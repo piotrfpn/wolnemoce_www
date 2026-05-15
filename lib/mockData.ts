@@ -12,6 +12,7 @@ export type Offer = {
   service: string;
   capacity: string;
   leadTime: string;
+  minimumOrder?: string;
   certifications: string[];
   description: string;
   image: string;
@@ -95,7 +96,7 @@ export const services = [
 export const offers: Offer[] = [
   {
     id: 1,
-    slug: "obrobka-cnc-metalpol",
+    slug: "obrobka-cnc-metalpol-warszawa",
     title: "Obróbka CNC - wolne moce 500 szt/miesiąc",
     company: "MetalPol Sp. z o.o.",
     companyInitials: "MP",
@@ -107,6 +108,7 @@ export const offers: Offer[] = [
     service: "Obróbka CNC",
     capacity: "500 szt/mies.",
     leadTime: "2 tyg.",
+    minimumOrder: "50 szt.",
     certifications: ["ISO 9001", "CE"],
     description:
       "Park maszynowy CNC 3- i 5-osiowy. Produkcja detali z aluminium, stali konstrukcyjnej i nierdzewnej.",
@@ -119,7 +121,7 @@ export const offers: Offer[] = [
   },
   {
     id: 2,
-    slug: "wtrysk-tworzyw-plasttech",
+    slug: "wtrysk-tworzyw-plasttech-katowice",
     title: "Wtrysk tworzyw - moce do 1000 szt/dzień",
     company: "PlastTech S.A.",
     companyInitials: "PT",
@@ -131,6 +133,7 @@ export const offers: Offer[] = [
     service: "Formowanie wtryskowe",
     capacity: "1000 szt/dzień",
     leadTime: "1 tydz.",
+    minimumOrder: "200 szt.",
     certifications: ["ISO 14001"],
     description:
       "Wtryskarki od 50 do 500 ton. Krótkie i średnie serie z PE, PP, ABS oraz PA.",
@@ -143,7 +146,7 @@ export const offers: Offer[] = [
   },
   {
     id: 3,
-    slug: "robotyzacja-autosys",
+    slug: "robotyzacja-autosys-poznan",
     title: "Budowa stanowisk zrobotyzowanych - wolne terminy",
     company: "AutoSys Sp. z o.o.",
     companyInitials: "AS",
@@ -155,6 +158,7 @@ export const offers: Offer[] = [
     service: "Robotyzacja",
     capacity: "3 projekty/kwartał",
     leadTime: "4 tyg.",
+    minimumOrder: "1 stanowisko",
     certifications: ["Siemens Partner"],
     description:
       "Projektowanie i uruchamianie stanowisk zrobotyzowanych, PLC oraz integracja z liniami produkcyjnymi.",
@@ -167,7 +171,7 @@ export const offers: Offer[] = [
   },
   {
     id: 4,
-    slug: "spawanie-steelworks",
+    slug: "spawanie-steelworks-wroclaw",
     title: "Spawanie konstrukcji stalowych - wolne moce od czerwca",
     company: "SteelWorks Polska",
     companyInitials: "SW",
@@ -179,6 +183,7 @@ export const offers: Offer[] = [
     service: "Spawanie",
     capacity: "25 ton/mies.",
     leadTime: "3 tyg.",
+    minimumOrder: "500 kg",
     certifications: ["ISO 3834", "EN 1090"],
     description:
       "Spawanie MIG/MAG i TIG, ramy maszyn, podesty techniczne oraz elementy dla przemysłu.",
@@ -191,7 +196,7 @@ export const offers: Offer[] = [
   },
   {
     id: 5,
-    slug: "pakowanie-packlab",
+    slug: "pakowanie-packlab-lodz",
     title: "Pakowanie i konfekcjonowanie produktów kosmetycznych",
     company: "PackLab Services",
     companyInitials: "PL",
@@ -203,6 +208,7 @@ export const offers: Offer[] = [
     service: "Pakowanie",
     capacity: "40 000 szt/mies.",
     leadTime: "10 dni",
+    minimumOrder: "1000 szt.",
     certifications: ["GMP", "ISO 22716"],
     description:
       "Konfekcja, etykietowanie i pakowanie jednostkowe dla krótkich serii oraz produkcji sezonowych.",
@@ -215,7 +221,7 @@ export const offers: Offer[] = [
   },
   {
     id: 6,
-    slug: "logistyka-logipartner",
+    slug: "logistyka-logipartner-gdansk",
     title: "Magazynowanie, kompletacja i cross-docking B2B",
     company: "LogiPartner 3PL",
     companyInitials: "LP",
@@ -227,6 +233,7 @@ export const offers: Offer[] = [
     service: "Magazynowanie",
     capacity: "1200 miejsc paletowych",
     leadTime: "od 48h",
+    minimumOrder: "1 paleta",
     certifications: ["ISO 9001"],
     description:
       "Obsługa logistyczna B2B, składowanie, kompletacja zamówień, etykietowanie i cross-docking.",

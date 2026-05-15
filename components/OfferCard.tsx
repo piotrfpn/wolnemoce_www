@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Offer } from "@/lib/mockData";
 
 function Stars() {
@@ -106,13 +107,13 @@ export default function OfferCard({ offer }: { offer: Offer }) {
             <span className="text-xs text-slate-400">({offer.reviews})</span>
           </div>
 
-          <a
-            href="#"
+          <Link
+            href={`/oferty/${offer.slug}`}
             className="inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] transition hover:text-[#0d3d26]"
           >
             Szczegóły
             <i className="fas fa-arrow-right text-xs"></i>
-          </a>
+          </Link>
         </div>
       </div>
     </article>
