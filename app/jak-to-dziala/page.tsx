@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
+import Link from "next/link";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
 
-export const metadata = {
-  title: "Jak to działa | WolneMoce.pl",
+export const metadata: Metadata = {
+  title: "Jak to działa",
   description:
     "Zobacz, jak WolneMoce.pl łączy firmy szukające podwykonawców z firmami posiadającymi wolne moce.",
 };
@@ -35,12 +37,12 @@ export default function HowItWorksPage() {
           icon="fas fa-route"
           actions={
             <>
-              <a href="/oferty" className="btn btn-accent">
+              <Link href="/oferty" className="btn btn-accent">
                 Przeglądaj oferty <i className="fas fa-arrow-right"></i>
-              </a>
-              <a href="/dodaj-oferte" className="btn btn-outline bg-white text-[#1a5f3c]">
+              </Link>
+              <Link href="/dodaj-oferte" className="btn btn-outline bg-white text-[#1a5f3c]">
                 Dodaj ofertę
-              </a>
+              </Link>
             </>
           }
         />

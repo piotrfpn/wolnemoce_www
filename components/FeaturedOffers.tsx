@@ -1,3 +1,4 @@
+import Link from "next/link";
 import OfferCard from "@/components/OfferCard";
 import { offers } from "@/lib/mockData";
 
@@ -30,13 +31,13 @@ export default function FeaturedOffers() {
         </div>
 
         <div style={{ textAlign: "center", marginTop: "48px" }}>
-          <a
+          <Link
             href="/oferty"
             className="btn btn-outline"
             style={{ padding: "14px 40px" }}
           >
             Zobacz wszystkie oferty <i className="fas fa-arrow-right"></i>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

@@ -1,5 +1,7 @@
 // components/Hero.tsx
 
+import Link from "next/link";
+
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#0d3d26] via-[#1a5f3c] to-[#2d8a5e] px-6 pb-20 pt-[140px]">
@@ -52,19 +54,19 @@ export default function Hero() {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            <a
+            <Link
               href="/oferty"
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-[#f59e0b] to-[#fbbf24] px-8 py-4 text-base font-bold text-white no-underline shadow-lg shadow-[#f59e0b]/30 transition hover:-translate-y-0.5 hover:shadow-xl"
             >
               Przeglądaj oferty
-            </a>
-            <a
+            </Link>
+            <Link
               href="/dodaj-oferte"
               className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/15 px-8 py-4 text-base font-bold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/20"
             >
               <i className="fas fa-plus"></i>
               Dodaj swoją ofertę
-            </a>
+            </Link>
           </div>
         </div>
 

@@ -9,9 +9,32 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "WolneMoce.pl - Portal Wolnych Mocy Produkcyjnych",
+  metadataBase: new URL("https://wolnemoce.pl"),
+  title: {
+    default: "WolneMoce.pl - Portal wolnych mocy produkcyjnych",
+    template: "%s | WolneMoce.pl",
+  },
   description:
-    "Marketplace B2B łączący firmy szukające podwykonawców z firmami posiadającymi wolne moce produkcyjne.",
+    "Marketplace B2B łączący firmy szukające podwykonawców z firmami posiadającymi wolne moce produkcyjne, magazynowe, logistyczne i techniczne.",
+  openGraph: {
+    title: "WolneMoce.pl - Portal wolnych mocy produkcyjnych",
+    description:
+      "Znajdź podwykonawcę albo pokaż wolne moce produkcyjne swojej firmy.",
+    url: "https://wolnemoce.pl",
+    siteName: "WolneMoce.pl",
+    locale: "pl_PL",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "WolneMoce.pl - Portal wolnych mocy produkcyjnych",
+    description:
+      "Marketplace B2B dla firm szukających podwykonawców i wolnych mocy produkcyjnych.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

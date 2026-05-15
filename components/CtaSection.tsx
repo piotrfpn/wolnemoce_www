@@ -1,5 +1,7 @@
 // components/CtaSection.tsx
 
+import Link from "next/link";
+
 export default function CtaSection() {
   return (
     <section className="px-6 py-20">
@@ -17,20 +19,20 @@ export default function CtaSection() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
-            <a
+            <Link
               href="/dodaj-oferte"
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-[#f59e0b] to-[#fbbf24] px-10 py-4 text-base font-bold text-white no-underline shadow-lg shadow-[#f59e0b]/30 transition hover:-translate-y-0.5 hover:shadow-xl"
             >
               Dodaj ofertę za darmo
-            </a>
+            </Link>
 
-            <a
+            <Link
               href="/oferty"
               className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/10 px-10 py-4 text-base font-bold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/15"
             >
               <i className="fas fa-search"></i>
               Przeglądaj oferty
-            </a>
+            </Link>
           </div>
         </div>
       </div>

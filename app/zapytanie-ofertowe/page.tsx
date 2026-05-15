@@ -1,10 +1,11 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import RfqRequestClient from "./RfqRequestClient";
 
-export const metadata = {
-  title: "Zapytanie ofertowe | WolneMoce.pl",
+export const metadata: Metadata = {
+  title: "Zapytanie ofertowe",
   description:
     "Statyczny formularz zapytania ofertowego RFQ w portalu WolneMoce.pl.",
 };

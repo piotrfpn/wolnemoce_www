@@ -1,9 +1,10 @@
+import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
 
-export const metadata = {
-  title: "Polityka prywatności | WolneMoce.pl",
+export const metadata: Metadata = {
+  title: "Polityka prywatności",
   description: "Roboczy szkic polityki prywatności portalu WolneMoce.pl.",
 };
 

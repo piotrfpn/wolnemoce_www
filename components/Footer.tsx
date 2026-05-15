@@ -1,17 +1,19 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="bg-slate-800 px-6 py-16 text-white">
       <div className="mx-auto max-w-[1400px]">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1.5fr]">
           <div>
-            <a href="/" className="mb-5 flex items-center gap-3 no-underline">
+            <Link href="/" className="mb-5 flex items-center gap-3 no-underline">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] text-xl text-white shadow-md">
                 <i className="fas fa-industry"></i>
               </div>
               <div className="text-[22px] font-extrabold tracking-[-0.5px] text-white">
                 Wolne<span className="text-[#2d8a5e]">Moce</span>.pl
               </div>
-            </a>
+            </Link>
 
             <p className="mb-6 max-w-sm text-sm leading-7 text-white/60">
               #1 Portal wolnych mocy produkcyjnych w Polsce. Łączymy firmy
@@ -42,29 +44,34 @@ export default function Footer() {
             <h4 className="mb-6 text-base font-bold text-white">Portal</h4>
             <ul className="space-y-3 list-none">
               <li>
-                <a href="/oferty" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <Link href="/oferty" className="text-sm text-white/60 no-underline transition hover:text-white">
                   Oferty produkcyjne
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/dodaj-oferte" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <Link href="/dodaj-oferte" className="text-sm text-white/60 no-underline transition hover:text-white">
                   Dodaj ofertę
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/jak-to-dziala" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <Link href="/jak-to-dziala" className="text-sm text-white/60 no-underline transition hover:text-white">
                   Jak to działa
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/cennik" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <Link href="/cennik" className="text-sm text-white/60 no-underline transition hover:text-white">
                   Cennik
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/blog" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <Link href="/blog" className="text-sm text-white/60 no-underline transition hover:text-white">
                   Blog
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/zapytanie-ofertowe" className="text-sm text-white/60 no-underline transition hover:text-white">
+                  Zapytanie ofertowe
+                </Link>
               </li>
             </ul>
           </div>
@@ -75,9 +82,9 @@ export default function Footer() {
               {["Metalurgia", "Tworzywa sztuczne", "Automatyka", "Logistyka", "Magazynowanie"].map(
                 (category) => (
                   <li key={category}>
-                    <a href="/#kategorie" className="text-sm text-white/60 no-underline transition hover:text-white">
+                    <Link href="/#kategorie" className="text-sm text-white/60 no-underline transition hover:text-white">
                       {category}
-                    </a>
+                    </Link>
                   </li>
                 )
               )}
@@ -88,24 +95,24 @@ export default function Footer() {
             <h4 className="mb-6 text-base font-bold text-white">Firma</h4>
             <ul className="space-y-3 list-none">
               <li>
-                <a href="/#ekspert" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <Link href="/#ekspert" className="text-sm text-white/60 no-underline transition hover:text-white">
                   Ekspert
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/kontakt" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <Link href="/kontakt" className="text-sm text-white/60 no-underline transition hover:text-white">
                   Kontakt
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/regulamin" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <Link href="/regulamin" className="text-sm text-white/60 no-underline transition hover:text-white">
                   Regulamin
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/polityka-prywatnosci" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <Link href="/polityka-prywatnosci" className="text-sm text-white/60 no-underline transition hover:text-white">
                   Polityka prywatności
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -137,15 +144,15 @@ export default function Footer() {
           <p>© 2026 WolneMoce.pl. Wszelkie prawa zastrzeżone.</p>
 
           <div className="flex flex-wrap gap-5">
-            <a href="/regulamin" className="text-white/40 no-underline transition hover:text-white">
+            <Link href="/regulamin" className="text-white/40 no-underline transition hover:text-white">
               Regulamin
-            </a>
-            <a href="/polityka-prywatnosci" className="text-white/40 no-underline transition hover:text-white">
+            </Link>
+            <Link href="/polityka-prywatnosci" className="text-white/40 no-underline transition hover:text-white">
               Polityka prywatności
-            </a>
-            <a href="/polityka-prywatnosci" className="text-white/40 no-underline transition hover:text-white">
+            </Link>
+            <Link href="/polityka-prywatnosci" className="text-white/40 no-underline transition hover:text-white">
               Cookies
-            </a>
+            </Link>
           </div>
         </div>
       </div>

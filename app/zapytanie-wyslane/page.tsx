@@ -1,9 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 
-export const metadata = {
-  title: "Zapytanie przygotowane | WolneMoce.pl",
+export const metadata: Metadata = {
+  title: "Zapytanie przygotowane",
   description:
     "Ekran sukcesu demonstracyjnego formularza zapytania ofertowego WolneMoce.pl.",
 };

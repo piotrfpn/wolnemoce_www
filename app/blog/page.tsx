@@ -1,11 +1,12 @@
+import type { Metadata } from "next";
 import BlogCard from "@/components/BlogCard";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
 import { blogArticles } from "@/lib/mockData";
 
-export const metadata = {
-  title: "Blog | WolneMoce.pl",
+export const metadata: Metadata = {
+  title: "Blog",
   description:
     "Statyczna lista artykułów WolneMoce.pl o outsourcingu produkcji i wolnych mocach.",
 };

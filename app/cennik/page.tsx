@@ -1,10 +1,11 @@
+import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
 import Pricing from "@/components/Pricing";
 
-export const metadata = {
-  title: "Cennik | WolneMoce.pl",
+export const metadata: Metadata = {
+  title: "Cennik",
   description:
     "Statyczny cennik WolneMoce.pl: FREE, PRO, ENTERPRISE oraz dodatki promocyjne.",
 };

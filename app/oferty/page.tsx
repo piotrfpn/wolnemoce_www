@@ -1,10 +1,12 @@
+import type { Metadata } from "next";
+import Link from "next/link";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import OfferCard from "@/components/OfferCard";
 import { categories, offers, provinces, services } from "@/lib/mockData";
 
-export const metadata = {
-  title: "Oferty wolnych mocy produkcyjnych | WolneMoce.pl",
+export const metadata: Metadata = {
+  title: "Oferty wolnych mocy produkcyjnych",
   description:
     "Przeglądaj statyczną listę ofert wolnych mocy produkcyjnych, magazynowych, logistycznych i technicznych w Polsce.",
 };
@@ -246,13 +248,13 @@ export default function OffersPage() {
                   Dodaj ofertę i pokaż swoją dostępność firmom szukającym
                   podwykonawców.
                 </p>
-                <a
+                <Link
                   href="/dodaj-oferte"
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#1a5f3c]"
                 >
                   Dodaj ofertę
                   <i className="fas fa-arrow-right text-xs"></i>
-                </a>
+                </Link>
               </div>
             </div>
           </aside>

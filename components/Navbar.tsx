@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -22,14 +23,14 @@ export default function Navbar() {
   return (
     <nav className="fixed left-0 right-0 top-0 z-[1000] border-b border-slate-200 bg-white/95 backdrop-blur-xl">
       <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between px-6">
-        <a href="/" className="flex items-center gap-3 no-underline" onClick={closeMenu}>
+        <Link href="/" className="flex items-center gap-3 no-underline" onClick={closeMenu}>
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] text-xl text-white shadow-md">
             <i className="fas fa-industry"></i>
           </div>
           <div className="text-[22px] font-extrabold tracking-[-0.5px] text-slate-800">
             Wolne<span className="text-[#1a5f3c]">Moce</span>.pl
           </div>
-        </a>
+        </Link>
 
         <ul className="hidden list-none items-center gap-2 lg:flex">
           {navLinks.map((link) => {
@@ -37,7 +38,7 @@ export default function Navbar() {
 
             return (
               <li key={link.href}>
-                <a
+                <Link
                   href={link.href}
                   onClick={closeMenu}
                   className={`rounded-lg px-4 py-2 text-sm font-medium no-underline transition ${
@@ -47,25 +48,25 @@ export default function Navbar() {
                   }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               </li>
             );
           })}
         </ul>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <a
+          <Link
             href="/kontakt"
             className="inline-flex items-center justify-center rounded-lg border-2 border-[#1a5f3c] px-5 py-2.5 text-sm font-semibold text-[#1a5f3c] no-underline transition hover:-translate-y-0.5 hover:bg-[#1a5f3c] hover:text-white hover:shadow-md"
           >
             Kontakt
-          </a>
-          <a
+          </Link>
+          <Link
             href="/dodaj-oferte"
             className="inline-flex items-center justify-center rounded-lg bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-5 py-2.5 text-sm font-semibold text-white no-underline shadow-lg shadow-[#1a5f3c]/25 transition hover:-translate-y-0.5 hover:shadow-xl"
           >
             Dodaj ofertę
-          </a>
+          </Link>
         </div>
 
         <button
@@ -85,7 +86,7 @@ export default function Navbar() {
               const isActive = link.match ? pathname === link.match : false;
 
               return (
-                <a
+                <Link
                   key={link.href}
                   href={link.href}
                   onClick={closeMenu}
@@ -96,25 +97,25 @@ export default function Navbar() {
                   }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               );
             })}
 
             <div className="mt-3 grid grid-cols-1 gap-3">
-              <a
+              <Link
                 href="/kontakt"
                 onClick={closeMenu}
                 className="inline-flex items-center justify-center rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline"
               >
                 Kontakt
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/dodaj-oferte"
                 onClick={closeMenu}
                 className="inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-5 py-3 text-sm font-bold text-white no-underline shadow-lg shadow-[#1a5f3c]/25"
               >
                 Dodaj ofertę
-              </a>
+              </Link>
             </div>
           </div>
         </div>

@@ -1,11 +1,12 @@
+import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
 import StaticFormField from "@/components/StaticFormField";
 import { categories, provinces, services } from "@/lib/mockData";
 
-export const metadata = {
-  title: "Dodaj ofertę | WolneMoce.pl",
+export const metadata: Metadata = {
+  title: "Dodaj ofertę",
   description:
     "Statyczny formularz dodania oferty wolnych mocy produkcyjnych w WolneMoce.pl.",
 };

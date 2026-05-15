@@ -1,11 +1,12 @@
+import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
 import StaticFormField from "@/components/StaticFormField";
 import { contactInfo, faqs } from "@/lib/mockData";
 
-export const metadata = {
-  title: "Kontakt | WolneMoce.pl",
+export const metadata: Metadata = {
+  title: "Kontakt",
   description:
     "Statyczna podstrona kontaktowa WolneMoce.pl z formularzem UI-only i FAQ.",
 };

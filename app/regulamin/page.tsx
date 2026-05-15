@@ -1,9 +1,10 @@
+import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
 
-export const metadata = {
-  title: "Regulamin | WolneMoce.pl",
+export const metadata: Metadata = {
+  title: "Regulamin",
   description: "Roboczy szkic regulaminu portalu WolneMoce.pl.",
 };
 
