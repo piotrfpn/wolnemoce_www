@@ -533,11 +533,13 @@
         /* ========== CATEGORIES ========== */
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 20px;
         }
 
         .category-card {
+            min-width: 0;
+            max-width: 100%;
             background: white;
             border: 2px solid var(--border-light);
             border-radius: var(--radius-lg);
@@ -611,11 +613,13 @@
         /* ========== LISTINGS ========== */
         .listings-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 24px;
         }
 
         .listing-card {
+            min-width: 0;
+            max-width: 100%;
             background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
@@ -809,7 +813,7 @@
 
         .steps-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 32px;
             max-width: 1400px;
             margin: 0 auto;
@@ -928,11 +932,13 @@
         /* ========== TESTIMONIALS ========== */
         .testimonials-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 24px;
         }
 
         .testimonial-card {
+            min-width: 0;
+            max-width: 100%;
             background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
@@ -1000,11 +1006,13 @@
         /* ========== BLOG ========== */
         .blog-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 24px;
         }
 
         .blog-card {
+            min-width: 0;
+            max-width: 100%;
             background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
@@ -1092,13 +1100,16 @@
         /* ========== PRICING ========== */
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 24px;
+            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
         }
 
         .pricing-card {
+            min-width: 0;
+            max-width: 100%;
             background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
@@ -1210,9 +1221,11 @@
             justify-content: center;
             gap: 24px;
             flex-wrap: wrap;
+            max-width: 100%;
         }
 
         .addon-card {
+            max-width: 100%;
             background: var(--bg-light);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
@@ -1469,9 +1482,9 @@
 
         /* Responsive */
         @media (max-width: 1200px) {
-            .categories-grid { grid-template-columns: repeat(3, 1fr); }
-            .listings-grid { grid-template-columns: repeat(2, 1fr); }
-            .footer-grid { grid-template-columns: repeat(3, 1fr); }
+            .categories-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .listings-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .footer-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         }
 
         @media (max-width: 992px) {
@@ -1484,9 +1497,10 @@
             .search-bar { flex-direction: column; }
             .search-btn { width: 100%; }
             .expert-content { grid-template-columns: 1fr; }
-            .steps-grid { grid-template-columns: repeat(2, 1fr); }
-            .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
-            .blog-grid { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .testimonials-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .blog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
 
         @media (max-width: 768px) {
@@ -1494,12 +1508,21 @@
             .nav-links { display: none; }
             .mobile-toggle { display: block; }
             .section-title { font-size: 32px; }
-            .categories-grid { grid-template-columns: repeat(2, 1fr); }
+            .categories-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .listings-grid { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .expert-features { grid-template-columns: 1fr; }
+            .expert-right { grid-template-columns: 1fr; }
             .steps-grid { grid-template-columns: 1fr; }
             .testimonials-grid { grid-template-columns: 1fr; }
             .blog-grid { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .addon-card { width: 100%; }
             .cta-section { padding: 60px 24px; }
             .cta-section h2 { font-size: 32px; }
+        }
+
+        @media (max-width: 480px) {
+            .categories-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
         }
