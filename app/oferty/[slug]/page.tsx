@@ -246,7 +246,7 @@ export default function OfferDetailsPage({ params }: OfferDetailsPageProps) {
           </div>
 
           <aside className="min-w-0">
-            <form className="sticky top-24 rounded-[24px] border border-slate-200 bg-white p-6 shadow-xl">
+            <div className="sticky top-24 rounded-[24px] border border-slate-200 bg-white p-6 shadow-xl">
               <div className="mb-6">
                 <h2 className="text-2xl font-extrabold text-slate-900">
                   Zapytaj o ofertę
@@ -273,10 +273,13 @@ export default function OfferDetailsPage({ params }: OfferDetailsPageProps) {
                 />
               </div>
 
-              <button type="button" className="mt-6 w-full btn btn-primary">
+              <Link
+                href={`/zapytanie-ofertowe?oferta=${offer.slug}`}
+                className="mt-6 w-full btn btn-primary"
+              >
                 Wyślij zapytanie
-              </button>
-            </form>
+              </Link>
+            </div>
           </aside>
         </section>
 
