@@ -1,0 +1,386 @@
+export type Offer = {
+  id: number;
+  slug: string;
+  title: string;
+  company: string;
+  companyInitials: string;
+  companyGradient: string;
+  companyMeta: string;
+  location: string;
+  province: string;
+  category: string;
+  service: string;
+  capacity: string;
+  leadTime: string;
+  certifications: string[];
+  description: string;
+  image: string;
+  imageAlt: string;
+  rating: string;
+  reviews: number;
+  isPremium: boolean;
+  isVerified: boolean;
+};
+
+export type BlogArticle = {
+  id: number;
+  title: string;
+  category: string;
+  date: string;
+  readTime: string;
+  excerpt: string;
+  image: string;
+  imageAlt: string;
+};
+
+export type PricingPlan = {
+  name: string;
+  subtitle: string;
+  price: string;
+  priceSuffix: string;
+  features: string[];
+  cta: string;
+  ctaHref: string;
+  isFeatured?: boolean;
+};
+
+export type AddOn = {
+  name: string;
+  description: string;
+  price: string;
+  suffix: string;
+};
+
+export const provinces = [
+  "Dolnośląskie",
+  "Kujawsko-pomorskie",
+  "Lubelskie",
+  "Lubuskie",
+  "Łódzkie",
+  "Małopolskie",
+  "Mazowieckie",
+  "Opolskie",
+  "Podkarpackie",
+  "Podlaskie",
+  "Pomorskie",
+  "Śląskie",
+  "Świętokrzyskie",
+  "Warmińsko-mazurskie",
+  "Wielkopolskie",
+  "Zachodniopomorskie",
+];
+
+export const categories = [
+  "Metalurgia",
+  "Tworzywa sztuczne",
+  "Automatyka",
+  "Logistyka",
+  "Chemia i kosmetyki",
+  "Magazynowanie",
+  "Elektronika",
+  "Drewno i meble",
+];
+
+export const services = [
+  "Obróbka CNC",
+  "Formowanie wtryskowe",
+  "Robotyzacja",
+  "Spawanie",
+  "Pakowanie",
+  "Magazynowanie",
+  "Montaż elektroniczny",
+  "Stolarka CNC",
+];
+
+export const offers: Offer[] = [
+  {
+    id: 1,
+    slug: "obrobka-cnc-metalpol",
+    title: "Obróbka CNC - wolne moce 500 szt/miesiąc",
+    company: "MetalPol Sp. z o.o.",
+    companyInitials: "MP",
+    companyGradient: "linear-gradient(135deg, #1a5f3c, #2d8a5e)",
+    companyMeta: "Metalurgia · 15 lat na rynku",
+    location: "Warszawa",
+    province: "Mazowieckie",
+    category: "Metalurgia",
+    service: "Obróbka CNC",
+    capacity: "500 szt/mies.",
+    leadTime: "2 tyg.",
+    certifications: ["ISO 9001", "CE"],
+    description:
+      "Park maszynowy CNC 3- i 5-osiowy. Produkcja detali z aluminium, stali konstrukcyjnej i nierdzewnej.",
+    image: "/images/offers/cnc.jpg",
+    imageAlt: "Obróbka CNC",
+    rating: "4.8",
+    reviews: 24,
+    isPremium: true,
+    isVerified: true,
+  },
+  {
+    id: 2,
+    slug: "wtrysk-tworzyw-plasttech",
+    title: "Wtrysk tworzyw - moce do 1000 szt/dzień",
+    company: "PlastTech S.A.",
+    companyInitials: "PT",
+    companyGradient: "linear-gradient(135deg, #2563eb, #60a5fa)",
+    companyMeta: "Tworzywa sztuczne · 8 lat na rynku",
+    location: "Katowice",
+    province: "Śląskie",
+    category: "Tworzywa sztuczne",
+    service: "Formowanie wtryskowe",
+    capacity: "1000 szt/dzień",
+    leadTime: "1 tydz.",
+    certifications: ["ISO 14001"],
+    description:
+      "Wtryskarki od 50 do 500 ton. Krótkie i średnie serie z PE, PP, ABS oraz PA.",
+    image: "/images/offers/injection.jpg",
+    imageAlt: "Wtrysk tworzyw sztucznych",
+    rating: "5.0",
+    reviews: 18,
+    isPremium: false,
+    isVerified: true,
+  },
+  {
+    id: 3,
+    slug: "robotyzacja-autosys",
+    title: "Budowa stanowisk zrobotyzowanych - wolne terminy",
+    company: "AutoSys Sp. z o.o.",
+    companyInitials: "AS",
+    companyGradient: "linear-gradient(135deg, #7c3aed, #a78bfa)",
+    companyMeta: "Automatyka · 10 lat na rynku",
+    location: "Poznań",
+    province: "Wielkopolskie",
+    category: "Automatyka",
+    service: "Robotyzacja",
+    capacity: "3 projekty/kwartał",
+    leadTime: "4 tyg.",
+    certifications: ["Siemens Partner"],
+    description:
+      "Projektowanie i uruchamianie stanowisk zrobotyzowanych, PLC oraz integracja z liniami produkcyjnymi.",
+    image: "/images/offers/automation.jpg",
+    imageAlt: "Automatyka przemysłowa",
+    rating: "4.9",
+    reviews: 12,
+    isPremium: true,
+    isVerified: true,
+  },
+  {
+    id: 4,
+    slug: "spawanie-steelworks",
+    title: "Spawanie konstrukcji stalowych - wolne moce od czerwca",
+    company: "SteelWorks Polska",
+    companyInitials: "SW",
+    companyGradient: "linear-gradient(135deg, #334155, #64748b)",
+    companyMeta: "Spawanie · 12 lat na rynku",
+    location: "Wrocław",
+    province: "Dolnośląskie",
+    category: "Metalurgia",
+    service: "Spawanie",
+    capacity: "25 ton/mies.",
+    leadTime: "3 tyg.",
+    certifications: ["ISO 3834", "EN 1090"],
+    description:
+      "Spawanie MIG/MAG i TIG, ramy maszyn, podesty techniczne oraz elementy dla przemysłu.",
+    image: "/images/offers/cnc.jpg",
+    imageAlt: "Spawanie konstrukcji stalowych",
+    rating: "4.7",
+    reviews: 16,
+    isPremium: false,
+    isVerified: true,
+  },
+  {
+    id: 5,
+    slug: "pakowanie-packlab",
+    title: "Pakowanie i konfekcjonowanie produktów kosmetycznych",
+    company: "PackLab Services",
+    companyInitials: "PL",
+    companyGradient: "linear-gradient(135deg, #db2777, #f472b6)",
+    companyMeta: "Chemia i kosmetyki · 6 lat na rynku",
+    location: "Łódź",
+    province: "Łódzkie",
+    category: "Chemia i kosmetyki",
+    service: "Pakowanie",
+    capacity: "40 000 szt/mies.",
+    leadTime: "10 dni",
+    certifications: ["GMP", "ISO 22716"],
+    description:
+      "Konfekcja, etykietowanie i pakowanie jednostkowe dla krótkich serii oraz produkcji sezonowych.",
+    image: "/images/offers/injection.jpg",
+    imageAlt: "Pakowanie produktów",
+    rating: "4.6",
+    reviews: 9,
+    isPremium: false,
+    isVerified: true,
+  },
+  {
+    id: 6,
+    slug: "logistyka-logipartner",
+    title: "Magazynowanie, kompletacja i cross-docking B2B",
+    company: "LogiPartner 3PL",
+    companyInitials: "LP",
+    companyGradient: "linear-gradient(135deg, #ea580c, #fb923c)",
+    companyMeta: "Logistyka · 11 lat na rynku",
+    location: "Gdańsk",
+    province: "Pomorskie",
+    category: "Logistyka",
+    service: "Magazynowanie",
+    capacity: "1200 miejsc paletowych",
+    leadTime: "od 48h",
+    certifications: ["ISO 9001"],
+    description:
+      "Obsługa logistyczna B2B, składowanie, kompletacja zamówień, etykietowanie i cross-docking.",
+    image: "/images/offers/automation.jpg",
+    imageAlt: "Magazynowanie i logistyka",
+    rating: "4.9",
+    reviews: 21,
+    isPremium: true,
+    isVerified: true,
+  },
+];
+
+export const blogArticles: BlogArticle[] = [
+  {
+    id: 1,
+    title: "Jak efektywnie outsourcingować produkcję w 2026 roku?",
+    category: "Poradnik",
+    date: "15 kwi 2026",
+    readTime: "8 min",
+    excerpt:
+      "Najważniejsze kryteria wyboru podwykonawcy, od zapytania ofertowego po kontrolę jakości.",
+    image: "/images/offers/injection.jpg",
+    imageAlt: "Outsourcing produkcji",
+  },
+  {
+    id: 2,
+    title: "Case study: zwiększenie produkcji bez inwestycji w maszyny",
+    category: "Case Study",
+    date: "10 kwi 2026",
+    readTime: "12 min",
+    excerpt:
+      "Jak firma B2B zrealizowała rekordowy kontrakt dzięki wolnym mocom u partnera.",
+    image: "/images/offers/cnc.jpg",
+    imageAlt: "Case study CNC",
+  },
+  {
+    id: 3,
+    title: "5 trendów w polskim przemyśle produkcyjnym",
+    category: "Trendy",
+    date: "5 kwi 2026",
+    readTime: "6 min",
+    excerpt:
+      "Automatyzacja, krótsze serie, odporne łańcuchy dostaw i większa specjalizacja zakładów.",
+    image: "/images/offers/automation.jpg",
+    imageAlt: "Trendy produkcyjne",
+  },
+];
+
+export const pricingPlans: PricingPlan[] = [
+  {
+    name: "Plan FREE",
+    subtitle: "Dla małych warsztatów i testowania portalu",
+    price: "0 zł",
+    priceSuffix: "/ mies.",
+    features: [
+      "1 aktywna oferta",
+      "Standardowa widoczność",
+      "2 zapytania / mies.",
+      "Podstawowa weryfikacja",
+      "Dostęp do bazy wiedzy",
+    ],
+    cta: "Rozpocznij za darmo",
+    ctaHref: "/dodaj-oferte",
+  },
+  {
+    name: "Plan PRO",
+    subtitle: "Dla aktywnych producentów",
+    price: "299 zł",
+    priceSuffix: "/ mies.",
+    features: [
+      "Nielimitowane oferty",
+      "Wyróżnienie Top",
+      "Nielimitowane zapytania",
+      "Certyfikat zaufania",
+      "Dedykowany opiekun",
+    ],
+    cta: "Wybierz Plan PRO",
+    ctaHref: "/kontakt",
+    isFeatured: true,
+  },
+  {
+    name: "Plan ENTERPRISE",
+    subtitle: "Dla dużych zakładów i grup produkcyjnych",
+    price: "Wycena",
+    priceSuffix: "indywidualna",
+    features: [
+      "Nielimitowane oferty",
+      "Priorytetowa widoczność",
+      "Kampanie branżowe",
+      "Rozszerzona weryfikacja",
+      "Key Account Manager",
+    ],
+    cta: "Skontaktuj się",
+    ctaHref: "/kontakt",
+  },
+];
+
+export const pricingAddOns: AddOn[] = [
+  {
+    name: "Wyróżnienie oferty",
+    description: "Zwiększona widoczność oferty na liście przez 7 dni.",
+    price: "49 zł",
+    suffix: "/ 7 dni",
+  },
+  {
+    name: "Pay-per-lead",
+    description: "Odblokowanie kontaktu do konkretnego zapytania dla planu FREE.",
+    price: "od 29 zł",
+    suffix: "/ zapytanie",
+  },
+  {
+    name: "Reklama branżowa",
+    description: "Promocja firmy w wybranej kategorii ofert.",
+    price: "199 zł",
+    suffix: "/ mies.",
+  },
+];
+
+export const faqs = [
+  {
+    question: "Czy formularze wysyłają dane?",
+    answer:
+      "Nie. W tej wersji MVP formularze są statyczne i służą wyłącznie do pokazania docelowego procesu.",
+  },
+  {
+    question: "Czy oferty są filtrowane dynamicznie?",
+    answer:
+      "Nie. Filtry i sortowanie są teraz elementami UI-only bez backendu i bez zapytań API.",
+  },
+  {
+    question: "Jak działa weryfikacja firm?",
+    answer:
+      "Docelowo firma będzie sprawdzana na podstawie danych rejestrowych i deklarowanych certyfikatów.",
+  },
+  {
+    question: "Czy można dodać ofertę za darmo?",
+    answer:
+      "Tak, plan FREE zakłada podstawową publikację jednej aktywnej oferty.",
+  },
+  {
+    question: "Czy WolneMoce.pl obsługuje płatności?",
+    answer:
+      "Nie w tym sprincie. Cennik jest statyczną prezentacją modelu biznesowego.",
+  },
+  {
+    question: "Kiedy pojawią się szczegóły ofert?",
+    answer:
+      "Podstrony pojedynczych ofert są poza zakresem tego sprintu i mogą powstać w kolejnej iteracji.",
+  },
+];
+
+export const contactInfo = {
+  email: "kontakt@wolnemoce.pl",
+  phone: "+48 500 000 000",
+  city: "Warszawa",
+  hours: "Pon.-pt. 9:00-17:00",
+};

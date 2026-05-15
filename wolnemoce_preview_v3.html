@@ -1,0 +1,2348 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WolneMoce.pl - Portal Wolnych Mocy Produkcyjnych</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a5f3c;
+            --primary-light: #2d8a5e;
+            --primary-dark: #0d3d26;
+            --accent: #f59e0b;
+            --accent-light: #fbbf24;
+            --accent-dark: #d97706;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --text-muted: #94a3b8;
+            --bg: #ffffff;
+            --bg-light: #f8fafc;
+            --bg-dark: #f1f5f9;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span { color: var(--primary); }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            background: var(--bg-light);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+            background: rgba(26, 95, 60, 0.08);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 4px 14px rgba(26, 95, 60, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(26, 95, 60, 0.4);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-sm { padding: 8px 16px; font-size: 13px; }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            position: relative;
+            padding: 140px 24px 80px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            overflow: hidden;
+        }
+
+        .hero-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.06;
+            background-image: 
+                radial-gradient(circle at 20% 50%, white 2px, transparent 2px),
+                radial-gradient(circle at 80% 20%, white 1px, transparent 1px),
+                radial-gradient(circle at 40% 80%, white 1.5px, transparent 1.5px);
+            background-size: 60px 60px, 40px 40px, 80px 80px;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            width: fit-content;
+        }
+
+        .hero-badge i { color: var(--accent-light); }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 900;
+            color: white;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--accent-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            font-size: 18px;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.7;
+            margin-bottom: 32px;
+            max-width: 520px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .hero-stat { text-align: center; }
+
+        .hero-stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: white;
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 4px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .hero-actions .btn {
+            padding: 14px 32px;
+            font-size: 15px;
+        }
+
+        .hero-visual { position: relative; }
+
+        .hero-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            color: white;
+            position: relative;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .hero-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .hero-card-avatar {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .hero-card-info h4 { font-size: 15px; font-weight: 600; }
+        .hero-card-info p { font-size: 12px; opacity: 0.7; }
+
+        .hero-card-body {
+            background: rgba(255,255,255,0.08);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .hero-card-body h5 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .hero-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .hero-card-tag {
+            background: rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .hero-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero-card-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent-light);
+            font-size: 12px;
+        }
+
+        .hero-card-btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: white;
+            padding: 12px 20px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 2;
+        }
+
+        .floating-badge i {
+            width: 32px; height: 32px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .floating-badge-text strong {
+            display: block;
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .floating-badge-text {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .floating-badge-1 { top: -20px; right: -20px; }
+        .floating-badge-2 { bottom: 40px; left: -40px; }
+
+        /* ========== SEARCH SECTION ========== */
+        .search-section {
+            max-width: 1400px;
+            margin: -40px auto 0;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-bar {
+            background: white;
+            padding: 32px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            gap: 24px;
+            align-items: flex-end;
+        }
+
+        .search-field {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .search-field label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+        }
+
+        .input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrap i {
+            position: absolute;
+            left: 16px;
+            color: var(--text-muted);
+        }
+
+        .input-wrap input, .input-wrap select {
+            width: 100%;
+            padding: 14px 16px 14px 44px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text);
+            background: var(--bg-light);
+            transition: all 0.2s;
+        }
+
+        .input-wrap input:focus, .input-wrap select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(26, 95, 60, 0.1);
+        }
+
+        .search-btn {
+            padding: 14px 40px;
+            height: 48px;
+        }
+
+        /* ========== SECTIONS ========== */
+        .section {
+            padding: 80px 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 640px;
+            margin: 0 auto 56px;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .section-label::before,
+        .section-label::after {
+            content: '';
+            width: 24px;
+            height: 2px;
+            background: var(--primary);
+            opacity: 0.3;
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .section-desc {
+            font-size: 17px;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* ========== CATEGORIES ========== */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .category-card {
+            background: white;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 32px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .category-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .category-card:hover::before { transform: scaleX(1); }
+
+        .category-icon {
+            width: 64px; height: 64px;
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-dark));
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 28px;
+            transition: all 0.3s;
+        }
+
+        .category-card:hover .category-icon {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .category-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .category-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .category-count {
+            display: inline-block;
+            background: var(--bg-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        /* ========== LISTINGS ========== */
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .listing-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .listing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+            border-color: transparent;
+        }
+
+        .listing-badge-premium {
+            position: absolute;
+            top: 16px; left: 16px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+            box-shadow: var(--shadow);
+        }
+
+        .listing-badge-verified {
+            position: absolute;
+            top: 16px; right: 16px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            color: var(--success);
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 2;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .listing-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .listing-image img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .listing-card:hover .listing-image img { transform: scale(1.05); }
+
+        .listing-image-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 16px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+        }
+
+        .listing-image-overlay span {
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .listing-content { padding: 20px; }
+
+        .listing-company {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .listing-company-logo {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .listing-company-info h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .listing-company-info p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .listing-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .listing-desc {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .listing-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .listing-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .listing-meta-item i { color: var(--primary); }
+
+        .listing-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .listing-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .listing-rating-stars {
+            color: var(--accent);
+            font-size: 11px;
+        }
+
+        .listing-rating-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .listing-rating-count {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .listing-cta {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ========== HOW IT WORKS ========== */
+        .how-it-works {
+            background: var(--bg-dark);
+            padding: 80px 24px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 56px; height: 56px;
+            background: white;
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0 auto 24px;
+            box-shadow: var(--shadow);
+            border: 4px solid var(--bg-dark);
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .step-card p {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* ========== EXPERT SECTION ========== */
+        .expert-section {
+            background: var(--primary-dark);
+            padding: 100px 24px;
+            color: white;
+        }
+
+        .expert-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .expert-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .expert-feature {
+            display: flex;
+            gap: 20px;
+        }
+
+        .expert-feature i {
+            font-size: 24px;
+            color: var(--accent-light);
+            margin-top: 4px;
+        }
+
+        .expert-feature h4 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .expert-feature p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
+        }
+
+        .expert-right {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .expert-stat-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .expert-stat-card i {
+            font-size: 32px;
+            color: var(--accent-light);
+            margin-bottom: 16px;
+        }
+
+        .expert-stat-card h3 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .expert-stat-card p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* ========== TESTIMONIALS ========== */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+
+        .testimonial-quote {
+            font-size: 48px;
+            color: var(--primary);
+            opacity: 0.2;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .testimonial-text {
+            font-size: 15px;
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .testimonial-avatar {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .testimonial-info h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .testimonial-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .testimonial-rating {
+            margin-left: auto;
+            color: var(--accent);
+            font-size: 13px;
+        }
+
+        /* ========== BLOG ========== */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .blog-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .blog-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--bg-dark), var(--bg-light));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-image img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .blog-card:hover .blog-image img { transform: scale(1.05); }
+
+        .blog-category {
+            position: absolute;
+            top: 16px; left: 16px;
+            background: var(--primary);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .blog-content { padding: 24px; }
+
+        .blog-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .blog-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .blog-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .blog-excerpt {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .blog-read-more {
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ========== PRICING ========== */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-8px);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow);
+        }
+
+        .pricing-card h3 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .pricing-card p.subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .pricing-card .price {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+
+        .pricing-card .price span {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 32px;
+            flex-grow: 1;
+        }
+
+        .pricing-card ul li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: var(--text-light);
+        }
+
+        .pricing-card ul li i {
+            color: var(--success);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            padding: 14px 24px;
+            font-size: 15px;
+        }
+
+        .pricing-addons {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 60px;
+            border-top: 1px solid var(--border);
+        }
+
+        .pricing-addons h4 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .addons-grid {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .addon-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px 28px;
+            text-align: left;
+            width: 300px;
+            transition: all 0.3s;
+        }
+
+        .addon-card:hover {
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+
+        .addon-card h5 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .addon-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .addon-card .price {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .addon-card .price span {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        /* ========== CTA SECTION ========== */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            border-radius: var(--radius-xl);
+            padding: 80px 60px;
+            margin: 0 24px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .cta-content { position: relative; z-index: 1; }
+
+        .cta-section h2 {
+            font-size: 40px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-buttons .btn {
+            padding: 16px 40px;
+            font-size: 16px;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            background: var(--text);
+            color: white;
+            padding: 80px 24px 40px;
+            margin-top: 80px;
+        }
+
+        .footer-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand .logo-text {
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer-social a {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .footer-social a:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: white;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul li a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .footer-col ul li a:hover {
+            color: white;
+            padding-left: 4px;
+        }
+
+        .footer-newsletter h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .footer-newsletter p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 20px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 8px;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            color: white;
+            font-family: inherit;
+        }
+
+        .newsletter-form button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 48px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .newsletter-form button:hover {
+            background: var(--primary-light);
+        }
+
+        .footer-bottom {
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-bottom p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-bottom-links a {
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .footer-bottom-links a:hover {
+            color: white;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .categories-grid { grid-template-columns: repeat(3, 1fr); }
+            .listings-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 992px) {
+            .hero-content { grid-template-columns: 1fr; text-align: center; }
+            .hero h1 { font-size: 42px; }
+            .hero-desc { margin: 0 auto 32px; }
+            .hero-stats { justify-content: center; }
+            .hero-actions { justify-content: center; }
+            .hero-visual { margin-top: 60px; }
+            .search-bar { flex-direction: column; }
+            .search-btn { width: 100%; }
+            .expert-content { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: repeat(2, 1fr); }
+            .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+            .blog-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-inner { height: 64px; }
+            .nav-links { display: none; }
+            .mobile-toggle { display: block; }
+            .section-title { font-size: 32px; }
+            .categories-grid { grid-template-columns: repeat(2, 1fr); }
+            .listings-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .blog-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .cta-section { padding: 60px 24px; }
+            .cta-section h2 { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon"><i class="fas fa-industry"></i></div>
+                <div class="logo-text">Wolne<span>Moce</span>.pl</div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#oferty">Oferty</a></li>
+                <li><a href="#kategorie">Branże</a></li>
+                <li><a href="#jak-to-dziala">Jak to działa</a></li>
+                <li><a href="#cennik">Cennik</a></li>
+                <li><a href="#ekspert">Ekspert</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#kontakt">Kontakt</a></li>
+            </ul>
+            <div class="nav-actions">
+                <a href="#" class="btn btn-sm btn-outline">Zaloguj się</a>
+                <a href="#" class="btn btn-sm btn-primary">Dodaj ofertę</a>
+            </div>
+            <button class="mobile-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-pattern"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <i class="fas fa-star"></i> #1 Portal wolnych mocy produkcyjnych w Polsce
+                </div>
+                <h1>Znajdź <span class="highlight">wolne moce</span> produkcyjne dla swojej firmy</h1>
+                <p class="hero-desc">
+                    Łączymy firmy poszukujące możliwości produkcyjnych z zakładami, 
+                    które dysponują wolnymi zdolnościami. Szybko, bezpiecznie i efektywnie.
+                </p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">500+</div>
+                        <div class="hero-stat-label">Aktywnych ofert</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">200+</div>
+                        <div class="hero-stat-label">Zweryfikowanych firm</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">50+</div>
+                        <div class="hero-stat-label">Zrealizowanych transakcji</div>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <a href="#oferty" class="btn btn-accent">Przeglądaj oferty</a>
+                    <a href="#" class="btn" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3);">
+                        <i class="fas fa-plus"></i> Dodaj swoją ofertę
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <div class="hero-card-avatar">MP</div>
+                        <div class="hero-card-info">
+                            <h4>MetalPol Sp. z o.o.</h4>
+                            <p>Obróbka CNC · Warszawa</p>
+                        </div>
+                    </div>
+                    <div class="hero-card-body">
+                        <h5>Obróbka CNC - wolne moce 500 szt/mies.</h5>
+                        <div class="hero-card-tags">
+                            <span class="hero-card-tag">CNC 3-osiowy</span>
+                            <span class="hero-card-tag">CNC 5-osiowy</span>
+                            <span class="hero-card-tag">ISO 9001</span>
+                        </div>
+                    </div>
+                    <div class="hero-card-footer">
+                        <div class="hero-card-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span style="margin-left: 6px; color: rgba(255,255,255,0.8);">4.8 (24)</span>
+                        </div>
+                        <button class="hero-card-btn">Zapytaj o ofertę</button>
+                    </div>
+                </div>
+                <div class="floating-badge floating-badge-1">
+                    <i class="fas fa-check"></i>
+                    <div class="floating-badge-text">
+                        <strong>Firma zweryfikowana</strong>
+                        KRS / CEIDG
+                    </div>
+                </div>
+                <div class="floating-badge floating-badge-2">
+                    <i class="fas fa-shield-alt"></i>
+                    <div class="floating-badge-text">
+                        <strong>Gwarancja jakości</strong>
+                        System recenzji
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEARCH BAR -->
+    <section class="search-section">
+        <div class="search-bar">
+            <div class="search-field">
+                <label>Szukaj oferty</label>
+                <div class="input-wrap">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Np. obróbka CNC, druk 3D...">
+                </div>
+            </div>
+            <div class="search-field">
+                <label>Branża</label>
+                <div class="input-wrap">
+                    <i class="fas fa-industry"></i>
+                    <select>
+                        <option value="">Wszystkie branże</option>
+                        <option value="metalurgia">Metalurgia</option>
+                        <option value="tworzywa">Tworzywa sztuczne</option>
+                        <option value="elektronika">Elektronika</option>
+                        <option value="tekstylia">Tekstylia</option>
+                        <option value="druk">Druk i poligrafia</option>
+                        <option value="drewno">Drewno i meble</option>
+                        <option value="chemia">Chemia i kosmetyki</option>
+                        <option value="zywnosc">Żywność</option>
+                        <option value="automatyka">Automatyka przemysłowa</option>
+                        <option value="logistyka">Logistyka kontraktowa</option>
+                        <option value="utrzymanie">Utrzymanie ruchu</option>
+                        <option value="magazynowanie">Magazynowanie</option>
+                    </select>
+                </div>
+            </div>
+            <div class="search-field">
+                <label>Lokalizacja</label>
+                <div class="input-wrap">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <select>
+                        <option value="">Cała Polska</option>
+                        <option value="mazowieckie">Mazowieckie</option>
+                        <option value="slaskie">Śląskie</option>
+                        <option value="wielkopolskie">Wielkopolskie</option>
+                        <option value="malopolskie">Małopolskie</option>
+                        <option value="dolnoslaskie">Dolnośląskie</option>
+                        <option value="pomorskie">Pomorskie</option>
+                        <option value="lodzkie">Łódzkie</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary search-btn">
+                <i class="fas fa-search"></i> Szukaj
+            </button>
+        </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section class="section" id="kategorie">
+        <div class="section-header fade-in">
+            <div class="section-label">Branże</div>
+            <h2 class="section-title">Przeglądaj oferty według branży</h2>
+            <p class="section-desc">
+                Wybierz branżę, która Cię interesuje i znajdź producentów z wolnymi możliwościami produkcyjnymi.
+            </p>
+        </div>
+        <div class="categories-grid">
+            <div class="category-card fade-in">
+                <div class="category-icon">⚙️</div>
+                <h3>Metalurgia</h3>
+                <p>Obróbka CNC, spawanie, odlewnictwo</p>
+                <span class="category-count">127 ofert</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">🧪</div>
+                <h3>Tworzywa sztuczne</h3>
+                <p>Wtrysk, wytłaczanie, termoformowanie</p>
+                <span class="category-count">89 ofert</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">🔌</div>
+                <h3>Elektronika</h3>
+                <p>Montaż PCB, testowanie, programowanie</p>
+                <span class="category-count">64 ofert</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">👕</div>
+                <h3>Tekstylia</h3>
+                <p>Szycie, haftowanie, druk na tkaninach</p>
+                <span class="category-count">43 oferty</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">🖨️</div>
+                <h3>Druk i poligrafia</h3>
+                <p>Druk offsetowy, cyfrowy, etykiety</p>
+                <span class="category-count">38 ofert</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">🪵</div>
+                <h3>Drewno i meble</h3>
+                <p>Stolarka, meble na zamówienie, CNC</p>
+                <span class="category-count">52 oferty</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">🧴</div>
+                <h3>Chemia i kosmetyki</h3>
+                <p>Konfekcja, mieszanie, pakowanie</p>
+                <span class="category-count">31 ofert</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">🍞</div>
+                <h3>Żywność</h3>
+                <p>Przetwórstwo, pakowanie, logistyka</p>
+                <span class="category-count">56 ofert</span>
+            </div>
+            <!-- NEW CATEGORIES -->
+            <div class="category-card fade-in">
+                <div class="category-icon">🤖</div>
+                <h3>Automatyka</h3>
+                <p>Integracja systemów, robotyzacja, PLC</p>
+                <span class="category-count">28 ofert</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">🚚</div>
+                <h3>Logistyka</h3>
+                <p>Spedycja, logistyka kontraktowa, 3PL</p>
+                <span class="category-count">47 ofert</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">🛠️</div>
+                <h3>Utrzymanie ruchu</h3>
+                <p>Serwis maszyn, predykcja, części</p>
+                <span class="category-count">19 ofert</span>
+            </div>
+            <div class="category-card fade-in">
+                <div class="category-icon">📦</div>
+                <h3>Magazynowanie</h3>
+                <p>Składowanie, konfekcja, cross-docking</p>
+                <span class="category-count">34 oferty</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED LISTINGS -->
+    <section class="section" id="oferty" style="background: var(--bg-light); margin: 0; max-width: 100%; padding: 80px 24px;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <div class="section-header fade-in">
+                <div class="section-label">Oferty</div>
+                <h2 class="section-title">Wyróżnione oferty produkcyjne</h2>
+                <p class="section-desc">
+                    Najlepsze oferty od zweryfikowanych producentów. Sprawdź dostępne moce produkcyjne w Twojej branży.
+                </p>
+            </div>
+            <div class="listings-grid">
+                <!-- Listing 1 -->
+                <div class="listing-card fade-in">
+                    <div class="listing-badge-premium"><i class="fas fa-crown"></i> Premium</div>
+                    <div class="listing-badge-verified"><i class="fas fa-check-circle"></i> Zweryfikowana</div>
+                    <div class="listing-image">
+                        <img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?w=600&h=400&fit=crop" alt="Obróbka CNC">
+                        <div class="listing-image-overlay">
+                            <span><i class="fas fa-map-marker-alt"></i> Warszawa, Mazowieckie</span>
+                        </div>
+                    </div>
+                    <div class="listing-content">
+                        <div class="listing-company">
+                            <div class="listing-company-logo">MP</div>
+                            <div class="listing-company-info">
+                                <h4>MetalPol Sp. z o.o.</h4>
+                                <p>Metalurgia · 15 lat na rynku</p>
+                            </div>
+                        </div>
+                        <h3 class="listing-title">Obróbka CNC - wolne moce 500 szt/miesiąc</h3>
+                        <p class="listing-desc">
+                            Dysponujemy nowoczesnym parkiem maszynowym CNC 3 i 5-osiowym. 
+                            Specjalizujemy się w obróbce detali z aluminium i stali.
+                        </p>
+                        <div class="listing-meta">
+                            <span class="listing-meta-item"><i class="fas fa-cogs"></i> CNC 3-osiowy, CNC 5-osiowy</span>
+                            <span class="listing-meta-item"><i class="fas fa-certificate"></i> ISO 9001</span>
+                            <span class="listing-meta-item"><i class="fas fa-clock"></i> 2 tyg.</span>
+                        </div>
+                        <div class="listing-footer">
+                            <div class="listing-rating">
+                                <span class="listing-rating-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></span>
+                                <span class="listing-rating-value">4.8</span>
+                                <span class="listing-rating-count">(24 recenzje)</span>
+                            </div>
+                            <a href="#" class="listing-cta">Szczegóły <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 2 -->
+                <div class="listing-card fade-in">
+                    <div class="listing-badge-verified"><i class="fas fa-check-circle"></i> Zweryfikowana</div>
+                    <div class="listing-image">
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop" alt="Wtrysk tworzyw">
+                        <div class="listing-image-overlay">
+                            <span><i class="fas fa-map-marker-alt"></i> Katowice, Śląskie</span>
+                        </div>
+                    </div>
+                    <div class="listing-content">
+                        <div class="listing-company">
+                            <div class="listing-company-logo" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">PT</div>
+                            <div class="listing-company-info">
+                                <h4>PlastTech S.A.</h4>
+                                <p>Tworzywa sztuczne · 8 lat na rynku</p>
+                            </div>
+                        </div>
+                        <h3 class="listing-title">Wtrysk tworzyw - moce do 1000 szt/dzień</h3>
+                        <p class="listing-desc">
+                            Nowoczesne wtryskarki od 50 do 500 ton. Produkcja detali z PE, PP, ABS, PA.
+                            Możliwość wykonania form wtryskowych.
+                        </p>
+                        <div class="listing-meta">
+                            <span class="listing-meta-item"><i class="fas fa-cogs"></i> Wtryskarki 50-500T</span>
+                            <span class="listing-meta-item"><i class="fas fa-certificate"></i> ISO 14001</span>
+                            <span class="listing-meta-item"><i class="fas fa-clock"></i> 1 tydz.</span>
+                        </div>
+                        <div class="listing-footer">
+                            <div class="listing-rating">
+                                <span class="listing-rating-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
+                                <span class="listing-rating-value">5.0</span>
+                                <span class="listing-rating-count">(18 recenzje)</span>
+                            </div>
+                            <a href="#" class="listing-cta">Szczegóły <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Listing 3 (Automatyka) -->
+                <div class="listing-card fade-in">
+                    <div class="listing-badge-premium"><i class="fas fa-crown"></i> Premium</div>
+                    <div class="listing-badge-verified"><i class="fas fa-check-circle"></i> Zweryfikowana</div>
+                    <div class="listing-image">
+                        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=600&h=400&fit=crop" alt="Automatyka przemysłowa">
+                        <div class="listing-image-overlay">
+                            <span><i class="fas fa-map-marker-alt"></i> Poznań, Wielkopolskie</span>
+                        </div>
+                    </div>
+                    <div class="listing-content">
+                        <div class="listing-company">
+                            <div class="listing-company-logo" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">AS</div>
+                            <div class="listing-company-info">
+                                <h4>AutoSys Sp. z o.o.</h4>
+                                <p>Automatyka · 10 lat na rynku</p>
+                            </div>
+                        </div>
+                        <h3 class="listing-title">Budowa stanowisk zrobotyzowanych - wolne terminy</h3>
+                        <p class="listing-desc">
+                            Projektowanie i budowa stanowisk zrobotyzowanych (Fanuc, Kuka). 
+                            Programowanie sterowników PLC i systemów SCADA.
+                        </p>
+                        <div class="listing-meta">
+                            <span class="listing-meta-item"><i class="fas fa-robot"></i> Robotyzacja, PLC</span>
+                            <span class="listing-meta-item"><i class="fas fa-certificate"></i> Siemens Partner</span>
+                            <span class="listing-meta-item"><i class="fas fa-clock"></i> 4 tyg.</span>
+                        </div>
+                        <div class="listing-footer">
+                            <div class="listing-rating">
+                                <span class="listing-rating-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
+                                <span class="listing-rating-value">4.9</span>
+                                <span class="listing-rating-count">(12 recenzji)</span>
+                            </div>
+                            <a href="#" class="listing-cta">Szczegóły <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 48px;">
+                <a href="#" class="btn btn-outline" style="padding: 14px 40px;">
+                    Zobacz wszystkie oferty <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-it-works" id="jak-to-dziala">
+        <div class="section-header fade-in">
+            <div class="section-label">Proces</div>
+            <h2 class="section-title">Jak to działa?</h2>
+            <p class="section-desc">
+                Prosty i przejrzysty proces łączący firmy poszukujące z producentami dysponującymi wolnymi możliwościami.
+            </p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card fade-in">
+                <div class="step-number">1</div>
+                <h3>Zarejestruj firmę</h3>
+                <p>Utwórz konto i zweryfikuj swoją firmę przez KRS/CEIDG. To zajmuje tylko 5 minut.</p>
+            </div>
+            <div class="step-card fade-in">
+                <div class="step-number">2</div>
+                <h3>Dodaj ofertę</h3>
+                <p>Opisz swoje wolne moce produkcyjne, maszyny, certyfikaty i dostępność.</p>
+            </div>
+            <div class="step-card fade-in">
+                <div class="step-number">3</div>
+                <h3>Otrzymuj zapytania</h3>
+                <p>Firmy zainteresowane Twoimi możliwościami wysyłają zapytania ofertowe.</p>
+            </div>
+            <div class="step-card fade-in">
+                <div class="step-number">4</div>
+                <h3>Realizuj zlecenia</h3>
+                <p>Negocjuj warunki, podpisuj umowy i realizuj zlecenia przez portal.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section class="section" id="cennik">
+        <div class="section-header fade-in">
+            <div class="section-label">Cennik</div>
+            <h2 class="section-title">Wybierz plan dla swojej firmy</h2>
+            <p class="section-desc">
+                Dopasuj plan do swoich potrzeb. Zwiększ widoczność, pozyskuj więcej zapytań i rozwijaj swój biznes.
+            </p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card fade-in">
+                <h3>Plan FREE</h3>
+                <p class="subtitle">Dla małych warsztatów i testowania</p>
+                <div class="price">0 zł <span>/ mies.</span></div>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> 1 aktywna oferta</li>
+                    <li><i class="fas fa-check-circle"></i> Standardowa widoczność</li>
+                    <li><i class="fas fa-check-circle"></i> 2 zapytania / mies.</li>
+                    <li><i class="fas fa-check-circle"></i> Podstawowa weryfikacja</li>
+                    <li><i class="fas fa-check-circle"></i> Dostęp do bazy wiedzy</li>
+                </ul>
+                <a href="#" class="btn btn-outline">Rozpocznij za darmo</a>
+            </div>
+
+            <div class="pricing-card featured fade-in">
+                <div class="pricing-badge">Najpopularniejszy</div>
+                <h3>Plan PRO</h3>
+                <p class="subtitle">Dla aktywnych producentów</p>
+                <div class="price">299 zł <span>/ mies.</span></div>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Nielimitowane oferty</li>
+                    <li><i class="fas fa-check-circle"></i> Wyróżnienie (Top)</li>
+                    <li><i class="fas fa-check-circle"></i> Nielimitowane zapytania</li>
+                    <li><i class="fas fa-check-circle"></i> Złoty Certyfikat Zaufania</li>
+                    <li><i class="fas fa-check-circle"></i> Dedykowany opiekun</li>
+                </ul>
+                <a href="#" class="btn btn-primary">Wybierz Plan PRO</a>
+            </div>
+
+            <div class="pricing-card fade-in">
+                <h3>Plan ENTERPRISE</h3>
+                <p class="subtitle">Dla dużych zakładów i grup produkcyjnych</p>
+                <div class="price">Wycena <span>indywidualna</span></div>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Nielimitowane oferty + Integracja API</li>
+                    <li><i class="fas fa-check-circle"></i> Priorytetowa widoczność + Kampanie</li>
+                    <li><i class="fas fa-check-circle"></i> Nielimitowane zapytania</li>
+                    <li><i class="fas fa-check-circle"></i> Pełny Audyt</li>
+                    <li><i class="fas fa-check-circle"></i> Key Account Manager</li>
+                </ul>
+                <a href="#" class="btn btn-outline">Skontaktuj się</a>
+            </div>
+        </div>
+
+        <div class="pricing-addons fade-in">
+            <h4>Dodatkowe opcje</h4>
+            <div class="addons-grid">
+                <div class="addon-card">
+                    <h5>Wyróżnienie oferty</h5>
+                    <p>Zwiększ widoczność swojej oferty na 7 dni.</p>
+                    <div class="price">49 zł <span>/ 7 dni</span></div>
+                </div>
+                <div class="addon-card">
+                    <h5>Dostęp do bazy zapytań (Pay-per-Lead)</h5>
+                    <p>Odblokuj kontakt do konkretnego zapytania (dla Planu FREE).</p>
+                    <div class="price">od 29 zł <span>/ zapytanie</span></div>
+                </div>
+                <div class="addon-card">
+                    <h5>Reklama banerowa</h5>
+                    <p>Wyświetlaj baner reklamowy w wybranej branży.</p>
+                    <div class="price">199 zł <span>/ mies.</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERT SECTION -->
+    <section class="expert-section" id="ekspert">
+        <div class="expert-content">
+            <div class="expert-left">
+                <div class="section-header" style="text-align: left; margin: 0 0 32px 0; max-width: 100%;">
+                    <div class="section-label">Z perspektywy eksperta</div>
+                    <h2 class="section-title">Dlaczego warto korzystać z WolneMoce.pl?</h2>
+                    <p class="section-desc" style="color: rgba(255,255,255,0.8);">
+                        Jako ekspert z 20-letnim doświadczeniem w branży produkcyjnej, widzę ogromny potencjał 
+                        w optymalizacji wykorzystania mocy produkcyjnych w polskim przemyśle.
+                    </p>
+                </div>
+                <div class="expert-features">
+                    <div class="expert-feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <h4>Weryfikacja i bezpieczeństwo</h4>
+                            <p>Każda firma jest weryfikowana przez KRS/CEIDG. System recenzji buduje zaufanie między stronami.</p>
+                        </div>
+                    </div>
+                    <div class="expert-feature">
+                        <i class="fas fa-chart-line"></i>
+                        <div>
+                            <h4>Optymalizacja kosztów</h4>
+                            <p>Wykorzystaj wolne moce produkcyjne i zarabiaj na niewykorzystanym czasie maszyn.</p>
+                        </div>
+                    </div>
+                    <div class="expert-feature">
+                        <i class="fas fa-handshake"></i>
+                        <div>
+                            <h4>Bezpośredni kontakt B2B</h4>
+                            <p>Bez pośredników - negocjuj bezpośrednio z producentami i zleceniodawcami.</p>
+                        </div>
+                    </div>
+                    <div class="expert-feature">
+                        <i class="fas fa-file-contract"></i>
+                        <div>
+                            <h4>Wsparcie prawne</h4>
+                            <p>Szablony umów, wsparcie prawne i escrow dla bezpiecznych transakcji.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="expert-right">
+                <div class="expert-stat-card">
+                    <i class="fas fa-industry"></i>
+                    <h3>12</h3>
+                    <p>Branż produkcyjnych</p>
+                </div>
+                <div class="expert-stat-card">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <h3>16</h3>
+                    <p>Województw</p>
+                </div>
+                <div class="expert-stat-card">
+                    <i class="fas fa-users"></i>
+                    <h3>500+</h3>
+                    <p>Zweryfikowanych firm</p>
+                </div>
+                <div class="expert-stat-card">
+                    <i class="fas fa-lock"></i>
+                    <h3>Transparentne</h3>
+                    <p>Modele współpracy bez ukrytych kosztów</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="section">
+        <div class="section-header fade-in">
+            <div class="section-label">Opinie</div>
+            <h2 class="section-title">Co mówią o nas firmy?</h2>
+            <p class="section-desc">
+                Sprawdź opinie firm, które już korzystają z naszego portalu i realizują zlecenia produkcyjne.
+            </p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-quote">"</div>
+                <p class="testimonial-text">
+                    Dzięki WolneMoce.pl znaleźliśmy producenta, który wykonał dla nas 10 000 detali w ciągu 3 tygodni. 
+                    Proces był szybki, transparentny i profesjonalny.
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">AK</div>
+                    <div class="testimonial-info">
+                        <h4>Andrzej Kowalski</h4>
+                        <p>Dyrektor Operacyjny, TechParts Sp. z o.o.</p>
+                    </div>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-quote">"</div>
+                <p class="testimonial-text">
+                    Nasze wolne moce produkcyjne przestały marnować się w kalendarzu. 
+                    W ciągu 2 miesięcy zrealizowaliśmy 5 dodatkowych zleceń, co dało nam 30% wzrostu przychodu.
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">MN</div>
+                    <div class="testimonial-info">
+                        <h4>Marta Nowak</h4>
+                        <p>Właściciel, PlastForm S.A.</p>
+                    </div>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card fade-in">
+                <div class="testimonial-quote">"</div>
+                <p class="testimonial-text">
+                    Weryfikacja firm i system recenzji daje nam pewność, że współpracujemy z rzetelnymi partnerami. 
+                    Polecam każdej firmie produkcyjnej.
+                </p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">PW</div>
+                    <div class="testimonial-info">
+                        <h4>Piotr Wiśniewski</h4>
+                        <p>Kierownik Zakupów, ElektroMax Sp. z o.o.</p>
+                    </div>
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOG -->
+    <section class="section" id="blog" style="background: var(--bg-light); margin: 0; max-width: 100%; padding: 80px 24px;">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <div class="section-header fade-in">
+                <div class="section-label">Wiedza</div>
+                <h2 class="section-title">Z perspektywy eksperta</h2>
+                <p class="section-desc">
+                    Artykuły, poradniki i case studies od ekspertów branżowych. Rozwijaj swoją wiedzę o outsourcingu produkcji.
+                </p>
+            </div>
+            <div class="blog-grid">
+                <div class="blog-card fade-in">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop" alt="Outsourcing produkcji">
+                        <span class="blog-category">Poradnik</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="fas fa-calendar"></i> 15 kwi 2026</span>
+                            <span><i class="fas fa-clock"></i> 8 min</span>
+                        </div>
+                        <h3 class="blog-title">Jak efektywnie outsourcingować produkcję w 2026 roku?</h3>
+                        <p class="blog-excerpt">
+                            Kompletny przewodnik po outsourcingu produkcji. Od wyboru podwykonawcy po zarządzanie jakością i logistyką.
+                        </p>
+                        <a href="#" class="blog-read-more">Czytaj więcej <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="blog-card fade-in">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1565043666747-69f6646db940?w=600&h=400&fit=crop" alt="Case study CNC">
+                        <span class="blog-category">Case Study</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="fas fa-calendar"></i> 10 kwi 2026</span>
+                            <span><i class="fas fa-clock"></i> 12 min</span>
+                        </div>
+                        <h3 class="blog-title">Case study: Jak firma TechParts zwiększyła produkcję o 200%?</h3>
+                        <p class="blog-excerpt">
+                            Analiza przypadku firmy, która dzięki outsourcingowi zrealizowała rekordowy kontrakt bez inwestycji w nowe maszyny.
+                        </p>
+                        <a href="#" class="blog-read-more">Czytaj więcej <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="blog-card fade-in">
+                    <div class="blog-image">
+                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop" alt="Trendy produkcyjne">
+                        <span class="blog-category">Trendy</span>
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">
+                            <span><i class="fas fa-calendar"></i> 5 kwi 2026</span>
+                            <span><i class="fas fa-clock"></i> 6 min</span>
+                        </div>
+                        <h3 class="blog-title">5 trendów w polskim przemyśle produkcyjnym na 2026 rok</h3>
+                        <p class="blog-excerpt">
+                            Automatyzacja, Przemysł 4.0, zrównoważona produkcja - co czeka polskich producentów w najbliższych miesiącach?
+                        </p>
+                        <a href="#" class="blog-read-more">Czytaj więcej <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA SECTION -->
+    <section class="cta-section" id="kontakt">
+        <div class="cta-content">
+            <h2>Gotowy na optymalizację produkcji?</h2>
+            <p>
+                Dołącz do 500+ firm, które już korzystają z WolneMoce.pl. 
+                Znajdź wolne moce lub dodaj swoją ofertę już dziś.
+            </p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-accent">Dodaj ofertę za darmo</a>
+                <a href="#" class="btn" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3);">
+                    <i class="fas fa-search"></i> Przeglądaj oferty
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo-text" style="font-size: 24px; margin-bottom: 16px;">Wolne<span style="color: var(--primary-light);">Moce</span>.pl</div>
+                    <p>
+                        #1 Portal wolnych mocy produkcyjnych w Polsce. 
+                        Łączymy firmy poszukujące możliwości produkcyjnych z zakładami 
+                        dysponującymi wolnymi zdolnościami.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Portal</h4>
+                    <ul>
+                        <li><a href="#oferty">Oferty produkcyjne</a></li>
+                        <li><a href="#">Dodaj ofertę</a></li>
+                        <li><a href="#jak-to-dziala">Jak to działa</a></li>
+                        <li><a href="#">Cennik</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Branże</h4>
+                    <ul>
+                        <li><a href="#">Metalurgia</a></li>
+                        <li><a href="#">Tworzywa sztuczne</a></li>
+                        <li><a href="#">Automatyka</a></li>
+                        <li><a href="#">Logistyka</a></li>
+                        <li><a href="#">Magazynowanie</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Firma</h4>
+                    <ul>
+                        <li><a href="#">O nas</a></li>
+                        <li><a href="#kontakt">Kontakt</a></li>
+                        <li><a href="#">Kariera</a></li>
+                        <li><a href="#">Partnerzy</a></li>
+                        <li><a href="#">Press kit</a></li>
+                    </ul>
+                </div>
+                <div class="footer-newsletter">
+                    <h4>Newsletter</h4>
+                    <p>Otrzymuj najnowsze oferty i artykuły eksperckie prosto na email.</p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Dziękujemy za zapisanie się do newslettera!');">
+                        <input type="email" placeholder="Twój email" required>
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 WolneMoce.pl. Wszelkie prawa zastrzeżone.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Regulamin</a>
+                    <a href="#">Polityka prywatności</a>
+                    <a href="#">RODO</a>
+                    <a href="#">Mapa strony</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            // If mobile menu existed, toggle it. In this layout we'll just alert for demo.
+            alert("Menu mobilne aktywne (widok demo)");
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
+                navbar.style.background = 'rgba(255,255,255,0.98)';
+            } else {
+                navbar.style.boxShadow = 'none';
+                navbar.style.background = 'rgba(255,255,255,0.95)';
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === "#") return;
+                
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
