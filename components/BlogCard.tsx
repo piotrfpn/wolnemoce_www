@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { BlogArticle } from "@/lib/mockData";
 
 export default function BlogCard({ article }: { article: BlogArticle }) {
@@ -21,9 +22,9 @@ export default function BlogCard({ article }: { article: BlogArticle }) {
         <h3 className="blog-title">{article.title}</h3>
         <p className="blog-excerpt">{article.excerpt}</p>
 
-        <a href="#" className="blog-read-more">
+        <Link href={`/blog/${article.slug}`} className="blog-read-more">
           Czytaj więcej <i className="fas fa-arrow-right"></i>
-        </a>
+        </Link>
       </div>
     </article>
   );

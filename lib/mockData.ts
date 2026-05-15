@@ -26,12 +26,16 @@ export type Offer = {
 export type BlogArticle = {
   id: number;
   title: string;
+  slug: string;
   category: string;
   date: string;
+  author: string;
   readTime: string;
   excerpt: string;
   image: string;
   imageAlt: string;
+  tags: string[];
+  content: string;
 };
 
 export type PricingPlan = {
@@ -250,35 +254,87 @@ export const blogArticles: BlogArticle[] = [
   {
     id: 1,
     title: "Jak efektywnie outsourcingować produkcję w 2026 roku?",
+    slug: "jak-efektywnie-outsourcingowac-produkcje-2026",
     category: "Poradnik",
     date: "15 kwi 2026",
+    author: "Zespół WolneMoce.pl",
     readTime: "8 min",
     excerpt:
       "Najważniejsze kryteria wyboru podwykonawcy, od zapytania ofertowego po kontrolę jakości.",
     image: "/images/offers/injection.jpg",
     imageAlt: "Outsourcing produkcji",
+    tags: ["Outsourcing", "Produkcja", "B2B"],
+    content: `
+      <p>Outsourcing produkcji pozwala szybciej reagować na popyt, ale wymaga dobrego przygotowania zapytania i jasnych kryteriów wyboru partnera.</p>
+      <h2>Od czego zacząć?</h2>
+      <p>Najpierw warto opisać produkt, wolumen, oczekiwany termin oraz wymagania jakościowe. Im precyzyjniejsze dane, tym łatwiej porównać oferty.</p>
+      <h2>Co sprawdzić u podwykonawcy?</h2>
+      <ul>
+        <li>doświadczenie w podobnych realizacjach,</li>
+        <li>dostępne moce produkcyjne,</li>
+        <li>certyfikaty i standardy jakości,</li>
+        <li>realny termin uruchomienia współpracy.</li>
+      </ul>
+      <h3>Wnioski dla firm B2B</h3>
+      <p>Dobrze przygotowane zapytanie skraca rozmowy handlowe i zmniejsza ryzyko opóźnień. WolneMoce.pl ma docelowo pomagać zebrać te informacje w jednym miejscu.</p>
+    `,
   },
   {
     id: 2,
     title: "Case study: zwiększenie produkcji bez inwestycji w maszyny",
+    slug: "zwiekszenie-produkcji-bez-inwestycji-w-maszyny",
     category: "Case Study",
     date: "10 kwi 2026",
+    author: "Zespół WolneMoce.pl",
     readTime: "12 min",
     excerpt:
       "Jak firma B2B zrealizowała rekordowy kontrakt dzięki wolnym mocom u partnera.",
     image: "/images/offers/cnc.jpg",
     imageAlt: "Case study CNC",
+    tags: ["Case Study", "CNC", "Skalowanie"],
+    content: `
+      <p>Wzrost zamówień nie zawsze musi oznaczać natychmiastową inwestycję w nowe maszyny. Czasem szybszą drogą jest współpraca z partnerem, który ma wolne moce.</p>
+      <h2>Sytuacja wyjściowa</h2>
+      <p>Firma produkcyjna otrzymała duży kontrakt, którego nie mogła zrealizować wyłącznie własnym parkiem maszynowym. Kluczowe były termin, jakość i powtarzalność detali.</p>
+      <h2>Jak dobrano partnera?</h2>
+      <ul>
+        <li>porównano dostępność maszyn CNC,</li>
+        <li>sprawdzono doświadczenie w podobnych materiałach,</li>
+        <li>ustalono minimalną partię i harmonogram odbiorów,</li>
+        <li>opisano standard kontroli jakości.</li>
+      </ul>
+      <h3>Efekt</h3>
+      <p>Firma utrzymała termin kontraktu bez zakupu dodatkowego centrum obróbczego. Model jest szczególnie użyteczny przy sezonowych wzrostach popytu.</p>
+    `,
   },
   {
     id: 3,
     title: "5 trendów w polskim przemyśle produkcyjnym",
+    slug: "trendy-w-polskim-przemysle-produkcyjnym",
     category: "Trendy",
     date: "5 kwi 2026",
+    author: "Zespół WolneMoce.pl",
     readTime: "6 min",
     excerpt:
       "Automatyzacja, krótsze serie, odporne łańcuchy dostaw i większa specjalizacja zakładów.",
     image: "/images/offers/automation.jpg",
     imageAlt: "Trendy produkcyjne",
+    tags: ["Trendy", "Automatyzacja", "Przemysł"],
+    content: `
+      <p>Polski przemysł coraz mocniej stawia na elastyczność. Firmy chcą produkować szybciej, bliżej rynku i przy mniejszym ryzyku przerw w dostawach.</p>
+      <h2>Najważniejsze kierunki</h2>
+      <ul>
+        <li>automatyzacja krótkich i średnich serii,</li>
+        <li>większe znaczenie lokalnych podwykonawców,</li>
+        <li>lepsze wykorzystanie wolnych mocy,</li>
+        <li>specjalizacja zakładów w konkretnych technologiach,</li>
+        <li>większy nacisk na transparentność jakości.</li>
+      </ul>
+      <h2>Dlaczego to ważne?</h2>
+      <p>Firmy, które potrafią szybko znaleźć sprawdzonego partnera, mogą lepiej obsługiwać zmienny popyt i unikać kosztownych przestojów.</p>
+      <h3>Rola marketplace B2B</h3>
+      <p>Statyczny MVP WolneMoce.pl pokazuje kierunek: uporządkowane oferty, parametry współpracy i łatwiejszy kontakt między firmami.</p>
+    `,
   },
 ];
 
