@@ -21,8 +21,10 @@ const panelItems = [
   },
   {
     title: "Moje oferty",
-    description: "Lista ofert wolnych mocy produkcyjnych.",
+    description: "Dodawaj i edytuj oferty firmy",
     icon: "fas fa-list-check",
+    href: "/panel/oferty",
+    cta: "Przejdź do ofert",
   },
   {
     title: "Ustawienia konta",

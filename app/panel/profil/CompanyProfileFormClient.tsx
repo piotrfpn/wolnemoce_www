@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
-import { categories, industryServiceTypes, provinces } from "@/lib/mockData";
+import { type FormEvent, useMemo, useState } from "react";
+import { industryServiceTypes, provinces } from "@/lib/mockData";
 import { createClient } from "@/lib/supabase/client";
 
 type ProfileData = {
@@ -17,6 +17,7 @@ type CompanyData = {
   name: string | null;
   description: string | null;
   industry: string | null;
+  industries: string[] | null;
   service_types: string[] | null;
   location_voivodeship: string | null;
   location_city: string | null;
@@ -31,11 +32,23 @@ type CompanyProfileFormClientProps = {
 };
 
 const inputClass =
-  "min-w-0 max-w-full w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10";
+  "min-w-0 max-w-full w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400";
 
-const sortedCategories = [...categories].sort((first, second) =>
+const sortedIndustries = Object.keys(industryServiceTypes).sort((first, second) =>
   first.localeCompare(second, "pl")
 );
+
+function getInitialIndustries(company: CompanyData | null) {
+  if (company?.industries && company.industries.length > 0) {
+    return company.industries;
+  }
+
+  if (company?.industry) {
+    return [company.industry];
+  }
+
+  return [];
+}
 
 export default function CompanyProfileFormClient({
   userId,
@@ -44,11 +57,18 @@ export default function CompanyProfileFormClient({
   company,
 }: CompanyProfileFormClientProps) {
   const router = useRouter();
+  const initialIndustries = getInitialIndustries(company);
   const [companyId, setCompanyId] = useState(company?.id ?? "");
   const [isVerified, setIsVerified] = useState(Boolean(company?.is_verified));
   const [nip, setNip] = useState(company?.nip ?? "");
   const [name, setName] = useState(company?.name ?? "");
-  const [industry, setIndustry] = useState(company?.industry ?? "");
+  const [mainIndustry, setMainIndustry] = useState(
+    company?.industry && initialIndustries.includes(company.industry)
+      ? company.industry
+      : initialIndustries[0] ?? ""
+  );
+  const [selectedIndustries, setSelectedIndustries] =
+    useState<string[]>(initialIndustries);
   const [selectedServiceTypes, setSelectedServiceTypes] = useState<string[]>(
     company?.service_types ?? []
   );
@@ -60,6 +80,70 @@ export default function CompanyProfileFormClient({
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [requestIndustry, setRequestIndustry] = useState(
+    initialIndustries[0] ?? ""
+  );
+  const [proposedService, setProposedService] = useState("");
+  const [requestReason, setRequestReason] = useState("");
+  const [requestError, setRequestError] = useState("");
+  const [requestMessage, setRequestMessage] = useState("");
+  const [isRequestSubmitting, setIsRequestSubmitting] = useState(false);
+
+  const servicesBySelectedIndustry = useMemo(
+    () =>
+      selectedIndustries.map((industry) => ({
+        industry,
+        services: industryServiceTypes[industry] ?? [],
+      })),
+    [selectedIndustries]
+  );
+
+  function getAllowedServices(industries: string[]) {
+    return new Set(
+      industries.flatMap((industry) => industryServiceTypes[industry] ?? [])
+    );
+  }
+
+  function handleIndustryToggle(industry: string) {
+    setSelectedIndustries((current) => {
+      const next = current.includes(industry)
+        ? current.filter((item) => item !== industry)
+        : [...current, industry].sort((first, second) =>
+            first.localeCompare(second, "pl")
+          );
+
+      const allowedServices = getAllowedServices(next);
+      setSelectedServiceTypes((services) =>
+        services.filter((service) => allowedServices.has(service))
+      );
+
+      setMainIndustry((currentMain) => {
+        if (next.length === 1) {
+          return next[0];
+        }
+
+        return currentMain && next.includes(currentMain)
+          ? currentMain
+          : next[0] ?? "";
+      });
+
+      setRequestIndustry((currentRequestIndustry) =>
+        currentRequestIndustry && next.includes(currentRequestIndustry)
+          ? currentRequestIndustry
+          : next[0] ?? ""
+      );
+
+      return next;
+    });
+  }
+
+  function toggleServiceType(serviceType: string) {
+    setSelectedServiceTypes((current) =>
+      current.includes(serviceType)
+        ? current.filter((item) => item !== serviceType)
+        : [...current, serviceType]
+    );
+  }
 
   function validateForm() {
     const normalizedNip = nip.replace(/[\s-]/g, "");
@@ -72,8 +156,12 @@ export default function CompanyProfileFormClient({
       return "Podaj nazwę firmy.";
     }
 
-    if (!industry) {
-      return "Wybierz branżę.";
+    if (selectedIndustries.length === 0) {
+      return "Wybierz co najmniej jedną branżę działalności.";
+    }
+
+    if (!mainIndustry || !selectedIndustries.includes(mainIndustry)) {
+      return "Branża główna musi być jedną z wybranych branż działalności.";
     }
 
     if (selectedServiceTypes.length === 0) {
@@ -108,7 +196,8 @@ export default function CompanyProfileFormClient({
       nip: nip.replace(/[\s-]/g, ""),
       name: name.trim(),
       description: description.trim() || null,
-      industry,
+      industry: mainIndustry,
+      industries: selectedIndustries,
       service_types: selectedServiceTypes,
       location_voivodeship: voivodeship,
       location_city: city.trim(),
@@ -120,7 +209,7 @@ export default function CompanyProfileFormClient({
           .update(payload)
           .eq("id", companyId)
           .select(
-            "id, nip, name, description, industry, service_types, location_voivodeship, location_city, is_verified"
+            "id, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified"
           )
           .single()
       : supabase
@@ -130,7 +219,7 @@ export default function CompanyProfileFormClient({
             user_id: userId,
           })
           .select(
-            "id, nip, name, description, industry, service_types, location_voivodeship, location_city, is_verified"
+            "id, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified"
           )
           .single();
 
@@ -143,15 +232,24 @@ export default function CompanyProfileFormClient({
     }
 
     if (data) {
+      const savedIndustries =
+        data.industries && data.industries.length > 0
+          ? data.industries
+          : data.industry
+            ? [data.industry]
+            : [];
+
       setCompanyId(data.id);
       setIsVerified(Boolean(data.is_verified));
       setNip(data.nip ?? "");
       setName(data.name ?? "");
       setDescription(data.description ?? "");
-      setIndustry(data.industry ?? "");
+      setMainIndustry(data.industry ?? savedIndustries[0] ?? "");
+      setSelectedIndustries(savedIndustries);
       setSelectedServiceTypes(data.service_types ?? []);
       setVoivodeship(data.location_voivodeship ?? "");
       setCity(data.location_city ?? "");
+      setRequestIndustry(savedIndustries[0] ?? "");
     }
 
     setMessage("Profil firmy został zapisany.");
@@ -159,16 +257,49 @@ export default function CompanyProfileFormClient({
     router.refresh();
   }
 
-  const availableServiceTypes = industry
-    ? industryServiceTypes[industry] ?? []
-    : [];
+  async function handleServiceRequestSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setRequestError("");
+    setRequestMessage("");
 
-  function toggleServiceType(serviceType: string) {
-    setSelectedServiceTypes((current) =>
-      current.includes(serviceType)
-        ? current.filter((item) => item !== serviceType)
-        : [...current, serviceType]
-    );
+    if (!companyId) {
+      setRequestError("Zapisz profil firmy, aby móc zgłaszać propozycje nowych usług.");
+      return;
+    }
+
+    if (!requestIndustry) {
+      setRequestError("Wybierz branżę, której dotyczy zgłoszenie.");
+      return;
+    }
+
+    if (proposedService.trim().length < 3) {
+      setRequestError("Proponowana nazwa usługi musi mieć co najmniej 3 znaki.");
+      return;
+    }
+
+    setIsRequestSubmitting(true);
+    const supabase = createClient();
+    const { error: requestInsertError } = await supabase
+      .from("service_requests")
+      .insert({
+        user_id: userId,
+        company_id: companyId,
+        industry: requestIndustry,
+        proposed_service: proposedService.trim(),
+        reason: requestReason.trim() || null,
+        status: "pending",
+      });
+
+    if (requestInsertError) {
+      setRequestError(requestInsertError.message);
+      setIsRequestSubmitting(false);
+      return;
+    }
+
+    setProposedService("");
+    setRequestReason("");
+    setRequestMessage("Zgłoszenie zostało wysłane do administratora.");
+    setIsRequestSubmitting(false);
   }
 
   return (
@@ -228,109 +359,79 @@ export default function CompanyProfileFormClient({
         </Link>
       </aside>
 
-      <form
-        onSubmit={handleSubmit}
-        className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8"
-      >
-        <div className="mb-8">
-          <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-            Profil firmy
-          </p>
-          <h2 className="text-2xl font-extrabold text-slate-900">
-            Dane firmy
-          </h2>
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            Uzupełnij dane firmy, które będą wykorzystywane przy ofertach i
-            zapytaniach.
-          </p>
-        </div>
-
-        {error ? (
-          <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-            {error}
+      <div className="min-w-0 space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8"
+        >
+          <div className="mb-8">
+            <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
+              Profil firmy
+            </p>
+            <h2 className="text-2xl font-extrabold text-slate-900">
+              Dane firmy
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-slate-500">
+              Uzupełnij dane firmy, które będą wykorzystywane przy ofertach i
+              zapytaniach.
+            </p>
           </div>
-        ) : null}
 
-        {message ? (
-          <div className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-            {message}
-          </div>
-        ) : null}
-
-        <div className="grid min-w-0 gap-5 md:grid-cols-2">
-          <label className="block min-w-0">
-            <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-              <i className="fas fa-id-card text-[#1a5f3c]"></i>
-              NIP
-            </span>
-            <input
-              value={nip}
-              onChange={(event) => setNip(event.target.value)}
-              placeholder="Np. 1234567890"
-              className={inputClass}
-            />
-          </label>
-
-          <label className="block min-w-0">
-            <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-              <i className="fas fa-building text-[#1a5f3c]"></i>
-              Nazwa firmy
-            </span>
-            <input
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Np. MetalPol Sp. z o.o."
-              className={inputClass}
-            />
-          </label>
-
-          <label className="block min-w-0">
-            <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-              <i className="fas fa-industry text-[#1a5f3c]"></i>
-              Branża
-            </span>
-            <select
-              value={industry}
-              onChange={(event) => {
-                setIndustry(event.target.value);
-                setSelectedServiceTypes([]);
-              }}
-              className={inputClass}
-            >
-              <option value="">Wybierz branżę</option>
-              {sortedCategories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <div className="min-w-0 md:col-span-2">
-            <div className="mb-3">
-              <h3 className="flex items-center gap-2 text-sm font-extrabold text-slate-900">
-                <i className="fas fa-screwdriver-wrench text-[#1a5f3c]"></i>
-                Rodzaje usług
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                Wybierz usługi, które najlepiej opisują możliwości Twojej firmy.
-                Możesz zaznaczyć kilka pozycji.
-              </p>
+          {error ? (
+            <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {error}
             </div>
+          ) : null}
 
-            {!industry ? (
-              <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm text-slate-500">
-                Najpierw wybierz branżę, aby zobaczyć dostępne rodzaje usług.
-              </div>
-            ) : (
+          {message ? (
+            <div className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+              {message}
+            </div>
+          ) : null}
+
+          <div className="grid min-w-0 gap-5 md:grid-cols-2">
+            <label className="block min-w-0">
+              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                <i className="fas fa-id-card text-[#1a5f3c]"></i>
+                NIP
+              </span>
+              <input
+                value={nip}
+                onChange={(event) => setNip(event.target.value)}
+                placeholder="Np. 1234567890"
+                className={inputClass}
+              />
+            </label>
+
+            <label className="block min-w-0">
+              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                <i className="fas fa-building text-[#1a5f3c]"></i>
+                Nazwa firmy
+              </span>
+              <input
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                placeholder="Np. MetalPol Sp. z o.o."
+                className={inputClass}
+              />
+            </label>
+
+            <div className="min-w-0 md:col-span-2">
+              <h3 className="mb-2 flex items-center gap-2 text-sm font-extrabold text-slate-900">
+                <i className="fas fa-layer-group text-[#1a5f3c]"></i>
+                Branże działalności
+              </h3>
+              <p className="mb-4 text-sm leading-6 text-slate-500">
+                Wybierz wszystkie branże, w których działa firma.
+              </p>
               <div className="grid min-w-0 gap-3 md:grid-cols-2">
-                {availableServiceTypes.map((serviceType) => {
-                  const isChecked = selectedServiceTypes.includes(serviceType);
+                {sortedIndustries.map((industryName) => {
+                  const isChecked = selectedIndustries.includes(industryName);
 
                   return (
                     <label
-                      key={serviceType}
-                      className={`flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 text-sm transition ${
+                      key={industryName}
+                      className={`flex min-w-0 cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-sm transition ${
                         isChecked
                           ? "border-[#1a5f3c] bg-[#f4fbf7] text-slate-900"
                           : "border-slate-200 bg-white text-slate-600 hover:border-[#1a5f3c]/40"
@@ -339,72 +440,241 @@ export default function CompanyProfileFormClient({
                       <input
                         type="checkbox"
                         checked={isChecked}
-                        onChange={() => toggleServiceType(serviceType)}
-                        className="mt-1 h-4 w-4 shrink-0 rounded border-slate-300 accent-[#1a5f3c]"
+                        onChange={() => handleIndustryToggle(industryName)}
+                        className="h-4 w-4 shrink-0 rounded border-slate-300 accent-[#1a5f3c]"
                       />
-                      <span className="min-w-0 leading-6">{serviceType}</span>
+                      <span className="min-w-0">{industryName}</span>
                     </label>
                   );
                 })}
               </div>
-            )}
+            </div>
+
+            <label className="block min-w-0 md:col-span-2">
+              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                <i className="fas fa-industry text-[#1a5f3c]"></i>
+                Branża główna
+              </span>
+              <select
+                value={mainIndustry}
+                onChange={(event) => setMainIndustry(event.target.value)}
+                className={inputClass}
+                disabled={selectedIndustries.length === 0}
+              >
+                <option value="">Wybierz branżę główną</option>
+                {selectedIndustries.map((industryName) => (
+                  <option key={industryName} value={industryName}>
+                    {industryName}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <div className="min-w-0 md:col-span-2">
+              <div className="mb-3">
+                <h3 className="flex items-center gap-2 text-sm font-extrabold text-slate-900">
+                  <i className="fas fa-screwdriver-wrench text-[#1a5f3c]"></i>
+                  Rodzaje usług
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  Wybierz usługi, które najlepiej opisują możliwości Twojej
+                  firmy. Możesz zaznaczyć kilka pozycji z wielu branż.
+                </p>
+              </div>
+
+              {selectedIndustries.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm text-slate-500">
+                  Najpierw wybierz branże działalności, aby zobaczyć dostępne
+                  rodzaje usług.
+                </div>
+              ) : (
+                <div className="space-y-5">
+                  {servicesBySelectedIndustry.map(({ industry, services }) => (
+                    <div key={industry} className="min-w-0">
+                      <h4 className="mb-3 text-sm font-extrabold text-slate-900">
+                        {industry}
+                      </h4>
+                      <div className="grid min-w-0 gap-3 md:grid-cols-2">
+                        {services.map((serviceType) => {
+                          const isChecked =
+                            selectedServiceTypes.includes(serviceType);
+
+                          return (
+                            <label
+                              key={`${industry}-${serviceType}`}
+                              className={`flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 text-sm transition ${
+                                isChecked
+                                  ? "border-[#1a5f3c] bg-[#f4fbf7] text-slate-900"
+                                  : "border-slate-200 bg-white text-slate-600 hover:border-[#1a5f3c]/40"
+                              }`}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={() => toggleServiceType(serviceType)}
+                                className="mt-1 h-4 w-4 shrink-0 rounded border-slate-300 accent-[#1a5f3c]"
+                              />
+                              <span className="min-w-0 leading-6">
+                                {serviceType}
+                              </span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <label className="block min-w-0">
+              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                <i className="fas fa-map text-[#1a5f3c]"></i>
+                Województwo
+              </span>
+              <select
+                value={voivodeship}
+                onChange={(event) => setVoivodeship(event.target.value)}
+                className={inputClass}
+              >
+                <option value="">Wybierz województwo</option>
+                {provinces.map((province) => (
+                  <option key={province} value={province}>
+                    {province}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="block min-w-0">
+              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                <i className="fas fa-location-dot text-[#1a5f3c]"></i>
+                Miasto
+              </span>
+              <input
+                value={city}
+                onChange={(event) => setCity(event.target.value)}
+                placeholder="Np. Poznań, Kalisz, Leszno"
+                className={inputClass}
+              />
+            </label>
+
+            <label className="block min-w-0 md:col-span-2">
+              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                <i className="fas fa-align-left text-[#1a5f3c]"></i>
+                Opis firmy
+              </span>
+              <textarea
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                rows={6}
+                placeholder="Opisz specjalizację, park maszynowy, doświadczenie lub typ klientów."
+                className={inputClass}
+              />
+            </label>
           </div>
 
-          <label className="block min-w-0">
-            <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-              <i className="fas fa-map text-[#1a5f3c]"></i>
-              Województwo
-            </span>
-            <select
-              value={voivodeship}
-              onChange={(event) => setVoivodeship(event.target.value)}
-              className={inputClass}
-            >
-              <option value="">Wybierz województwo</option>
-              {provinces.map((province) => (
-                <option key={province} value={province}>
-                  {province}
-                </option>
-              ))}
-            </select>
-          </label>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="mt-8 btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {isSubmitting ? "Zapisywanie..." : "Zapisz profil firmy"}
+          </button>
+        </form>
 
-          <label className="block min-w-0 md:col-span-2">
-            <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-              <i className="fas fa-location-dot text-[#1a5f3c]"></i>
-              Miasto
-            </span>
-            <input
-              value={city}
-              onChange={(event) => setCity(event.target.value)}
-              placeholder="Np. Poznań, Kalisz, Leszno"
-              className={inputClass}
-            />
-          </label>
+        <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
+            Nie widzisz usługi na liście?
+          </p>
+          <h2 className="text-2xl font-extrabold text-slate-900">
+            Zgłoś brakującą usługę
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-slate-500">
+            Zgłoś brakującą usługę do administratora. Po weryfikacji może
+            zostać dodana do słownika branż.
+          </p>
 
-          <label className="block min-w-0 md:col-span-2">
-            <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-              <i className="fas fa-align-left text-[#1a5f3c]"></i>
-              Opis firmy
-            </span>
-            <textarea
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              rows={6}
-              placeholder="Opisz specjalizację, park maszynowy, doświadczenie lub typ klientów."
-              className={inputClass}
-            />
-          </label>
-        </div>
+          {!companyId ? (
+            <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm text-slate-500">
+              Zapisz profil firmy, aby móc zgłaszać propozycje nowych usług.
+            </div>
+          ) : (
+            <form onSubmit={handleServiceRequestSubmit} className="mt-6">
+              {requestError ? (
+                <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {requestError}
+                </div>
+              ) : null}
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="mt-8 btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isSubmitting ? "Zapisywanie..." : "Zapisz profil firmy"}
-        </button>
-      </form>
+              {requestMessage ? (
+                <div className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                  {requestMessage}
+                </div>
+              ) : null}
+
+              <div className="grid min-w-0 gap-5 md:grid-cols-2">
+                <label className="block min-w-0">
+                  <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                    <i className="fas fa-industry text-[#1a5f3c]"></i>
+                    Branża zgłoszenia
+                  </span>
+                  <select
+                    value={requestIndustry}
+                    onChange={(event) => setRequestIndustry(event.target.value)}
+                    className={inputClass}
+                    disabled={selectedIndustries.length === 0}
+                  >
+                    <option value="">Wybierz branżę</option>
+                    {selectedIndustries.map((industryName) => (
+                      <option key={industryName} value={industryName}>
+                        {industryName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="block min-w-0">
+                  <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                    <i className="fas fa-plus text-[#1a5f3c]"></i>
+                    Proponowana nazwa usługi
+                  </span>
+                  <input
+                    value={proposedService}
+                    onChange={(event) => setProposedService(event.target.value)}
+                    className={inputClass}
+                    placeholder="Np. nowa usługa technologiczna"
+                    disabled={selectedIndustries.length === 0}
+                  />
+                </label>
+
+                <label className="block min-w-0 md:col-span-2">
+                  <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                    <i className="fas fa-align-left text-[#1a5f3c]"></i>
+                    Uzasadnienie / opis
+                  </span>
+                  <textarea
+                    value={requestReason}
+                    onChange={(event) => setRequestReason(event.target.value)}
+                    rows={4}
+                    className={inputClass}
+                    placeholder="Opcjonalnie opisz, dlaczego ta usługa powinna znaleźć się w słowniku."
+                    disabled={selectedIndustries.length === 0}
+                  />
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isRequestSubmitting || selectedIndustries.length === 0}
+                className="mt-6 btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isRequestSubmitting ? "Wysyłanie..." : "Zgłoś usługę"}
+              </button>
+            </form>
+          )}
+        </section>
+      </div>
     </div>
   );
 }
