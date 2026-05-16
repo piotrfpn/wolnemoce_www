@@ -1,31 +1,53 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import RfqRequestClient from "./RfqRequestClient";
+import { createClient } from "@/lib/supabase/server";
+import RfqRequestClient, { type RfqOffer } from "./RfqRequestClient";
 
 export const metadata: Metadata = {
   title: "Zapytanie ofertowe",
   description:
-    "Statyczny formularz zapytania ofertowego RFQ w portalu WolneMoce.pl.",
+    "Wyślij zapytanie ofertowe RFQ do aktywnej oferty w portalu WolneMoce.pl.",
 };
 
-export default function RfqRequestPage() {
+type RfqRequestPageProps = {
+  searchParams?: {
+    oferta?: string;
+  };
+};
+
+async function getActiveOffer(slug?: string) {
+  if (!slug) {
+    return null;
+  }
+
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("offers")
+    .select(
+      "id, title, slug, branch, service_type, power_available, lead_time, status, companies!inner(id, name, slug, location_voivodeship, location_city, is_verified)"
+    )
+    .eq("slug", slug)
+    .eq("status", "active")
+    .single();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return data as unknown as RfqOffer;
+}
+
+export default async function RfqRequestPage({
+  searchParams,
+}: RfqRequestPageProps) {
+  const selectedOffer = await getActiveOffer(searchParams?.oferta);
+
   return (
     <>
       <Navbar />
       <main className="bg-white">
-        <Suspense
-          fallback={
-            <section className="px-6 pb-20 pt-36">
-              <div className="mx-auto max-w-[1400px] rounded-[24px] border border-slate-200 bg-white p-8 text-slate-600 shadow-sm">
-                Ładowanie formularza...
-              </div>
-            </section>
-          }
-        >
-          <RfqRequestClient />
-        </Suspense>
+        <RfqRequestClient offer={selectedOffer} requestedSlug={searchParams?.oferta ?? ""} />
       </main>
       <Footer />
     </>

@@ -27,6 +27,13 @@ const panelItems = [
     cta: "Przejdź do ofert",
   },
   {
+    title: "Zapytania ofertowe",
+    description: "Przeglądaj zapytania wysłane do Twojej firmy.",
+    icon: "fas fa-inbox",
+    href: "/panel/zapytania",
+    cta: "Przejdź do zapytań",
+  },
+  {
     title: "Ustawienia konta",
     description: "Dane użytkownika, email i bezpieczeństwo konta.",
     icon: "fas fa-gear",

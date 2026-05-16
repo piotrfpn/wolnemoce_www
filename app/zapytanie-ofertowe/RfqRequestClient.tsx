@@ -1,30 +1,55 @@
 "use client";
 
 import type { FormEvent } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import StaticFormField from "@/components/StaticFormField";
-import { categories, offers, services } from "@/lib/mockData";
+import { submitInquiry } from "./actions";
 
-const categoryOptions = categories.map((category) => ({
-  label: category,
-  value: category,
-}));
+export type RfqOffer = {
+  id: string;
+  title: string | null;
+  slug: string | null;
+  branch: string | null;
+  service_type: string | null;
+  power_available: string | null;
+  lead_time: string | null;
+  status: string | null;
+  companies: {
+    id: string;
+    name: string | null;
+    slug: string | null;
+    location_voivodeship: string | null;
+    location_city: string | null;
+    is_verified: boolean | null;
+  } | null;
+};
 
-const serviceOptions = services.map((service) => ({
-  label: service,
-  value: service,
-}));
-
-export default function RfqRequestClient() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const offerSlug = searchParams.get("oferta");
-  const selectedOffer = offers.find((offer) => offer.slug === offerSlug);
+export default function RfqRequestClient({
+  offer,
+  requestedSlug,
+}: {
+  offer: RfqOffer | null;
+  requestedSlug: string;
+}) {
+  const [error, setError] = useState("");
+  const [isPending, startTransition] = useTransition();
+  const company = offer?.companies;
+  const location = [company?.location_city, company?.location_voivodeship]
+    .filter(Boolean)
+    .join(", ");
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    router.push("/zapytanie-wyslane");
+    setError("");
+    const formData = new FormData(event.currentTarget);
+
+    startTransition(async () => {
+      const result = await submitInquiry(formData);
+      if (result?.error) {
+        setError(result.error);
+      }
+    });
   }
 
   return (
@@ -39,77 +64,74 @@ export default function RfqRequestClient() {
           </div>
 
           <h1 className="max-w-4xl text-3xl font-black leading-tight tracking-[-1px] md:text-5xl">
-            Opisz zapotrzebowanie i przygotuj zapytanie
+            Wyślij zapytanie do firmy
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-white/85">
-            Formularz jest demonstracyjny. W wersji MVP nie wysyła danych, ale
-            pokazuje docelowy przepływ zapytania do wykonawcy.
+            Zapytanie zostanie zapisane i przekazane do firmy w panelu
+            WolneMoce.pl.
           </p>
         </div>
       </section>
 
       <section className="mx-auto grid max-w-[1400px] min-w-0 gap-8 px-6 py-16 lg:grid-cols-[0.85fr_1.15fr]">
         <aside className="min-w-0">
-          {selectedOffer ? (
-            <div className="overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-sm">
-              <img
-                src={selectedOffer.image}
-                alt={selectedOffer.imageAlt}
-                className="h-56 w-full max-w-full object-cover"
-              />
-              <div className="p-6">
-                <div className="mb-4 flex flex-wrap gap-2">
-                  {selectedOffer.isPremium && (
-                    <span className="rounded-full bg-[#f59e0b] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
-                      Premium
-                    </span>
-                  )}
-                  {selectedOffer.isVerified && (
-                    <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                      <i className="fas fa-check-circle mr-1"></i>
-                      Zweryfikowana
-                    </span>
-                  )}
-                </div>
+          {offer ? (
+            <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="mb-4 flex flex-wrap gap-2">
+                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+                  Aktywna oferta
+                </span>
+                {company?.is_verified ? (
+                  <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+                    <i className="fas fa-check-circle mr-1"></i>
+                    Zweryfikowana firma
+                  </span>
+                ) : null}
+              </div>
 
-                <h2 className="text-2xl font-extrabold leading-tight text-slate-900">
-                  {selectedOffer.title}
-                </h2>
-                <p className="mt-2 text-sm font-semibold text-slate-500">
-                  {selectedOffer.company}
-                </p>
+              <h2 className="text-2xl font-extrabold leading-tight text-slate-900">
+                {offer.title}
+              </h2>
+              <p className="mt-2 text-sm font-semibold text-slate-500">
+                {company?.name ?? "Firma"}
+              </p>
 
-                <div className="mt-6 grid gap-3 text-sm text-slate-600">
-                  <span className="flex min-w-0 items-center gap-2">
-                    <i className="fas fa-location-dot text-[#1a5f3c]"></i>
-                    {selectedOffer.location}, {selectedOffer.province}
-                  </span>
-                  <span className="flex min-w-0 items-center gap-2">
-                    <i className="fas fa-industry text-[#1a5f3c]"></i>
-                    {selectedOffer.category}
-                  </span>
-                  <span className="flex min-w-0 items-center gap-2">
-                    <i className="fas fa-cogs text-[#1a5f3c]"></i>
-                    {selectedOffer.service}
-                  </span>
+              <div className="mt-6 grid gap-3 text-sm text-slate-600">
+                <span className="flex min-w-0 items-center gap-2">
+                  <i className="fas fa-location-dot text-[#1a5f3c]"></i>
+                  {location || "Polska"}
+                </span>
+                <span className="flex min-w-0 items-center gap-2">
+                  <i className="fas fa-industry text-[#1a5f3c]"></i>
+                  {offer.branch ?? "Branża"}
+                </span>
+                <span className="flex min-w-0 items-center gap-2">
+                  <i className="fas fa-cogs text-[#1a5f3c]"></i>
+                  {offer.service_type ?? "Usługa"}
+                </span>
+                {offer.power_available ? (
                   <span className="flex min-w-0 items-center gap-2">
                     <i className="fas fa-chart-bar text-[#1a5f3c]"></i>
-                    {selectedOffer.capacity}
+                    {offer.power_available}
                   </span>
+                ) : null}
+                {offer.lead_time ? (
                   <span className="flex min-w-0 items-center gap-2">
                     <i className="fas fa-clock text-[#1a5f3c]"></i>
-                    {selectedOffer.leadTime}
+                    {offer.lead_time}
                   </span>
-                </div>
+                ) : null}
+              </div>
 
+              {offer.slug ? (
                 <Link
-                  href={`/oferty/${selectedOffer.slug}`}
+                  href={`/oferty/${offer.slug}`}
                   className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
                 >
                   Wróć do oferty
                   <i className="fas fa-arrow-right text-xs"></i>
                 </Link>
-              </div>
+              ) : null}
             </div>
           ) : (
             <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-6 shadow-sm">
@@ -117,11 +139,12 @@ export default function RfqRequestClient() {
                 <i className="fas fa-circle-info text-xl"></i>
               </div>
               <h2 className="text-2xl font-extrabold text-slate-900">
-                Ogólne zapytanie RFQ
+                Oferta nie jest dostępna
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                Wypełnij zapytanie, a nasz zespół pomoże dopasować właściwego
-                wykonawcę.
+                {requestedSlug
+                  ? "Nie znaleziono aktywnej oferty dla podanego adresu."
+                  : "Wybierz aktywną ofertę, aby wysłać zapytanie do firmy."}
               </p>
               <Link href="/oferty" className="mt-6 inline-flex text-sm font-bold text-[#1a5f3c]">
                 Przeglądaj oferty
@@ -130,83 +153,77 @@ export default function RfqRequestClient() {
           )}
         </aside>
 
-        <form
-          onSubmit={handleSubmit}
-          className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-xl md:p-8"
-        >
-          <div className="mb-8">
-            <h2 className="text-2xl font-extrabold text-slate-900">
-              Formularz zapytania
-            </h2>
-            <p className="mt-2 text-sm leading-6 text-slate-500">
-              Po kliknięciu formularz przejdzie do ekranu sukcesu bez wysyłki
-              danych.
-            </p>
-          </div>
+        {offer ? (
+          <form
+            onSubmit={handleSubmit}
+            className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-xl md:p-8"
+          >
+            <input type="hidden" name="offer_id" value={offer.id} />
+            <div className="mb-8">
+              <h2 className="text-2xl font-extrabold text-slate-900">
+                Formularz zapytania
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-500">
+                Zapytanie zostanie zapisane i przekazane do firmy w panelu
+                WolneMoce.pl.
+              </p>
+            </div>
 
-          <div className="grid min-w-0 gap-5 md:grid-cols-2">
-            <StaticFormField label="Imię i nazwisko" name="name" icon="fas fa-user" />
-            <StaticFormField label="Firma" name="company" icon="fas fa-building" />
-            <StaticFormField label="Email" name="email" type="email" icon="fas fa-envelope" />
-            <StaticFormField label="Telefon" name="phone" type="tel" icon="fas fa-phone" />
-          </div>
+            {error ? (
+              <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {error}
+              </div>
+            ) : null}
 
-          <div className="mt-10 border-t border-slate-200 pt-8">
-            <h3 className="mb-5 text-xl font-extrabold text-slate-900">
-              Szczegóły zapytania
-            </h3>
             <div className="grid min-w-0 gap-5 md:grid-cols-2">
-              <StaticFormField
-                label="Branża"
-                name="category"
-                options={categoryOptions}
-                placeholder={selectedOffer?.category ?? "Wybierz branżę"}
-                icon="fas fa-industry"
-              />
-              <StaticFormField
-                label="Rodzaj usługi"
-                name="service"
-                options={serviceOptions}
-                placeholder={selectedOffer?.service ?? "Wybierz usługę"}
-                icon="fas fa-cogs"
-              />
-              <StaticFormField label="Ilość / zakres zamówienia" name="quantity" icon="fas fa-boxes-stacked" />
-              <StaticFormField label="Termin realizacji" name="deadline" icon="fas fa-clock" />
-              <StaticFormField label="Budżet orientacyjny" name="budget" icon="fas fa-wallet" />
-              <div className="md:col-span-2">
-                <StaticFormField
-                  label="Wiadomość / opis zapotrzebowania"
-                  name="message"
-                  textarea
-                  rows={6}
-                  placeholder="Opisz produkt, materiał, ilości, wymagania jakościowe i oczekiwany termin."
-                  icon="fas fa-message"
-                />
+              <StaticFormField label="Imię i nazwisko" name="buyer_name" icon="fas fa-user" />
+              <StaticFormField label="Firma" name="buyer_company" icon="fas fa-building" />
+              <StaticFormField label="Email" name="buyer_email" type="email" icon="fas fa-envelope" />
+              <StaticFormField label="Telefon" name="buyer_phone" type="tel" icon="fas fa-phone" />
+            </div>
+
+            <div className="mt-10 border-t border-slate-200 pt-8">
+              <h3 className="mb-5 text-xl font-extrabold text-slate-900">
+                Szczegóły zapytania
+              </h3>
+              <div className="grid min-w-0 gap-5 md:grid-cols-2">
+                <StaticFormField label="Ilość / zakres zamówienia" name="quantity_scope" icon="fas fa-boxes-stacked" />
+                <StaticFormField label="Termin realizacji" name="expected_deadline" icon="fas fa-clock" />
+                <StaticFormField label="Budżet orientacyjny" name="budget" icon="fas fa-wallet" />
+                <div className="md:col-span-2">
+                  <StaticFormField
+                    label="Wiadomość / opis zapotrzebowania"
+                    name="message"
+                    textarea
+                    rows={6}
+                    placeholder="Opisz produkt, materiał, ilości, wymagania jakościowe i oczekiwany termin."
+                    icon="fas fa-message"
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="mt-8 space-y-3 rounded-2xl bg-slate-50 p-5">
-            <label className="flex min-w-0 items-start gap-3 text-sm leading-6 text-slate-600">
-              <input type="checkbox" className="mt-1 h-4 w-4 shrink-0 accent-[#1a5f3c]" />
-              <span>
-                Akceptuję{" "}
-                <Link href="/regulamin" className="font-bold text-[#1a5f3c]">
-                  regulamin
-                </Link>
-                .
-              </span>
-            </label>
-            <label className="flex min-w-0 items-start gap-3 text-sm leading-6 text-slate-600">
-              <input type="checkbox" className="mt-1 h-4 w-4 shrink-0 accent-[#1a5f3c]" />
-              <span>Wyrażam zgodę na kontakt w sprawie zapytania.</span>
-            </label>
+            <button
+              type="submit"
+              disabled={isPending}
+              className="mt-8 w-full btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isPending ? "Wysyłanie..." : "Wyślij zapytanie"}
+            </button>
+          </form>
+        ) : (
+          <div className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+            <h2 className="text-2xl font-extrabold text-slate-900">
+              Formularz niedostępny
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-slate-600">
+              Zapytania można wysyłać tylko do aktywnych ofert.
+            </p>
+            <Link href="/oferty" className="mt-6 btn btn-primary">
+              Przeglądaj oferty
+            </Link>
           </div>
-
-          <button type="submit" className="mt-8 w-full btn btn-primary">
-            Wyślij zapytanie
-          </button>
-        </form>
+        )}
       </section>
     </>
   );

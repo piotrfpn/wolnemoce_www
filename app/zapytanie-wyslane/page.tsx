@@ -4,9 +4,9 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Zapytanie przygotowane",
+  title: "Zapytanie wysłane",
   description:
-    "Ekran sukcesu demonstracyjnego formularza zapytania ofertowego WolneMoce.pl.",
+    "Ekran sukcesu formularza zapytania ofertowego WolneMoce.pl.",
 };
 
 export default function RfqSentPage() {
@@ -22,11 +22,10 @@ export default function RfqSentPage() {
               <i className="fas fa-check-circle text-4xl"></i>
             </div>
             <h1 className="text-3xl font-black leading-tight tracking-[-1px] md:text-5xl">
-              Zapytanie zostało przygotowane
+              Dziękujemy. Zapytanie zostało wysłane do firmy.
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/85">
-              W wersji MVP formularz jest demonstracyjny i nie wysyła jeszcze
-              danych.
+              Firma zobaczy je w panelu WolneMoce.pl.
             </p>
           </div>
         </section>
@@ -45,11 +44,8 @@ export default function RfqSentPage() {
               <Link href="/oferty" className="btn btn-primary">
                 Wróć do ofert
               </Link>
-              <Link href="/dodaj-oferte" className="btn btn-outline">
-                Dodaj własną ofertę
-              </Link>
-              <Link href="/kontakt" className="btn btn-outline">
-                Kontakt
+              <Link href="/" className="btn btn-outline">
+                Strona główna
               </Link>
             </div>
           </div>
