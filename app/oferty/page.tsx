@@ -1,34 +1,122 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import OfferCard from "@/components/OfferCard";
-import { categories, offers, provinces, services } from "@/lib/mockData";
+import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
+import { categories, industryServiceTypes, provinces, services } from "@/lib/mockData";
+import { createClient } from "@/lib/supabase/server";
+import OffersFiltersClient from "./OffersFiltersClient";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Oferty wolnych mocy produkcyjnych",
   description:
-    "Przeglądaj statyczną listę ofert wolnych mocy produkcyjnych, magazynowych, logistycznych i technicznych w Polsce.",
+    "Przeglądaj aktywne oferty wolnych mocy produkcyjnych, magazynowych, logistycznych i technicznych w Polsce.",
 };
 
-function FilterCheckbox({ label, count }: { label: string; count: number }) {
-  return (
-    <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl px-3 py-2 text-sm text-slate-600 transition hover:bg-slate-50 hover:text-[#1a5f3c]">
-      <span className="flex items-center gap-3">
-        <input
-          type="checkbox"
-          className="h-4 w-4 rounded border-slate-300 accent-[#1a5f3c]"
-        />
-        {label}
-      </span>
-      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-500">
-        {count}
-      </span>
-    </label>
-  );
+type OffersPageProps = {
+  searchParams?: Record<string, string | string[] | undefined>;
+};
+
+function getSingleParam(
+  searchParams: OffersPageProps["searchParams"],
+  key: string
+) {
+  const value = searchParams?.[key];
+  return Array.isArray(value) ? value[0] ?? "" : value ?? "";
 }
 
-export default function OffersPage() {
+function sanitizeSearchTerm(value: string) {
+  return value.replace(/[(),%]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function getFilterState(searchParams: OffersPageProps["searchParams"]) {
+  return {
+    q: getSingleParam(searchParams, "q").trim(),
+    industry: getSingleParam(searchParams, "industry").trim(),
+    serviceType: getSingleParam(searchParams, "service_type").trim(),
+    voivodeship: getSingleParam(searchParams, "voivodeship").trim(),
+    sort: getSingleParam(searchParams, "sort").trim() || "newest",
+  };
+}
+
+async function getCompanyIdsByName(query: string) {
+  if (!query) {
+    return [];
+  }
+
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("companies")
+    .select("id")
+    .ilike("name", `%${query}%`)
+    .limit(50);
+
+  return data?.map((company) => company.id as string) ?? [];
+}
+
+async function getPublicOffers(
+  filters: ReturnType<typeof getFilterState>
+): Promise<PublicOffer[]> {
+  const supabase = createClient();
+  const searchTerm = sanitizeSearchTerm(filters.q);
+  const companyIds = await getCompanyIdsByName(searchTerm);
+
+  let query = supabase
+    .from("offers")
+    .select("*, companies!inner(*)")
+    .eq("status", "active");
+
+  if (searchTerm) {
+    const searchFilters = [
+      `title.ilike.%${searchTerm}%`,
+      `description.ilike.%${searchTerm}%`,
+      `branch.ilike.%${searchTerm}%`,
+      `service_type.ilike.%${searchTerm}%`,
+    ];
+
+    if (companyIds.length > 0) {
+      searchFilters.push(`company_id.in.(${companyIds.join(",")})`);
+    }
+
+    query = query.or(searchFilters.join(","));
+  }
+
+  if (filters.industry) {
+    query = query.eq("branch", filters.industry);
+  }
+
+  if (filters.serviceType) {
+    query = query.eq("service_type", filters.serviceType);
+  }
+
+  if (filters.voivodeship) {
+    query = query.eq("companies.location_voivodeship", filters.voivodeship);
+  }
+
+  query = query.order("created_at", {
+    ascending: filters.sort === "oldest",
+  });
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("Public offers query failed", error);
+    return [];
+  }
+
+  return (data ?? []) as PublicOffer[];
+}
+
+export default async function OffersPage({ searchParams }: OffersPageProps) {
+  const filters = getFilterState(searchParams);
+  const publicOffers = await getPublicOffers(filters);
+  const serviceOptions = filters.industry
+    ? industryServiceTypes[filters.industry] ?? services
+    : services;
+
   return (
     <>
       <Navbar />
@@ -37,11 +125,11 @@ export default function OffersPage() {
         <section className="relative overflow-hidden bg-gradient-to-br from-[#0d3d26] via-[#1a5f3c] to-[#2d8a5e] px-6 pb-24 pt-36 text-white">
           <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(circle_at_20%_50%,white_2px,transparent_2px),radial-gradient(circle_at_80%_20%,white_1px,transparent_1px),radial-gradient(circle_at_40%_80%,white_1.5px,transparent_1.5px)] [background-size:60px_60px,40px_40px,80px_80px]" />
 
-          <div className="relative z-10 mx-auto grid max-w-[1400px] items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-            <div>
+          <div className="relative z-10 mx-auto grid max-w-[1400px] min-w-0 items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className="min-w-0">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-5 py-2 text-sm font-medium backdrop-blur">
                 <i className="fas fa-list-check text-[#fbbf24]"></i>
-                Archiwum ofert produkcyjnych
+                Aktywne oferty z firm
               </div>
 
               <h1 className="mb-5 max-w-3xl text-4xl font-black leading-tight tracking-[-1px] md:text-5xl lg:text-[56px]">
@@ -49,25 +137,27 @@ export default function OffersPage() {
               </h1>
 
               <p className="mb-8 max-w-2xl text-lg leading-8 text-white/85">
-                Przeglądaj zweryfikowane oferty firm produkcyjnych,
-                magazynowych, logistycznych i technicznych. Na tym etapie to
-                statyczny widok MVP bez backendu.
+                Przeglądaj aktywne oferty firm produkcyjnych, magazynowych,
+                logistycznych i technicznych. Publicznie pokazujemy tylko oferty
+                zatwierdzone jako aktywne.
               </p>
 
               <div className="grid max-w-2xl grid-cols-1 gap-5 sm:grid-cols-3">
                 <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur">
-                  <div className="text-3xl font-extrabold">500+</div>
-                  <div className="mt-1 text-xs text-white/70">Aktywnych ofert</div>
-                </div>
-                <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur">
-                  <div className="text-3xl font-extrabold">200+</div>
+                  <div className="text-3xl font-extrabold">{publicOffers.length}</div>
                   <div className="mt-1 text-xs text-white/70">
-                    Zweryfikowanych firm
+                    Wyników dla filtrów
                   </div>
                 </div>
                 <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur">
-                  <div className="text-3xl font-extrabold">13</div>
+                  <div className="text-3xl font-extrabold">{categories.length}</div>
                   <div className="mt-1 text-xs text-white/70">Branż B2B</div>
+                </div>
+                <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur">
+                  <div className="text-3xl font-extrabold">active</div>
+                  <div className="mt-1 text-xs text-white/70">
+                    Status widoczny publicznie
+                  </div>
                 </div>
               </div>
             </div>
@@ -87,222 +177,102 @@ export default function OffersPage() {
                 </div>
 
                 <div className="space-y-3">
-                  {["CNC i metalurgia", "Wtrysk tworzyw", "Automatyka", "Logistyka 3PL"].map(
-                    (item) => (
-                      <div
-                        key={item}
-                        className="flex items-center justify-between rounded-2xl bg-white/10 px-4 py-3"
-                      >
-                        <span className="text-sm font-semibold">{item}</span>
-                        <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-[#1a5f3c]">
-                          Dostępne
-                        </span>
-                      </div>
-                    )
-                  )}
-                </div>
-              </div>
-
-              <div className="absolute -right-5 -top-5 flex items-center gap-3 rounded-2xl bg-white px-5 py-4 text-slate-900 shadow-xl">
-                <i className="fas fa-check h-8 w-8 rounded-full bg-emerald-50 p-2 text-center text-sm text-emerald-600"></i>
-                <div className="text-xs text-slate-400">
-                  <strong className="block text-sm text-slate-900">
-                    Firmy zweryfikowane
-                  </strong>
-                  KRS / CEIDG / certyfikaty
+                  {categories.slice(0, 4).map((item) => (
+                    <div
+                      key={item}
+                      className="flex items-center justify-between rounded-2xl bg-white/10 px-4 py-3"
+                    >
+                      <span className="text-sm font-semibold">{item}</span>
+                      <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-[#1a5f3c]">
+                        Filtr
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="relative z-20 mx-auto -mt-12 max-w-[1400px] px-6">
-          <div className="rounded-[24px] bg-white p-6 shadow-2xl">
-            <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr_1fr_auto]">
-              <div>
-                <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-                  Szukaj oferty
-                </label>
-                <div className="relative">
-                  <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                  <input
-                    type="text"
-                    placeholder="Np. obróbka CNC, spawanie, pakowanie..."
-                    className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-                  Branża
-                </label>
-                <div className="relative">
-                  <i className="fas fa-industry absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                  <select
-                    defaultValue=""
-                    className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
-                  >
-                    <option value="">Wszystkie branże</option>
-                    {categories.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-                  Lokalizacja
-                </label>
-                <div className="relative">
-                  <i className="fas fa-map-marker-alt absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                  <select
-                    defaultValue=""
-                    className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
-                  >
-                    <option value="">Cała Polska</option>
-                    {provinces.map((province) => (
-                      <option key={province} value={province}>
-                        {province}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <button className="mt-0 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#1a5f3c] to-[#2d8a5e] px-8 text-sm font-bold text-white shadow-lg shadow-[#1a5f3c]/25 transition hover:-translate-y-0.5 hover:shadow-xl lg:mt-6">
-                <i className="fas fa-search"></i>
-                Szukaj
-              </button>
-            </div>
-          </div>
-        </section>
-
-        <section className="mx-auto grid max-w-[1400px] gap-8 px-6 py-16 lg:grid-cols-[310px_1fr]">
-          <aside className="h-fit rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm lg:sticky lg:top-24">
-            <div className="mb-6 flex items-center justify-between">
+        <section className="mx-auto grid max-w-[1400px] min-w-0 gap-8 px-6 py-16 lg:grid-cols-[310px_1fr]">
+          <aside className="h-fit min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm lg:sticky lg:top-24">
+            <div className="mb-6">
               <h2 className="text-lg font-extrabold text-slate-900">Filtry</h2>
-              <button className="text-xs font-bold text-[#1a5f3c]">
-                Wyczyść
-              </button>
+              <p className="mt-1 text-sm text-slate-500">
+                Źródłem prawdy jest adres URL.
+              </p>
             </div>
 
-            <div className="space-y-7">
-              <div>
-                <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-slate-900">
-                  <i className="fas fa-layer-group text-[#1a5f3c]"></i>
-                  Branża
-                </h3>
-                <div className="space-y-1">
-                  {categories.slice(0, 6).map((category, index) => (
-                    <FilterCheckbox
-                      key={category}
-                      label={category}
-                      count={[28, 31, 52, 38, 64, 24][index]}
-                    />
-                  ))}
-                </div>
-              </div>
+            <Suspense fallback={<div className="text-sm text-slate-500">Ładowanie filtrów...</div>}>
+              <OffersFiltersClient
+                categories={categories}
+                services={serviceOptions}
+                provinces={provinces}
+              />
+            </Suspense>
 
-              <div>
-                <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-slate-900">
-                  <i className="fas fa-map-marked-alt text-[#1a5f3c]"></i>
-                  Województwo
-                </h3>
-                <div className="space-y-1">
-                  {provinces.slice(0, 6).map((province, index) => (
-                    <FilterCheckbox
-                      key={province}
-                      label={province}
-                      count={[64, 58, 52, 41, 36, 29][index]}
-                    />
-                  ))}
-                </div>
+            <div className="mt-7 rounded-2xl bg-gradient-to-br from-[#0d3d26] to-[#1a5f3c] p-5 text-white">
+              <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white/15">
+                <i className="fas fa-plus"></i>
               </div>
-
-              <div>
-                <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-slate-900">
-                  <i className="fas fa-screwdriver-wrench text-[#1a5f3c]"></i>
-                  Rodzaj usługi
-                </h3>
-                <div className="space-y-1">
-                  {services.slice(0, 6).map((service, index) => (
-                    <FilterCheckbox
-                      key={service}
-                      label={service}
-                      count={[76, 48, 32, 44, 29, 24][index]}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              <div className="rounded-2xl bg-gradient-to-br from-[#0d3d26] to-[#1a5f3c] p-5 text-white">
-                <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white/15">
-                  <i className="fas fa-plus"></i>
-                </div>
-                <h3 className="mb-2 font-bold">Masz wolne moce?</h3>
-                <p className="mb-4 text-sm leading-6 text-white/75">
-                  Dodaj ofertę i pokaż swoją dostępność firmom szukającym
-                  podwykonawców.
-                </p>
-                <Link
-                  href="/dodaj-oferte"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#1a5f3c]"
-                >
-                  Dodaj ofertę
-                  <i className="fas fa-arrow-right text-xs"></i>
-                </Link>
-              </div>
+              <h3 className="mb-2 font-bold">Masz wolne moce?</h3>
+              <p className="mb-4 text-sm leading-6 text-white/75">
+                Dodaj ofertę w panelu firmy i wyślij ją do zatwierdzenia.
+              </p>
+              <Link
+                href="/panel/oferty/nowa"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#1a5f3c]"
+              >
+                Dodaj ofertę
+                <i className="fas fa-arrow-right text-xs"></i>
+              </Link>
             </div>
           </aside>
 
-          <div>
+          <div className="min-w-0">
             <div className="mb-6 flex flex-col gap-4 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-sm text-slate-500">Znaleziono</p>
                 <h2 className="text-2xl font-extrabold text-slate-900">
-                  {offers.length} ofert produkcyjnych
+                  {publicOffers.length} aktywnych ofert
                 </h2>
               </div>
+              <Link
+                href="/oferty"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white"
+              >
+                Wyczyść filtry
+              </Link>
+            </div>
 
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <span className="text-sm font-semibold text-slate-500">
-                  Sortuj:
-                </span>
-                <select
-                  defaultValue="recommended"
-                  className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm font-medium text-slate-700 outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
-                >
-                  <option value="recommended">Rekomendowane</option>
-                  <option value="newest">Najnowsze</option>
-                  <option value="premium">Wyróżnione najpierw</option>
-                  <option value="rating">Najwyżej oceniane</option>
-                </select>
+            {publicOffers.length > 0 ? (
+              <div className="grid min-w-0 gap-6 xl:grid-cols-2">
+                {publicOffers.map((offer) => (
+                  <PublicOfferCard key={offer.id} offer={offer} />
+                ))}
               </div>
-            </div>
-
-            <div className="grid gap-6 xl:grid-cols-2">
-              {offers.map((offer) => (
-                <OfferCard key={offer.id} offer={offer} />
-              ))}
-            </div>
-
-            <div className="mt-10 rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#1a5f3c] shadow-sm">
-                <i className="fas fa-circle-info text-xl"></i>
+            ) : (
+              <div className="rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#1a5f3c] shadow-sm">
+                  <i className="fas fa-circle-info text-xl"></i>
+                </div>
+                <h3 className="mb-2 text-xl font-extrabold text-slate-900">
+                  Brak aktywnych ofert dla wybranych filtrów.
+                </h3>
+                <p className="mx-auto mb-6 max-w-2xl text-sm leading-6 text-slate-500">
+                  Publicznie widoczne są tylko oferty ze statusem active.
+                  Oferty draft, pending i rejected pozostają ukryte.
+                </p>
+                <div className="flex flex-col justify-center gap-3 sm:flex-row">
+                  <Link href="/panel/oferty/nowa" className="btn btn-primary">
+                    Dodaj ofertę
+                  </Link>
+                  <Link href="/oferty" className="btn btn-outline">
+                    Wyczyść filtry
+                  </Link>
+                </div>
               </div>
-              <h3 className="mb-2 text-xl font-extrabold text-slate-900">
-                To jest statyczna wersja MVP
-              </h3>
-              <p className="mx-auto max-w-2xl text-sm leading-6 text-slate-500">
-                Filtry, sortowanie i przyciski są teraz tylko warstwą UI. W
-                kolejnych iteracjach można dodać szczegóły pojedynczej oferty,
-                formularz RFQ oraz dynamiczne dane.
-              </p>
-            </div>
+            )}
           </div>
         </section>
       </main>

@@ -225,6 +225,7 @@ export const industryServiceTypes: Record<string, string[]> = {
   ],
 };
 
+// Legacy fallback / demo data — public offers are now loaded from Supabase.
 export const offers: Offer[] = [
   {
     id: 1,
