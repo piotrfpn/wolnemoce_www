@@ -1,0 +1,9 @@
+do wolnemoce.pl
+
+Supabase dokumentuje, że dla SSR trzeba skonfigurować klienta z cookies, a do projektu dodać URL i klucz publiczny/publishable; instalacja pakietów to npm install @supabase/supabase-js @supabase/ssr.
+
+Do resetu hasła potrzebny jest redirectTo, bo metoda resetPasswordForEmail obsługuje przekierowanie użytkownika na stronę ustawienia nowego hasła po kliknięciu linku z maila.
+
+NEXT_PUBLIC_SUPABASE_URL=https://bbbtbnkfprwetvkypzlw.supabase.co
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_HBh7sQvCR9getiFnDh0ttw_eQiQGU-f
+

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import AuthNavButton from "./AuthNavButton";
 
 const navLinks = [
   { label: "Oferty", href: "/oferty", match: "/oferty" },
@@ -55,6 +56,7 @@ export default function Navbar() {
         </ul>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <AuthNavButton />
           <Link
             href="/kontakt"
             className="inline-flex items-center justify-center rounded-lg border-2 border-[#1a5f3c] px-5 py-2.5 text-sm font-semibold text-[#1a5f3c] no-underline transition hover:-translate-y-0.5 hover:bg-[#1a5f3c] hover:text-white hover:shadow-md"
@@ -102,6 +104,7 @@ export default function Navbar() {
             })}
 
             <div className="mt-3 grid grid-cols-1 gap-3">
+              <AuthNavButton variant="mobile" onNavigate={closeMenu} />
               <Link
                 href="/kontakt"
                 onClick={closeMenu}
