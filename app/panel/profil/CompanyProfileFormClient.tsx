@@ -22,6 +22,12 @@ type CompanyData = {
   location_voivodeship: string | null;
   location_city: string | null;
   is_verified: boolean | null;
+  website_url: string | null;
+  presentation_path: string | null;
+  presentation_file_name: string | null;
+  presentation_mime_type: string | null;
+  presentation_size_bytes: number | null;
+  presentation_uploaded_at: string | null;
 };
 
 type CompanyProfileFormClientProps = {
@@ -33,6 +39,15 @@ type CompanyProfileFormClientProps = {
 
 const inputClass =
   "min-w-0 max-w-full w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400";
+
+const presentationBucket = "company-presentations";
+const maxPresentationSize = 10 * 1024 * 1024;
+const allowedPresentationMimeTypes = new Set([
+  "application/pdf",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+]);
+const allowedPresentationExtensions = new Set(["pdf", "ppt", "pptx"]);
 
 const sortedIndustries = Object.keys(industryServiceTypes).sort((first, second) =>
   first.localeCompare(second, "pl")
@@ -48,6 +63,45 @@ function getInitialIndustries(company: CompanyData | null) {
   }
 
   return [];
+}
+
+function getPresentationExtension(fileName: string) {
+  return fileName.split(".").pop()?.toLowerCase() ?? "";
+}
+
+function getSafeFileName(fileName: string) {
+  const extension = getPresentationExtension(fileName);
+  const baseName = fileName.replace(/\.[^/.]+$/, "");
+  const safeBaseName =
+    baseName
+      .replace(/[łŁ]/g, (match) => (match === "Ł" ? "L" : "l"))
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "prezentacja-firmy";
+
+  return extension ? `${safeBaseName}.${extension}` : safeBaseName;
+}
+
+function formatPresentationSize(size: number | null) {
+  if (!size) {
+    return "Brak danych";
+  }
+
+  return `${(size / 1024 / 1024).toFixed(2)} MB`;
+}
+
+function formatPresentationDate(dateValue: string | null) {
+  if (!dateValue) {
+    return null;
+  }
+
+  return new Intl.DateTimeFormat("pl-PL", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(new Date(dateValue));
 }
 
 export default function CompanyProfileFormClient({
@@ -77,6 +131,27 @@ export default function CompanyProfileFormClient({
   );
   const [city, setCity] = useState(company?.location_city ?? "");
   const [description, setDescription] = useState(company?.description ?? "");
+  const [websiteUrl, setWebsiteUrl] = useState(company?.website_url ?? "");
+  const [presentationPath, setPresentationPath] = useState(
+    company?.presentation_path ?? ""
+  );
+  const [presentationFileName, setPresentationFileName] = useState(
+    company?.presentation_file_name ?? ""
+  );
+  const [presentationMimeType, setPresentationMimeType] = useState(
+    company?.presentation_mime_type ?? ""
+  );
+  const [presentationSizeBytes, setPresentationSizeBytes] = useState<
+    number | null
+  >(company?.presentation_size_bytes ?? null);
+  const [presentationUploadedAt, setPresentationUploadedAt] = useState(
+    company?.presentation_uploaded_at ?? ""
+  );
+  const [presentationFile, setPresentationFile] = useState<File | null>(null);
+  const [presentationError, setPresentationError] = useState("");
+  const [presentationMessage, setPresentationMessage] = useState("");
+  const [isPresentationSubmitting, setIsPresentationSubmitting] =
+    useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -176,6 +251,14 @@ export default function CompanyProfileFormClient({
       return "Podaj miasto.";
     }
 
+    if (
+      websiteUrl.trim() &&
+      !websiteUrl.trim().startsWith("http://") &&
+      !websiteUrl.trim().startsWith("https://")
+    ) {
+      return "Adres strony WWW musi zaczynać się od http:// albo https://";
+    }
+
     return "";
   }
 
@@ -201,6 +284,7 @@ export default function CompanyProfileFormClient({
       service_types: selectedServiceTypes,
       location_voivodeship: voivodeship,
       location_city: city.trim(),
+      website_url: websiteUrl.trim() || null,
     };
 
     const query = companyId
@@ -209,7 +293,7 @@ export default function CompanyProfileFormClient({
           .update(payload)
           .eq("id", companyId)
           .select(
-            "id, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified"
+            "id, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
           )
           .single()
       : supabase
@@ -219,7 +303,7 @@ export default function CompanyProfileFormClient({
             user_id: userId,
           })
           .select(
-            "id, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified"
+            "id, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
           )
           .single();
 
@@ -249,6 +333,12 @@ export default function CompanyProfileFormClient({
       setSelectedServiceTypes(data.service_types ?? []);
       setVoivodeship(data.location_voivodeship ?? "");
       setCity(data.location_city ?? "");
+      setWebsiteUrl(data.website_url ?? "");
+      setPresentationPath(data.presentation_path ?? "");
+      setPresentationFileName(data.presentation_file_name ?? "");
+      setPresentationMimeType(data.presentation_mime_type ?? "");
+      setPresentationSizeBytes(data.presentation_size_bytes ?? null);
+      setPresentationUploadedAt(data.presentation_uploaded_at ?? "");
       setRequestIndustry(savedIndustries[0] ?? "");
     }
 
@@ -300,6 +390,162 @@ export default function CompanyProfileFormClient({
     setRequestReason("");
     setRequestMessage("Zgłoszenie zostało wysłane do administratora.");
     setIsRequestSubmitting(false);
+  }
+
+  function handlePresentationFileChange(file: File | null) {
+    setPresentationError("");
+    setPresentationMessage("");
+    setPresentationFile(file);
+  }
+
+  function validatePresentationFile(file: File) {
+    const extension = getPresentationExtension(file.name);
+
+    if (file.size > maxPresentationSize) {
+      return "Plik jest za duży. Maksymalny rozmiar to 10 MB.";
+    }
+
+    if (
+      !allowedPresentationExtensions.has(extension) ||
+      (file.type && !allowedPresentationMimeTypes.has(file.type))
+    ) {
+      return "Dozwolone formaty to PDF, PPT lub PPTX.";
+    }
+
+    return "";
+  }
+
+  async function handlePresentationUpload(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setPresentationError("");
+    setPresentationMessage("");
+
+    if (!companyId) {
+      setPresentationError(
+        "Najpierw zapisz profil firmy, aby móc dodać prezentację."
+      );
+      return;
+    }
+
+    if (!presentationFile) {
+      setPresentationError("Wybierz plik prezentacji firmy.");
+      return;
+    }
+
+    const validationError = validatePresentationFile(presentationFile);
+    if (validationError) {
+      setPresentationError(validationError);
+      return;
+    }
+
+    setIsPresentationSubmitting(true);
+    const supabase = createClient();
+    const safeFileName = getSafeFileName(presentationFile.name);
+    const nextPresentationPath = `companies/${companyId}/presentation/${Date.now()}-${safeFileName}`;
+    const uploadResult = await supabase.storage
+      .from(presentationBucket)
+      .upload(nextPresentationPath, presentationFile);
+
+    if (uploadResult.error) {
+      setPresentationError(uploadResult.error.message);
+      setIsPresentationSubmitting(false);
+      return;
+    }
+
+    const uploadedAt = new Date().toISOString();
+    const { error: updateError } = await supabase
+      .from("companies")
+      .update({
+        presentation_path: nextPresentationPath,
+        presentation_file_name: presentationFile.name,
+        presentation_mime_type:
+          presentationFile.type || getPresentationExtension(presentationFile.name),
+        presentation_size_bytes: presentationFile.size,
+        presentation_uploaded_at: uploadedAt,
+      })
+      .eq("id", companyId);
+
+    if (updateError) {
+      await supabase.storage.from(presentationBucket).remove([nextPresentationPath]);
+      setPresentationError(updateError.message);
+      setIsPresentationSubmitting(false);
+      return;
+    }
+
+    const previousPresentationPath = presentationPath;
+    if (
+      previousPresentationPath &&
+      previousPresentationPath !== nextPresentationPath
+    ) {
+      await supabase.storage
+        .from(presentationBucket)
+        .remove([previousPresentationPath]);
+    }
+
+    setPresentationPath(nextPresentationPath);
+    setPresentationFileName(presentationFile.name);
+    setPresentationMimeType(
+      presentationFile.type || getPresentationExtension(presentationFile.name)
+    );
+    setPresentationSizeBytes(presentationFile.size);
+    setPresentationUploadedAt(uploadedAt);
+    setPresentationFile(null);
+    setPresentationMessage("Prezentacja firmy została wgrana.");
+    setIsPresentationSubmitting(false);
+    router.refresh();
+  }
+
+  async function handlePresentationDelete() {
+    setPresentationError("");
+    setPresentationMessage("");
+
+    if (!companyId || !presentationPath) {
+      return;
+    }
+
+    const confirmed = window.confirm("Czy na pewno usunąć prezentację firmy?");
+    if (!confirmed) {
+      return;
+    }
+
+    setIsPresentationSubmitting(true);
+    const supabase = createClient();
+    const removeResult = await supabase.storage
+      .from(presentationBucket)
+      .remove([presentationPath]);
+
+    if (removeResult.error) {
+      setPresentationError(removeResult.error.message);
+      setIsPresentationSubmitting(false);
+      return;
+    }
+
+    const { error: updateError } = await supabase
+      .from("companies")
+      .update({
+        presentation_path: null,
+        presentation_file_name: null,
+        presentation_mime_type: null,
+        presentation_size_bytes: null,
+        presentation_uploaded_at: null,
+      })
+      .eq("id", companyId);
+
+    if (updateError) {
+      setPresentationError(updateError.message);
+      setIsPresentationSubmitting(false);
+      return;
+    }
+
+    setPresentationPath("");
+    setPresentationFileName("");
+    setPresentationMimeType("");
+    setPresentationSizeBytes(null);
+    setPresentationUploadedAt("");
+    setPresentationFile(null);
+    setPresentationMessage("Prezentacja firmy została usunięta.");
+    setIsPresentationSubmitting(false);
+    router.refresh();
   }
 
   return (
@@ -412,6 +658,19 @@ export default function CompanyProfileFormClient({
                 value={name}
                 onChange={(event) => setName(event.target.value)}
                 placeholder="Np. MetalPol Sp. z o.o."
+                className={inputClass}
+              />
+            </label>
+
+            <label className="block min-w-0 md:col-span-2">
+              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                <i className="fas fa-globe text-[#1a5f3c]"></i>
+                Adres strony WWW
+              </span>
+              <input
+                value={websiteUrl}
+                onChange={(event) => setWebsiteUrl(event.target.value)}
+                placeholder="https://twojafirma.pl"
                 className={inputClass}
               />
             </label>
@@ -582,6 +841,102 @@ export default function CompanyProfileFormClient({
             {isSubmitting ? "Zapisywanie..." : "Zapisz profil firmy"}
           </button>
         </form>
+
+        <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+          <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
+            Prezentacja firmy
+          </p>
+          <h2 className="text-2xl font-extrabold text-slate-900">
+            PDF lub PowerPoint
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-slate-500">
+            Dodaj prezentację firmy w PDF lub PowerPoint. Plik będzie
+            wykorzystywany w profilu firmy i przy ofertach.
+          </p>
+
+          {!companyId ? (
+            <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm text-slate-500">
+              Najpierw zapisz profil firmy, aby móc dodać prezentację.
+            </div>
+          ) : (
+            <div className="mt-6 space-y-5">
+              {presentationError ? (
+                <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {presentationError}
+                </div>
+              ) : null}
+
+              {presentationMessage ? (
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                  {presentationMessage}
+                </div>
+              ) : null}
+
+              {presentationPath ? (
+                <div className="min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-4">
+                  <div className="flex min-w-0 items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
+                      <i className="fas fa-file-powerpoint"></i>
+                    </div>
+                    <div className="min-w-0">
+                      <p className="break-words text-sm font-bold text-slate-900">
+                        {presentationFileName || "Prezentacja firmy"}
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-slate-500">
+                        {formatPresentationSize(presentationSizeBytes)}
+                        {presentationMimeType ? ` · ${presentationMimeType}` : ""}
+                        {formatPresentationDate(presentationUploadedAt)
+                          ? ` · ${formatPresentationDate(presentationUploadedAt)}`
+                          : ""}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
+              <form onSubmit={handlePresentationUpload} className="space-y-4">
+                <label className="block min-w-0">
+                  <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                    <i className="fas fa-upload text-[#1a5f3c]"></i>
+                    Plik prezentacji
+                  </span>
+                  <input
+                    type="file"
+                    accept=".pdf,.ppt,.pptx,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                    onChange={(event) =>
+                      handlePresentationFileChange(event.target.files?.[0] ?? null)
+                    }
+                    className="min-w-0 max-w-full w-full rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600 file:mr-4 file:rounded-lg file:border-0 file:bg-[#1a5f3c] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white"
+                  />
+                </label>
+
+                <div className="flex min-w-0 flex-col gap-3 sm:flex-row">
+                  <button
+                    type="submit"
+                    disabled={isPresentationSubmitting}
+                    className="btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                  >
+                    {isPresentationSubmitting
+                      ? "Przetwarzanie..."
+                      : "Wgraj prezentację"}
+                  </button>
+
+                  {presentationPath ? (
+                    <button
+                      type="button"
+                      onClick={handlePresentationDelete}
+                      disabled={isPresentationSubmitting}
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-red-200 px-5 py-3 text-sm font-bold text-red-700 transition hover:border-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                    >
+                      <i className="fas fa-trash"></i>
+                      Usuń prezentację
+                    </button>
+                  ) : null}
+                </div>
+              </form>
+            </div>
+          )}
+        </section>
 
         <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
           <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
