@@ -222,7 +222,7 @@ export default async function OffersPage({ searchParams }: OffersPageProps) {
                 Dodaj ofertę w panelu firmy i wyślij ją do zatwierdzenia.
               </p>
               <Link
-                href="/panel/oferty/nowa"
+                href="/dodaj-oferte"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#1a5f3c]"
               >
                 Dodaj ofertę
@@ -266,7 +266,7 @@ export default async function OffersPage({ searchParams }: OffersPageProps) {
                   Oferty draft, pending i rejected pozostają ukryte.
                 </p>
                 <div className="flex flex-col justify-center gap-3 sm:flex-row">
-                  <Link href="/panel/oferty/nowa" className="btn btn-primary">
+                  <Link href="/dodaj-oferte" className="btn btn-primary">
                     Dodaj ofertę
                   </Link>
                   <Link href="/oferty" className="btn btn-outline">

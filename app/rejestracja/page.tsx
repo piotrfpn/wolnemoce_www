@@ -8,13 +8,29 @@ export const metadata: Metadata = {
   description: "Utwórz konto firmowe w WolneMoce.pl.",
 };
 
-export default function RegisterPage() {
+type RegisterPageProps = {
+  searchParams?: {
+    next?: string;
+  };
+};
+
+function getSafeNextPath(nextPath?: string) {
+  if (!nextPath || !nextPath.startsWith("/") || nextPath.startsWith("//")) {
+    return "";
+  }
+
+  return nextPath;
+}
+
+export default function RegisterPage({ searchParams }: RegisterPageProps) {
+  const nextPath = getSafeNextPath(searchParams?.next);
+
   return (
     <>
       <Navbar />
       <main className="bg-slate-50 pt-[72px]">
         <section className="mx-auto flex min-h-[calc(100vh-72px)] max-w-[560px] items-center px-6 py-16">
-          <RegisterFormClient />
+          <RegisterFormClient nextPath={nextPath} />
         </section>
       </main>
       <Footer />

@@ -1,10 +1,29 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-export default function RegisterFormClient() {
+type RegisterFormClientProps = {
+  nextPath?: string;
+};
+
+function getSafeNextPath(nextPath?: string) {
+  if (!nextPath || !nextPath.startsWith("/") || nextPath.startsWith("//")) {
+    return "";
+  }
+
+  return nextPath;
+}
+
+export default function RegisterFormClient({ nextPath }: RegisterFormClientProps) {
+  const router = useRouter();
+  const safeNextPath = getSafeNextPath(nextPath);
+  const redirectAfterAuth = safeNextPath || "/panel";
+  const loginHref = safeNextPath
+    ? `/logowanie?next=${encodeURIComponent(safeNextPath)}`
+    : "/logowanie";
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,20 +45,28 @@ export default function RegisterFormClient() {
       return;
     }
 
-    const { error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: {
           full_name: fullName,
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/panel`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(
+          redirectAfterAuth
+        )}`,
       },
     });
 
     if (signUpError) {
       setError(signUpError.message);
       setIsSubmitting(false);
+      return;
+    }
+
+    if (data.session) {
+      router.push(redirectAfterAuth);
+      router.refresh();
       return;
     }
 
@@ -71,6 +98,14 @@ export default function RegisterFormClient() {
       {message ? (
         <div className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
           {message}
+          {safeNextPath ? (
+            <Link
+              href={safeNextPath}
+              className="mt-2 block font-semibold text-[#1a5f3c] no-underline"
+            >
+              Przejdź dalej
+            </Link>
+          ) : null}
         </div>
       ) : null}
 
@@ -144,7 +179,7 @@ export default function RegisterFormClient() {
 
       <p className="mt-6 text-center text-sm text-slate-500">
         Masz konto?{" "}
-        <Link href="/logowanie" className="font-semibold text-[#1a5f3c] no-underline">
+        <Link href={loginHref} className="font-semibold text-[#1a5f3c] no-underline">
           Zaloguj się
         </Link>
       </p>

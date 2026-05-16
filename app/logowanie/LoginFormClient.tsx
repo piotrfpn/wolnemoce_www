@@ -5,8 +5,24 @@ import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-export default function LoginFormClient() {
+type LoginFormClientProps = {
+  nextPath?: string;
+};
+
+function getSafeNextPath(nextPath?: string) {
+  if (!nextPath || !nextPath.startsWith("/") || nextPath.startsWith("//")) {
+    return "";
+  }
+
+  return nextPath;
+}
+
+export default function LoginFormClient({ nextPath }: LoginFormClientProps) {
   const router = useRouter();
+  const safeNextPath = getSafeNextPath(nextPath);
+  const registerHref = safeNextPath
+    ? `/rejestracja?next=${encodeURIComponent(safeNextPath)}`
+    : "/rejestracja";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -35,7 +51,7 @@ export default function LoginFormClient() {
       .eq("id", data.user.id)
       .maybeSingle();
 
-    router.push(profile?.role === "admin" ? "/admin" : "/panel");
+    router.push(safeNextPath || (profile?.role === "admin" ? "/admin" : "/panel"));
     router.refresh();
   }
 
@@ -104,7 +120,7 @@ export default function LoginFormClient() {
         </Link>
         <span>
           Nie masz konta?{" "}
-          <Link href="/rejestracja" className="font-semibold text-[#1a5f3c] no-underline">
+          <Link href={registerHref} className="font-semibold text-[#1a5f3c] no-underline">
             Utwórz konto
           </Link>
         </span>

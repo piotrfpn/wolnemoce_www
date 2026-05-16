@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getOfferImageByIndustry } from "@/lib/offerImages";
 
 export type PublicOfferCompany = {
   name: string | null;
@@ -25,17 +26,6 @@ export type PublicOffer = {
   companies: PublicOfferCompany | null;
 };
 
-const branchImages: Record<string, string> = {
-  Automatyka: "/images/offers/automation.jpg",
-  Lakiernictwo: "/images/offers/automation.jpg",
-  Metalurgia: "/images/offers/cnc.jpg",
-  "Tworzywa sztuczne": "/images/offers/injection.jpg",
-};
-
-function getOfferImage(branch: string | null) {
-  return branch ? branchImages[branch] ?? "/images/offers/cnc.jpg" : "/images/offers/cnc.jpg";
-}
-
 function getInitials(name: string | null) {
   if (!name) {
     return "WM";
@@ -55,6 +45,10 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
   const location = [company?.location_city, company?.location_voivodeship]
     .filter(Boolean)
     .join(", ");
+  const imageSrc = getOfferImageByIndustry(offer.branch);
+  const imageAlt = `${offer.title ?? "Oferta WolneMoce.pl"} - ${
+    offer.branch ?? "wolne moce"
+  }`;
 
   return (
     <article className="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-xl">
@@ -67,8 +61,8 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
 
       <div className="relative h-[210px] overflow-hidden bg-slate-100">
         <img
-          src={getOfferImage(offer.branch)}
-          alt={offer.title ?? "Oferta WolneMoce.pl"}
+          src={imageSrc}
+          alt={imageAlt}
           loading="lazy"
           className="h-full w-full max-w-full object-cover transition duration-500 group-hover:scale-105"
         />

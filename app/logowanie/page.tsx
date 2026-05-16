@@ -8,13 +8,29 @@ export const metadata: Metadata = {
   description: "Zaloguj się do konta WolneMoce.pl.",
 };
 
-export default function LoginPage() {
+type LoginPageProps = {
+  searchParams?: {
+    next?: string;
+  };
+};
+
+function getSafeNextPath(nextPath?: string) {
+  if (!nextPath || !nextPath.startsWith("/") || nextPath.startsWith("//")) {
+    return "";
+  }
+
+  return nextPath;
+}
+
+export default function LoginPage({ searchParams }: LoginPageProps) {
+  const nextPath = getSafeNextPath(searchParams?.next);
+
   return (
     <>
       <Navbar />
       <main className="bg-slate-50 pt-[72px]">
         <section className="mx-auto flex min-h-[calc(100vh-72px)] max-w-[560px] items-center px-6 py-16">
-          <LoginFormClient />
+          <LoginFormClient nextPath={nextPath} />
         </section>
       </main>
       <Footer />

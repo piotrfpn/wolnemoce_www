@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
   const next = requestUrl.searchParams.get("next") || "/panel";
-  const redirectPath = next.startsWith("/") ? next : "/panel";
+  const redirectPath = next.startsWith("/") && !next.startsWith("//") ? next : "/panel";
 
   if (!code) {
     return NextResponse.redirect(new URL("/logowanie", request.url));

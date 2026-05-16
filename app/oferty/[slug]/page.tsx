@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
 import StaticFormField from "@/components/StaticFormField";
+import { getOfferImageByIndustry } from "@/lib/offerImages";
 import { createClient } from "@/lib/supabase/server";
 
 type OfferDetailsPageProps = {
@@ -14,17 +15,6 @@ type OfferDetailsPageProps = {
 };
 
 export const dynamic = "force-dynamic";
-
-const branchImages: Record<string, string> = {
-  Automatyka: "/images/offers/automation.jpg",
-  Lakiernictwo: "/images/offers/automation.jpg",
-  Metalurgia: "/images/offers/cnc.jpg",
-  "Tworzywa sztuczne": "/images/offers/injection.jpg",
-};
-
-function getOfferImage(branch: string | null) {
-  return branch ? branchImages[branch] ?? "/images/offers/cnc.jpg" : "/images/offers/cnc.jpg";
-}
 
 function getInitials(name: string | null) {
   if (!name) {
@@ -143,6 +133,10 @@ export default async function OfferDetailsPage({
   const location = [company?.location_city, company?.location_voivodeship]
     .filter(Boolean)
     .join(", ");
+  const imageSrc = getOfferImageByIndustry(offer.branch);
+  const imageAlt = `${offer.title ?? "Oferta WolneMoce.pl"} - ${
+    offer.branch ?? "wolne moce"
+  }`;
 
   const parameters = [
     ["Firma", companyName, "fas fa-building"],
@@ -214,8 +208,8 @@ export default async function OfferDetailsPage({
 
             <div className="min-w-0 overflow-hidden rounded-[24px] border border-white/20 bg-white/10 p-3 shadow-2xl backdrop-blur">
               <img
-                src={getOfferImage(offer.branch)}
-                alt={offer.title ?? "Oferta WolneMoce.pl"}
+                src={imageSrc}
+                alt={imageAlt}
                 className="h-[260px] w-full max-w-full rounded-[18px] object-cover md:h-[360px]"
               />
             </div>
@@ -399,7 +393,7 @@ export default async function OfferDetailsPage({
               Dodaj ofertę w panelu firmy i wyślij ją do zatwierdzenia.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Link href="/panel/oferty/nowa" className="btn btn-accent">
+              <Link href="/dodaj-oferte" className="btn btn-accent">
                 Dodaj ofertę
               </Link>
               <Link href="/kontakt" className="btn btn-outline bg-white text-[#1a5f3c]">
