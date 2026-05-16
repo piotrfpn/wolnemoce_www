@@ -66,7 +66,7 @@ export default function OffersPage() {
                   </div>
                 </div>
                 <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur">
-                  <div className="text-3xl font-extrabold">12</div>
+                  <div className="text-3xl font-extrabold">13</div>
                   <div className="mt-1 text-xs text-white/70">Branż B2B</div>
                 </div>
               </div>
@@ -201,7 +201,7 @@ export default function OffersPage() {
                     <FilterCheckbox
                       key={category}
                       label={category}
-                      count={[127, 89, 28, 47, 31, 34][index]}
+                      count={[127, 89, 28, 47, 31, 24][index]}
                     />
                   ))}
                 </div>
@@ -233,7 +233,7 @@ export default function OffersPage() {
                     <FilterCheckbox
                       key={service}
                       label={service}
-                      count={[76, 48, 32, 44, 29, 39][index]}
+                      count={[76, 48, 32, 44, 29, 24][index]}
                     />
                   ))}
                 </div>

@@ -60,6 +60,13 @@
         </div>
 
         <div className="category-card fade-in visible">
+          <div className="category-icon">🎨</div>
+          <h3>Lakiernictwo</h3>
+          <p>Lakierowanie proszkowe, mokre, przemysłowe</p>
+          <span className="category-count">24 oferty</span>
+        </div>
+
+        <div className="category-card fade-in visible">
           <div className="category-icon">🍞</div>
           <h3>Żywność</h3>
           <p>Przetwórstwo, pakowanie, logistyka</p>
