@@ -4,6 +4,9 @@ import Footer from "@/components/Footer";
 import LogoutButton from "@/components/LogoutButton";
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
+import PendingCompaniesClient, {
+  type PendingCompany,
+} from "./PendingCompaniesClient";
 import PendingOffersClient, { type PendingOffer } from "./PendingOffersClient";
 import PendingServicesClient, {
   type PendingServiceRequest,
@@ -34,7 +37,14 @@ export default async function AdminPage() {
     redirect("/panel");
   }
 
-  const [offersResult, serviceRequestsResult] = await Promise.all([
+  const [companiesResult, offersResult, serviceRequestsResult] = await Promise.all([
+    supabase
+      .from("companies")
+      .select(
+        "id, name, nip, industry, industries, service_types, location_voivodeship, location_city, website_url, is_verified, created_at"
+      )
+      .eq("is_verified", false)
+      .order("created_at", { ascending: false }),
     supabase
       .from("offers")
       .select(
@@ -49,6 +59,7 @@ export default async function AdminPage() {
       .order("created_at", { ascending: false }),
   ]);
 
+  const pendingCompanies = (companiesResult.data ?? []) as PendingCompany[];
   const pendingOffers = (offersResult.data ?? []) as PendingOffer[];
   const pendingServiceRequests = (serviceRequestsResult.data ??
     []) as PendingServiceRequest[];
@@ -76,7 +87,19 @@ export default async function AdminPage() {
             </div>
           </div>
 
-          <div className="mb-8 grid min-w-0 gap-5 md:grid-cols-2">
+          <div className="mb-8 grid min-w-0 gap-5 md:grid-cols-3">
+            <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
+                <i className="fas fa-building-circle-check"></i>
+              </div>
+              <p className="text-sm font-bold uppercase tracking-wide text-slate-500">
+                Firmy do weryfikacji
+              </p>
+              <p className="mt-2 text-3xl font-extrabold text-slate-900">
+                {pendingCompanies.length}
+              </p>
+            </div>
+
             <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
                 <i className="fas fa-clipboard-check"></i>
@@ -102,6 +125,12 @@ export default async function AdminPage() {
             </div>
           </div>
 
+          {companiesResult.error ? (
+            <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              Nie udało się pobrać firm: {companiesResult.error.message}
+            </div>
+          ) : null}
+
           {offersResult.error ? (
             <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               Nie udało się pobrać ofert: {offersResult.error.message}
@@ -114,6 +143,22 @@ export default async function AdminPage() {
               {serviceRequestsResult.error.message}
             </div>
           ) : null}
+
+          <section className="mb-8 min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+            <div className="mb-6">
+              <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
+                Weryfikacja firm
+              </p>
+              <h2 className="text-2xl font-extrabold text-slate-900">
+                Firmy oczekujące na weryfikację
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-500">
+                Oznaczenie firmy jako zweryfikowanej pokaże badge w panelu
+                użytkownika, na kartach ofert i profilu firmy.
+              </p>
+            </div>
+            <PendingCompaniesClient companies={pendingCompanies} />
+          </section>
 
           <div className="grid min-w-0 gap-8 xl:grid-cols-[1.2fr_0.8fr]">
             <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">

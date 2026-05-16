@@ -97,3 +97,43 @@ export async function rejectServiceRequest(requestId: string) {
 
   revalidatePath("/admin");
 }
+
+export async function verifyCompany(companyId: string) {
+  const supabase = await requireAdmin();
+  const { data, error } = await supabase
+    .from("companies")
+    .update({ is_verified: true })
+    .eq("id", companyId)
+    .select("slug")
+    .single();
+
+  if (error) {
+    throw new Error(`Nie udało się zweryfikować firmy: ${error.message}`);
+  }
+
+  revalidatePath("/admin");
+  revalidatePath("/oferty");
+  if (data?.slug) {
+    revalidatePath(`/firmy/${data.slug}`);
+  }
+}
+
+export async function unverifyCompany(companyId: string) {
+  const supabase = await requireAdmin();
+  const { data, error } = await supabase
+    .from("companies")
+    .update({ is_verified: false })
+    .eq("id", companyId)
+    .select("slug")
+    .single();
+
+  if (error) {
+    throw new Error(`Nie udało się cofnąć weryfikacji firmy: ${error.message}`);
+  }
+
+  revalidatePath("/admin");
+  revalidatePath("/oferty");
+  if (data?.slug) {
+    revalidatePath(`/firmy/${data.slug}`);
+  }
+}

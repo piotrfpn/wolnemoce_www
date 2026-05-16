@@ -2,6 +2,7 @@ import Link from "next/link";
 
 export type PublicOfferCompany = {
   name: string | null;
+  slug?: string | null;
   description?: string | null;
   location_voivodeship: string | null;
   location_city: string | null;
@@ -85,9 +86,18 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
             {getInitials(companyName)}
           </div>
           <div className="min-w-0">
-            <h3 className="truncate text-sm font-bold text-slate-900">
-              {companyName}
-            </h3>
+            {company?.slug ? (
+              <Link
+                href={`/firmy/${company.slug}`}
+                className="block truncate text-sm font-bold text-slate-900 transition hover:text-[#1a5f3c]"
+              >
+                {companyName}
+              </Link>
+            ) : (
+              <h3 className="truncate text-sm font-bold text-slate-900">
+                {companyName}
+              </h3>
+            )}
             <p className="truncate text-[11px] text-slate-400">
               {offer.branch ?? "Branża"} · {company?.is_verified ? "zweryfikowana" : "profil publiczny"}
             </p>

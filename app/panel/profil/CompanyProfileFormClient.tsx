@@ -13,6 +13,7 @@ type ProfileData = {
 
 type CompanyData = {
   id: string;
+  slug: string | null;
   nip: string | null;
   name: string | null;
   description: string | null;
@@ -52,6 +53,35 @@ const allowedPresentationExtensions = new Set(["pdf", "ppt", "pptx"]);
 const sortedIndustries = Object.keys(industryServiceTypes).sort((first, second) =>
   first.localeCompare(second, "pl")
 );
+
+function slugifyCompanyName(value: string) {
+  return (
+    value
+      .toLowerCase()
+      .replace(/[ąćęłńóśźż]/g, (match) => {
+        const replacements: Record<string, string> = {
+          ą: "a",
+          ć: "c",
+          ę: "e",
+          ł: "l",
+          ń: "n",
+          ó: "o",
+          ś: "s",
+          ź: "z",
+          ż: "z",
+        };
+
+        return replacements[match] ?? match;
+      })
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "firma"
+  );
+}
+
+function createCompanySlug(companyName: string, stableSuffix?: string) {
+  const suffix = stableSuffix?.slice(0, 8) || Date.now().toString(36);
+  return `${slugifyCompanyName(companyName)}-${suffix}`;
+}
 
 function getInitialIndustries(company: CompanyData | null) {
   if (company?.industries && company.industries.length > 0) {
@@ -113,6 +143,7 @@ export default function CompanyProfileFormClient({
   const router = useRouter();
   const initialIndustries = getInitialIndustries(company);
   const [companyId, setCompanyId] = useState(company?.id ?? "");
+  const [companySlug, setCompanySlug] = useState(company?.slug ?? "");
   const [isVerified, setIsVerified] = useState(Boolean(company?.is_verified));
   const [nip, setNip] = useState(company?.nip ?? "");
   const [name, setName] = useState(company?.name ?? "");
@@ -275,9 +306,11 @@ export default function CompanyProfileFormClient({
 
     setIsSubmitting(true);
     const supabase = createClient();
+    const nextCompanySlug = companySlug || createCompanySlug(name.trim(), companyId);
     const payload = {
       nip: nip.replace(/[\s-]/g, ""),
       name: name.trim(),
+      slug: nextCompanySlug,
       description: description.trim() || null,
       industry: mainIndustry,
       industries: selectedIndustries,
@@ -293,7 +326,7 @@ export default function CompanyProfileFormClient({
           .update(payload)
           .eq("id", companyId)
           .select(
-            "id, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
+            "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
           )
           .single()
       : supabase
@@ -303,7 +336,7 @@ export default function CompanyProfileFormClient({
             user_id: userId,
           })
           .select(
-            "id, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
+            "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
           )
           .single();
 
@@ -324,6 +357,7 @@ export default function CompanyProfileFormClient({
             : [];
 
       setCompanyId(data.id);
+      setCompanySlug(data.slug ?? "");
       setIsVerified(Boolean(data.is_verified));
       setNip(data.nip ?? "");
       setName(data.name ?? "");
@@ -594,6 +628,23 @@ export default function CompanyProfileFormClient({
             Weryfikacja firmy będzie wykonywana przez administratora
             WolneMoce.pl.
           </p>
+          <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+            {companySlug ? (
+              <>
+                <span className="font-bold text-slate-900">
+                  Publiczny profil firmy:
+                </span>{" "}
+                <Link
+                  href={`/firmy/${companySlug}`}
+                  className="break-words font-bold text-[#1a5f3c]"
+                >
+                  /firmy/{companySlug}
+                </Link>
+              </>
+            ) : (
+              "Publiczny profil firmy zostanie utworzony po zapisaniu profilu."
+            )}
+          </div>
         </div>
 
         <Link

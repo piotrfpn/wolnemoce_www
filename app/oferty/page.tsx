@@ -66,7 +66,9 @@ async function getPublicOffers(
 
   let query = supabase
     .from("offers")
-    .select("*, companies!inner(*)")
+    .select(
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url)"
+    )
     .eq("status", "active");
 
   if (searchTerm) {
@@ -107,7 +109,7 @@ async function getPublicOffers(
     return [];
   }
 
-  return (data ?? []) as PublicOffer[];
+  return (data ?? []) as unknown as PublicOffer[];
 }
 
 export default async function OffersPage({ searchParams }: OffersPageProps) {

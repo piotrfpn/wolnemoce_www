@@ -52,7 +52,9 @@ async function getPublicOfferBySlug(slug: string) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("offers")
-    .select("*, companies!inner(*)")
+    .select(
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url)"
+    )
     .eq("slug", slug)
     .eq("status", "active")
     .single();
@@ -61,14 +63,16 @@ async function getPublicOfferBySlug(slug: string) {
     return null;
   }
 
-  return data as PublicOffer;
+  return data as unknown as PublicOffer;
 }
 
 async function getSimilarOffers(offer: PublicOffer) {
   const supabase = createClient();
   const sameBranchQuery = supabase
     .from("offers")
-    .select("*, companies!inner(*)")
+    .select(
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url)"
+    )
     .eq("status", "active")
     .neq("id", offer.id)
     .limit(3);
@@ -77,7 +81,7 @@ async function getSimilarOffers(offer: PublicOffer) {
     ? await sameBranchQuery.eq("branch", offer.branch)
     : await sameBranchQuery;
 
-  const collected = (sameBranch ?? []) as PublicOffer[];
+  const collected = (sameBranch ?? []) as unknown as PublicOffer[];
 
   if (collected.length >= 3) {
     return collected.slice(0, 3);
@@ -85,14 +89,16 @@ async function getSimilarOffers(offer: PublicOffer) {
 
   const { data: otherOffers } = await supabase
     .from("offers")
-    .select("*, companies!inner(*)")
+    .select(
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url)"
+    )
     .eq("status", "active")
     .neq("id", offer.id)
     .order("created_at", { ascending: false })
     .limit(3);
 
   const byId = new Map<string, PublicOffer>();
-  [...collected, ...((otherOffers ?? []) as PublicOffer[])].forEach((item) => {
+  [...collected, ...((otherOffers ?? []) as unknown as PublicOffer[])].forEach((item) => {
     byId.set(item.id, item);
   });
 
@@ -187,7 +193,13 @@ export default async function OfferDetailsPage({
               <div className="mt-6 flex flex-col gap-4 text-white/85 sm:flex-row sm:flex-wrap sm:items-center">
                 <span className="inline-flex items-center gap-2 text-sm font-semibold">
                   <i className="fas fa-building text-[#fbbf24]"></i>
-                  {companyName}
+                  {company?.slug ? (
+                    <Link href={`/firmy/${company.slug}`} className="hover:text-white">
+                      {companyName}
+                    </Link>
+                  ) : (
+                    companyName
+                  )}
                 </span>
                 <span className="inline-flex items-center gap-2 text-sm font-semibold">
                   <i className="fas fa-map-marker-alt text-[#fbbf24]"></i>
@@ -282,9 +294,18 @@ export default async function OfferDetailsPage({
                   {getInitials(companyName)}
                 </div>
                 <div className="min-w-0">
-                  <h3 className="break-words text-xl font-extrabold text-slate-900">
-                    {companyName}
-                  </h3>
+                  {company?.slug ? (
+                    <Link
+                      href={`/firmy/${company.slug}`}
+                      className="break-words text-xl font-extrabold text-slate-900 transition hover:text-[#1a5f3c]"
+                    >
+                      {companyName}
+                    </Link>
+                  ) : (
+                    <h3 className="break-words text-xl font-extrabold text-slate-900">
+                      {companyName}
+                    </h3>
+                  )}
                   <p className="mt-1 whitespace-pre-line text-sm leading-6 text-slate-500">
                     {company?.description ||
                       `Firma prezentuje dostępne moce w kategorii ${offer.branch ?? "B2B"} i obsługuje zapytania B2B przez WolneMoce.pl.`}
