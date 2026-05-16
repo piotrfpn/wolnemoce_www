@@ -4,7 +4,9 @@ import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
-import InquiryActionsClient from "./InquiryActionsClient";
+import InquiryActionsClient, {
+  type InquiryAttachment,
+} from "./InquiryActionsClient";
 
 export const metadata: Metadata = {
   title: "Zapytania ofertowe",
@@ -32,6 +34,7 @@ type CompanyInquiry = {
     service_type: string | null;
     status: string | null;
   } | null;
+  attachments: InquiryAttachment[];
 };
 
 function formatDate(value: string | null) {
@@ -107,6 +110,28 @@ export default async function PanelInquiriesPage() {
     .order("created_at", { ascending: false });
 
   const companyInquiries = (inquiries ?? []) as unknown as CompanyInquiry[];
+  const inquiryIds = companyInquiries.map((inquiry) => inquiry.id);
+  const { data: attachments } =
+    inquiryIds.length > 0
+      ? await supabase
+          .from("inquiry_attachments")
+          .select("id, inquiry_id, original_file_name, mime_type, size_bytes")
+          .in("inquiry_id", inquiryIds)
+      : { data: [] };
+  const attachmentsByInquiryId = new Map<string, InquiryAttachment[]>();
+
+  for (const attachment of (attachments ?? []) as (InquiryAttachment & {
+    inquiry_id: string;
+  })[]) {
+    const current = attachmentsByInquiryId.get(attachment.inquiry_id) ?? [];
+    current.push(attachment);
+    attachmentsByInquiryId.set(attachment.inquiry_id, current);
+  }
+
+  const inquiriesWithAttachments = companyInquiries.map((inquiry) => ({
+    ...inquiry,
+    attachments: attachmentsByInquiryId.get(inquiry.id) ?? [],
+  }));
 
   return (
     <>
@@ -128,9 +153,9 @@ export default async function PanelInquiriesPage() {
             </Link>
           </div>
 
-          {companyInquiries.length > 0 ? (
+          {inquiriesWithAttachments.length > 0 ? (
             <div className="space-y-5">
-              {companyInquiries.map((inquiry) => (
+              {inquiriesWithAttachments.map((inquiry) => (
                 <article
                   key={inquiry.id}
                   className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm"
@@ -160,6 +185,7 @@ export default async function PanelInquiriesPage() {
                     <InquiryActionsClient
                       inquiryId={inquiry.id}
                       status={inquiry.status}
+                      attachments={inquiry.attachments}
                     />
                   </div>
 

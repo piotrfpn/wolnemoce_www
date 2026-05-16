@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import AddOfferLinkClient from "./AddOfferLinkClient";
 import AuthNavButton from "./AuthNavButton";
 
 const navLinks = [
@@ -63,12 +64,9 @@ export default function Navbar() {
           >
             Kontakt
           </Link>
-          <Link
-            href="/dodaj-oferte"
-            className="inline-flex items-center justify-center rounded-lg bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-5 py-2.5 text-sm font-semibold text-white no-underline shadow-lg shadow-[#1a5f3c]/25 transition hover:-translate-y-0.5 hover:shadow-xl"
-          >
+          <AddOfferLinkClient className="inline-flex items-center justify-center rounded-lg bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-5 py-2.5 text-sm font-semibold text-white no-underline shadow-lg shadow-[#1a5f3c]/25 transition hover:-translate-y-0.5 hover:shadow-xl">
             Dodaj ofertę
-          </Link>
+          </AddOfferLinkClient>
         </div>
 
         <button
@@ -112,13 +110,12 @@ export default function Navbar() {
               >
                 Kontakt
               </Link>
-              <Link
-                href="/dodaj-oferte"
-                onClick={closeMenu}
+              <AddOfferLinkClient
+                onNavigate={closeMenu}
                 className="inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-5 py-3 text-sm font-bold text-white no-underline shadow-lg shadow-[#1a5f3c]/25"
               >
                 Dodaj ofertę
-              </Link>
+              </AddOfferLinkClient>
             </div>
           </div>
         </div>

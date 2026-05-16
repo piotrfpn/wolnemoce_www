@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Dodaj ofertę",
@@ -38,7 +40,16 @@ const steps = [
   },
 ];
 
-export default function AddOfferPage() {
+export default async function AddOfferPage() {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    redirect("/panel/oferty/nowa");
+  }
+
   return (
     <>
       <Navbar />

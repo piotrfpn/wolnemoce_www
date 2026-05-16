@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import AddOfferLinkClient from "@/components/AddOfferLinkClient";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
-import StaticFormField from "@/components/StaticFormField";
+import RfqInlineFormClient from "@/components/RfqInlineFormClient";
 import { getOfferImageByIndustry } from "@/lib/offerImages";
 import { createClient } from "@/lib/supabase/server";
 
@@ -322,38 +323,12 @@ export default async function OfferDetailsPage({
 
           <aside className="min-w-0">
             <div className="sticky top-24 rounded-[24px] border border-slate-200 bg-white p-6 shadow-xl">
-              <div className="mb-6">
-                <h2 className="text-2xl font-extrabold text-slate-900">
-                  Zapytaj o ofertę
-                </h2>
-                <p className="mt-2 text-sm leading-6 text-slate-500">
-                  Formularz RFQ jest demonstracyjny i nie wysyła jeszcze danych.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                <StaticFormField label="Imię i nazwisko" name="name" icon="fas fa-user" />
-                <StaticFormField label="Firma" name="company" icon="fas fa-building" />
-                <StaticFormField label="Email" name="email" type="email" icon="fas fa-envelope" />
-                <StaticFormField label="Telefon" name="phone" type="tel" icon="fas fa-phone" />
-                <StaticFormField label="Ilość / zakres zamówienia" name="quantity" icon="fas fa-boxes-stacked" />
-                <StaticFormField label="Termin realizacji" name="deadline" icon="fas fa-clock" />
-                <StaticFormField
-                  label="Wiadomość"
-                  name="message"
-                  textarea
-                  rows={5}
-                  placeholder="Opisz krótko zapotrzebowanie, materiał, ilość i oczekiwany termin."
-                  icon="fas fa-message"
-                />
-              </div>
-
-              <Link
-                href={`/zapytanie-ofertowe?oferta=${offer.slug}`}
-                className="mt-6 w-full btn btn-primary"
-              >
-                Wyślij zapytanie
-              </Link>
+              <RfqInlineFormClient
+                offerId={offer.id}
+                offerSlug={offer.slug}
+                offerTitle={offer.title}
+                companyName={companyName}
+              />
             </div>
           </aside>
         </section>
@@ -393,9 +368,9 @@ export default async function OfferDetailsPage({
               Dodaj ofertę w panelu firmy i wyślij ją do zatwierdzenia.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Link href="/dodaj-oferte" className="btn btn-accent">
+              <AddOfferLinkClient className="btn btn-accent">
                 Dodaj ofertę
-              </Link>
+              </AddOfferLinkClient>
               <Link href="/kontakt" className="btn btn-outline bg-white text-[#1a5f3c]">
                 Kontakt
               </Link>

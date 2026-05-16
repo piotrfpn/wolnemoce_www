@@ -11,14 +11,9 @@ type AuthNavButtonProps = {
   onNavigate?: () => void;
 };
 
-export default function AuthNavButton({
-  variant = "desktop",
-  onNavigate,
-}: AuthNavButtonProps) {
-  const router = useRouter();
+function useCurrentUser() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSigningOut, setIsSigningOut] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
@@ -45,6 +40,17 @@ export default function AuthNavButton({
       subscription.unsubscribe();
     };
   }, []);
+
+  return { user, isLoading };
+}
+
+export default function AuthNavButton({
+  variant = "desktop",
+  onNavigate,
+}: AuthNavButtonProps) {
+  const router = useRouter();
+  const { user, isLoading } = useCurrentUser();
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   async function handleLogout() {
     setIsSigningOut(true);

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import AddOfferLinkClient from "@/components/AddOfferLinkClient";
 import BlogCard from "@/components/BlogCard";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -185,9 +186,9 @@ export default function BlogArticlePage({ params }: BlogArticlePageProps) {
               <Link href="/oferty" className="btn btn-accent">
                 Przeglądaj oferty
               </Link>
-              <Link href="/dodaj-oferte" className="btn btn-outline bg-white text-[#1a5f3c]">
+              <AddOfferLinkClient className="btn btn-outline bg-white text-[#1a5f3c]">
                 Dodaj ofertę
-              </Link>
+              </AddOfferLinkClient>
             </div>
           </div>
         </section>

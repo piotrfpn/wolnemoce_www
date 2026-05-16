@@ -1,6 +1,7 @@
 // components/Hero.tsx
 
 import Link from "next/link";
+import AddOfferLinkClient from "./AddOfferLinkClient";
 
 export default function Hero() {
   return (
@@ -60,13 +61,12 @@ export default function Hero() {
             >
               Przeglądaj oferty
             </Link>
-            <Link
-              href="/dodaj-oferte"
+            <AddOfferLinkClient
               className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/15 px-8 py-4 text-base font-bold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/20"
             >
               <i className="fas fa-plus"></i>
               Dodaj swoją ofertę
-            </Link>
+            </AddOfferLinkClient>
           </div>
         </div>
 

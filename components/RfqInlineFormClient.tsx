@@ -13,11 +13,15 @@ import { submitInquiry } from "@/app/zapytanie-ofertowe/actions";
 type RfqInlineFormClientProps = {
   offerId: string;
   offerSlug: string | null;
+  offerTitle?: string | null;
+  companyName?: string | null;
 };
 
 export default function RfqInlineFormClient({
   offerId,
   offerSlug,
+  offerTitle,
+  companyName,
 }: RfqInlineFormClientProps) {
   const [error, setError] = useState("");
   const [partialSuccess, setPartialSuccess] = useState("");
@@ -101,6 +105,8 @@ export default function RfqInlineFormClient({
   return (
     <form onSubmit={handleSubmit} className="min-w-0">
       <input type="hidden" name="offer_id" value={offerId} />
+      <input type="hidden" name="offer_title" value={offerTitle ?? ""} />
+      <input type="hidden" name="company_name" value={companyName ?? ""} />
 
       <div className="mb-6">
         <h2 className="text-2xl font-extrabold text-slate-900">

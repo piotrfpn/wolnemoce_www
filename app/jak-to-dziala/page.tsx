@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AddOfferLinkClient from "@/components/AddOfferLinkClient";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
@@ -40,9 +41,9 @@ export default function HowItWorksPage() {
               <Link href="/oferty" className="btn btn-accent">
                 Przeglądaj oferty <i className="fas fa-arrow-right"></i>
               </Link>
-              <Link href="/dodaj-oferte" className="btn btn-outline bg-white text-[#1a5f3c]">
+              <AddOfferLinkClient className="btn btn-outline bg-white text-[#1a5f3c]">
                 Dodaj ofertę
-              </Link>
+              </AddOfferLinkClient>
             </>
           }
         />

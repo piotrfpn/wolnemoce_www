@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AddOfferLinkClient from "./AddOfferLinkClient";
 
 export default function Footer() {
   return (
@@ -49,9 +50,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/dodaj-oferte" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <AddOfferLinkClient className="text-sm text-white/60 no-underline transition hover:text-white">
                   Dodaj ofertę
-                </Link>
+                </AddOfferLinkClient>
               </li>
               <li>
                 <Link href="/jak-to-dziala" className="text-sm text-white/60 no-underline transition hover:text-white">

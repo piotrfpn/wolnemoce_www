@@ -63,3 +63,34 @@ export async function markInquiryRead(inquiryId: string) {
 export async function archiveInquiry(inquiryId: string) {
   await updateInquiryStatus(inquiryId, "archived");
 }
+
+export async function createAttachmentDownloadUrl(attachmentId: string) {
+  const { supabase, companyId } = await requireUserCompany();
+  const { data: attachment, error: attachmentError } = await supabase
+    .from("inquiry_attachments")
+    .select("id, company_id, storage_bucket, storage_path")
+    .eq("id", attachmentId)
+    .single();
+
+  if (attachmentError || !attachment) {
+    throw new Error("Nie znaleziono załącznika.");
+  }
+
+  if (attachment.company_id !== companyId) {
+    throw new Error("Forbidden");
+  }
+
+  if (attachment.storage_bucket !== "inquiry-attachments") {
+    throw new Error("Nieprawidłowy bucket załącznika.");
+  }
+
+  const { data, error } = await supabase.storage
+    .from("inquiry-attachments")
+    .createSignedUrl(attachment.storage_path, 60);
+
+  if (error || !data?.signedUrl) {
+    throw new Error("Nie udało się przygotować linku do pobrania.");
+  }
+
+  return data.signedUrl;
+}

@@ -1,6 +1,7 @@
 // components/CtaSection.tsx
 
 import Link from "next/link";
+import AddOfferLinkClient from "./AddOfferLinkClient";
 
 export default function CtaSection() {
   return (
@@ -19,12 +20,11 @@ export default function CtaSection() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href="/dodaj-oferte"
+            <AddOfferLinkClient
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-[#f59e0b] to-[#fbbf24] px-10 py-4 text-base font-bold text-white no-underline shadow-lg shadow-[#f59e0b]/30 transition hover:-translate-y-0.5 hover:shadow-xl"
             >
               Dodaj ofertę za darmo
-            </Link>
+            </AddOfferLinkClient>
 
             <Link
               href="/oferty"
