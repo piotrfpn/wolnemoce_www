@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import LogoutButton from "@/components/LogoutButton";
@@ -13,8 +14,10 @@ export const metadata: Metadata = {
 const panelItems = [
   {
     title: "Profil firmy",
-    description: "Dane rejestrowe, lokalizacja i status weryfikacji.",
+    description: "Uzupełnij dane firmy",
     icon: "fas fa-building",
+    href: "/panel/profil",
+    cta: "Przejdź do profilu",
   },
   {
     title: "Moje oferty",
@@ -59,7 +62,7 @@ export default async function PanelPage() {
                   Panel firmy
                 </h1>
                 <div className="mt-4 grid gap-2 text-sm text-slate-600 sm:grid-cols-2">
-                  <p className="min-w-0">
+                  <p className="min-w-0 break-words">
                     <strong className="text-slate-900">Email:</strong>{" "}
                     {user.email}
                   </p>
@@ -74,22 +77,44 @@ export default async function PanelPage() {
           </div>
 
           <div className="grid min-w-0 gap-5 md:grid-cols-3">
-            {panelItems.map((item) => (
-              <div
-                key={item.title}
-                className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm"
-              >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
-                  <i className={item.icon}></i>
+            {panelItems.map((item) => {
+              const card = (
+                <>
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
+                    <i className={item.icon}></i>
+                  </div>
+                  <h2 className="text-lg font-extrabold text-slate-900">
+                    {item.href ? item.title : `${item.title} — wkrótce`}
+                  </h2>
+                  <p className="mt-2 text-sm leading-6 text-slate-500">
+                    {item.description}
+                  </p>
+                  {item.href ? (
+                    <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c]">
+                      {item.cta}
+                      <i className="fas fa-arrow-right text-xs"></i>
+                    </span>
+                  ) : null}
+                </>
+              );
+
+              return item.href ? (
+                <Link
+                  key={item.title}
+                  href={item.href}
+                  className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-[#1a5f3c] hover:shadow-md"
+                >
+                  {card}
+                </Link>
+              ) : (
+                <div
+                  key={item.title}
+                  className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm"
+                >
+                  {card}
                 </div>
-                <h2 className="text-lg font-extrabold text-slate-900">
-                  {item.title} — wkrótce
-                </h2>
-                <p className="mt-2 text-sm leading-6 text-slate-500">
-                  {item.description}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       </main>
