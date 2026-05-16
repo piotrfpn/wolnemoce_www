@@ -76,15 +76,19 @@ export const provinces = [
 ];
 
 export const categories = [
-  "Metalurgia",
-  "Tworzywa sztuczne",
   "Automatyka",
-  "Logistyka",
   "Chemia i kosmetyki",
-  "Lakiernictwo",
-  "Magazynowanie",
-  "Elektronika",
   "Drewno i meble",
+  "Druk i poligrafia",
+  "Elektronika",
+  "Lakiernictwo",
+  "Logistyka",
+  "Magazynowanie",
+  "Metalurgia",
+  "Tekstylia",
+  "Tworzywa sztuczne",
+  "Utrzymanie ruchu",
+  "Żywność",
 ];
 
 export const services = [
@@ -190,7 +194,7 @@ export const industryServiceTypes: Record<string, string[]> = {
     "Modernizacja maszyn",
     "Szafy sterownicze",
   ],
-  "Logistyka i Magazynowanie": [
+  Logistyka: [
     "Magazynowanie",
     "Składowanie paletowe/drobnicowe",
     "Kompletacja zamówień",
@@ -198,6 +202,16 @@ export const industryServiceTypes: Record<string, string[]> = {
     "Pakowanie i etykietowanie",
     "Obsługa e-commerce",
     "Transport lokalny",
+    "Fulfillment B2B",
+    "Obsługa zwrotów",
+  ],
+  Magazynowanie: [
+    "Magazynowanie",
+    "Składowanie paletowe/drobnicowe",
+    "Kompletacja zamówień",
+    "Cross-docking",
+    "Pakowanie i etykietowanie",
+    "Obsługa e-commerce",
     "Fulfillment B2B",
     "Obsługa zwrotów",
   ],

@@ -7,7 +7,9 @@ import { industryServiceTypes, provinces } from "@/lib/mockData";
 
 type LocationMode = "profile" | "custom";
 
-const industryOptions = Object.keys(industryServiceTypes);
+const industryOptions = Object.keys(industryServiceTypes).sort((first, second) =>
+  first.localeCompare(second, "pl")
+);
 const provinceOptions = provinces.map((province) => ({
   label: province,
   value: province,
@@ -179,6 +181,7 @@ export default function AddOfferFormClient() {
             <StaticFormField
               label="Miasto"
               name="city"
+              placeholder="Np. Poznań, Kalisz, Leszno"
               icon="fas fa-location-dot"
             />
           </div>

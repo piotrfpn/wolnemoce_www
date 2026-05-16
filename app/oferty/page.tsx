@@ -201,7 +201,7 @@ export default function OffersPage() {
                     <FilterCheckbox
                       key={category}
                       label={category}
-                      count={[127, 89, 28, 47, 31, 24][index]}
+                      count={[28, 31, 52, 38, 64, 24][index]}
                     />
                   ))}
                 </div>

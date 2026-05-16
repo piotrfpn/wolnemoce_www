@@ -1,4 +1,85 @@
-﻿export default function Categories() {
+const homepageCategories = [
+  {
+    icon: "🤖",
+    name: "Automatyka",
+    description: "Integracja systemów, robotyzacja, PLC",
+    count: "28 ofert",
+  },
+  {
+    icon: "🧴",
+    name: "Chemia i kosmetyki",
+    description: "Konfekcja, mieszanie, pakowanie",
+    count: "31 ofert",
+  },
+  {
+    icon: "🪵",
+    name: "Drewno i meble",
+    description: "Stolarka, meble na zamówienie, CNC",
+    count: "52 oferty",
+  },
+  {
+    icon: "🖨️",
+    name: "Druk i poligrafia",
+    description: "Druk offsetowy, cyfrowy, etykiety",
+    count: "38 ofert",
+  },
+  {
+    icon: "🔌",
+    name: "Elektronika",
+    description: "Montaż PCB, testowanie, programowanie",
+    count: "64 ofert",
+  },
+  {
+    icon: "🎨",
+    name: "Lakiernictwo",
+    description: "Lakierowanie proszkowe, mokre, przemysłowe",
+    count: "24 oferty",
+  },
+  {
+    icon: "🚚",
+    name: "Logistyka",
+    description: "Spedycja, logistyka kontraktowa, 3PL",
+    count: "47 ofert",
+  },
+  {
+    icon: "📦",
+    name: "Magazynowanie",
+    description: "Składowanie, konfekcja, cross-docking",
+    count: "34 oferty",
+  },
+  {
+    icon: "⚙️",
+    name: "Metalurgia",
+    description: "Obróbka CNC, spawanie, odlewnictwo",
+    count: "127 ofert",
+  },
+  {
+    icon: "👕",
+    name: "Tekstylia",
+    description: "Szycie, haftowanie, druk na tkaninach",
+    count: "43 oferty",
+  },
+  {
+    icon: "🧪",
+    name: "Tworzywa sztuczne",
+    description: "Wtrysk, wytłaczanie, termoformowanie",
+    count: "89 ofert",
+  },
+  {
+    icon: "🛠️",
+    name: "Utrzymanie ruchu",
+    description: "Serwis maszyn, predykcja, części",
+    count: "19 ofert",
+  },
+  {
+    icon: "🍞",
+    name: "Żywność",
+    description: "Przetwórstwo, pakowanie, logistyka",
+    count: "56 ofert",
+  },
+];
+
+export default function Categories() {
   return (
     <section className="section" id="kategorie">
       <div className="section-header fade-in visible">
@@ -10,96 +91,14 @@
       </div>
 
       <div className="categories-grid">
-        <div className="category-card fade-in visible">
-          <div className="category-icon">⚙️</div>
-          <h3>Metalurgia</h3>
-          <p>Obróbka CNC, spawanie, odlewnictwo</p>
-          <span className="category-count">127 ofert</span>
-        </div>
-
-        <div className="category-card fade-in visible">
-          <div className="category-icon">🧪</div>
-          <h3>Tworzywa sztuczne</h3>
-          <p>Wtrysk, wytłaczanie, termoformowanie</p>
-          <span className="category-count">89 ofert</span>
-        </div>
-
-        <div className="category-card fade-in visible">
-          <div className="category-icon">🔌</div>
-          <h3>Elektronika</h3>
-          <p>Montaż PCB, testowanie, programowanie</p>
-          <span className="category-count">64 ofert</span>
-        </div>
-
-        <div className="category-card fade-in visible">
-          <div className="category-icon">👕</div>
-          <h3>Tekstylia</h3>
-          <p>Szycie, haftowanie, druk na tkaninach</p>
-          <span className="category-count">43 oferty</span>
-        </div>
-
-        <div className="category-card fade-in visible">
-          <div className="category-icon">🖨️</div>
-          <h3>Druk i poligrafia</h3>
-          <p>Druk offsetowy, cyfrowy, etykiety</p>
-          <span className="category-count">38 ofert</span>
-        </div>
-
-        <div className="category-card fade-in visible">
-          <div className="category-icon">🪵</div>
-          <h3>Drewno i meble</h3>
-          <p>Stolarka, meble na zamówienie, CNC</p>
-          <span className="category-count">52 oferty</span>
-        </div>
-
-        <div className="category-card fade-in visible">
-          <div className="category-icon">🧴</div>
-          <h3>Chemia i kosmetyki</h3>
-          <p>Konfekcja, mieszanie, pakowanie</p>
-          <span className="category-count">31 ofert</span>
-        </div>
-
-        <div className="category-card fade-in visible">
-          <div className="category-icon">🎨</div>
-          <h3>Lakiernictwo</h3>
-          <p>Lakierowanie proszkowe, mokre, przemysłowe</p>
-          <span className="category-count">24 oferty</span>
-        </div>
-
-        <div className="category-card fade-in visible">
-          <div className="category-icon">🍞</div>
-          <h3>Żywność</h3>
-          <p>Przetwórstwo, pakowanie, logistyka</p>
-          <span className="category-count">56 ofert</span>
-        </div>
-
-        <div className="category-card fade-in visible">
-          <div className="category-icon">🤖</div>
-          <h3>Automatyka</h3>
-          <p>Integracja systemów, robotyzacja, PLC</p>
-          <span className="category-count">28 ofert</span>
-        </div>
-
-        <div className="category-card fade-in visible">
-          <div className="category-icon">🚚</div>
-          <h3>Logistyka</h3>
-          <p>Spedycja, logistyka kontraktowa, 3PL</p>
-          <span className="category-count">47 ofert</span>
-        </div>
-
-        <div className="category-card fade-in visible">
-          <div className="category-icon">🛠️</div>
-          <h3>Utrzymanie ruchu</h3>
-          <p>Serwis maszyn, predykcja, części</p>
-          <span className="category-count">19 ofert</span>
-        </div>
-
-        <div className="category-card fade-in visible">
-          <div className="category-icon">📦</div>
-          <h3>Magazynowanie</h3>
-          <p>Składowanie, konfekcja, cross-docking</p>
-          <span className="category-count">34 oferty</span>
-        </div>
+        {homepageCategories.map((category) => (
+          <div key={category.name} className="category-card fade-in visible">
+            <div className="category-icon">{category.icon}</div>
+            <h3>{category.name}</h3>
+            <p>{category.description}</p>
+            <span className="category-count">{category.count}</span>
+          </div>
+        ))}
       </div>
     </section>
   );
