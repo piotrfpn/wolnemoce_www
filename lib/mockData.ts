@@ -511,7 +511,7 @@ export const pricingPlans: PricingPlan[] = [
       "Rozszerzona weryfikacja",
       "Key Account Manager",
     ],
-    cta: "Skontaktuj się",
+    cta: "Wkrótce",
     ctaHref: "/kontakt",
   },
 ];
