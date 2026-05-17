@@ -53,6 +53,7 @@ async function updateInquiryStatus(inquiryId: string, status: "read" | "archived
     throw new Error(`Nie udało się zmienić statusu zapytania: ${error.message}`);
   }
 
+  revalidatePath("/panel");
   revalidatePath("/panel/zapytania");
 }
 

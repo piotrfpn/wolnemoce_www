@@ -66,6 +66,21 @@ export default async function PanelPage() {
     .select("role, full_name")
     .eq("id", user.id)
     .maybeSingle();
+
+  const { data: company } = await supabase
+    .from("companies")
+    .select("id")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  const { count: newInquiriesCount } = company?.id
+    ? await supabase
+        .from("inquiries")
+        .select("id", { count: "exact", head: true })
+        .eq("company_id", company.id)
+        .eq("status", "new")
+    : { count: 0 };
+
   const visiblePanelItems =
     profile?.role === "admin" ? [...panelItems, adminPanelItem] : panelItems;
 
@@ -100,10 +115,28 @@ export default async function PanelPage() {
 
           <div className="grid min-w-0 gap-5 md:grid-cols-3">
             {visiblePanelItems.map((item) => {
+              const isInquiriesCard = item.href === "/panel/zapytania";
+              const inquiryBadge =
+                (newInquiriesCount ?? 0) > 0
+                  ? `${newInquiriesCount} nowych`
+                  : "Brak nowych zapytań";
               const card = (
                 <>
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
-                    <i className={item.icon}></i>
+                  <div className="mb-4 flex items-start justify-between gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
+                      <i className={item.icon}></i>
+                    </div>
+                    {isInquiriesCard ? (
+                      <span
+                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${
+                          (newInquiriesCount ?? 0) > 0
+                            ? "bg-emerald-50 text-emerald-700"
+                            : "bg-slate-100 text-slate-500"
+                        }`}
+                      >
+                        {inquiryBadge}
+                      </span>
+                    ) : null}
                   </div>
                   <h2 className="text-lg font-extrabold text-slate-900">
                     {item.href ? item.title : `${item.title} — wkrótce`}

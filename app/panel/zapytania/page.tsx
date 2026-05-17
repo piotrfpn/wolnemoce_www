@@ -63,6 +63,22 @@ function getStatusLabel(status: string | null) {
   return "Nowe";
 }
 
+function isNewInquiry(status: string | null) {
+  return status === "new" || !status;
+}
+
+function getStatusBadgeClass(status: string | null) {
+  if (isNewInquiry(status)) {
+    return "bg-emerald-50 text-emerald-700";
+  }
+
+  if (status === "archived") {
+    return "bg-slate-100 text-slate-500";
+  }
+
+  return "bg-slate-100 text-slate-600";
+}
+
 export default async function PanelInquiriesPage() {
   const supabase = createClient();
   const {
@@ -158,12 +174,20 @@ export default async function PanelInquiriesPage() {
               {inquiriesWithAttachments.map((inquiry) => (
                 <article
                   key={inquiry.id}
-                  className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm"
+                  className={`min-w-0 rounded-[24px] border p-6 shadow-sm ${
+                    isNewInquiry(inquiry.status)
+                      ? "border-emerald-200 bg-emerald-50/40"
+                      : "border-slate-200 bg-white"
+                  }`}
                 >
                   <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div className="min-w-0">
                       <div className="mb-3 flex flex-wrap gap-2">
-                        <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-bold ${getStatusBadgeClass(
+                            inquiry.status
+                          )}`}
+                        >
                           {getStatusLabel(inquiry.status)}
                         </span>
                         <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
@@ -227,7 +251,7 @@ export default async function PanelInquiriesPage() {
             </div>
           ) : (
             <div className="rounded-[24px] border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
-              Brak zapytań ofertowych dla Twojej firmy.
+              Nie masz jeszcze żadnych zapytań ofertowych.
             </div>
           )}
         </section>
