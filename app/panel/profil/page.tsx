@@ -29,7 +29,7 @@ export default async function CompanyProfilePage() {
   const { data: company } = await supabase
     .from("companies")
     .select(
-      "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
+      "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, contact_email, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
     )
     .eq("user_id", user.id)
     .maybeSingle();

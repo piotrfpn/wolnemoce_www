@@ -24,6 +24,7 @@ type CompanyData = {
   location_city: string | null;
   is_verified: boolean | null;
   website_url: string | null;
+  contact_email: string | null;
   presentation_path: string | null;
   presentation_file_name: string | null;
   presentation_mime_type: string | null;
@@ -53,6 +54,10 @@ const allowedPresentationExtensions = new Set(["pdf", "ppt", "pptx"]);
 const sortedIndustries = Object.keys(industryServiceTypes).sort((first, second) =>
   first.localeCompare(second, "pl")
 );
+
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
 
 function slugifyCompanyName(value: string) {
   return (
@@ -163,6 +168,7 @@ export default function CompanyProfileFormClient({
   const [city, setCity] = useState(company?.location_city ?? "");
   const [description, setDescription] = useState(company?.description ?? "");
   const [websiteUrl, setWebsiteUrl] = useState(company?.website_url ?? "");
+  const [contactEmail, setContactEmail] = useState(company?.contact_email ?? "");
   const [presentationPath, setPresentationPath] = useState(
     company?.presentation_path ?? ""
   );
@@ -290,6 +296,10 @@ export default function CompanyProfileFormClient({
       return "Adres strony WWW musi zaczynać się od http:// albo https://";
     }
 
+    if (contactEmail.trim() && !isValidEmail(contactEmail.trim())) {
+      return "Podaj poprawny adres e-mail do zapytań ofertowych albo pozostaw pole puste.";
+    }
+
     return "";
   }
 
@@ -318,6 +328,7 @@ export default function CompanyProfileFormClient({
       location_voivodeship: voivodeship,
       location_city: city.trim(),
       website_url: websiteUrl.trim() || null,
+      contact_email: contactEmail.trim() || null,
     };
 
     const query = companyId
@@ -326,7 +337,7 @@ export default function CompanyProfileFormClient({
           .update(payload)
           .eq("id", companyId)
           .select(
-            "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
+            "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, contact_email, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
           )
           .single()
       : supabase
@@ -336,7 +347,7 @@ export default function CompanyProfileFormClient({
             user_id: userId,
           })
           .select(
-            "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
+            "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, contact_email, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
           )
           .single();
 
@@ -368,6 +379,7 @@ export default function CompanyProfileFormClient({
       setVoivodeship(data.location_voivodeship ?? "");
       setCity(data.location_city ?? "");
       setWebsiteUrl(data.website_url ?? "");
+      setContactEmail(data.contact_email ?? "");
       setPresentationPath(data.presentation_path ?? "");
       setPresentationFileName(data.presentation_file_name ?? "");
       setPresentationMimeType(data.presentation_mime_type ?? "");
@@ -724,6 +736,25 @@ export default function CompanyProfileFormClient({
                 placeholder="https://twojafirma.pl"
                 className={inputClass}
               />
+            </label>
+
+            <label className="block min-w-0 md:col-span-2">
+              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                <i className="fas fa-envelope text-[#1a5f3c]"></i>
+                E-mail do zapytań ofertowych
+              </span>
+              <input
+                type="email"
+                value={contactEmail}
+                onChange={(event) => setContactEmail(event.target.value)}
+                placeholder="oferty@twojafirma.pl"
+                className={inputClass}
+              />
+              <p className="mt-2 text-xs leading-5 text-slate-500">
+                Na ten adres wyślemy powiadomienia o nowych zapytaniach
+                ofertowych. Adres nie będzie publicznie wyświetlany w profilu
+                firmy.
+              </p>
             </label>
 
             <div className="min-w-0 md:col-span-2">
