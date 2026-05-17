@@ -811,44 +811,46 @@ export default function CompanyProfileFormClient({
                 <i className="fas fa-id-card text-[#1a5f3c]"></i>
                 NIP
               </label>
-              <div className="flex min-w-0 flex-col gap-3 sm:flex-row">
-                <input
-                  id="company-nip"
-                  value={nip}
-                  onChange={(event) => {
-                    setNip(event.target.value);
-                    setGusError("");
-                    setGusMessage("");
-                  }}
-                  placeholder="Np. 1234567890"
-                  className={inputClass}
-                />
-                <button
-                  type="button"
-                  onClick={handleGusLookup}
-                  disabled={isGusLoading}
-                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  <i
-                    className={
-                      isGusLoading ? "fas fa-spinner fa-spin" : "fas fa-download"
-                    }
-                  ></i>
-                  {isGusLoading ? "Pobieranie..." : "Pobierz dane z GUS"}
-                </button>
-              </div>
+              <input
+                id="company-nip"
+                value={nip}
+                onChange={(event) => {
+                  setNip(event.target.value);
+                  setGusError("");
+                  setGusMessage("");
+                }}
+                placeholder="Np. 1234567890"
+                className={inputClass}
+              />
+              <button
+                type="button"
+                onClick={handleGusLookup}
+                disabled={isGusLoading}
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+              >
+                <i
+                  className={
+                    isGusLoading ? "fas fa-spinner fa-spin" : "fas fa-download"
+                  }
+                ></i>
+                {isGusLoading
+                  ? "Pobieranie danych z GUS..."
+                  : "Pobierz dane z GUS"}
+              </button>
               {isGusLoading ? (
-                <p className="mt-2 text-xs leading-5 text-slate-500">
+                <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-5 text-slate-600">
                   Pobieranie danych z GUS...
-                </p>
+                </div>
               ) : null}
               {gusError ? (
-                <p className="mt-2 text-xs leading-5 text-red-600">{gusError}</p>
+                <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs leading-5 text-red-700">
+                  {gusError}
+                </div>
               ) : null}
               {gusMessage ? (
-                <p className="mt-2 text-xs leading-5 text-emerald-700">
+                <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-5 text-emerald-700">
                   {gusMessage}
-                </p>
+                </div>
               ) : null}
             </div>
 
