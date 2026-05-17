@@ -113,6 +113,7 @@ export async function verifyCompany(companyId: string) {
 
   revalidatePath("/admin");
   revalidatePath("/oferty");
+  revalidatePath("/firmy");
   if (data?.slug) {
     revalidatePath(`/firmy/${data.slug}`);
   }
@@ -133,6 +134,7 @@ export async function unverifyCompany(companyId: string) {
 
   revalidatePath("/admin");
   revalidatePath("/oferty");
+  revalidatePath("/firmy");
   if (data?.slug) {
     revalidatePath(`/firmy/${data.slug}`);
   }

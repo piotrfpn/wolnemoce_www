@@ -44,34 +44,14 @@ async function getPublicCompanyRoutes() {
     return [];
   }
 
-  const [activeOffersResult, verifiedCompaniesResult] = await Promise.all([
-    supabase
-      .from("offers")
-      .select("companies!inner(slug)")
-      .eq("status", "active")
-      .not("companies.slug", "is", null),
-    supabase
-      .from("companies")
-      .select("slug")
-      .eq("is_verified", true)
-      .not("slug", "is", null),
-  ]);
+  const verifiedCompaniesResult = await supabase
+    .from("companies")
+    .select("slug")
+    .eq("is_verified", true)
+    .not("slug", "is", null)
+    .limit(500);
 
   const slugs = new Set<string>();
-
-  (
-    (activeOffersResult.data ?? []) as unknown as {
-      companies: { slug: string | null } | { slug: string | null }[] | null;
-    }[]
-  ).forEach((row) => {
-    const company = Array.isArray(row.companies)
-      ? row.companies[0]
-      : row.companies;
-
-    if (company?.slug) {
-      slugs.add(company.slug);
-    }
-  });
 
   (verifiedCompaniesResult.data ?? []).forEach((company) => {
     if (company.slug) {
@@ -79,7 +59,7 @@ async function getPublicCompanyRoutes() {
     }
   });
 
-  if (activeOffersResult.error || verifiedCompaniesResult.error) {
+  if (verifiedCompaniesResult.error) {
     return [];
   }
 
@@ -113,6 +93,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
     "",
     "/oferty",
+    "/firmy",
     "/blog",
     "/jak-to-dziala",
     "/cennik",

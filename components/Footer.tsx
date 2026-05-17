@@ -50,6 +50,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/firmy" className="text-sm text-white/60 no-underline transition hover:text-white">
+                  Katalog firm
+                </Link>
+              </li>
+              <li>
                 <AddOfferLinkClient className="text-sm text-white/60 no-underline transition hover:text-white">
                   Dodaj ofertę
                 </AddOfferLinkClient>

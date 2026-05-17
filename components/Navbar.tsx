@@ -8,6 +8,7 @@ import AuthNavButton from "./AuthNavButton";
 
 const navLinks = [
   { label: "Oferty", href: "/oferty", match: "/oferty" },
+  { label: "Firmy", href: "/firmy", match: "/firmy" },
   { label: "Branże", href: "/#kategorie", match: null },
   { label: "Jak to działa", href: "/jak-to-dziala", match: "/jak-to-dziala" },
   { label: "Cennik", href: "/cennik", match: "/cennik" },
