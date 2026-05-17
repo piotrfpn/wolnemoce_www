@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { type FormEvent, useMemo, useState } from "react";
 import { industryServiceTypes, provinces } from "@/lib/mockData";
 import { createClient } from "@/lib/supabase/client";
+import { isValidNip, normalizeNip } from "@/lib/validators/nip";
+import { lookupCompanyInGus } from "./actions";
 
 type ProfileData = {
   role: string | null;
@@ -139,6 +141,27 @@ function formatPresentationDate(dateValue: string | null) {
   }).format(new Date(dateValue));
 }
 
+function normalizeLookupText(value: string) {
+  return value
+    .replace(/[łŁ]/g, (match) => (match === "Ł" ? "L" : "l"))
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+function getProvinceFromGus(region: string | null) {
+  if (!region) {
+    return "";
+  }
+
+  const normalizedRegion = normalizeLookupText(region);
+  const matchingProvince = provinces.find(
+    (province) => normalizeLookupText(province) === normalizedRegion
+  );
+
+  return matchingProvince ?? region;
+}
+
 export default function CompanyProfileFormClient({
   userId,
   userEmail,
@@ -192,6 +215,9 @@ export default function CompanyProfileFormClient({
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [gusError, setGusError] = useState("");
+  const [gusMessage, setGusMessage] = useState("");
+  const [isGusLoading, setIsGusLoading] = useState(false);
   const [requestIndustry, setRequestIndustry] = useState(
     initialIndustries[0] ?? ""
   );
@@ -258,10 +284,10 @@ export default function CompanyProfileFormClient({
   }
 
   function validateForm() {
-    const normalizedNip = nip.replace(/[\s-]/g, "");
+    const normalizedNip = normalizeNip(nip);
 
-    if (!normalizedNip || normalizedNip.length < 10) {
-      return "Podaj poprawny NIP. Minimum 10 znaków po usunięciu spacji i myślników.";
+    if (!/^\d{10}$/.test(normalizedNip)) {
+      return "Podaj poprawny NIP. NIP powinien mieć 10 cyfr.";
     }
 
     if (!name.trim()) {
@@ -318,7 +344,7 @@ export default function CompanyProfileFormClient({
     const supabase = createClient();
     const nextCompanySlug = companySlug || createCompanySlug(name.trim(), companyId);
     const payload = {
-      nip: nip.replace(/[\s-]/g, ""),
+      nip: normalizeNip(nip),
       name: name.trim(),
       slug: nextCompanySlug,
       description: description.trim() || null,
@@ -391,6 +417,84 @@ export default function CompanyProfileFormClient({
     setMessage("Profil firmy został zapisany.");
     setIsSubmitting(false);
     router.refresh();
+  }
+
+  async function handleGusLookup() {
+    setGusError("");
+    setGusMessage("");
+
+    const normalizedNip = normalizeNip(nip);
+
+    if (!isValidNip(normalizedNip)) {
+      setGusError("Podaj poprawny NIP.");
+      return;
+    }
+
+    setIsGusLoading(true);
+    const result = await lookupCompanyInGus(normalizedNip);
+    setIsGusLoading(false);
+
+    if (result.error) {
+      setGusError(result.error);
+      return;
+    }
+
+    if (!result.company) {
+      setGusError("Nie znaleziono firmy w rejestrze GUS.");
+      return;
+    }
+
+    const gusCompany = result.company;
+    const nextProvince = getProvinceFromGus(gusCompany.region);
+    let skippedExistingFields = false;
+    let updatedFields = 0;
+
+    setNip(gusCompany.nip ?? normalizedNip);
+
+    if (gusCompany.name) {
+      if (!name.trim()) {
+        setName(gusCompany.name);
+        updatedFields += 1;
+      } else if (normalizeLookupText(name) !== normalizeLookupText(gusCompany.name)) {
+        skippedExistingFields = true;
+      }
+    }
+
+    if (gusCompany.city) {
+      if (!city.trim()) {
+        setCity(gusCompany.city);
+        updatedFields += 1;
+      } else if (normalizeLookupText(city) !== normalizeLookupText(gusCompany.city)) {
+        skippedExistingFields = true;
+      }
+    }
+
+    if (nextProvince) {
+      if (!voivodeship) {
+        setVoivodeship(nextProvince);
+        updatedFields += 1;
+      } else if (
+        normalizeLookupText(voivodeship) !== normalizeLookupText(nextProvince)
+      ) {
+        skippedExistingFields = true;
+      }
+    }
+
+    const details = [
+      "Dane firmy zostały pobrane z GUS. Sprawdź je przed zapisaniem profilu.",
+    ];
+
+    if (updatedFields === 0) {
+      details.push("Formularz nie wymagał automatycznego uzupełnienia pól.");
+    }
+
+    if (skippedExistingFields) {
+      details.push(
+        "Część pól była już uzupełniona, dlatego nie została automatycznie nadpisana."
+      );
+    }
+
+    setGusMessage(details.join(" "));
   }
 
   async function handleServiceRequestSubmit(event: FormEvent<HTMLFormElement>) {
@@ -699,18 +803,54 @@ export default function CompanyProfileFormClient({
           ) : null}
 
           <div className="grid min-w-0 gap-5 md:grid-cols-2">
-            <label className="block min-w-0">
-              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+            <div className="block min-w-0">
+              <label
+                htmlFor="company-nip"
+                className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500"
+              >
                 <i className="fas fa-id-card text-[#1a5f3c]"></i>
                 NIP
-              </span>
-              <input
-                value={nip}
-                onChange={(event) => setNip(event.target.value)}
-                placeholder="Np. 1234567890"
-                className={inputClass}
-              />
-            </label>
+              </label>
+              <div className="flex min-w-0 flex-col gap-3 sm:flex-row">
+                <input
+                  id="company-nip"
+                  value={nip}
+                  onChange={(event) => {
+                    setNip(event.target.value);
+                    setGusError("");
+                    setGusMessage("");
+                  }}
+                  placeholder="Np. 1234567890"
+                  className={inputClass}
+                />
+                <button
+                  type="button"
+                  onClick={handleGusLookup}
+                  disabled={isGusLoading}
+                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <i
+                    className={
+                      isGusLoading ? "fas fa-spinner fa-spin" : "fas fa-download"
+                    }
+                  ></i>
+                  {isGusLoading ? "Pobieranie..." : "Pobierz dane z GUS"}
+                </button>
+              </div>
+              {isGusLoading ? (
+                <p className="mt-2 text-xs leading-5 text-slate-500">
+                  Pobieranie danych z GUS...
+                </p>
+              ) : null}
+              {gusError ? (
+                <p className="mt-2 text-xs leading-5 text-red-600">{gusError}</p>
+              ) : null}
+              {gusMessage ? (
+                <p className="mt-2 text-xs leading-5 text-emerald-700">
+                  {gusMessage}
+                </p>
+              ) : null}
+            </div>
 
             <label className="block min-w-0">
               <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
