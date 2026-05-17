@@ -40,6 +40,15 @@ const panelItems = [
   },
 ];
 
+const adminPanelItem = {
+  title: "ADMIN",
+  description:
+    "Zarządzaj ofertami, firmami i zgłoszeniami w panelu administracyjnym.",
+  icon: "fas fa-user-shield",
+  href: "/admin",
+  cta: "Przejdź do admina",
+};
+
 export default async function PanelPage() {
   const supabase = createClient();
   const {
@@ -55,6 +64,8 @@ export default async function PanelPage() {
     .select("role, full_name")
     .eq("id", user.id)
     .maybeSingle();
+  const visiblePanelItems =
+    profile?.role === "admin" ? [...panelItems, adminPanelItem] : panelItems;
 
   return (
     <>
@@ -86,7 +97,7 @@ export default async function PanelPage() {
           </div>
 
           <div className="grid min-w-0 gap-5 md:grid-cols-3">
-            {panelItems.map((item) => {
+            {visiblePanelItems.map((item) => {
               const card = (
                 <>
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">

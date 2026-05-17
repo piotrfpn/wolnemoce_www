@@ -45,13 +45,7 @@ export default function LoginFormClient({ nextPath }: LoginFormClientProps) {
       return;
     }
 
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", data.user.id)
-      .maybeSingle();
-
-    router.push(safeNextPath || (profile?.role === "admin" ? "/admin" : "/panel"));
+    router.push(safeNextPath || "/panel");
     router.refresh();
   }
 
