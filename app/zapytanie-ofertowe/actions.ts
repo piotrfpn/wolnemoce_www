@@ -1,6 +1,15 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import {
+  buildBuyerRfqConfirmationEmail,
+  buildCompanyRfqEmail,
+} from "@/lib/email/rfqEmails";
+import {
+  getAppBaseUrl,
+  isValidEmailAddress,
+  sendEmail,
+} from "@/lib/email/sendEmail";
 import { createClient } from "@/lib/supabase/server";
 import {
   getRfqAttachmentExtension,
@@ -13,6 +22,21 @@ export type InquiryActionResult = {
 };
 
 const attachmentsBucket = "inquiry-attachments";
+
+type OfferCompany = {
+  name: string | null;
+  contact_email: string | null;
+};
+
+type ActiveOffer = {
+  id: string;
+  company_id: string;
+  title: string | null;
+  branch: string | null;
+  service_type: string | null;
+  status: string;
+  companies: OfferCompany | OfferCompany[] | null;
+};
 
 function getValue(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -105,6 +129,7 @@ async function saveAttachments(params: {
 }) {
   const supabase = createClient();
   let hasUploadError = false;
+  let savedAttachmentCount = 0;
 
   for (let index = 0; index < params.files.length; index += 1) {
     const file = params.files[index];
@@ -134,10 +159,78 @@ async function saveAttachments(params: {
 
     if (metadataError) {
       hasUploadError = true;
+      continue;
     }
+
+    savedAttachmentCount += 1;
   }
 
-  return hasUploadError;
+  return { hasUploadError, savedAttachmentCount };
+}
+
+function getOfferCompany(offer: ActiveOffer) {
+  return Array.isArray(offer.companies)
+    ? offer.companies[0] ?? null
+    : offer.companies;
+}
+
+async function sendRfqNotificationEmails(params: {
+  inquiryId: string;
+  offer: ActiveOffer;
+  buyerName: string;
+  buyerCompany: string;
+  buyerEmail: string;
+  buyerPhone: string;
+  message: string;
+  savedAttachmentCount: number;
+  hasAttachmentUploadError: boolean;
+}) {
+  const appBaseUrl = getAppBaseUrl();
+  const company = getOfferCompany(params.offer);
+  const companyEmail = company?.contact_email?.trim() || "";
+  const emailTasks: Promise<unknown>[] = [];
+
+  if (isValidEmailAddress(companyEmail)) {
+    const companyEmailContent = buildCompanyRfqEmail({
+      appBaseUrl,
+      companyName: company?.name ?? null,
+      offerTitle: params.offer.title,
+      buyerName: params.buyerName,
+      buyerCompany: params.buyerCompany,
+      buyerEmail: params.buyerEmail,
+      buyerPhone: params.buyerPhone,
+      message: params.message,
+      savedAttachmentCount: params.savedAttachmentCount,
+      hasAttachmentUploadError: params.hasAttachmentUploadError,
+    });
+
+    emailTasks.push(
+      sendEmail({
+        to: companyEmail,
+        idempotencyKey: `rfq-company-${params.inquiryId}`,
+        ...companyEmailContent,
+      })
+    );
+  }
+
+  if (isValidEmailAddress(params.buyerEmail)) {
+    const buyerEmailContent = buildBuyerRfqConfirmationEmail({
+      appBaseUrl,
+      offerTitle: params.offer.title,
+    });
+
+    emailTasks.push(
+      sendEmail({
+        to: params.buyerEmail,
+        idempotencyKey: `rfq-buyer-${params.inquiryId}`,
+        ...buyerEmailContent,
+      })
+    );
+  }
+
+  if (emailTasks.length > 0) {
+    await Promise.allSettled(emailTasks);
+  }
 }
 
 export async function submitInquiry(
@@ -158,7 +251,9 @@ export async function submitInquiry(
   const supabase = createClient();
   const { data: offer, error: offerError } = await supabase
     .from("offers")
-    .select("id, company_id, branch, service_type, status")
+    .select(
+      "id, company_id, title, branch, service_type, status, companies!inner(name, contact_email)"
+    )
     .eq("id", offerId)
     .eq("status", "active")
     .single();
@@ -167,21 +262,28 @@ export async function submitInquiry(
     return { error: "Oferta nie jest dostępna albo nie jest aktywna." };
   }
 
+  const activeOffer = offer as unknown as ActiveOffer;
   const inquiryId = crypto.randomUUID();
+  const buyerName = getValue(formData, "buyer_name");
+  const buyerCompany = getValue(formData, "buyer_company");
+  const buyerEmail = getValue(formData, "buyer_email");
+  const buyerPhone = getValue(formData, "buyer_phone");
+  const message = getValue(formData, "message");
+
   const { error: insertError } = await supabase.from("inquiries").insert({
     id: inquiryId,
-    offer_id: offer.id,
-    company_id: offer.company_id,
-    branch: offer.branch,
-    service_type: offer.service_type,
-    buyer_name: getValue(formData, "buyer_name"),
-    buyer_company: getValue(formData, "buyer_company"),
-    buyer_email: getValue(formData, "buyer_email"),
-    buyer_phone: getValue(formData, "buyer_phone"),
+    offer_id: activeOffer.id,
+    company_id: activeOffer.company_id,
+    branch: activeOffer.branch,
+    service_type: activeOffer.service_type,
+    buyer_name: buyerName,
+    buyer_company: buyerCompany,
+    buyer_email: buyerEmail,
+    buyer_phone: buyerPhone,
     quantity_scope: getValue(formData, "quantity_scope") || null,
     expected_deadline: getValue(formData, "expected_deadline") || null,
     budget: getValue(formData, "budget") || null,
-    message: getValue(formData, "message"),
+    message,
     status: "new",
     source: "offer",
   });
@@ -190,20 +292,38 @@ export async function submitInquiry(
     return { error: "Nie udało się wysłać zapytania. Spróbuj ponownie za chwilę." };
   }
 
+  let hasUploadError = false;
+  let savedAttachmentCount = 0;
+
   if (attachments.length > 0) {
-    const hasUploadError = await saveAttachments({
+    const attachmentResult = await saveAttachments({
       files: attachments,
       inquiryId,
-      companyId: offer.company_id,
-      offerId: offer.id,
+      companyId: activeOffer.company_id,
+      offerId: activeOffer.id,
     });
 
-    if (hasUploadError) {
-      return {
-        partialSuccess:
-          "Zapytanie zostało wysłane, ale nie wszystkie załączniki udało się wgrać.",
-      };
-    }
+    hasUploadError = attachmentResult.hasUploadError;
+    savedAttachmentCount = attachmentResult.savedAttachmentCount;
+  }
+
+  await sendRfqNotificationEmails({
+    inquiryId,
+    offer: activeOffer,
+    buyerName,
+    buyerCompany,
+    buyerEmail,
+    buyerPhone,
+    message,
+    savedAttachmentCount,
+    hasAttachmentUploadError: hasUploadError,
+  });
+
+  if (hasUploadError) {
+    return {
+      partialSuccess:
+        "Zapytanie zostało wysłane, ale nie wszystkie załączniki udało się wgrać.",
+    };
   }
 
   redirect("/zapytanie-wyslane");
