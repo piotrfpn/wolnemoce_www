@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import { blogArticles } from "@/lib/mockData";
 
 const baseUrl = "https://wolnemoce.pl";
 
@@ -87,6 +86,29 @@ async function getPublicCompanyRoutes() {
   return Array.from(slugs).map((slug) => `/firmy/${slug}`);
 }
 
+async function getPublishedBlogRoutes() {
+  const supabase = createSitemapSupabaseClient();
+
+  if (!supabase) {
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select("slug")
+    .eq("status", "published")
+    .not("slug", "is", null);
+
+  if (error) {
+    return [];
+  }
+
+  return (data ?? [])
+    .map((post) => post.slug)
+    .filter(Boolean)
+    .map((slug) => `/blog/${slug}`);
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
     "",
@@ -105,7 +127,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const offerRoutes = await getActiveOfferRoutes();
   const companyRoutes = await getPublicCompanyRoutes();
-  const blogRoutes = blogArticles.map((article) => `/blog/${article.slug}`);
+  const blogRoutes = await getPublishedBlogRoutes();
 
   return [...staticRoutes, ...offerRoutes, ...companyRoutes, ...blogRoutes].map((route) => ({
     url: `${baseUrl}${route}`,

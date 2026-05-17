@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import LogoutButton from "@/components/LogoutButton";
@@ -124,6 +125,32 @@ export default async function AdminPage() {
               </p>
             </div>
           </div>
+
+          <section className="mb-8 min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+            <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-center md:justify-between">
+              <div className="min-w-0">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
+                  <i className="fas fa-newspaper"></i>
+                </div>
+                <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
+                  Blog
+                </p>
+                <h2 className="text-2xl font-extrabold text-slate-900">
+                  Zarządzanie blogiem
+                </h2>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+                  Zarządzaj artykułami, poradnikami i aktualnościami.
+                </p>
+              </div>
+              <Link
+                href="/admin/blog"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline transition hover:bg-[#1a5f3c] hover:text-white"
+              >
+                Zarządzaj blogiem
+                <i className="fas fa-arrow-right text-xs"></i>
+              </Link>
+            </div>
+          </section>
 
           {companiesResult.error ? (
             <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">

@@ -1,26 +1,55 @@
 import Link from "next/link";
-import type { BlogArticle } from "@/lib/mockData";
 
-export default function BlogCard({ article }: { article: BlogArticle }) {
+export type BlogCardArticle = {
+  id: string | number;
+  title: string;
+  slug: string;
+  category?: string | null;
+  date?: string | null;
+  author?: string | null;
+  readTime?: string | null;
+  excerpt?: string | null;
+  image?: string | null;
+  imageAlt?: string | null;
+  tags?: string[] | null;
+};
+
+export default function BlogCard({ article }: { article: BlogCardArticle }) {
+  const image = article.image ?? "/images/offers/automation.jpg";
+  const imageAlt = article.imageAlt ?? article.title;
+
   return (
     <article className="blog-card fade-in visible">
       <div className="blog-image">
-        <img src={article.image} alt={article.imageAlt} loading="lazy" />
-        <span className="blog-category">{article.category}</span>
+        <img src={image} alt={imageAlt} loading="lazy" />
+        <span className="blog-category">{article.category ?? "Blog"}</span>
       </div>
 
       <div className="blog-content">
         <div className="blog-meta">
           <span>
-            <i className="fas fa-calendar"></i> {article.date}
+            <i className="fas fa-calendar"></i> {article.date ?? "Blog"}
           </span>
           <span>
-            <i className="fas fa-clock"></i> {article.readTime}
+            <i className="fas fa-clock"></i> {article.readTime ?? "5 min"}
           </span>
         </div>
 
         <h3 className="blog-title">{article.title}</h3>
-        <p className="blog-excerpt">{article.excerpt}</p>
+        <p className="blog-excerpt">{article.excerpt ?? ""}</p>
+
+        {article.tags && article.tags.length > 0 ? (
+          <div className="mb-5 flex flex-wrap gap-2">
+            {article.tags.slice(0, 4).map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        ) : null}
 
         <Link href={`/blog/${article.slug}`} className="blog-read-more">
           Czytaj więcej <i className="fas fa-arrow-right"></i>

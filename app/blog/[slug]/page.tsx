@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AddOfferLinkClient from "@/components/AddOfferLinkClient";
-import BlogCard from "@/components/BlogCard";
+import BlogCard, { type BlogCardArticle } from "@/components/BlogCard";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import { blogArticles } from "@/lib/mockData";
+import { createClient } from "@/lib/supabase/server";
 
 type BlogArticlePageProps = {
   params: {
@@ -13,10 +13,37 @@ type BlogArticlePageProps = {
   };
 };
 
-export const dynamicParams = false;
+export const dynamic = "force-dynamic";
 
-function getArticle(slug: string) {
-  return blogArticles.find((article) => article.slug === slug);
+type BlogPost = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content: string;
+  category: string | null;
+  author_name: string | null;
+  featured_image_path: string | null;
+  featured_image_alt: string | null;
+  tags: string[] | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  published_at: string | null;
+  created_at: string | null;
+};
+
+const BLOG_IMAGE_FALLBACK = "/images/offers/automation.jpg";
+
+function formatDate(value: string | null) {
+  if (!value) {
+    return "Blog";
+  }
+
+  return new Intl.DateTimeFormat("pl-PL", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(value));
 }
 
 function truncateDescription(description: string, maxLength = 160) {
@@ -25,59 +52,139 @@ function truncateDescription(description: string, maxLength = 160) {
   }
 
   const trimmed = description.slice(0, maxLength - 1).trimEnd();
-  return `${trimmed}…`;
+  return `${trimmed}...`;
 }
 
-function getSimilarArticles(currentSlug: string) {
-  const currentArticle = getArticle(currentSlug);
+async function getPublishedPost(slug: string) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("blog_posts")
+    .select(
+      "id, title, slug, excerpt, content, category, author_name, featured_image_path, featured_image_alt, tags, meta_title, meta_description, published_at, created_at"
+    )
+    .eq("slug", slug)
+    .eq("status", "published")
+    .single();
 
-  if (!currentArticle) {
-    return [];
+  if (error || !data) {
+    return null;
   }
 
-  const sameCategory = blogArticles.filter(
-    (article) =>
-      article.slug !== currentSlug && article.category === currentArticle.category
-  );
-  const otherArticles = blogArticles.filter(
-    (article) =>
-      article.slug !== currentSlug && article.category !== currentArticle.category
-  );
-
-  return [...sameCategory, ...otherArticles].slice(0, 2);
+  return data as BlogPost;
 }
 
-export function generateStaticParams() {
-  return blogArticles.map((article) => ({
-    slug: article.slug,
-  }));
+async function getSimilarPosts(currentPost: BlogPost) {
+  const supabase = createClient();
+  const sameCategoryQuery = supabase
+    .from("blog_posts")
+    .select(
+      "id, title, slug, excerpt, category, author_name, featured_image_path, featured_image_alt, tags, published_at, created_at"
+    )
+    .eq("status", "published")
+    .neq("id", currentPost.id)
+    .limit(2);
+
+  const { data: sameCategory } = currentPost.category
+    ? await sameCategoryQuery.eq("category", currentPost.category)
+    : await sameCategoryQuery;
+
+  const collected = (sameCategory ?? []) as BlogPost[];
+  if (collected.length >= 2) {
+    return collected.slice(0, 2);
+  }
+
+  const { data: otherPosts } = await supabase
+    .from("blog_posts")
+    .select(
+      "id, title, slug, excerpt, category, author_name, featured_image_path, featured_image_alt, tags, published_at, created_at"
+    )
+    .eq("status", "published")
+    .neq("id", currentPost.id)
+    .order("published_at", { ascending: false, nullsFirst: false })
+    .order("created_at", { ascending: false })
+    .limit(2);
+
+  const byId = new Map<string, BlogPost>();
+  [...collected, ...((otherPosts ?? []) as BlogPost[])].forEach((post) => {
+    byId.set(post.id, post);
+  });
+
+  return Array.from(byId.values()).slice(0, 2);
 }
 
-export function generateMetadata({
+function toBlogCardArticle(post: BlogPost): BlogCardArticle {
+  return {
+    id: post.id,
+    title: post.title,
+    slug: post.slug,
+    category: post.category,
+    date: formatDate(post.published_at ?? post.created_at),
+    author: post.author_name,
+    readTime: "5 min",
+    excerpt: post.excerpt,
+    image: getBlogImageUrl(post.featured_image_path),
+    imageAlt: post.featured_image_alt || post.title,
+    tags: post.tags ?? [],
+  };
+}
+
+function getBlogImageUrl(path: string | null) {
+  if (!path) {
+    return BLOG_IMAGE_FALLBACK;
+  }
+
+  if (path.startsWith("/") || path.startsWith("http://") || path.startsWith("https://")) {
+    return path;
+  }
+
+  const supabase = createClient();
+  return supabase.storage.from("blog-images").getPublicUrl(path).data.publicUrl;
+}
+
+function renderContent(content: string) {
+  return content
+    .split(/\n\s*\n/g)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block, index) => (
+      <p key={`${index}-${block.slice(0, 24)}`} className="mb-5">
+        {block}
+      </p>
+    ));
+}
+
+export async function generateMetadata({
   params,
-}: BlogArticlePageProps): Metadata {
-  const article = getArticle(params.slug);
+}: BlogArticlePageProps): Promise<Metadata> {
+  const post = await getPublishedPost(params.slug);
 
-  if (!article) {
+  if (!post) {
     return {
       title: "Artykuł nie znaleziony | Blog WolneMoce.pl",
     };
   }
 
   return {
-    title: `${article.title} | Blog WolneMoce.pl`,
-    description: truncateDescription(article.excerpt),
+    title: post.meta_title || `${post.title} | Blog WolneMoce.pl`,
+    description: truncateDescription(
+      post.meta_description || post.excerpt || post.content
+    ),
   };
 }
 
-export default function BlogArticlePage({ params }: BlogArticlePageProps) {
-  const article = getArticle(params.slug);
+export default async function BlogArticlePage({
+  params,
+}: BlogArticlePageProps) {
+  const post = await getPublishedPost(params.slug);
 
-  if (!article) {
+  if (!post) {
     notFound();
   }
 
-  const similarArticles = getSimilarArticles(article.slug);
+  const similarPosts = await getSimilarPosts(post);
+  const date = formatDate(post.published_at ?? post.created_at);
+  const imageUrl = getBlogImageUrl(post.featured_image_path);
+  const imageAlt = post.featured_image_alt || post.title;
 
   return (
     <>
@@ -98,59 +205,56 @@ export default function BlogArticlePage({ params }: BlogArticlePageProps) {
 
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-5 py-2 text-sm font-medium backdrop-blur">
               <i className="fas fa-newspaper text-[#fbbf24]"></i>
-              {article.category}
+              {post.category ?? "Blog"}
             </div>
 
             <h1 className="text-3xl font-black leading-tight tracking-[-1px] md:text-5xl">
-              {article.title}
+              {post.title}
             </h1>
 
             <div className="mt-6 flex flex-col gap-3 text-sm font-semibold text-white/85 sm:flex-row sm:flex-wrap sm:items-center">
               <span className="inline-flex items-center gap-2">
                 <i className="fas fa-calendar text-[#fbbf24]"></i>
-                {article.date}
+                {date}
               </span>
               <span className="inline-flex items-center gap-2">
                 <i className="fas fa-user text-[#fbbf24]"></i>
-                {article.author}
+                {post.author_name ?? "WolneMoce.pl"}
               </span>
               <span className="inline-flex items-center gap-2">
                 <i className="fas fa-clock text-[#fbbf24]"></i>
-                {article.readTime}
+                5 min
               </span>
             </div>
+
+            {post.tags && post.tags.length > 0 ? (
+              <div className="mt-6 flex flex-wrap gap-2">
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-white/20 bg-white/15 px-3 py-1 text-xs font-bold text-white/85"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
         </section>
 
         <section className="mx-auto max-w-[1100px] min-w-0 px-6 py-12 md:py-16">
           <div className="overflow-hidden rounded-[24px] border border-slate-200 bg-white p-3 shadow-xl">
             <img
-              src={article.image}
-              alt={article.imageAlt}
+              src={imageUrl}
+              alt={imageAlt}
               className="h-[240px] w-full max-w-full rounded-[18px] object-cover md:h-[420px]"
             />
           </div>
         </section>
 
         <article className="mx-auto max-w-[860px] min-w-0 px-6 pb-16">
-          <div
-            className="max-w-none text-base leading-8 text-slate-600 [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-extrabold [&_h2]:leading-tight [&_h2]:text-slate-900 [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:text-xl [&_h3]:font-extrabold [&_h3]:text-slate-900 [&_li]:mb-2 [&_li]:pl-1 [&_p]:mb-5 [&_ul]:mb-6 [&_ul]:list-disc [&_ul]:pl-6"
-            dangerouslySetInnerHTML={{ __html: article.content }}
-          />
-
-          <div className="mt-10 border-t border-slate-200 pt-8">
-            <h2 className="mb-4 text-lg font-extrabold text-slate-900">Tagi</h2>
-            <div className="flex flex-wrap gap-3">
-              {article.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-700"
-                >
-                  <i className="fas fa-tag"></i>
-                  {tag}
-                </span>
-              ))}
-            </div>
+          <div className="max-w-none text-base leading-8 text-slate-600">
+            {renderContent(post.content)}
           </div>
         </article>
 
@@ -165,11 +269,16 @@ export default function BlogArticlePage({ params }: BlogArticlePageProps) {
               </p>
             </div>
 
-            <div className="grid min-w-0 gap-6 md:grid-cols-2">
-              {similarArticles.map((similarArticle) => (
-                <BlogCard key={similarArticle.id} article={similarArticle} />
-              ))}
-            </div>
+            {similarPosts.length > 0 ? (
+              <div className="grid min-w-0 gap-6 md:grid-cols-2">
+                {similarPosts.map((similarPost) => (
+                  <BlogCard
+                    key={similarPost.id}
+                    article={toBlogCardArticle(similarPost)}
+                  />
+                ))}
+              </div>
+            ) : null}
           </div>
         </section>
 
