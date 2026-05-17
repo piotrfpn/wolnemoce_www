@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { getPublicOfferImageUrl } from "@/lib/offerImages";
 import { approveOffer, rejectOffer } from "./actions";
 
 export type PendingOffer = {
@@ -21,6 +22,14 @@ export type PendingOffer = {
     location_city: string | null;
     is_verified: boolean | null;
   } | null;
+  offer_images?: {
+    id: string;
+    offer_id: string;
+    path: string | null;
+    alt: string | null;
+    sort_order: number | null;
+    created_at: string | null;
+  }[];
 };
 
 function formatDate(value: string | null) {
@@ -83,6 +92,17 @@ export default function PendingOffersClient({
         const location = [company?.location_city, company?.location_voivodeship]
           .filter(Boolean)
           .join(", ");
+        const offerImages = [...(offer.offer_images ?? [])].sort((a, b) => {
+          const orderDiff = (a.sort_order ?? 0) - (b.sort_order ?? 0);
+
+          if (orderDiff !== 0) {
+            return orderDiff;
+          }
+
+          return (a.created_at ?? "").localeCompare(b.created_at ?? "");
+        });
+        const mainImage = offerImages[0];
+        const mainImageUrl = getPublicOfferImageUrl(mainImage?.path);
         const isCurrentPending = isPending && activeId === offer.id;
 
         return (
@@ -162,6 +182,68 @@ export default function PendingOffersClient({
                   </p>
                 </div>
               ))}
+            </div>
+
+            <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50 p-4">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
+                  Zdjęcia oferty
+                </p>
+                <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-600">
+                  {offerImages.length === 1
+                    ? "1 zdjęcie"
+                    : `${offerImages.length} zdjęcia`}
+                </span>
+              </div>
+
+              {offerImages.length > 0 && mainImageUrl ? (
+                <div className="space-y-3">
+                  <div className="overflow-hidden rounded-2xl bg-white">
+                    <div className="aspect-video">
+                      <img
+                        src={mainImageUrl}
+                        alt={mainImage?.alt || offer.title || "Zdjęcie oferty"}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                  </div>
+
+                  {offerImages.length > 1 ? (
+                    <div className="grid min-w-0 gap-3 sm:grid-cols-3">
+                      {offerImages.slice(1).map((image) => {
+                        const imageUrl = getPublicOfferImageUrl(image.path);
+
+                        if (!imageUrl) {
+                          return null;
+                        }
+
+                        return (
+                          <div
+                            key={image.id}
+                            className="min-w-0 overflow-hidden rounded-xl bg-white"
+                          >
+                            <div className="aspect-video">
+                              <img
+                                src={imageUrl}
+                                alt={image.alt || offer.title || "Zdjęcie oferty"}
+                                loading="lazy"
+                                decoding="async"
+                                className="h-full w-full object-cover"
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : null}
+                </div>
+              ) : (
+                <p className="rounded-xl bg-white px-4 py-3 text-sm text-slate-500">
+                  Brak zdjęć dodanych do oferty.
+                </p>
+              )}
             </div>
 
             <p className="mt-4 text-xs leading-5 text-slate-400">

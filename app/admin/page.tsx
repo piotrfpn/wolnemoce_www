@@ -64,6 +64,30 @@ export default async function AdminPage() {
   const pendingOffers = (offersResult.data ?? []) as PendingOffer[];
   const pendingServiceRequests = (serviceRequestsResult.data ??
     []) as PendingServiceRequest[];
+  const pendingOfferIds = pendingOffers.map((offer) => offer.id);
+  const { data: offerImages } =
+    pendingOfferIds.length > 0
+      ? await supabase
+          .from("offer_images")
+          .select("id, offer_id, path, alt, sort_order, created_at")
+          .in("offer_id", pendingOfferIds)
+          .order("sort_order", { ascending: true })
+          .order("created_at", { ascending: true })
+      : { data: [] };
+  const offerImagesByOfferId = new Map<string, PendingOffer["offer_images"]>();
+
+  for (const image of (offerImages ?? []) as NonNullable<
+    PendingOffer["offer_images"]
+  >) {
+    const current = offerImagesByOfferId.get(image.offer_id) ?? [];
+    current.push(image);
+    offerImagesByOfferId.set(image.offer_id, current);
+  }
+
+  const pendingOffersWithImages = pendingOffers.map((offer) => ({
+    ...offer,
+    offer_images: offerImagesByOfferId.get(offer.id) ?? [],
+  }));
 
   return (
     <>
@@ -201,7 +225,7 @@ export default async function AdminPage() {
                   publicznie w `/oferty`.
                 </p>
               </div>
-              <PendingOffersClient offers={pendingOffers} />
+              <PendingOffersClient offers={pendingOffersWithImages} />
             </section>
 
             <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
