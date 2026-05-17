@@ -37,6 +37,8 @@ const panelItems = [
     title: "Ustawienia konta",
     description: "Dane użytkownika, email i bezpieczeństwo konta.",
     icon: "fas fa-gear",
+    href: "/panel/ustawienia",
+    cta: "Przejdź do ustawień",
   },
 ];
 
