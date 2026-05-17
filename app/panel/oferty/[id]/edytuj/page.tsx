@@ -48,6 +48,12 @@ export default async function EditPanelOfferPage({
     notFound();
   }
 
+  const { data: offerImages } = await supabase
+    .from("offer_images")
+    .select("id, path, alt, sort_order")
+    .eq("offer_id", offer.id)
+    .order("sort_order", { ascending: true });
+
   return (
     <>
       <Navbar />
@@ -62,7 +68,11 @@ export default async function EditPanelOfferPage({
               Wróć do ofert
             </Link>
           </div>
-          <EditOfferFormClient company={company} offer={offer} />
+          <EditOfferFormClient
+            company={company}
+            offer={offer}
+            offerImages={offerImages ?? []}
+          />
         </section>
       </main>
       <Footer />

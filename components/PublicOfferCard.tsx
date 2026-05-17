@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getOfferImageByIndustry } from "@/lib/offerImages";
+import { getOfferImageByIndustry, getPublicOfferImageUrl } from "@/lib/offerImages";
 
 export type PublicOfferCompany = {
   name: string | null;
@@ -24,6 +24,12 @@ export type PublicOffer = {
   status: string | null;
   created_at: string | null;
   companies: PublicOfferCompany | null;
+  offer_images?: {
+    id: string;
+    path: string | null;
+    alt: string | null;
+    sort_order: number | null;
+  }[];
 };
 
 function getInitials(name: string | null) {
@@ -45,10 +51,14 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
   const location = [company?.location_city, company?.location_voivodeship]
     .filter(Boolean)
     .join(", ");
-  const imageSrc = getOfferImageByIndustry(offer.branch);
-  const imageAlt = `${offer.title ?? "Oferta WolneMoce.pl"} - ${
-    offer.branch ?? "wolne moce"
-  }`;
+  const mainImage = [...(offer.offer_images ?? [])].sort(
+    (a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)
+  )[0];
+  const imageSrc =
+    getPublicOfferImageUrl(mainImage?.path) ?? getOfferImageByIndustry(offer.branch);
+  const imageAlt =
+    mainImage?.alt ||
+    `${offer.title ?? "Oferta WolneMoce.pl"} - ${offer.branch ?? "wolne moce"}`;
 
   return (
     <article className="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-xl">
@@ -59,11 +69,12 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
         </div>
       ) : null}
 
-      <div className="relative h-[210px] overflow-hidden bg-slate-100">
+      <div className="relative aspect-video overflow-hidden bg-slate-100">
         <img
           src={imageSrc}
           alt={imageAlt}
           loading="lazy"
+          decoding="async"
           className="h-full w-full max-w-full object-cover transition duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4 text-white">

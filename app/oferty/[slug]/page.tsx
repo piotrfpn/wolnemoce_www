@@ -6,13 +6,21 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
 import RfqInlineFormClient from "@/components/RfqInlineFormClient";
-import { getOfferImageByIndustry } from "@/lib/offerImages";
+import { getOfferImageByIndustry, getPublicOfferImageUrl } from "@/lib/offerImages";
 import { createClient } from "@/lib/supabase/server";
 
 type OfferDetailsPageProps = {
   params: {
     slug: string;
   };
+};
+
+type OfferImage = {
+  id: string;
+  path: string | null;
+  alt: string | null;
+  sort_order: number | null;
+  created_at: string | null;
 };
 
 export const dynamic = "force-dynamic";
@@ -44,7 +52,7 @@ async function getPublicOfferBySlug(slug: string) {
   const { data, error } = await supabase
     .from("offers")
     .select(
-      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url)"
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
     )
     .eq("slug", slug)
     .eq("status", "active")
@@ -62,7 +70,7 @@ async function getSimilarOffers(offer: PublicOffer) {
   const sameBranchQuery = supabase
     .from("offers")
     .select(
-      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url)"
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
     )
     .eq("status", "active")
     .neq("id", offer.id)
@@ -81,7 +89,7 @@ async function getSimilarOffers(offer: PublicOffer) {
   const { data: otherOffers } = await supabase
     .from("offers")
     .select(
-      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url)"
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
     )
     .eq("status", "active")
     .neq("id", offer.id)
@@ -94,6 +102,23 @@ async function getSimilarOffers(offer: PublicOffer) {
   });
 
   return Array.from(byId.values()).slice(0, 3);
+}
+
+async function getPublicOfferImages(offerId: string): Promise<OfferImage[]> {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("offer_images")
+    .select("id, path, alt, sort_order, created_at")
+    .eq("offer_id", offerId)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("Offer images query failed", error);
+    return [];
+  }
+
+  return (data ?? []) as OfferImage[];
 }
 
 export async function generateMetadata({
@@ -128,16 +153,21 @@ export default async function OfferDetailsPage({
     notFound();
   }
 
-  const similarOffers = await getSimilarOffers(offer);
+  const [similarOffers, offerImages] = await Promise.all([
+    getSimilarOffers(offer),
+    getPublicOfferImages(offer.id),
+  ]);
   const company = offer.companies;
   const companyName = company?.name ?? "Firma";
   const location = [company?.location_city, company?.location_voivodeship]
     .filter(Boolean)
     .join(", ");
-  const imageSrc = getOfferImageByIndustry(offer.branch);
-  const imageAlt = `${offer.title ?? "Oferta WolneMoce.pl"} - ${
-    offer.branch ?? "wolne moce"
-  }`;
+  const mainImage = offerImages[0];
+  const imageSrc =
+    getPublicOfferImageUrl(mainImage?.path) ?? getOfferImageByIndustry(offer.branch);
+  const imageAlt =
+    mainImage?.alt ||
+    `${offer.title ?? "Oferta WolneMoce.pl"} - ${offer.branch ?? "wolne moce"}`;
 
   const parameters = [
     ["Firma", companyName, "fas fa-building"],
@@ -211,6 +241,8 @@ export default async function OfferDetailsPage({
               <img
                 src={imageSrc}
                 alt={imageAlt}
+                loading="lazy"
+                decoding="async"
                 className="h-[260px] w-full max-w-full rounded-[18px] object-cover md:h-[360px]"
               />
             </div>
@@ -219,6 +251,49 @@ export default async function OfferDetailsPage({
 
         <section className="mx-auto grid max-w-[1400px] min-w-0 gap-8 px-6 py-16 lg:grid-cols-[1fr_380px]">
           <div className="min-w-0 space-y-8">
+            <section className="rounded-[24px] border border-slate-200 bg-white p-4 shadow-sm md:p-5">
+              <div className="overflow-hidden rounded-[20px] bg-slate-100">
+                <div className="aspect-video">
+                  <img
+                    src={imageSrc}
+                    alt={imageAlt}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              </div>
+
+              {offerImages.length > 1 ? (
+                <div className="mt-4 grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {offerImages.slice(1).map((image) => {
+                    const galleryImageSrc = getPublicOfferImageUrl(image.path);
+
+                    if (!galleryImageSrc) {
+                      return null;
+                    }
+
+                    return (
+                      <div
+                        key={image.id}
+                        className="min-w-0 overflow-hidden rounded-2xl bg-slate-100"
+                      >
+                        <div className="aspect-video">
+                          <img
+                            src={galleryImageSrc}
+                            alt={image.alt || offer.title || "Zdjęcie oferty"}
+                            loading="lazy"
+                            decoding="async"
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : null}
+            </section>
+
             <section className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
               <div className="mb-6 flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-[#1a5f3c]">

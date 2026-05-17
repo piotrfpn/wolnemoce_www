@@ -1,4 +1,5 @@
 const fallbackImage = "/images/offers/cnc.jpg";
+const offerImagesBucket = "offer-images";
 
 const industryImages: Record<string, string> = {
   Automatyka: "/images/offers/automation.jpg",
@@ -24,4 +25,19 @@ export function getOfferImageByIndustry(industry?: string | null): string {
   }
 
   return industryImages[normalizedIndustry] ?? fallbackImage;
+}
+
+export function getPublicOfferImageUrl(path?: string | null): string | null {
+  if (!path) {
+    return null;
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+  if (!supabaseUrl) {
+    return null;
+  }
+
+  const encodedPath = path.split("/").map(encodeURIComponent).join("/");
+  return `${supabaseUrl}/storage/v1/object/public/${offerImagesBucket}/${encodedPath}`;
 }

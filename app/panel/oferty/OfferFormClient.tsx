@@ -2,8 +2,15 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useMemo, useState } from "react";
+import { type ChangeEvent, type FormEvent, useMemo, useState } from "react";
 import { industryServiceTypes } from "@/lib/mockData";
+import {
+  createSafeOfferImageFileName,
+  getOfferImageFileKey,
+  MAX_OFFER_IMAGES,
+  OFFER_IMAGES_BUCKET,
+  validateOfferImageFiles,
+} from "@/lib/offerImageUploads";
 import { createClient } from "@/lib/supabase/client";
 
 type CompanyData = {
@@ -28,9 +35,17 @@ type OfferData = {
   status: OfferStatus;
 };
 
+export type OfferImageData = {
+  id: string;
+  path: string;
+  alt: string | null;
+  sort_order: number | null;
+};
+
 type OfferFormClientProps = {
   company: CompanyData;
   offer?: OfferData;
+  offerImages?: OfferImageData[];
   mode: "new" | "edit";
 };
 
@@ -71,9 +86,25 @@ function getServicesForBranch(branch: string, companyServices: string[]) {
   return dictionaryServices.filter((service) => companyServices.includes(service));
 }
 
+function getOfferImagePublicUrl(path: string) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+  if (!supabaseUrl) {
+    return "";
+  }
+
+  const encodedPath = path.split("/").map(encodeURIComponent).join("/");
+  return `${supabaseUrl}/storage/v1/object/public/${OFFER_IMAGES_BUCKET}/${encodedPath}`;
+}
+
+function formatImageSize(size: number) {
+  return `${(size / (1024 * 1024)).toFixed(2)} MB`;
+}
+
 export default function OfferFormClient({
   company,
   offer,
+  offerImages = [],
   mode,
 }: OfferFormClientProps) {
   const router = useRouter();
@@ -100,7 +131,13 @@ export default function OfferFormClient({
   const [saveMode, setSaveMode] = useState<"draft" | "pending">(
     currentStatus === "pending" ? "pending" : "draft"
   );
+  const [existingImages, setExistingImages] = useState<OfferImageData[]>(
+    [...offerImages].sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+  );
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [deletingImageId, setDeletingImageId] = useState("");
   const [error, setError] = useState("");
+  const [partialSuccess, setPartialSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const branchServices = useMemo(
@@ -144,9 +181,136 @@ export default function OfferFormClient({
     return "";
   }
 
+  function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
+    const newFiles = Array.from(event.currentTarget.files ?? []);
+    event.currentTarget.value = "";
+    setError("");
+    setPartialSuccess("");
+
+    if (newFiles.length === 0) {
+      return;
+    }
+
+    const currentKeys = new Set(selectedImages.map(getOfferImageFileKey));
+    const uniqueNewFiles = newFiles.filter(
+      (file) => !currentKeys.has(getOfferImageFileKey(file))
+    );
+
+    if (uniqueNewFiles.length === 0) {
+      setError("Ten plik został już dodany.");
+      return;
+    }
+
+    const mergedFiles = [...selectedImages, ...uniqueNewFiles];
+    const validationError = validateOfferImageFiles(
+      mergedFiles,
+      existingImages.length
+    );
+
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setSelectedImages(mergedFiles);
+  }
+
+  function removeSelectedImage(fileKey: string) {
+    setSelectedImages((current) =>
+      current.filter((file) => getOfferImageFileKey(file) !== fileKey)
+    );
+    setError("");
+  }
+
+  async function uploadSelectedImages(params: {
+    supabase: ReturnType<typeof createClient>;
+    userId: string;
+    offerId: string;
+    startOrder: number;
+  }) {
+    let failedUploads = 0;
+
+    for (let index = 0; index < selectedImages.length; index += 1) {
+      const file = selectedImages[index];
+      const safeFileName = createSafeOfferImageFileName(file.name);
+      const path = `${params.userId}/${params.offerId}/${safeFileName}`;
+
+      const { error: uploadError } = await params.supabase.storage
+        .from(OFFER_IMAGES_BUCKET)
+        .upload(path, file, {
+          contentType: file.type || undefined,
+          upsert: false,
+        });
+
+      if (uploadError) {
+        failedUploads += 1;
+        continue;
+      }
+
+      const { error: metadataError } = await params.supabase
+        .from("offer_images")
+        .insert({
+          offer_id: params.offerId,
+          user_id: params.userId,
+          path,
+          alt: title.trim() || "Zdjęcie oferty",
+          sort_order: params.startOrder + index,
+        });
+
+      if (metadataError) {
+        await params.supabase.storage.from(OFFER_IMAGES_BUCKET).remove([path]);
+        failedUploads += 1;
+      }
+    }
+
+    return failedUploads;
+  }
+
+  async function deleteExistingImage(image: OfferImageData) {
+    const confirmed = window.confirm("Czy na pewno chcesz usunąć to zdjęcie?");
+
+    if (!confirmed) {
+      return;
+    }
+
+    setError("");
+    setPartialSuccess("");
+    setDeletingImageId(image.id);
+    const supabase = createClient();
+
+    const { error: storageError } = await supabase.storage
+      .from(OFFER_IMAGES_BUCKET)
+      .remove([image.path]);
+
+    if (storageError) {
+      setError("Nie udało się usunąć pliku zdjęcia ze Storage.");
+      setDeletingImageId("");
+      return;
+    }
+
+    const { error: deleteError } = await supabase
+      .from("offer_images")
+      .delete()
+      .eq("id", image.id)
+      .eq("offer_id", offer?.id ?? "");
+
+    if (deleteError) {
+      setError(deleteError.message);
+      setDeletingImageId("");
+      return;
+    }
+
+    setExistingImages((current) =>
+      current.filter((item) => item.id !== image.id)
+    );
+    setDeletingImageId("");
+    router.refresh();
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    setPartialSuccess("");
 
     if (!canSaveOffer) {
       setError("Najpierw uzupełnij branże i usługi w zakładce Profil firmy.");
@@ -156,6 +320,16 @@ export default function OfferFormClient({
     const validationError = validateForm();
     if (validationError) {
       setError(validationError);
+      return;
+    }
+
+    const imageValidationError = validateOfferImageFiles(
+      selectedImages,
+      existingImages.length
+    );
+
+    if (imageValidationError) {
+      setError(imageValidationError);
       return;
     }
 
@@ -171,28 +345,72 @@ export default function OfferFormClient({
       lead_time: leadTime.trim(),
     };
 
-    const query =
-      mode === "new"
-        ? supabase.from("offers").insert({
-            ...basePayload,
-            company_id: company.id,
-            slug: slugify(title),
-            status: saveMode,
-          })
-        : supabase
-            .from("offers")
-            .update({
-              ...basePayload,
-              ...(currentStatus === "draft" ? { status: saveMode } : {}),
-            })
-            .eq("id", offer?.id ?? "");
+    const savedOfferId = offer?.id;
+    let nextOfferId = savedOfferId ?? "";
 
-    const { error: saveError } = await query;
+    if (mode === "new") {
+      const { data: insertedOffer, error: saveError } = await supabase
+        .from("offers")
+        .insert({
+          ...basePayload,
+          company_id: company.id,
+          slug: slugify(title),
+          status: saveMode,
+        })
+        .select("id")
+        .single();
 
-    if (saveError) {
-      setError(saveError.message);
-      setIsSubmitting(false);
-      return;
+      if (saveError || !insertedOffer?.id) {
+        setError(saveError?.message ?? "Nie udało się zapisać oferty.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      nextOfferId = insertedOffer.id as string;
+    } else {
+      const { error: saveError } = await supabase
+        .from("offers")
+        .update({
+          ...basePayload,
+          ...(currentStatus === "draft" ? { status: saveMode } : {}),
+        })
+        .eq("id", offer?.id ?? "");
+
+      if (saveError) {
+        setError(saveError.message);
+        setIsSubmitting(false);
+        return;
+      }
+    }
+
+    if (selectedImages.length > 0) {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        setPartialSuccess(
+          "Oferta została zapisana, ale nie udało się wgrać zdjęć. Spróbuj dodać je w edycji oferty."
+        );
+        setIsSubmitting(false);
+        return;
+      }
+
+      const failedUploads = await uploadSelectedImages({
+        supabase,
+        userId: user.id,
+        offerId: nextOfferId,
+        startOrder: existingImages.length,
+      });
+
+      if (failedUploads > 0) {
+        setPartialSuccess(
+          "Oferta została zapisana, ale część zdjęć nie została wgrana. Spróbuj ponownie w edycji oferty."
+        );
+        setIsSubmitting(false);
+        return;
+      }
     }
 
     router.push("/panel/oferty");
@@ -261,6 +479,12 @@ export default function OfferFormClient({
       {error ? (
         <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
+        </div>
+      ) : null}
+
+      {partialSuccess ? (
+        <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          {partialSuccess}
         </div>
       ) : null}
 
@@ -378,6 +602,122 @@ export default function OfferFormClient({
             disabled={!hasProfileSetup}
           />
         </label>
+
+        <section className="min-w-0 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:col-span-2">
+          <div className="mb-5 flex min-w-0 flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div className="min-w-0">
+              <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                <i className="fas fa-images text-[#1a5f3c]"></i>
+                Zdjęcia oferty
+              </p>
+              <p className="text-sm leading-6 text-slate-500">
+                Dodaj do 5 zdjęć maszyn, stanowiska, hali lub przykładowych
+                realizacji. Zdjęcia będą widoczne publicznie przy ofercie.
+              </p>
+              <p className="mt-2 text-xs leading-5 text-slate-400">
+                Dozwolone formaty: JPG, PNG, WEBP. Maksymalnie 5 MB na zdjęcie.
+              </p>
+            </div>
+            <label className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] bg-white px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white">
+              <i className="fas fa-plus"></i>
+              Dodaj zdjęcia
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                onChange={handleImageChange}
+                className="sr-only"
+                disabled={
+                  !hasProfileSetup ||
+                  isSubmitting ||
+                  existingImages.length + selectedImages.length >= MAX_OFFER_IMAGES
+                }
+              />
+            </label>
+          </div>
+
+          {existingImages.length > 0 ? (
+            <div className="mb-5">
+              <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+                Zapisane zdjęcia
+              </p>
+              <div className="grid min-w-0 gap-3 sm:grid-cols-2">
+                {existingImages.map((image) => (
+                  <div
+                    key={image.id}
+                    className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white"
+                  >
+                    <div className="aspect-video bg-slate-100">
+                      <img
+                        src={getOfferImagePublicUrl(image.path)}
+                        alt={image.alt ?? title ?? "Zdjęcie oferty"}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between gap-3 p-3">
+                      <span className="text-xs font-semibold text-slate-500">
+                        {image.sort_order === 0 ? "Zdjęcie główne" : "Zdjęcie oferty"}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => deleteExistingImage(image)}
+                        disabled={deletingImageId === image.id || isSubmitting}
+                        className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-xs font-bold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <i className="fas fa-trash"></i>
+                        {deletingImageId === image.id ? "Usuwanie..." : "Usuń"}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {selectedImages.length > 0 ? (
+            <div>
+              <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+                Gotowe do wysłania po zapisie oferty
+              </p>
+              <div className="space-y-2">
+                {selectedImages.map((file) => {
+                  const fileKey = getOfferImageFileKey(file);
+
+                  return (
+                    <div
+                      key={fileKey}
+                      className="flex min-w-0 flex-col gap-3 rounded-xl bg-white p-3 sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-bold text-slate-900">
+                          {file.name}
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          {formatImageSize(file.size)}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeSelectedImage(fileKey)}
+                        disabled={isSubmitting}
+                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition hover:border-red-200 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <i className="fas fa-xmark"></i>
+                        Usuń
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <p className="rounded-xl bg-white px-4 py-3 text-sm text-slate-500">
+              Nie wybrano nowych zdjęć.
+            </p>
+          )}
+        </section>
 
         {canChooseStatus ? (
           <fieldset className="min-w-0 md:col-span-2">

@@ -24,12 +24,28 @@ type OfferData = {
   status: OfferStatus;
 };
 
+type OfferImageData = {
+  id: string;
+  path: string;
+  alt: string | null;
+  sort_order: number | null;
+};
+
 export default function EditOfferFormClient({
   company,
   offer,
+  offerImages,
 }: {
   company: CompanyData;
   offer: OfferData;
+  offerImages: OfferImageData[];
 }) {
-  return <OfferFormClient mode="edit" company={company} offer={offer} />;
+  return (
+    <OfferFormClient
+      mode="edit"
+      company={company}
+      offer={offer}
+      offerImages={offerImages}
+    />
+  );
 }

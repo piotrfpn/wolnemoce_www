@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { OFFER_IMAGES_BUCKET } from "@/lib/offerImageUploads";
 import { createClient } from "@/lib/supabase/client";
 
 type OfferActionsClientProps = {
@@ -26,6 +27,33 @@ export default function OfferActionsClient({ offerId }: OfferActionsClientProps)
     setIsDeleting(true);
 
     const supabase = createClient();
+    const { data: images, error: imagesError } = await supabase
+      .from("offer_images")
+      .select("path")
+      .eq("offer_id", offerId);
+
+    if (imagesError) {
+      setError(imagesError.message);
+      setIsDeleting(false);
+      return;
+    }
+
+    const imagePaths = (images ?? [])
+      .map((image) => image.path as string | null)
+      .filter((path): path is string => Boolean(path));
+
+    if (imagePaths.length > 0) {
+      const { error: storageError } = await supabase.storage
+        .from(OFFER_IMAGES_BUCKET)
+        .remove(imagePaths);
+
+      if (storageError) {
+        setError("Nie udało się usunąć zdjęć oferty ze Storage.");
+        setIsDeleting(false);
+        return;
+      }
+    }
+
     const { error: deleteError } = await supabase
       .from("offers")
       .delete()

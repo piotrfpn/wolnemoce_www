@@ -72,7 +72,7 @@ async function getCompanyActiveOffers(companyId: string, company: PublicCompany)
   const { data } = await supabase
     .from("offers")
     .select(
-      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at"
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, offer_images(id, path, alt, sort_order)"
     )
     .eq("company_id", companyId)
     .eq("status", "active")
