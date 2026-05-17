@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { registerUser } from "./actions";
 
 type RegisterFormClientProps = {
   nextPath?: string;
@@ -20,7 +20,6 @@ function getSafeNextPath(nextPath?: string) {
 export default function RegisterFormClient({ nextPath }: RegisterFormClientProps) {
   const router = useRouter();
   const safeNextPath = getSafeNextPath(nextPath);
-  const redirectAfterAuth = safeNextPath || "/panel";
   const loginHref = safeNextPath
     ? `/logowanie?next=${encodeURIComponent(safeNextPath)}`
     : "/logowanie";
@@ -36,41 +35,30 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
     event.preventDefault();
     setError("");
     setMessage("");
-    setIsSubmitting(true);
-    const supabase = createClient();
 
     if (!acceptedTerms) {
-      setError("Zaakceptuj regulamin, aby utworzyć konto.");
+      setError("Musisz zaakceptować regulamin, aby założyć konto.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const formData = new FormData(event.currentTarget);
+    const result = await registerUser(formData);
+
+    if (result.error) {
+      setError(result.error);
       setIsSubmitting(false);
       return;
     }
 
-    const { data, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-        },
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(
-          redirectAfterAuth
-        )}`,
-      },
-    });
-
-    if (signUpError) {
-      setError(signUpError.message);
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (data.session) {
-      router.push(redirectAfterAuth);
+    if (result.redirectTo) {
+      router.push(result.redirectTo);
       router.refresh();
       return;
     }
 
-    setMessage("Konto zostało utworzone. Możesz się zalogować.");
+    setMessage(result.message ?? "Konto zostało utworzone. Możesz się zalogować.");
     setIsSubmitting(false);
   }
 
@@ -79,6 +67,8 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
       onSubmit={handleSubmit}
       className="w-full min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8"
     >
+      <input type="hidden" name="nextPath" value={safeNextPath} />
+
       <div className="mb-8 text-center">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
           <i className="fas fa-user-plus text-xl"></i>
@@ -116,10 +106,11 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
             Imię i nazwisko
           </span>
           <input
+            name="fullName"
             value={fullName}
             onChange={(event) => setFullName(event.target.value)}
             required
-            className="min-w-0 max-w-full w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
+            className="w-full min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
           />
         </label>
 
@@ -129,11 +120,12 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
             Email
           </span>
           <input
+            name="email"
             type="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
-            className="min-w-0 max-w-full w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
+            className="w-full min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
           />
         </label>
 
@@ -143,33 +135,44 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
             Hasło
           </span>
           <input
+            name="password"
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
             minLength={6}
-            className="min-w-0 max-w-full w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
+            className="w-full min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
           />
         </label>
 
         <label className="flex min-w-0 items-start gap-3 rounded-xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
           <input
             type="checkbox"
+            name="termsAccepted"
+            value="accepted"
+            required
             checked={acceptedTerms}
             onChange={(event) => setAcceptedTerms(event.target.checked)}
             className="mt-1 h-4 w-4 rounded border-slate-300 accent-[#1a5f3c]"
           />
-          <span>
+          <span className="min-w-0">
             Akceptuję{" "}
-            <Link href="/regulamin" className="font-semibold text-[#1a5f3c] no-underline">
-              regulamin
-            </Link>
-            {" "}oraz zapoznałem się z{" "}
             <Link
-              href="/polityka-prywatnosci"
+              href="/regulamin"
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-semibold text-[#1a5f3c] no-underline"
             >
-              polityką prywatności
+              Regulamin Serwisu
+            </Link>{" "}
+            oraz potwierdzam zapoznanie się z{" "}
+            <Link
+              href="/polityka-prywatnosci"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-[#1a5f3c] no-underline"
+            >
+              Polityką Prywatności
             </Link>
             .
           </span>
@@ -179,7 +182,7 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-6 btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
+        className="btn btn-primary mt-6 w-full disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isSubmitting ? "Tworzenie konta..." : "Utwórz konto"}
       </button>
