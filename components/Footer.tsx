@@ -115,6 +115,11 @@ export default function Footer() {
                   Polityka prywatności
                 </Link>
               </li>
+              <li>
+                <Link href="/polityka-cookies" className="text-sm text-white/60 no-underline transition hover:text-white">
+                  Polityka cookies
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -151,7 +156,7 @@ export default function Footer() {
             <Link href="/polityka-prywatnosci" className="text-white/40 no-underline transition hover:text-white">
               Polityka prywatności
             </Link>
-            <Link href="/polityka-prywatnosci" className="text-white/40 no-underline transition hover:text-white">
+            <Link href="/polityka-cookies" className="text-white/40 no-underline transition hover:text-white">
               Cookies
             </Link>
           </div>

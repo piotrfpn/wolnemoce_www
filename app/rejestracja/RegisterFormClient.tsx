@@ -164,6 +164,13 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
             <Link href="/regulamin" className="font-semibold text-[#1a5f3c] no-underline">
               regulamin
             </Link>
+            {" "}oraz zapoznałem się z{" "}
+            <Link
+              href="/polityka-prywatnosci"
+              className="font-semibold text-[#1a5f3c] no-underline"
+            >
+              polityką prywatności
+            </Link>
             .
           </span>
         </label>

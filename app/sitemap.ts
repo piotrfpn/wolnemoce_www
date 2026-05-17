@@ -98,6 +98,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/dodaj-oferte",
     "/regulamin",
     "/polityka-prywatnosci",
+    "/polityka-cookies",
     "/zapytanie-ofertowe",
     "/zapytanie-wyslane",
   ];
