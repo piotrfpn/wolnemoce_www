@@ -278,6 +278,7 @@ export async function createBlogPost(
   }
 
   revalidatePath("/blog");
+  revalidatePath("/");
   revalidatePath("/admin/blog");
   if (data?.slug) {
     revalidatePath(`/blog/${data.slug}`);
@@ -373,6 +374,7 @@ export async function updateBlogPost(
   }
 
   revalidatePath("/blog");
+  revalidatePath("/");
   revalidatePath("/admin/blog");
   if (previousSlug) {
     revalidatePath(`/blog/${previousSlug}`);
@@ -399,6 +401,7 @@ export async function archiveBlogPost(postId: string, slug: string | null) {
   }
 
   revalidatePath("/blog");
+  revalidatePath("/");
   revalidatePath("/admin/blog");
   if (slug) {
     revalidatePath(`/blog/${slug}`);
@@ -414,6 +417,7 @@ export async function deleteBlogPost(postId: string, slug: string | null) {
   }
 
   revalidatePath("/blog");
+  revalidatePath("/");
   revalidatePath("/admin/blog");
   if (slug) {
     revalidatePath(`/blog/${slug}`);
