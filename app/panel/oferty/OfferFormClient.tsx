@@ -361,7 +361,7 @@ export default function OfferFormClient({
         .single();
 
       if (saveError || !insertedOffer?.id) {
-        setError(saveError?.message ?? "Nie udało się zapisać oferty.");
+        setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
         setIsSubmitting(false);
         return;
       }
@@ -377,7 +377,7 @@ export default function OfferFormClient({
         .eq("id", offer?.id ?? "");
 
       if (saveError) {
-        setError(saveError.message);
+        setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
         setIsSubmitting(false);
         return;
       }

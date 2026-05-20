@@ -61,6 +61,35 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+function normalizeWebsiteUrl(value: string) {
+  const trimmedValue = value.trim();
+
+  if (!trimmedValue) {
+    return { value: null, error: "" };
+  }
+
+  const withProtocol = /^https?:\/\//i.test(trimmedValue)
+    ? trimmedValue
+    : `https://${trimmedValue}`;
+
+  try {
+    const parsedUrl = new URL(withProtocol);
+
+    if (!parsedUrl.hostname || !parsedUrl.hostname.includes(".")) {
+      return { value: null, error: "Podaj poprawny adres strony internetowej." };
+    }
+
+    const normalizedUrl =
+      parsedUrl.pathname === "/" && !parsedUrl.search && !parsedUrl.hash
+        ? `${parsedUrl.protocol}//${parsedUrl.host}`
+        : parsedUrl.toString();
+
+    return { value: normalizedUrl, error: "" };
+  } catch {
+    return { value: null, error: "Podaj poprawny adres strony internetowej." };
+  }
+}
+
 function slugifyCompanyName(value: string) {
   return (
     value
@@ -161,6 +190,30 @@ function getProvinceFromGus(region: string | null) {
 
   return matchingProvince ?? region;
 }
+
+type CompanySaveData = {
+  id: string;
+  slug: string | null;
+  nip: string | null;
+  name: string | null;
+  description: string | null;
+  industry: string | null;
+  industries: string[] | null;
+  service_types: string[] | null;
+  location_voivodeship: string | null;
+  location_city: string | null;
+  is_verified: boolean | null;
+  website_url: string | null;
+  contact_email: string | null;
+  presentation_path: string | null;
+  presentation_file_name: string | null;
+  presentation_mime_type: string | null;
+  presentation_size_bytes: number | null;
+  presentation_uploaded_at: string | null;
+};
+
+const companyProfileSelect =
+  "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, contact_email, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at";
 
 export default function CompanyProfileFormClient({
   userId,
@@ -285,6 +338,7 @@ export default function CompanyProfileFormClient({
 
   function validateForm() {
     const normalizedNip = normalizeNip(nip);
+    const normalizedWebsite = normalizeWebsiteUrl(websiteUrl);
 
     if (!/^\d{10}$/.test(normalizedNip)) {
       return "Podaj poprawny NIP. NIP powinien mieć 10 cyfr.";
@@ -314,12 +368,8 @@ export default function CompanyProfileFormClient({
       return "Podaj miasto.";
     }
 
-    if (
-      websiteUrl.trim() &&
-      !websiteUrl.trim().startsWith("http://") &&
-      !websiteUrl.trim().startsWith("https://")
-    ) {
-      return "Adres strony WWW musi zaczynać się od http:// albo https://";
+    if (normalizedWebsite.error) {
+      return normalizedWebsite.error;
     }
 
     if (contactEmail.trim() && !isValidEmail(contactEmail.trim())) {
@@ -327,6 +377,46 @@ export default function CompanyProfileFormClient({
     }
 
     return "";
+  }
+
+  function applySavedCompany(data: CompanySaveData) {
+    const savedIndustries =
+      data.industries && data.industries.length > 0
+        ? data.industries
+        : data.industry
+          ? [data.industry]
+          : [];
+
+    setCompanyId(data.id);
+    setCompanySlug(data.slug ?? "");
+    setIsVerified(Boolean(data.is_verified));
+    setNip(data.nip ?? "");
+    setName(data.name ?? "");
+    setDescription(data.description ?? "");
+    setMainIndustry(data.industry ?? savedIndustries[0] ?? "");
+    setSelectedIndustries(savedIndustries);
+    setSelectedServiceTypes(data.service_types ?? []);
+    setVoivodeship(data.location_voivodeship ?? "");
+    setCity(data.location_city ?? "");
+    setWebsiteUrl(data.website_url ?? "");
+    setContactEmail(data.contact_email ?? "");
+    setPresentationPath(data.presentation_path ?? "");
+    setPresentationFileName(data.presentation_file_name ?? "");
+    setPresentationMimeType(data.presentation_mime_type ?? "");
+    setPresentationSizeBytes(data.presentation_size_bytes ?? null);
+    setPresentationUploadedAt(data.presentation_uploaded_at ?? "");
+    setRequestIndustry(savedIndustries[0] ?? "");
+  }
+
+  async function findCompanyByNip(
+    supabase: ReturnType<typeof createClient>,
+    normalizedNip: string
+  ) {
+    return supabase
+      .from("companies")
+      .select(`user_id, ${companyProfileSelect}`)
+      .eq("nip", normalizedNip)
+      .maybeSingle();
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -342,9 +432,18 @@ export default function CompanyProfileFormClient({
 
     setIsSubmitting(true);
     const supabase = createClient();
+    const normalizedNip = normalizeNip(nip);
+    const normalizedWebsite = normalizeWebsiteUrl(websiteUrl);
+
+    if (normalizedWebsite.error) {
+      setError(normalizedWebsite.error);
+      setIsSubmitting(false);
+      return;
+    }
+
     const nextCompanySlug = companySlug || createCompanySlug(name.trim(), companyId);
     const payload = {
-      nip: normalizeNip(nip),
+      nip: normalizedNip,
       name: name.trim(),
       slug: nextCompanySlug,
       description: description.trim() || null,
@@ -353,18 +452,52 @@ export default function CompanyProfileFormClient({
       service_types: selectedServiceTypes,
       location_voivodeship: voivodeship,
       location_city: city.trim(),
-      website_url: websiteUrl.trim() || null,
+      website_url: normalizedWebsite.value,
       contact_email: contactEmail.trim() || null,
     };
+
+    const existingCompanyResult = await findCompanyByNip(supabase, normalizedNip);
+
+    if (existingCompanyResult.error) {
+      setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    const existingCompany = existingCompanyResult.data as
+      | (CompanySaveData & { user_id: string | null })
+      | null;
+
+    if (existingCompany && existingCompany.user_id !== userId) {
+      setError("Firma z tym NIP jest już zarejestrowana w systemie.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (existingCompany && !companyId) {
+      applySavedCompany(existingCompany);
+      setMessage(
+        "Firma z tym NIP jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
+      );
+      setIsSubmitting(false);
+      router.refresh();
+      return;
+    }
+
+    if (existingCompany && companyId && existingCompany.id !== companyId) {
+      setError("Firma z tym NIP jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty.");
+      applySavedCompany(existingCompany);
+      setIsSubmitting(false);
+      router.refresh();
+      return;
+    }
 
     const query = companyId
       ? supabase
           .from("companies")
           .update(payload)
           .eq("id", companyId)
-          .select(
-            "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, contact_email, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
-          )
+          .select(companyProfileSelect)
           .single()
       : supabase
           .from("companies")
@@ -372,46 +505,40 @@ export default function CompanyProfileFormClient({
             ...payload,
             user_id: userId,
           })
-          .select(
-            "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, contact_email, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
-          )
+          .select(companyProfileSelect)
           .single();
 
     const { data, error: saveError } = await query;
 
     if (saveError) {
-      setError(saveError.message);
+      if (saveError.code === "23505") {
+        const retryCompanyResult = await findCompanyByNip(supabase, normalizedNip);
+        const retryCompany = retryCompanyResult.data as
+          | (CompanySaveData & { user_id: string | null })
+          | null;
+
+        if (retryCompany?.user_id === userId) {
+          applySavedCompany(retryCompany);
+          setMessage(
+            "Firma z tym NIP jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
+          );
+          setIsSubmitting(false);
+          router.refresh();
+          return;
+        }
+
+        setError("Firma z tym NIP jest już zarejestrowana w systemie.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
       setIsSubmitting(false);
       return;
     }
 
     if (data) {
-      const savedIndustries =
-        data.industries && data.industries.length > 0
-          ? data.industries
-          : data.industry
-            ? [data.industry]
-            : [];
-
-      setCompanyId(data.id);
-      setCompanySlug(data.slug ?? "");
-      setIsVerified(Boolean(data.is_verified));
-      setNip(data.nip ?? "");
-      setName(data.name ?? "");
-      setDescription(data.description ?? "");
-      setMainIndustry(data.industry ?? savedIndustries[0] ?? "");
-      setSelectedIndustries(savedIndustries);
-      setSelectedServiceTypes(data.service_types ?? []);
-      setVoivodeship(data.location_voivodeship ?? "");
-      setCity(data.location_city ?? "");
-      setWebsiteUrl(data.website_url ?? "");
-      setContactEmail(data.contact_email ?? "");
-      setPresentationPath(data.presentation_path ?? "");
-      setPresentationFileName(data.presentation_file_name ?? "");
-      setPresentationMimeType(data.presentation_mime_type ?? "");
-      setPresentationSizeBytes(data.presentation_size_bytes ?? null);
-      setPresentationUploadedAt(data.presentation_uploaded_at ?? "");
-      setRequestIndustry(savedIndustries[0] ?? "");
+      applySavedCompany(data as CompanySaveData);
     }
 
     setMessage("Profil firmy został zapisany.");
