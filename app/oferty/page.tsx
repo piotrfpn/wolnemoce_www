@@ -158,7 +158,7 @@ async function getPublicOffers(
   let query = supabase
     .from("offers")
     .select(
-      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, is_featured, featured_until, featured_priority, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
     )
     .eq("status", "active");
 
@@ -213,12 +213,29 @@ async function getPublicOffers(
   const offers = (data ?? []) as unknown as PublicOffer[];
 
   if (filters.sort === "featured") {
-    return [...offers].sort((first, second) => {
-      const firstVerified = first.companies?.is_verified ? 1 : 0;
-      const secondVerified = second.companies?.is_verified ? 1 : 0;
+    const now = Date.now();
 
-      if (firstVerified !== secondVerified) {
-        return secondVerified - firstVerified;
+    return [...offers].sort((first, second) => {
+      const firstFeatured =
+        first.is_featured &&
+        (!first.featured_until || new Date(first.featured_until).getTime() > now)
+          ? 1
+          : 0;
+      const secondFeatured =
+        second.is_featured &&
+        (!second.featured_until || new Date(second.featured_until).getTime() > now)
+          ? 1
+          : 0;
+
+      if (firstFeatured !== secondFeatured) {
+        return secondFeatured - firstFeatured;
+      }
+
+      const priorityDiff =
+        (second.featured_priority ?? 0) - (first.featured_priority ?? 0);
+
+      if (priorityDiff !== 0) {
+        return priorityDiff;
       }
 
       return (

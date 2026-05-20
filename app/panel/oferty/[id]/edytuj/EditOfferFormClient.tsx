@@ -10,7 +10,7 @@ type CompanyData = {
   service_types: string[] | null;
 };
 
-type OfferStatus = "draft" | "pending" | "active" | "rejected";
+type OfferStatus = "draft" | "pending" | "active" | "rejected" | "archived";
 
 type OfferData = {
   id: string;

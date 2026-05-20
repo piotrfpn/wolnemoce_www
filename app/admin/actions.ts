@@ -44,6 +44,8 @@ export async function approveOffer(offerId: string) {
   }
 
   revalidatePath("/admin");
+  revalidatePath("/admin/oferty");
+  revalidatePath(`/admin/oferty/${offerId}`);
   revalidatePath("/oferty");
   if (data?.slug) {
     revalidatePath(`/oferty/${data.slug}`);
@@ -64,6 +66,8 @@ export async function rejectOffer(offerId: string) {
   }
 
   revalidatePath("/admin");
+  revalidatePath("/admin/oferty");
+  revalidatePath(`/admin/oferty/${offerId}`);
   revalidatePath("/oferty");
   if (data?.slug) {
     revalidatePath(`/oferty/${data.slug}`);

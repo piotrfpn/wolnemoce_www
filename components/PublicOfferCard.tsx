@@ -22,6 +22,9 @@ export type PublicOffer = {
   min_order: string | null;
   lead_time: string | null;
   status: string | null;
+  is_featured?: boolean | null;
+  featured_until?: string | null;
+  featured_priority?: number | null;
   created_at: string | null;
   companies: PublicOfferCompany | null;
   offer_images?: {
@@ -45,6 +48,14 @@ function getInitials(name: string | null) {
     .join("");
 }
 
+function isActiveFeatured(offer: PublicOffer) {
+  if (!offer.is_featured) {
+    return false;
+  }
+
+  return !offer.featured_until || new Date(offer.featured_until).getTime() > Date.now();
+}
+
 export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
   const company = offer.companies;
   const companyName = company?.name ?? "Firma";
@@ -59,13 +70,27 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
   const imageAlt =
     mainImage?.alt ||
     `${offer.title ?? "Oferta WolneMoce.pl"} - ${offer.branch ?? "wolne moce"}`;
+  const featured = isActiveFeatured(offer);
 
   return (
     <article className="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-xl">
       {company?.is_verified ? (
-        <div className="absolute right-4 top-4 z-10 flex items-center gap-1 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-semibold text-emerald-600 shadow-sm backdrop-blur">
-          <i className="fas fa-check-circle"></i>
-          Zweryfikowana
+        <div className="absolute right-4 top-4 z-10 flex flex-col items-end gap-2">
+          {featured ? (
+            <span className="flex items-center gap-1 rounded-full bg-[#fbbf24] px-3 py-1.5 text-[11px] font-bold text-slate-900 shadow-sm">
+              <i className="fas fa-star"></i>
+              Wyróżniona
+            </span>
+          ) : null}
+          <span className="flex items-center gap-1 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-semibold text-emerald-600 shadow-sm backdrop-blur">
+            <i className="fas fa-check-circle"></i>
+            Zweryfikowana
+          </span>
+        </div>
+      ) : featured ? (
+        <div className="absolute right-4 top-4 z-10 flex items-center gap-1 rounded-full bg-[#fbbf24] px-3 py-1.5 text-[11px] font-bold text-slate-900 shadow-sm">
+          <i className="fas fa-star"></i>
+          Wyróżniona
         </div>
       ) : null}
 

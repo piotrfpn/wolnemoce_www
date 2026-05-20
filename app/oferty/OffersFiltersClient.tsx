@@ -246,6 +246,7 @@ export default function OffersFiltersClient({
         >
           <option value="newest">Najnowsze</option>
           <option value="az">Alfabetycznie</option>
+          <option value="featured">Wyróżnione</option>
         </select>
       </div>
 

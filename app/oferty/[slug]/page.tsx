@@ -52,7 +52,7 @@ async function getPublicOfferBySlug(slug: string) {
   const { data, error } = await supabase
     .from("offers")
     .select(
-      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, is_featured, featured_until, featured_priority, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
     )
     .eq("slug", slug)
     .eq("status", "active")
@@ -70,7 +70,7 @@ async function getSimilarOffers(offer: PublicOffer) {
   const sameBranchQuery = supabase
     .from("offers")
     .select(
-      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, is_featured, featured_until, featured_priority, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
     )
     .eq("status", "active")
     .neq("id", offer.id)
@@ -89,7 +89,7 @@ async function getSimilarOffers(offer: PublicOffer) {
   const { data: otherOffers } = await supabase
     .from("offers")
     .select(
-      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, is_featured, featured_until, featured_priority, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
     )
     .eq("status", "active")
     .neq("id", offer.id)

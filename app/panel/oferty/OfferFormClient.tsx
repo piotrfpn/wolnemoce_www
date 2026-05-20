@@ -28,7 +28,7 @@ type CompanyData = {
   service_types: string[] | null;
 };
 
-type OfferStatus = "draft" | "pending" | "active" | "rejected";
+type OfferStatus = "draft" | "pending" | "active" | "rejected" | "archived";
 
 type OfferData = {
   id: string;
@@ -64,6 +64,7 @@ const statusLabels: Record<OfferStatus, string> = {
   pending: "Oczekuje na zatwierdzenie",
   active: "Aktywna",
   rejected: "Odrzucona",
+  archived: "Zarchiwizowana",
 };
 
 function slugify(value: string) {
@@ -120,7 +121,9 @@ export default function OfferFormClient({
   const currentStatus = offer?.status ?? "draft";
   const canChooseStatus = mode === "new" || currentStatus === "draft";
   const isLockedModerationStatus =
-    currentStatus === "active" || currentStatus === "rejected";
+    currentStatus === "active" ||
+    currentStatus === "rejected" ||
+    currentStatus === "archived";
   const initialBranch =
     offer?.branch && companyIndustries.includes(offer.branch)
       ? offer.branch
