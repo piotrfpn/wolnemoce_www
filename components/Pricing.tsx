@@ -39,12 +39,18 @@ export default function Pricing() {
               ))}
             </ul>
 
-            <a
-              href={plan.ctaHref}
-              className={plan.isFeatured ? "btn btn-primary" : "btn btn-outline"}
-            >
-              {plan.cta}
-            </a>
+            {plan.cta === "Wkrótce" ? (
+              <span className="btn btn-outline cursor-not-allowed opacity-60">
+                {plan.cta}
+              </span>
+            ) : (
+              <a
+                href={plan.ctaHref}
+                className={plan.isFeatured ? "btn btn-primary" : "btn btn-outline"}
+              >
+                {plan.cta}
+              </a>
+            )}
           </div>
         ))}
       </div>

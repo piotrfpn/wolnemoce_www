@@ -9,6 +9,7 @@ import FeaturedOffers from "@/components/FeaturedOffers";
 import HowItWorks from "@/components/HowItWorks";
 import Pricing from "@/components/Pricing";
 import ExpertSection from "@/components/ExpertSection";
+import PartnerServices from "@/components/PartnerServices";
 import Testimonials from "@/components/Testimonials";
 import BlogPreview from "@/components/BlogPreview";
 import CtaSection from "@/components/CtaSection";
@@ -31,6 +32,7 @@ export default function Home() {
       <HowItWorks />
       <Pricing />
       <ExpertSection />
+      <PartnerServices />
       <Testimonials />
       <BlogPreview />
       <CtaSection />
