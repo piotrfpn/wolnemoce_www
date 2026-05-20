@@ -8,6 +8,7 @@ type StaticFormFieldProps = {
   name: string;
   type?: string;
   placeholder?: string;
+  defaultValue?: string;
   icon?: string;
   options?: Option[];
   textarea?: boolean;
@@ -19,6 +20,7 @@ export default function StaticFormField({
   name,
   type = "text",
   placeholder,
+  defaultValue = "",
   icon = "fas fa-pen",
   options,
   textarea = false,
@@ -39,10 +41,11 @@ export default function StaticFormField({
           name={name}
           rows={rows}
           placeholder={placeholder}
+          defaultValue={defaultValue}
           className={baseClass}
         />
       ) : options ? (
-        <select name={name} defaultValue="" className={baseClass}>
+        <select name={name} defaultValue={defaultValue} className={baseClass}>
           <option value="">{placeholder ?? "Wybierz"}</option>
           {options.map((option) => (
             <option key={option.value} value={option.value}>
@@ -55,6 +58,7 @@ export default function StaticFormField({
           name={name}
           type={type}
           placeholder={placeholder}
+          defaultValue={defaultValue}
           className={baseClass}
         />
       )}

@@ -11,7 +11,40 @@ export const metadata: Metadata = {
     "Statyczna podstrona kontaktowa WolneMoce.pl z formularzem UI-only i FAQ.",
 };
 
-export default function ContactPage() {
+type ContactPageProps = {
+  searchParams?: Record<string, string | string[] | undefined>;
+};
+
+const partnerTopics = {
+  credos: {
+    subject: "Wsparcie księgowo-prawne Credos",
+    description:
+      "Pytanie dotyczy płatnego wsparcia partnerskiego Credos w zakresie księgowości, prawa i formalnej obsługi współpracy B2B. Usługa nie jest automatycznie zawarta w planach WolneMoce.pl i wymaga osobnego ustalenia zakresu oraz ceny.",
+    icon: "fas fa-scale-balanced",
+  },
+  logimarket: {
+    subject: "Doradztwo procesowe i łańcuch dostaw LogiMarket",
+    description:
+      "Pytanie dotyczy płatnego doradztwa partnerskiego LogiMarket w zakresie procesów, outsourcingu produkcji, RFQ, make-or-buy oraz łańcucha dostaw. Usługa nie jest automatycznie zawarta w planach WolneMoce.pl i wymaga osobnego ustalenia zakresu oraz ceny.",
+    icon: "fas fa-route",
+  },
+};
+
+function getSingleParam(
+  searchParams: ContactPageProps["searchParams"],
+  key: string
+) {
+  const value = searchParams?.[key];
+  return Array.isArray(value) ? value[0] ?? "" : value ?? "";
+}
+
+export default function ContactPage({ searchParams }: ContactPageProps) {
+  const topicParam = getSingleParam(searchParams, "temat").toLowerCase().trim();
+  const partnerTopic =
+    topicParam === "credos" || topicParam === "logimarket"
+      ? partnerTopics[topicParam]
+      : null;
+
   return (
     <>
       <Navbar />
@@ -52,11 +85,39 @@ export default function ContactPage() {
               </p>
             </div>
 
+            {partnerTopic ? (
+              <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#1a5f3c]">
+                    <i className={partnerTopic.icon}></i>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wide text-amber-700">
+                      Partner usługowy
+                    </p>
+                    <h3 className="font-extrabold text-slate-900">
+                      {partnerTopic.subject}
+                    </h3>
+                  </div>
+                </div>
+                <p>{partnerTopic.description}</p>
+              </div>
+            ) : null}
+
             <div className="grid gap-5 md:grid-cols-2">
               <StaticFormField label="Imię i nazwisko" name="name" icon="fas fa-user" />
               <StaticFormField label="Firma" name="company" icon="fas fa-building" />
               <StaticFormField label="Email" name="email" type="email" icon="fas fa-envelope" />
               <StaticFormField label="Telefon" name="phone" type="tel" icon="fas fa-phone" />
+              <div className="md:col-span-2">
+                <StaticFormField
+                  label="Temat"
+                  name="subject"
+                  defaultValue={partnerTopic?.subject ?? ""}
+                  placeholder="Np. wolne moce, partnerstwo, wsparcie partnerskie"
+                  icon="fas fa-tag"
+                />
+              </div>
               <div className="md:col-span-2">
                 <StaticFormField
                   label="Wiadomość"
