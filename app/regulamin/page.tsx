@@ -45,8 +45,9 @@ export default function TermsPage() {
           <article className="mx-auto max-w-4xl rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-10">
             <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-7 text-amber-900">
               <strong>Wersja MVP / beta.</strong> Dokument powinien zostać
-              zweryfikowany przez profesjonalnego prawnika przed pełnym
-              publicznym uruchomieniem komercyjnym.
+              zweryfikowany przez profesjonalnego prawnika albo partnera
+              prawno-księgowego Credos przed pełnym publicznym uruchomieniem
+              komercyjnym.
             </div>
 
             <div className="space-y-10">
@@ -77,10 +78,19 @@ export default function TermsPage() {
               <Section number={3} title="Charakter portalu i zakres usług">
                 <p>
                   Serwis jest narzędziem B2B typu marketplace/SaaS służącym do
-                  publikacji profili firm, ofert wolnych mocy oraz obsługi
-                  zapytań RFQ. Serwis nie jest stroną umów zawieranych między
-                  firmami i nie świadczy usług produkcyjnych, logistycznych,
-                  magazynowych ani technicznych we własnym imieniu.
+                  publikacji profili firm, prezentacji ofert wolnych mocy
+                  produkcyjnych, magazynowych, logistycznych i technicznych oraz
+                  obsługi zapytań RFQ. Serwis ułatwia nawiązanie kontaktu
+                  biznesowego między firmami, ale nie świadczy usług
+                  produkcyjnych, logistycznych, magazynowych ani technicznych we
+                  własnym imieniu.
+                </p>
+                <p>
+                  WolneMoce.pl nie gwarantuje pozyskania zapytania, zlecenia,
+                  zawarcia umowy ani osiągnięcia określonego wyniku
+                  sprzedażowego. Widoczność w Serwisie, aktywny profil, aktywna
+                  oferta, wyróżnienie albo korzystanie z płatnego planu nie
+                  oznaczają gwarancji zainteresowania ze strony innych firm.
                 </p>
               </Section>
 
@@ -142,14 +152,23 @@ export default function TermsPage() {
                   ofertę, jeżeli narusza Regulamin, prawo, prawa osób trzecich
                   albo zasady rzetelnej komunikacji B2B.
                 </p>
+                <p>
+                  Kliknięcie przycisku „Dodaj ofertę”, „Zapisz ofertę”, „Wyślij
+                  do publikacji” albo podobnej akcji nie oznacza automatycznej
+                  publikacji oferty na publicznych stronach Serwisu. Dodanie
+                  oferty oznacza zapisanie jej, zgłoszenie do weryfikacji lub
+                  przekazanie do procesu publikacji zgodnie z aktualnym
+                  działaniem platformy.
+                </p>
               </Section>
 
               <Section number={10} title="Statusy ofert">
                 <ul className="list-disc space-y-2 pl-5">
-                  <li><strong>draft</strong> - szkic widoczny dla właściciela firmy.</li>
-                  <li><strong>pending</strong> - oferta oczekująca na moderację.</li>
-                  <li><strong>active</strong> - oferta aktywna i widoczna publicznie.</li>
+                  <li><strong>draft</strong> - wersja robocza widoczna dla właściciela firmy.</li>
+                  <li><strong>pending</strong> - oferta oczekuje na weryfikację lub publikację.</li>
+                  <li><strong>active</strong> - oferta publiczna i widoczna w Serwisie.</li>
                   <li><strong>rejected</strong> - oferta odrzucona przez administratora.</li>
+                  <li><strong>archived</strong> - oferta archiwalna lub wycofana.</li>
                   <li>Operator może w przyszłości dodać inne statusy techniczne lub biznesowe.</li>
                 </ul>
               </Section>
@@ -201,9 +220,122 @@ export default function TermsPage() {
                   lub ograniczanie widoczności treści oraz weryfikację profili
                   firm.
                 </p>
+                <p>
+                  Administrator może w szczególności zaakceptować ofertę, odrzucić
+                  ją, zarchiwizować, ukryć, zmienić jej status, odmówić publikacji
+                  oferty niespełniającej standardów platformy, poprosić
+                  użytkownika o poprawienie treści albo usunąć lub ukryć materiały
+                  naruszające zasady Serwisu.
+                </p>
               </Section>
 
-              <Section number={16} title="Zgłaszanie naruszeń / notice and takedown / notice and action">
+              <Section number={16} title="WolneMoce.pl nie jest stroną umowy produkcyjnej">
+                <p>
+                  WolneMoce.pl jest dostawcą infrastruktury teleinformatycznej i
+                  platformą kojarzącą firmy B2B. Serwis nie jest stroną umowy
+                  zawieranej między zleceniodawcą i wykonawcą albo podwykonawcą.
+                </p>
+                <p>Strony samodzielnie ustalają w szczególności:</p>
+                <ul className="list-disc space-y-2 pl-5">
+                  <li>zakres prac, ceny, terminy i warunki techniczne,</li>
+                  <li>odpowiedzialność, gwarancje, reklamacje i odbiory,</li>
+                  <li>płatności, dokumentację, transport i logistykę,</li>
+                  <li>inne warunki współpracy wymagane dla danego zlecenia.</li>
+                </ul>
+                <p>
+                  Operator nie odpowiada za jakość wykonania detali lub usług,
+                  wady produktów, opóźnienia, rozliczenia między firmami, brak
+                  płatności między stronami, błędne ustalenia techniczne ani spory
+                  wynikające z realizacji umowy zawartej poza Serwisem.
+                </p>
+              </Section>
+
+              <Section number={17} title="Plany, wyróżnienia i dodatki płatne">
+                <p>
+                  Serwis może udostępniać plany FREE, PRO i ENTERPRISE. Szczegółowy
+                  zakres planów, limity, funkcje i ceny są prezentowane w cenniku
+                  na stronie i mogą być aktualizowane wraz z rozwojem Serwisu.
+                </p>
+                <p>
+                  Plan PRO nie obejmuje automatycznie usług księgowych, prawnych
+                  ani doradczych partnerów usługowych. Usługi partnerskie,
+                  wyróżnienia ofert, reklama branżowa i inne dodatki mogą być
+                  oferowane jako płatne osobno albo na podstawie indywidualnych
+                  ustaleń.
+                </p>
+                <p>
+                  Wyróżnienie oferty zwiększa jej widoczność w Serwisie, ale nie
+                  gwarantuje zapytań, zleceń ani sprzedaży. Administrator może
+                  ręcznie ustawić wyróżnienie oferty, w szczególności w ramach
+                  testów, promocji, indywidualnej umowy albo obsługi klienta.
+                </p>
+              </Section>
+
+              <Section number={18} title="Usługi partnerskie">
+                <p>
+                  WolneMoce.pl może prezentować płatne usługi partnerów
+                  usługowych. Credos może świadczyć wsparcie księgowo-prawne, a
+                  LogiMarket może świadczyć doradztwo procesowe i doradztwo w
+                  zakresie łańcucha dostaw.
+                </p>
+                <p>
+                  Usługi partnerskie nie są automatycznie zawarte w planie FREE
+                  ani PRO. Wymagają osobnego ustalenia zakresu, ceny, terminu i
+                  warunków realizacji. Szczegółowe warunki mogą być ustalane
+                  bezpośrednio z właściwym partnerem.
+                </p>
+                <p>
+                  WolneMoce.pl może przekazać dane kontaktowe partnerowi wyłącznie
+                  w związku z zapytaniem użytkownika dotyczącym danej usługi
+                  partnerskiej albo za zgodą użytkownika, w zakresie potrzebnym do
+                  obsługi zapytania.
+                </p>
+              </Section>
+
+              <Section number={19} title="Zasady treści ofert i zakaz obchodzenia platformy">
+                <p>
+                  Użytkownik nie może publikować w treści oferty, zdjęciach,
+                  grafikach, nazwach plików, materiałach ani innych elementach
+                  oferty danych lub elementów służących bezpośredniemu obchodzeniu
+                  komunikacji przez platformę.
+                </p>
+                <p>Zakaz obejmuje w szczególności:</p>
+                <ul className="list-disc space-y-2 pl-5">
+                  <li>numery telefonów i adresy e-mail,</li>
+                  <li>adresy stron internetowych służących do kontaktu poza platformą,</li>
+                  <li>linki do zewnętrznych formularzy kontaktowych,</li>
+                  <li>kody QR, dane handlowców, komunikatory i podobne identyfikatory,</li>
+                  <li>treści typu „skontaktuj się bezpośrednio pod...”.</li>
+                </ul>
+                <p>
+                  Celem tych zasad jest utrzymanie jakości i bezpieczeństwa
+                  komunikacji, zapewnienie spójnej obsługi zapytań, ochrona modelu
+                  działania marketplace oraz zapobieganie obchodzeniu mechanizmów
+                  platformy. Administrator może edytować treść oferty w celu
+                  usunięcia bezpośrednich danych kontaktowych, ukryć ofertę,
+                  wstrzymać jej publikację, zmienić status oferty na
+                  pending/rejected/archived albo poprosić użytkownika o poprawienie
+                  oferty.
+                </p>
+              </Section>
+
+              <Section number={20} title="Zdjęcia, grafiki i materiały ofertowe">
+                <p>
+                  Zdjęcia i materiały graficzne dodawane do ofert powinny
+                  przedstawiać maszyny, park maszynowy, hale, stanowiska,
+                  przykładowe realizacje lub inne materiały bezpośrednio związane
+                  z ofertą.
+                </p>
+                <p>
+                  Zdjęcia, grafiki i inne materiały nie powinny zawierać danych
+                  kontaktowych ani elementów służących obejściu komunikacji przez
+                  platformę. Administrator może ukryć, usunąć albo poprosić o
+                  zmianę materiałów, jeśli naruszają Regulamin, prawo, prawa osób
+                  trzecich lub zasady jakości Serwisu.
+                </p>
+              </Section>
+
+              <Section number={21} title="Zgłaszanie naruszeń / notice and takedown / notice and action">
                 <p>
                   Użytkownik lub osoba trzecia może zgłosić treści bezprawne,
                   naruszające prawa osób trzecich, poufność, prawa autorskie,
@@ -218,7 +350,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={17} title="Płatności, subskrypcje i Stripe">
+              <Section number={22} title="Płatności, subskrypcje i Stripe">
                 <p>
                   Docelowy model Serwisu może obejmować odpłatne plany B2B SaaS
                   lub abonament miesięczny. Subskrypcja może odnawiać się
@@ -228,7 +360,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={18} title="Anulowanie subskrypcji i brak proporcjonalnych zwrotów">
+              <Section number={23} title="Anulowanie subskrypcji i brak proporcjonalnych zwrotów">
                 <p>
                   Użytkownik może anulować subskrypcję w dowolnym momencie, ze
                   skutkiem na koniec opłaconego okresu rozliczeniowego. Użytkownik
@@ -239,7 +371,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={19} title="Zawieszenie konta przy braku płatności lub naruszeniu regulaminu">
+              <Section number={24} title="Zawieszenie konta przy braku płatności lub naruszeniu regulaminu">
                 <p>
                   Operator może zawiesić lub ograniczyć dostęp do płatnych funkcji
                   w przypadku braku płatności, błędu płatności, cofnięcia płatności
@@ -249,7 +381,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={20} title="Odpowiedzialność użytkowników">
+              <Section number={25} title="Odpowiedzialność użytkowników">
                 <p>
                   Użytkownicy odpowiadają za treści ofert, dane profili, treść RFQ,
                   załączniki, legalność dokumentacji technicznej oraz działania
@@ -259,7 +391,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={21} title="Wyłączenia odpowiedzialności Operatora">
+              <Section number={26} title="Wyłączenia odpowiedzialności Operatora">
                 <p>
                   Operator nie gwarantuje zawarcia umowy, jakości usług,
                   wypłacalności firm, terminowości, dostępności mocy, kompletności
@@ -270,7 +402,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={22} title="Dostępność techniczna i przerwy serwisowe">
+              <Section number={27} title="Dostępność techniczna i przerwy serwisowe">
                 <p>
                   Operator dokłada starań, aby Serwis działał stabilnie, ale nie
                   gwarantuje nieprzerwanej dostępności. Możliwe są przerwy
@@ -279,7 +411,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={23} title="Reklamacje">
+              <Section number={28} title="Reklamacje">
                 <p>
                   Reklamacje dotyczące działania Serwisu można kierować na adres
                   [Wpisz_Email_Reklamacje]. Reklamacja powinna zawierać opis
@@ -288,7 +420,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={24} title="Zmiany regulaminu">
+              <Section number={29} title="Zmiany regulaminu">
                 <p>
                   Operator może zmienić Regulamin w szczególności w razie rozwoju
                   Serwisu, wdrożenia płatności, zmian prawnych, zmian technicznych
@@ -296,7 +428,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={25} title="Prawo właściwe i sąd właściwy">
+              <Section number={30} title="Prawo właściwe i sąd właściwy">
                 <p>
                   Regulamin podlega prawu polskiemu. Spory będą rozstrzygane przez
                   sąd właściwy zgodnie z bezwzględnie obowiązującymi przepisami
@@ -304,7 +436,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={26} title="Postanowienia końcowe">
+              <Section number={31} title="Postanowienia końcowe">
                 <p>
                   W sprawach nieuregulowanych Regulaminem stosuje się przepisy
                   prawa powszechnie obowiązującego. Jeżeli którekolwiek

@@ -200,7 +200,23 @@ export default function PrivacyPage() {
                 </p>
               </Section>
 
-              <Section number={15} title="Zmiany polityki prywatności">
+              <Section number={15} title="Kontakt w sprawie usług partnerskich">
+                <p>
+                  Dane podane w formularzu kontaktowym mogą być wykorzystywane do
+                  obsługi zapytania użytkownika. Jeżeli zapytanie dotyczy usługi
+                  partnerskiej, dane mogą zostać przekazane właściwemu partnerowi,
+                  na przykład Credos albo LogiMarket, w celu przygotowania
+                  odpowiedzi lub ustalenia zakresu współpracy.
+                </p>
+                <p>
+                  Zakres przekazania danych powinien być ograniczony do informacji
+                  niezbędnych do obsługi konkretnego zapytania. Ta sekcja ma
+                  charakter roboczy i wymaga finalnej weryfikacji prawnej przed
+                  produkcyjnym wykorzystaniem.
+                </p>
+              </Section>
+
+              <Section number={16} title="Zmiany polityki prywatności">
                 <p>
                   Polityka prywatności może być aktualizowana w związku z rozwojem
                   Serwisu, zmianą dostawców, wdrożeniem płatności, zmianami prawa
