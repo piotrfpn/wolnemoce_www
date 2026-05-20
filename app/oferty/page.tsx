@@ -29,17 +29,71 @@ function getSingleParam(
   return Array.isArray(value) ? value[0] ?? "" : value ?? "";
 }
 
+function normalizeParamValue(value: string) {
+  return value
+    .replace(/[łŁ]/g, (match) => (match === "Ł" ? "L" : "l"))
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function getLegacyParam(
+  searchParams: OffersPageProps["searchParams"],
+  primaryKey: string,
+  legacyKey: string
+) {
+  return (
+    getSingleParam(searchParams, primaryKey).trim() ||
+    getSingleParam(searchParams, legacyKey).trim()
+  );
+}
+
+function getOptionFromParam(value: string, options: string[]) {
+  if (!value) {
+    return "";
+  }
+
+  const normalizedValue = normalizeParamValue(value);
+
+  return (
+    options.find(
+      (option) =>
+        option === value || normalizeParamValue(option) === normalizedValue
+    ) ?? value
+  );
+}
+
 function sanitizeSearchTerm(value: string) {
   return value.replace(/[(),%]/g, " ").replace(/\s+/g, " ").trim();
 }
 
-function getFilterState(searchParams: OffersPageProps["searchParams"]) {
+function getFilterState(
+  searchParams: OffersPageProps["searchParams"],
+  cityOptions: string[]
+) {
+  const sort = getSingleParam(searchParams, "sort").trim();
+
   return {
     q: getSingleParam(searchParams, "q").trim(),
-    industry: getSingleParam(searchParams, "industry").trim(),
-    serviceType: getSingleParam(searchParams, "service_type").trim(),
-    voivodeship: getSingleParam(searchParams, "voivodeship").trim(),
-    sort: getSingleParam(searchParams, "sort").trim() || "newest",
+    industry: getOptionFromParam(
+      getLegacyParam(searchParams, "branza", "industry"),
+      categories
+    ),
+    serviceType: getOptionFromParam(
+      getLegacyParam(searchParams, "usluga", "service_type"),
+      services
+    ),
+    voivodeship: getOptionFromParam(
+      getLegacyParam(searchParams, "wojewodztwo", "voivodeship"),
+      provinces
+    ),
+    city: getOptionFromParam(getSingleParam(searchParams, "miasto").trim(), cityOptions),
+    verified: getSingleParam(searchParams, "verified") === "true",
+    sort: ["newest", "featured", "popular", "az"].includes(sort)
+      ? sort
+      : "newest",
   };
 }
 
@@ -56,6 +110,36 @@ async function getCompanyIdsByName(query: string) {
     .limit(50);
 
   return data?.map((company) => company.id as string) ?? [];
+}
+
+async function getFilterCities() {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("offers")
+    .select("companies!inner(location_city)")
+    .eq("status", "active")
+    .limit(200);
+
+  if (error) {
+    console.error("Offer city options query failed", error);
+    return [];
+  }
+
+  return Array.from(
+    new Set(
+      (data ?? [])
+        .map((offer) => {
+          const companies = offer.companies as
+            | { location_city: string | null }
+            | { location_city: string | null }[]
+            | null;
+          const company = Array.isArray(companies) ? companies[0] : companies;
+
+          return company?.location_city?.trim() ?? "";
+        })
+        .filter(Boolean)
+    )
+  ).sort((first, second) => first.localeCompare(second, "pl"));
 }
 
 async function getPublicOffers(
@@ -99,9 +183,19 @@ async function getPublicOffers(
     query = query.eq("companies.location_voivodeship", filters.voivodeship);
   }
 
-  query = query.order("created_at", {
-    ascending: filters.sort === "oldest",
-  });
+  if (filters.city) {
+    query = query.eq("companies.location_city", filters.city);
+  }
+
+  if (filters.verified) {
+    query = query.eq("companies.is_verified", true);
+  }
+
+  if (filters.sort === "az") {
+    query = query.order("title", { ascending: true });
+  } else {
+    query = query.order("created_at", { ascending: false });
+  }
 
   const { data, error } = await query;
 
@@ -110,11 +204,30 @@ async function getPublicOffers(
     return [];
   }
 
-  return (data ?? []) as unknown as PublicOffer[];
+  const offers = (data ?? []) as unknown as PublicOffer[];
+
+  if (filters.sort === "featured") {
+    return [...offers].sort((first, second) => {
+      const firstVerified = first.companies?.is_verified ? 1 : 0;
+      const secondVerified = second.companies?.is_verified ? 1 : 0;
+
+      if (firstVerified !== secondVerified) {
+        return secondVerified - firstVerified;
+      }
+
+      return (
+        new Date(second.created_at ?? 0).getTime() -
+        new Date(first.created_at ?? 0).getTime()
+      );
+    });
+  }
+
+  return offers;
 }
 
 export default async function OffersPage({ searchParams }: OffersPageProps) {
-  const filters = getFilterState(searchParams);
+  const cityOptions = await getFilterCities();
+  const filters = getFilterState(searchParams, cityOptions);
   const publicOffers = await getPublicOffers(filters);
   const serviceOptions = filters.industry
     ? industryServiceTypes[filters.industry] ?? services
@@ -206,11 +319,16 @@ export default async function OffersPage({ searchParams }: OffersPageProps) {
               </p>
             </div>
 
-            <Suspense fallback={<div className="text-sm text-slate-500">Ładowanie filtrów...</div>}>
+            <Suspense
+              fallback={
+                <div className="text-sm text-slate-500">Ładowanie filtrów...</div>
+              }
+            >
               <OffersFiltersClient
                 categories={categories}
                 services={serviceOptions}
                 provinces={provinces}
+                cities={cityOptions}
               />
             </Suspense>
 
@@ -236,7 +354,8 @@ export default async function OffersPage({ searchParams }: OffersPageProps) {
               <div>
                 <p className="text-sm text-slate-500">Znaleziono</p>
                 <h2 className="text-2xl font-extrabold text-slate-900">
-                  {publicOffers.length} aktywnych ofert
+                  {publicOffers.length}{" "}
+                  {publicOffers.length === 1 ? "ofertę" : "ofert"}
                 </h2>
               </div>
               <Link
@@ -259,11 +378,11 @@ export default async function OffersPage({ searchParams }: OffersPageProps) {
                   <i className="fas fa-circle-info text-xl"></i>
                 </div>
                 <h3 className="mb-2 text-xl font-extrabold text-slate-900">
-                  Brak aktywnych ofert dla wybranych filtrów.
+                  Brak ofert dla wybranych filtrów.
                 </h3>
                 <p className="mx-auto mb-6 max-w-2xl text-sm leading-6 text-slate-500">
                   Publicznie widoczne są tylko oferty ze statusem active.
-                  Oferty draft, pending i rejected pozostają ukryte.
+                  Zmień kryteria albo wyczyść filtry.
                 </p>
                 <div className="flex flex-col justify-center gap-3 sm:flex-row">
                   <AddOfferLinkClient className="btn btn-primary">
