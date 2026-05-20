@@ -2,12 +2,13 @@
 
 import { type FormEvent, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { cityToSlug, type CityOption } from "@/lib/location";
 
 type OffersFiltersClientProps = {
   categories: string[];
   services: string[];
   provinces: string[];
-  cities: string[];
+  cities: CityOption[];
 };
 
 function getParam(searchParams: { get: (key: string) => string | null }, key: string) {
@@ -47,6 +48,15 @@ function getOptionValue(value: string, options: string[]) {
   );
 }
 
+function getCityValue(value: string, options: CityOption[]) {
+  if (!value) {
+    return "";
+  }
+
+  const slug = cityToSlug(value);
+  return options.find((option) => option.slug === slug)?.slug ?? "";
+}
+
 export default function OffersFiltersClient({
   categories,
   services,
@@ -76,7 +86,7 @@ export default function OffersFiltersClient({
         getLegacyParam(searchParams, "wojewodztwo", "voivodeship"),
         provinces
       ),
-      city: getOptionValue(getParam(searchParams, "miasto"), cities),
+      city: getCityValue(getParam(searchParams, "miasto"), cities),
       verified: getParam(searchParams, "verified") === "true",
       sort: getParam(searchParams, "sort") || "newest",
     }),
@@ -193,14 +203,14 @@ export default function OffersFiltersClient({
         <select
           value={current.city}
           onChange={(event) =>
-            updateUrl({ miasto: getQueryValue(event.target.value) })
+            updateUrl({ miasto: event.target.value })
           }
           className="h-12 min-w-0 w-full max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
         >
           <option value="">Wszystkie miasta</option>
           {cities.map((city) => (
-            <option key={city} value={city}>
-              {city}
+            <option key={city.slug} value={city.slug}>
+              {city.label}
             </option>
           ))}
         </select>

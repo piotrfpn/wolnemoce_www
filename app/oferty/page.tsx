@@ -5,6 +5,7 @@ import AddOfferLinkClient from "@/components/AddOfferLinkClient";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
+import { cityToSlug, createCityOptions, type CityOption } from "@/lib/location";
 import { categories, industryServiceTypes, provinces, services } from "@/lib/mockData";
 import { createClient } from "@/lib/supabase/server";
 import OffersFiltersClient from "./OffersFiltersClient";
@@ -71,9 +72,16 @@ function sanitizeSearchTerm(value: string) {
 
 function getFilterState(
   searchParams: OffersPageProps["searchParams"],
-  cityOptions: string[]
+  cityOptions: CityOption[]
 ) {
   const sort = getSingleParam(searchParams, "sort").trim();
+  const cityParam = getSingleParam(searchParams, "miasto").trim();
+  const city = cityParam
+    ? cityOptions.find(
+        (option) =>
+          option.slug === cityToSlug(cityParam) || option.label === cityParam
+      ) ?? null
+    : null;
 
   return {
     q: getSingleParam(searchParams, "q").trim(),
@@ -89,7 +97,7 @@ function getFilterState(
       getLegacyParam(searchParams, "wojewodztwo", "voivodeship"),
       provinces
     ),
-    city: getOptionFromParam(getSingleParam(searchParams, "miasto").trim(), cityOptions),
+    city,
     verified: getSingleParam(searchParams, "verified") === "true",
     sort: ["newest", "featured", "popular", "az"].includes(sort)
       ? sort
@@ -125,21 +133,19 @@ async function getFilterCities() {
     return [];
   }
 
-  return Array.from(
-    new Set(
-      (data ?? [])
-        .map((offer) => {
-          const companies = offer.companies as
-            | { location_city: string | null }
-            | { location_city: string | null }[]
-            | null;
-          const company = Array.isArray(companies) ? companies[0] : companies;
+  const rawCities = (data ?? [])
+    .map((offer) => {
+      const companies = offer.companies as
+        | { location_city: string | null }
+        | { location_city: string | null }[]
+        | null;
+      const company = Array.isArray(companies) ? companies[0] : companies;
 
-          return company?.location_city?.trim() ?? "";
-        })
-        .filter(Boolean)
-    )
-  ).sort((first, second) => first.localeCompare(second, "pl"));
+      return company?.location_city?.trim() ?? "";
+    })
+    .filter(Boolean);
+
+  return createCityOptions(rawCities);
 }
 
 async function getPublicOffers(
@@ -184,7 +190,7 @@ async function getPublicOffers(
   }
 
   if (filters.city) {
-    query = query.eq("companies.location_city", filters.city);
+    query = query.in("companies.location_city", filters.city.values);
   }
 
   if (filters.verified) {

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useMemo, useState } from "react";
+import { normalizeCityName, POLISH_CITY_OPTIONS } from "@/lib/location";
 import { industryServiceTypes, provinces } from "@/lib/mockData";
 import { createClient } from "@/lib/supabase/client";
 import { isValidNip, normalizeNip } from "@/lib/validators/nip";
@@ -241,7 +242,9 @@ export default function CompanyProfileFormClient({
   const [voivodeship, setVoivodeship] = useState(
     company?.location_voivodeship ?? ""
   );
-  const [city, setCity] = useState(company?.location_city ?? "");
+  const [city, setCity] = useState(
+    company?.location_city ? normalizeCityName(company.location_city) : ""
+  );
   const [description, setDescription] = useState(company?.description ?? "");
   const [websiteUrl, setWebsiteUrl] = useState(company?.website_url ?? "");
   const [contactEmail, setContactEmail] = useState(company?.contact_email ?? "");
@@ -397,7 +400,7 @@ export default function CompanyProfileFormClient({
     setSelectedIndustries(savedIndustries);
     setSelectedServiceTypes(data.service_types ?? []);
     setVoivodeship(data.location_voivodeship ?? "");
-    setCity(data.location_city ?? "");
+    setCity(data.location_city ? normalizeCityName(data.location_city) : "");
     setWebsiteUrl(data.website_url ?? "");
     setContactEmail(data.contact_email ?? "");
     setPresentationPath(data.presentation_path ?? "");
@@ -451,7 +454,7 @@ export default function CompanyProfileFormClient({
       industries: selectedIndustries,
       service_types: selectedServiceTypes,
       location_voivodeship: voivodeship,
-      location_city: city.trim(),
+      location_city: normalizeCityName(city),
       website_url: normalizedWebsite.value,
       contact_email: contactEmail.trim() || null,
     };
@@ -589,7 +592,7 @@ export default function CompanyProfileFormClient({
 
     if (gusCompany.city) {
       if (!city.trim()) {
-        setCity(gusCompany.city);
+        setCity(normalizeCityName(gusCompany.city));
         updatedFields += 1;
       } else if (normalizeLookupText(city) !== normalizeLookupText(gusCompany.city)) {
         skippedExistingFields = true;
@@ -1164,9 +1167,15 @@ export default function CompanyProfileFormClient({
               <input
                 value={city}
                 onChange={(event) => setCity(event.target.value)}
+                list="company-city-options"
                 placeholder="Np. Poznań, Kalisz, Leszno"
                 className={inputClass}
               />
+              <datalist id="company-city-options">
+                {POLISH_CITY_OPTIONS.map((cityOption) => (
+                  <option key={cityOption} value={cityOption} />
+                ))}
+              </datalist>
             </label>
 
             <label className="block min-w-0 md:col-span-2">
