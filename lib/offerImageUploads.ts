@@ -1,5 +1,5 @@
 export const OFFER_IMAGES_BUCKET = "offer-images";
-export const MAX_OFFER_IMAGES = 5;
+export const MAX_OFFER_IMAGES = 10;
 export const MAX_OFFER_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 
 const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp"];
@@ -35,7 +35,7 @@ export function isAllowedOfferImage(file: File) {
 
 export function validateOfferImageFiles(files: File[], existingCount = 0) {
   if (existingCount + files.length > MAX_OFFER_IMAGES) {
-    return `Możesz dodać maksymalnie ${MAX_OFFER_IMAGES} zdjęć oferty.`;
+    return `Możesz dodać maksymalnie ${MAX_OFFER_IMAGES} zdjęć.`;
   }
 
   const oversizedFile = files.find(
@@ -43,13 +43,13 @@ export function validateOfferImageFiles(files: File[], existingCount = 0) {
   );
 
   if (oversizedFile) {
-    return "Zdjęcie jest za duże. Maksymalny rozmiar to 5 MB.";
+    return "Plik jest za duży. Maksymalny rozmiar to 5 MB.";
   }
 
   const invalidFile = files.find((file) => !isAllowedOfferImage(file));
 
   if (invalidFile) {
-    return "Dozwolone formaty zdjęć to JPG, PNG lub WEBP.";
+    return "Dozwolone są tylko pliki JPG, PNG lub WEBP.";
   }
 
   return "";

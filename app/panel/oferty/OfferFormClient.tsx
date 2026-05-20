@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type ChangeEvent, type FormEvent, useMemo, useState } from "react";
+import {
+  type ChangeEvent,
+  type DragEvent,
+  type FormEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { industryServiceTypes } from "@/lib/mockData";
 import {
   createSafeOfferImageFileName,
@@ -135,6 +142,10 @@ export default function OfferFormClient({
     [...offerImages].sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
   );
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [selectedImagePreviews, setSelectedImagePreviews] = useState<
+    { fileKey: string; url: string }[]
+  >([]);
+  const [isDraggingImages, setIsDraggingImages] = useState(false);
   const [deletingImageId, setDeletingImageId] = useState("");
   const [error, setError] = useState("");
   const [partialSuccess, setPartialSuccess] = useState("");
@@ -152,6 +163,19 @@ export default function OfferFormClient({
     Boolean(selectedBranch) &&
     branchServices.length > 0 &&
     !isSubmitting;
+
+  useEffect(() => {
+    const previews = selectedImages.map((file) => ({
+      fileKey: getOfferImageFileKey(file),
+      url: URL.createObjectURL(file),
+    }));
+
+    setSelectedImagePreviews(previews);
+
+    return () => {
+      previews.forEach((preview) => URL.revokeObjectURL(preview.url));
+    };
+  }, [selectedImages]);
 
   function validateForm() {
     if (!title.trim()) {
@@ -181,9 +205,7 @@ export default function OfferFormClient({
     return "";
   }
 
-  function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
-    const newFiles = Array.from(event.currentTarget.files ?? []);
-    event.currentTarget.value = "";
+  function addSelectedImageFiles(newFiles: File[]) {
     setError("");
     setPartialSuccess("");
 
@@ -213,6 +235,38 @@ export default function OfferFormClient({
     }
 
     setSelectedImages(mergedFiles);
+  }
+
+  function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
+    const newFiles = Array.from(event.currentTarget.files ?? []);
+    event.currentTarget.value = "";
+    addSelectedImageFiles(newFiles);
+  }
+
+  function handleImageDragOver(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+
+    if (!hasProfileSetup || isSubmitting) {
+      return;
+    }
+
+    setIsDraggingImages(true);
+  }
+
+  function handleImageDragLeave(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    setIsDraggingImages(false);
+  }
+
+  function handleImageDrop(event: DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+    setIsDraggingImages(false);
+
+    if (!hasProfileSetup || isSubmitting) {
+      return;
+    }
+
+    addSelectedImageFiles(Array.from(event.dataTransfer.files ?? []));
   }
 
   function removeSelectedImage(fileKey: string) {
@@ -604,36 +658,59 @@ export default function OfferFormClient({
         </label>
 
         <section className="min-w-0 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:col-span-2">
-          <div className="mb-5 flex min-w-0 flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="mb-5 space-y-4">
             <div className="min-w-0">
               <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                 <i className="fas fa-images text-[#1a5f3c]"></i>
                 Zdjęcia oferty
               </p>
               <p className="text-sm leading-6 text-slate-500">
-                Dodaj do 5 zdjęć maszyn, stanowiska, hali lub przykładowych
-                realizacji. Zdjęcia będą widoczne publicznie przy ofercie.
+                Dodaj zdjęcia maszyn, hali lub przykładowych realizacji.
+                Zdjęcia będą widoczne publicznie przy ofercie.
               </p>
               <p className="mt-2 text-xs leading-5 text-slate-400">
-                Dozwolone formaty: JPG, PNG, WEBP. Maksymalnie 5 MB na zdjęcie.
+                JPG, PNG lub WEBP, maks. 5 MB na plik, do {MAX_OFFER_IMAGES} zdjęć.
               </p>
             </div>
-            <label className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] bg-white px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white">
-              <i className="fas fa-plus"></i>
-              Dodaj zdjęcia
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                multiple
-                onChange={handleImageChange}
-                className="sr-only"
-                disabled={
-                  !hasProfileSetup ||
-                  isSubmitting ||
-                  existingImages.length + selectedImages.length >= MAX_OFFER_IMAGES
-                }
-              />
-            </label>
+            <div
+              onDragOver={handleImageDragOver}
+              onDragLeave={handleImageDragLeave}
+              onDrop={handleImageDrop}
+              className={`rounded-2xl border-2 border-dashed bg-white p-5 text-center transition ${
+                isDraggingImages
+                  ? "border-[#1a5f3c] bg-[#f4fbf7]"
+                  : "border-slate-200 hover:border-[#1a5f3c]/50"
+              }`}
+            >
+              <label className="mx-auto inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] bg-white px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white">
+                <i className="fas fa-cloud-arrow-up"></i>
+                Wybierz zdjęcia
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  multiple
+                  onChange={handleImageChange}
+                  className="sr-only"
+                  disabled={
+                    !hasProfileSetup ||
+                    isSubmitting ||
+                    existingImages.length + selectedImages.length >= MAX_OFFER_IMAGES
+                  }
+                />
+              </label>
+              <p className="mt-3 text-sm font-semibold text-slate-700">
+                Kliknij albo przeciągnij i upuść zdjęcia w tym miejscu.
+              </p>
+              <p className="mt-2 text-xs leading-5 text-slate-500">
+                Zdjęcia nie są wysyłane od razu. Trafią do Storage dopiero po
+                zapisaniu oferty.
+              </p>
+              <p className="mt-3 rounded-xl bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-800">
+                Zdjęcia nie powinny zawierać numerów telefonów, adresów e-mail,
+                kodów QR ani danych kontaktowych. Takie materiały mogą zostać
+                ukryte przez administratora.
+              </p>
+            </div>
           </div>
 
           {existingImages.length > 0 ? (
@@ -681,32 +758,55 @@ export default function OfferFormClient({
               <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
                 Gotowe do wysłania po zapisie oferty
               </p>
-              <div className="space-y-2">
+              <div className="grid min-w-0 gap-3 sm:grid-cols-2">
                 {selectedImages.map((file) => {
                   const fileKey = getOfferImageFileKey(file);
+                  const preview = selectedImagePreviews.find(
+                    (item) => item.fileKey === fileKey
+                  );
 
                   return (
                     <div
                       key={fileKey}
-                      className="flex min-w-0 flex-col gap-3 rounded-xl bg-white p-3 sm:flex-row sm:items-center sm:justify-between"
+                      className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white"
                     >
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-bold text-slate-900">
-                          {file.name}
-                        </p>
-                        <p className="text-xs text-slate-500">
-                          {formatImageSize(file.size)}
-                        </p>
+                      <div className="aspect-video bg-slate-100">
+                        {preview ? (
+                          <img
+                            src={preview.url}
+                            alt={file.name}
+                            loading="lazy"
+                            decoding="async"
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full items-center justify-center text-xs font-semibold text-slate-400">
+                            Podgląd zdjęcia
+                          </div>
+                        )}
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => removeSelectedImage(fileKey)}
-                        disabled={isSubmitting}
-                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition hover:border-red-200 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-60"
-                      >
-                        <i className="fas fa-xmark"></i>
-                        Usuń
-                      </button>
+                      <div className="flex min-w-0 flex-col gap-3 p-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-bold text-slate-900">
+                            {file.name}
+                          </p>
+                          <p className="text-xs text-slate-500">
+                            {formatImageSize(file.size)}
+                          </p>
+                          <p className="mt-1 text-xs font-semibold text-[#1a5f3c]">
+                            Gotowe do wysłania
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeSelectedImage(fileKey)}
+                          disabled={isSubmitting}
+                          className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition hover:border-red-200 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                          <i className="fas fa-xmark"></i>
+                          Usuń
+                        </button>
+                      </div>
                     </div>
                   );
                 })}
