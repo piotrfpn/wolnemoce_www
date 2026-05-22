@@ -1,9 +1,11 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
+import AdminOffersFiltersClient from "./AdminOffersFiltersClient";
 
 export const metadata: Metadata = {
   title: "Oferty | Panel administratora",
@@ -88,16 +90,88 @@ async function requireAdmin() {
   return supabase;
 }
 
-export default async function AdminOffersPage() {
+export default async function AdminOffersPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const supabase = await requireAdmin();
-  const { data, error } = await supabase
+
+  let query = supabase
     .from("offers")
     .select(
       "id, title, slug, branch, service_type, status, is_featured, featured_until, featured_priority, created_at, companies!inner(name, location_city, location_voivodeship, is_verified)"
-    )
-    .order("created_at", { ascending: false });
+    );
 
-  const offers = (data ?? []) as unknown as AdminOfferListItem[];
+  const statusFilter = typeof searchParams.status === "string" ? searchParams.status : "all";
+  if (statusFilter !== "all") {
+    query = query.eq("status", statusFilter);
+  }
+
+  const sort = typeof searchParams.sort === "string" ? searchParams.sort : "newest";
+  switch (sort) {
+    case "oldest":
+      query = query.order("created_at", { ascending: true });
+      break;
+    case "alpha":
+      query = query.order("title", { ascending: true });
+      break;
+    case "status":
+      query = query.order("status", { ascending: true });
+      break;
+    case "priority":
+      query = query.order("featured_priority", { ascending: false, nullsFirst: false });
+      break;
+    case "featured_until":
+      query = query.order("featured_until", { ascending: true, nullsFirst: false });
+      break;
+    case "newest":
+    default:
+      query = query.order("created_at", { ascending: false });
+      break;
+  }
+
+  const { data, error } = await query;
+  let offers = (data ?? []) as unknown as AdminOfferListItem[];
+
+  const q = typeof searchParams.q === "string" ? searchParams.q.toLowerCase() : "";
+  const featured = typeof searchParams.featured === "string" ? searchParams.featured : "all";
+  const companyVerified = typeof searchParams.companyVerified === "string" ? searchParams.companyVerified : "all";
+
+  offers = offers.filter((offer) => {
+    if (q) {
+      const searchTerms = q.split(/\s+/);
+      const textToSearch = [
+        offer.title,
+        offer.branch,
+        offer.service_type,
+        offer.companies?.name,
+        offer.companies?.location_city,
+        offer.companies?.location_voivodeship,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      if (!searchTerms.every((term) => textToSearch.includes(term))) {
+        return false;
+      }
+    }
+
+    if (featured !== "all") {
+      const isFeatured = isActiveFeatured(offer);
+      if (featured === "true" && !isFeatured) return false;
+      if (featured === "false" && isFeatured) return false;
+    }
+
+    if (companyVerified !== "all") {
+      const isVerified = offer.companies?.is_verified ?? false;
+      if (companyVerified === "true" && !isVerified) return false;
+      if (companyVerified === "false" && isVerified) return false;
+    }
+
+    return true;
+  });
 
   return (
     <>
@@ -122,6 +196,10 @@ export default async function AdminOffersPage() {
             </Link>
           </div>
 
+          <Suspense fallback={<div className="mb-8 h-[200px] rounded-[24px] border border-slate-200 bg-white shadow-sm" />}>
+            <AdminOffersFiltersClient />
+          </Suspense>
+
           {error ? (
             <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               Nie udało się pobrać ofert: {error.message}
@@ -136,7 +214,7 @@ export default async function AdminOffersPage() {
                   .filter(Boolean)
                   .join(", ");
                 const status = offer.status ?? "pending";
-                const featured = isActiveFeatured(offer);
+                const featuredIndicator = isActiveFeatured(offer);
 
                 return (
                   <article
@@ -153,7 +231,7 @@ export default async function AdminOffersPage() {
                           >
                             {statusLabels[status] ?? status}
                           </span>
-                          {featured ? (
+                          {featuredIndicator ? (
                             <span className="rounded-full bg-[#fbbf24]/20 px-3 py-1 text-xs font-bold text-[#8a5a00]">
                               Wyróżniona
                             </span>
@@ -229,7 +307,7 @@ export default async function AdminOffersPage() {
             </div>
           ) : (
             <div className="rounded-[24px] border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
-              Brak ofert do wyświetlenia.
+              Brak ofert do wyświetlenia dla podanych kryteriów.
             </div>
           )}
         </section>
