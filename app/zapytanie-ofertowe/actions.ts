@@ -1,14 +1,6 @@
 "use server";
 
-import {
-  buildBuyerRfqConfirmationEmail,
-  buildCompanyRfqEmail,
-} from "@/lib/email/rfqEmails";
-import {
-  getAppBaseUrl,
-  isValidEmailAddress,
-  sendEmail,
-} from "@/lib/email/sendEmail";
+// Email imports removed for Sprint 7D.1
 import { createClient } from "@/lib/supabase/server";
 import {
   getRfqAttachmentExtension,
@@ -25,7 +17,6 @@ const attachmentsBucket = "inquiry-attachments";
 
 type OfferCompany = {
   name: string | null;
-  contact_email: string | null;
 };
 
 type ActiveOffer = {
@@ -174,64 +165,7 @@ function getOfferCompany(offer: ActiveOffer) {
     : offer.companies;
 }
 
-async function sendRfqNotificationEmails(params: {
-  inquiryId: string;
-  offer: ActiveOffer;
-  buyerName: string;
-  buyerCompany: string;
-  buyerEmail: string;
-  buyerPhone: string;
-  message: string;
-  savedAttachmentCount: number;
-  hasAttachmentUploadError: boolean;
-}) {
-  const appBaseUrl = getAppBaseUrl();
-  const company = getOfferCompany(params.offer);
-  const companyEmail = company?.contact_email?.trim() || "";
-  const emailTasks: Promise<unknown>[] = [];
-
-  if (isValidEmailAddress(companyEmail)) {
-    const companyEmailContent = buildCompanyRfqEmail({
-      appBaseUrl,
-      companyName: company?.name ?? null,
-      offerTitle: params.offer.title,
-      buyerName: params.buyerName,
-      buyerCompany: params.buyerCompany,
-      buyerEmail: params.buyerEmail,
-      buyerPhone: params.buyerPhone,
-      message: params.message,
-      savedAttachmentCount: params.savedAttachmentCount,
-      hasAttachmentUploadError: params.hasAttachmentUploadError,
-    });
-
-    emailTasks.push(
-      sendEmail({
-        to: companyEmail,
-        idempotencyKey: `rfq-company-${params.inquiryId}`,
-        ...companyEmailContent,
-      })
-    );
-  }
-
-  if (isValidEmailAddress(params.buyerEmail)) {
-    const buyerEmailContent = buildBuyerRfqConfirmationEmail({
-      appBaseUrl,
-      offerTitle: params.offer.title,
-    });
-
-    emailTasks.push(
-      sendEmail({
-        to: params.buyerEmail,
-        idempotencyKey: `rfq-buyer-${params.inquiryId}`,
-        ...buyerEmailContent,
-      })
-    );
-  }
-
-  if (emailTasks.length > 0) {
-    await Promise.allSettled(emailTasks);
-  }
-}
+// Email notifications are disabled in this sprint
 
 export async function submitInquiry(
   formData: FormData
@@ -252,7 +186,7 @@ export async function submitInquiry(
   const { data: offer, error: offerError } = await supabase
     .from("offers")
     .select(
-      "id, company_id, title, branch, service_type, status, companies!inner(name, contact_email)"
+      "id, company_id, title, branch, service_type, status, companies!inner(name)"
     )
     .eq("id", offerId)
     .eq("status", "active")
@@ -307,17 +241,7 @@ export async function submitInquiry(
     savedAttachmentCount = attachmentResult.savedAttachmentCount;
   }
 
-  await sendRfqNotificationEmails({
-    inquiryId,
-    offer: activeOffer,
-    buyerName,
-    buyerCompany,
-    buyerEmail,
-    buyerPhone,
-    message,
-    savedAttachmentCount,
-    hasAttachmentUploadError: hasUploadError,
-  });
+  // Email sending completely disabled for Sprint 7D.1
 
   if (hasUploadError) {
     return {

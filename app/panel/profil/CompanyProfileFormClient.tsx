@@ -205,7 +205,7 @@ type CompanySaveData = {
   location_city: string | null;
   is_verified: boolean | null;
   website_url: string | null;
-  contact_email: string | null;
+  contact_email?: string | null;
   presentation_path: string | null;
   presentation_file_name: string | null;
   presentation_mime_type: string | null;
@@ -214,7 +214,7 @@ type CompanySaveData = {
 };
 
 const companyProfileSelect =
-  "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, contact_email, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at";
+  "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at, company_contact_settings(contact_email)";
 
 export default function CompanyProfileFormClient({
   userId,
@@ -402,7 +402,10 @@ export default function CompanyProfileFormClient({
     setVoivodeship(data.location_voivodeship ?? "");
     setCity(data.location_city ? normalizeCityName(data.location_city) : "");
     setWebsiteUrl(data.website_url ?? "");
-    setContactEmail(data.contact_email ?? "");
+    const email = Array.isArray((data as any).company_contact_settings)
+      ? (data as any).company_contact_settings[0]?.contact_email
+      : ((data as any).company_contact_settings?.contact_email ?? data.contact_email);
+    setContactEmail(email ?? "");
     setPresentationPath(data.presentation_path ?? "");
     setPresentationFileName(data.presentation_file_name ?? "");
     setPresentationMimeType(data.presentation_mime_type ?? "");
@@ -456,7 +459,6 @@ export default function CompanyProfileFormClient({
       location_voivodeship: voivodeship,
       location_city: normalizeCityName(city),
       website_url: normalizedWebsite.value,
-      contact_email: contactEmail.trim() || null,
     };
 
     const existingCompanyResult = await findCompanyByNip(supabase, normalizedNip);
@@ -467,7 +469,7 @@ export default function CompanyProfileFormClient({
       return;
     }
 
-    const existingCompany = existingCompanyResult.data as
+    const existingCompany = existingCompanyResult.data as unknown as
       | (CompanySaveData & { user_id: string | null })
       | null;
 
@@ -516,7 +518,7 @@ export default function CompanyProfileFormClient({
     if (saveError) {
       if (saveError.code === "23505") {
         const retryCompanyResult = await findCompanyByNip(supabase, normalizedNip);
-        const retryCompany = retryCompanyResult.data as
+        const retryCompany = retryCompanyResult.data as unknown as
           | (CompanySaveData & { user_id: string | null })
           | null;
 
@@ -541,7 +543,34 @@ export default function CompanyProfileFormClient({
     }
 
     if (data) {
-      applySavedCompany(data as CompanySaveData);
+      const savedCompanyId = data.id;
+
+      const { error: emailSaveError } = await supabase
+        .from("company_contact_settings")
+        .upsert({
+          company_id: savedCompanyId,
+          contact_email: contactEmail.trim() || null,
+        });
+
+      const { data: freshCompany } = await supabase
+        .from("companies")
+        .select(companyProfileSelect)
+        .eq("id", savedCompanyId)
+        .single();
+
+      if (freshCompany) {
+        applySavedCompany(freshCompany as unknown as CompanySaveData);
+      } else {
+        applySavedCompany(data as unknown as CompanySaveData);
+      }
+
+      if (emailSaveError) {
+        console.error("Failed to save contact email", emailSaveError);
+        setError("Dane firmy zapisano, ale nie udało się zapisać e-maila kontaktowego. Spróbuj ponownie.");
+        setIsSubmitting(false);
+        router.refresh();
+        return;
+      }
     }
 
     setMessage("Profil firmy został zapisany.");

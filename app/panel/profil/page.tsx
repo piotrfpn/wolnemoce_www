@@ -26,13 +26,22 @@ export default async function CompanyProfilePage() {
     .eq("id", user.id)
     .maybeSingle();
 
-  const { data: company } = await supabase
+  const { data: companyData } = await supabase
     .from("companies")
     .select(
-      "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, contact_email, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at"
+      "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at, company_contact_settings(contact_email)"
     )
     .eq("user_id", user.id)
     .maybeSingle();
+
+  const company = companyData
+    ? {
+        ...companyData,
+        contact_email: Array.isArray((companyData as any).company_contact_settings)
+          ? (companyData as any).company_contact_settings[0]?.contact_email ?? null
+          : (companyData as any).company_contact_settings?.contact_email ?? null,
+      }
+    : null;
 
   return (
     <>

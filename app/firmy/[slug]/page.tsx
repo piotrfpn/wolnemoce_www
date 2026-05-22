@@ -58,6 +58,7 @@ async function getCompanyBySlug(slug: string) {
       "id, slug, name, description, industry, industries, service_types, location_voivodeship, location_city, website_url, is_verified, presentation_file_name"
     )
     .eq("slug", slug)
+    .eq("is_verified", true)
     .single();
 
   if (error || !data) {
@@ -91,7 +92,8 @@ export async function generateMetadata({
 
   if (!company) {
     return {
-      title: "Firma | WolneMoce.pl",
+      title: "Nie znaleziono firmy | WolneMoce.pl",
+      description: "Nie znaleziono profilu firmy w serwisie WolneMoce.pl.",
     };
   }
 
