@@ -475,10 +475,10 @@ export const pricingPlans: PricingPlan[] = [
     price: "0 zł",
     priceSuffix: "/ mies.",
     features: [
-      "Podstawowy dostęp do publikacji i obsługi zapytań",
+      "1 oferta oczekująca lub aktywna",
       "Standardowa widoczność w katalogu ofert",
       "Podstawowy profil firmy",
-      "Możliwość sprawdzenia dopasowania portalu",
+      "Obsługa zapytań z panelu",
       "Możliwość zamówienia usług partnerskich",
     ],
     cta: "Rozpocznij za darmo",
@@ -565,7 +565,7 @@ export const faqs = [
   {
     question: "Czy można dodać ofertę za darmo?",
     answer:
-      "Plan FREE jest przeznaczony dla firm rozpoczynających publikację ofert i sprawdzających dopasowanie portalu.",
+      "Tak. W planie FREE firma może mieć jedną ofertę oczekującą lub aktywną. Kolejne oferty wymagają wyższego planu lub kontaktu z administracją.",
   },
   {
     question: "Czy WolneMoce.pl obsługuje płatności?",
