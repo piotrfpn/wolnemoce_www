@@ -1,5 +1,6 @@
 import "server-only";
 
+import { isGusMockNip } from "@/lib/gus/mockNips";
 import { normalizeNip } from "@/lib/validators/nip";
 
 export type GusCompany = {
@@ -29,8 +30,49 @@ const defaultGusApiUrl =
   "https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc";
 const requestTimeoutMs = 12000;
 
+function isProductionEnvironment() {
+  return process.env.NODE_ENV === "production" || process.env.VERCEL_ENV === "production";
+}
+
+export function isGusMockLookupAllowed(input: string) {
+  const nip = normalizeNip(input);
+
+  return (
+    process.env.GUS_MOCK_MODE === "true" &&
+    !isProductionEnvironment() &&
+    isGusMockNip(nip)
+  );
+}
+
+function getMockGusCompany(nip: string): GusCompany {
+  const mockCompanies: Record<string, GusCompany> = {
+    "0000000000": {
+      name: "Mock Produkcja Testowa Sp. z o.o.",
+      nip,
+      regon: "000000000",
+      city: "Poznań",
+      region: "Wielkopolskie",
+      postalCode: "60-001",
+      street: "Testowa",
+      rawSource: "gus",
+    },
+    "1111111111": {
+      name: "Mock Logistyka Testowa Sp. z o.o.",
+      nip,
+      regon: "111111111",
+      city: "Wrocław",
+      region: "Dolnośląskie",
+      postalCode: "50-001",
+      street: "Przykładowa",
+      rawSource: "gus",
+    },
+  };
+
+  return mockCompanies[nip];
+}
+
 function getGusConfig() {
-  const apiKey = process.env.GUS_REGON_API_KEY?.trim();
+  const apiKey = process.env.GUS_API_KEY?.trim();
   const apiUrl =
     process.env.GUS_REGON_API_URL?.trim() || defaultGusApiUrl;
 
@@ -173,6 +215,11 @@ function mapGusSearchResult(rawXml: string, fallbackNip: string): GusCompany | n
 
 export async function searchGusByNip(input: string) {
   const nip = normalizeNip(input);
+
+  if (isGusMockLookupAllowed(nip)) {
+    return getMockGusCompany(nip);
+  }
+
   const { sid, apiUrl } = await loginToGus();
   const xml = await postSoap(
     apiUrl,

@@ -1,6 +1,11 @@
 "use server";
 
-import { searchGusByNip, GusApiError, GusConfigError } from "@/lib/gus/regonClient";
+import {
+  searchGusByNip,
+  GusApiError,
+  GusConfigError,
+  isGusMockLookupAllowed,
+} from "@/lib/gus/regonClient";
 import type { GusCompany } from "@/lib/gus/regonClient";
 import { isValidNip, normalizeNip } from "@/lib/validators/nip";
 import { createClient } from "@/lib/supabase/server";
@@ -9,6 +14,10 @@ export type GusLookupResult = {
   company?: GusCompany;
   error?: string;
 };
+
+const invalidNipMessage = "Podaj prawidłowy NIP składający się z 10 cyfr.";
+const gusFallbackMessage =
+  "Nie udało się pobrać danych z GUS. Możesz uzupełnić dane ręcznie.";
 
 export async function lookupCompanyInGus(nipInput: string): Promise<GusLookupResult> {
   const supabase = createClient();
@@ -21,32 +30,46 @@ export async function lookupCompanyInGus(nipInput: string): Promise<GusLookupRes
   }
 
   const nip = normalizeNip(nipInput);
+  const canUseMockNip = isGusMockLookupAllowed(nip);
 
-  if (!isValidNip(nip)) {
-    return { error: "Podaj poprawny NIP." };
+  if (!isValidNip(nip) && !canUseMockNip) {
+    return { error: invalidNipMessage };
+  }
+
+  const existingCompanyResult = await supabase
+    .from("companies")
+    .select("id, user_id")
+    .eq("nip", nip)
+    .maybeSingle();
+
+  if (existingCompanyResult.error) {
+    return { error: gusFallbackMessage };
+  }
+
+  if (
+    existingCompanyResult.data &&
+    existingCompanyResult.data.user_id !== user.id
+  ) {
+    return { error: "Firma z tym NIP jest już zarejestrowana w systemie." };
   }
 
   try {
     const company = await searchGusByNip(nip);
 
     if (!company) {
-      return { error: "Nie znaleziono firmy w rejestrze GUS." };
+      return { error: gusFallbackMessage };
     }
 
     return { company };
   } catch (error) {
     if (error instanceof GusConfigError) {
-      return { error: "Integracja GUS nie jest jeszcze skonfigurowana." };
+      return { error: gusFallbackMessage };
     }
 
     if (error instanceof GusApiError) {
-      return {
-        error: "Nie udało się pobrać danych z GUS. Spróbuj ponownie później.",
-      };
+      return { error: gusFallbackMessage };
     }
 
-    return {
-      error: "Nie udało się pobrać danych z GUS. Spróbuj ponownie później.",
-    };
+    return { error: gusFallbackMessage };
   }
 }

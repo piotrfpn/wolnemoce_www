@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useMemo, useState } from "react";
+import { type FormEvent, useMemo, useRef, useState } from "react";
+import { isGusMockNip } from "@/lib/gus/mockNips";
 import { normalizeCityName, POLISH_CITY_OPTIONS } from "@/lib/location";
 import { industryServiceTypes, provinces } from "@/lib/mockData";
 import { createClient } from "@/lib/supabase/client";
@@ -44,6 +45,9 @@ type CompanyProfileFormClientProps = {
 
 const inputClass =
   "min-w-0 max-w-full w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400";
+
+const invalidNipMessage = "Podaj prawidłowy NIP składający się z 10 cyfr.";
+const gusSuccessMessage = "Dane z GUS zostały pobrane. Sprawdź je przed zapisem.";
 
 const presentationBucket = "company-presentations";
 const maxPresentationSize = 10 * 1024 * 1024;
@@ -192,6 +196,10 @@ function getProvinceFromGus(region: string | null) {
   return matchingProvince ?? region;
 }
 
+function canUseDevelopmentMockNip(nip: string) {
+  return process.env.NODE_ENV === "development" && isGusMockNip(nip);
+}
+
 type CompanySaveData = {
   id: string;
   slug: string | null;
@@ -282,6 +290,7 @@ export default function CompanyProfileFormClient({
   const [requestError, setRequestError] = useState("");
   const [requestMessage, setRequestMessage] = useState("");
   const [isRequestSubmitting, setIsRequestSubmitting] = useState(false);
+  const gusLookupInFlight = useRef(false);
 
   const servicesBySelectedIndustry = useMemo(
     () =>
@@ -585,81 +594,89 @@ export default function CompanyProfileFormClient({
   }
 
   async function handleGusLookup() {
+    if (gusLookupInFlight.current) {
+      return;
+    }
+
     setGusError("");
     setGusMessage("");
 
     const normalizedNip = normalizeNip(nip);
+    const canUseMockNip = canUseDevelopmentMockNip(normalizedNip);
 
-    if (!isValidNip(normalizedNip)) {
-      setGusError("Podaj poprawny NIP.");
+    if (!isValidNip(normalizedNip) && !canUseMockNip) {
+      setGusError(invalidNipMessage);
       return;
     }
 
+    gusLookupInFlight.current = true;
     setIsGusLoading(true);
-    const result = await lookupCompanyInGus(normalizedNip);
-    setIsGusLoading(false);
+    try {
+      const result = await lookupCompanyInGus(normalizedNip);
 
-    if (result.error) {
-      setGusError(result.error);
-      return;
-    }
-
-    if (!result.company) {
-      setGusError("Nie znaleziono firmy w rejestrze GUS.");
-      return;
-    }
-
-    const gusCompany = result.company;
-    const nextProvince = getProvinceFromGus(gusCompany.region);
-    let skippedExistingFields = false;
-    let updatedFields = 0;
-
-    setNip(gusCompany.nip ?? normalizedNip);
-
-    if (gusCompany.name) {
-      if (!name.trim()) {
-        setName(gusCompany.name);
-        updatedFields += 1;
-      } else if (normalizeLookupText(name) !== normalizeLookupText(gusCompany.name)) {
-        skippedExistingFields = true;
+      if (result.error) {
+        setGusError(result.error);
+        return;
       }
-    }
 
-    if (gusCompany.city) {
-      if (!city.trim()) {
-        setCity(normalizeCityName(gusCompany.city));
-        updatedFields += 1;
-      } else if (normalizeLookupText(city) !== normalizeLookupText(gusCompany.city)) {
-        skippedExistingFields = true;
+      if (!result.company) {
+        setGusError("Nie udało się pobrać danych z GUS. Możesz uzupełnić dane ręcznie.");
+        return;
       }
-    }
 
-    if (nextProvince) {
-      if (!voivodeship) {
-        setVoivodeship(nextProvince);
-        updatedFields += 1;
-      } else if (
-        normalizeLookupText(voivodeship) !== normalizeLookupText(nextProvince)
-      ) {
-        skippedExistingFields = true;
+      const gusCompany = result.company;
+      const nextProvince = getProvinceFromGus(gusCompany.region);
+      let skippedExistingFields = false;
+      let updatedFields = 0;
+
+      setNip(gusCompany.nip ?? normalizedNip);
+
+      if (gusCompany.name) {
+        if (!name.trim()) {
+          setName(gusCompany.name);
+          updatedFields += 1;
+        } else if (normalizeLookupText(name) !== normalizeLookupText(gusCompany.name)) {
+          skippedExistingFields = true;
+        }
       }
+
+      if (gusCompany.city) {
+        if (!city.trim()) {
+          setCity(normalizeCityName(gusCompany.city));
+          updatedFields += 1;
+        } else if (normalizeLookupText(city) !== normalizeLookupText(gusCompany.city)) {
+          skippedExistingFields = true;
+        }
+      }
+
+      if (nextProvince) {
+        if (!voivodeship) {
+          setVoivodeship(nextProvince);
+          updatedFields += 1;
+        } else if (
+          normalizeLookupText(voivodeship) !== normalizeLookupText(nextProvince)
+        ) {
+          skippedExistingFields = true;
+        }
+      }
+
+      const details = [gusSuccessMessage];
+
+      if (updatedFields === 0) {
+        details.push("Formularz nie wymagał automatycznego uzupełnienia pól.");
+      }
+
+      if (skippedExistingFields) {
+        details.push(
+          "Część pól była już uzupełniona, dlatego nie została automatycznie nadpisana."
+        );
+      }
+
+      setGusMessage(details.join(" "));
+    } finally {
+      gusLookupInFlight.current = false;
+      setIsGusLoading(false);
     }
-
-    const details = [
-      "Dane firmy zostały pobrane z GUS. Sprawdź je przed zapisaniem profilu.",
-    ];
-
-    if (updatedFields === 0) {
-      details.push("Formularz nie wymagał automatycznego uzupełnienia pól.");
-    }
-
-    if (skippedExistingFields) {
-      details.push(
-        "Część pól była już uzupełniona, dlatego nie została automatycznie nadpisana."
-      );
-    }
-
-    setGusMessage(details.join(" "));
   }
 
   async function handleServiceRequestSubmit(event: FormEvent<HTMLFormElement>) {

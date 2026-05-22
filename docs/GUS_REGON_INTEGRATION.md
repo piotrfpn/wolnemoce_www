@@ -1,53 +1,60 @@
 # Integracja GUS/REGON
 
-Sprint 6S dodaje pobieranie podstawowych danych firmy z rejestru REGON/GUS po numerze NIP w `/panel/profil`.
+Pobieranie podstawowych danych firmy z rejestru REGON/GUS po numerze NIP działa w `/panel/profil`.
 
 ## Zmienne środowiskowe
 
-Wymagane:
+Wymagane dla prawdziwego wywołania GUS:
 
 ```env
-GUS_REGON_API_KEY=
+GUS_API_KEY=
 ```
 
 Opcjonalne:
 
 ```env
 GUS_REGON_API_URL=https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc
+GUS_MOCK_MODE=false
 ```
 
-Lokalnie dodaj wartości w `.env.local`.
+`GUS_API_KEY` jest sekretem server-side. Nie używaj `NEXT_PUBLIC_GUS_API_KEY`, nie zapisuj prawdziwego klucza w repo i nie loguj klucza ani pełnych odpowiedzi GUS.
 
-Na Vercel dodaj je w:
+Lokalnie dodaj wartości w `.env.local`. Na Vercel dodaj je w `Project Settings -> Environment Variables`.
 
-```text
-Project Settings -> Environment Variables
-```
+## Działanie produkcyjne
 
-Nie commituj prawdziwego klucza GUS.
+Frontend wysyła do Server Action tylko NIP. Zapytania SOAP do GUS są wykonywane wyłącznie po stronie serwera:
 
-## Działanie
-
-Zapytania do GUS są wykonywane wyłącznie po stronie serwera. Klucz API nie trafia do przeglądarki.
-
-Integracja używa usługi SOAP BIR1.1:
-
-1. `Zaloguj` z `GUS_REGON_API_KEY`.
+1. `Zaloguj` z `GUS_API_KEY`.
 2. Odczyt tokenu sesji SID.
 3. `DaneSzukajPodmioty` po NIP z nagłówkiem HTTP `sid`.
 
-Pobrane dane są tylko podpowiadane w formularzu profilu firmy. Użytkownik musi sprawdzić dane i kliknąć zapis profilu.
+Wywołanie ma timeout 12 sekund. Błąd, timeout, brak konfiguracji albo brak wyniku nie blokują ręcznego zapisu profilu firmy.
 
-Pobranie danych z GUS nie oznacza automatycznej weryfikacji firmy. Pole `is_verified` nadal ustawia administrator.
+## Mapowanie danych
 
-## Środowiska GUS
+Z GUS podpowiadamy tylko:
 
-Produkcyjne API GUS wymaga klucza uzyskanego zgodnie z aktualną dokumentacją GUS.
+- nazwę firmy do `companies.name`,
+- NIP do `companies.nip`,
+- miejscowość do `companies.location_city`,
+- województwo do `companies.location_voivodeship`, jeśli da się je wiarygodnie dopasować.
 
-Do testów można wykorzystać środowisko testowe/brudnopisowe, jeżeli GUS udostępnia aktualny publiczny klucz testowy. W materiałach integracyjnych często pojawia się przykładowy klucz:
+Formularz uzupełnia tylko puste pola. Jeśli użytkownik już wpisał nazwę, miasto albo województwo, dane z GUS nie nadpisują ich automatycznie.
 
-```text
-abcde12345abcde12345
-```
+Nie mapujemy automatycznie `description`, `industry`, `industries`, `service_types`, `is_verified`, `plan` ani prywatnych danych kontaktowych.
 
-Przed użyciem należy potwierdzić aktualność klucza i endpointów w oficjalnej dokumentacji GUS.
+Pobranie danych z GUS nie oznacza weryfikacji firmy. `is_verified` pozostaje decyzją administratora. `companies.plan` pozostaje poza integracją GUS.
+
+## Mock mode
+
+`GUS_MOCK_MODE=true` działa tylko poza produkcją. Kod dodatkowo wyłącza mock mode, gdy `NODE_ENV=production` albo `VERCEL_ENV=production`.
+
+Allowlista mock NIP:
+
+- `0000000000`
+- `1111111111`
+
+Jeśli mock mode jest włączony i NIP jest na allowliście, Server Action zwraca dane testowe bez odpytywania GUS. Jeśli mock mode jest wyłączony albo środowisko jest produkcyjne, flow przechodzi przez standardową walidację NIP i prawdziwe wywołanie GUS.
+
+Mock data nie ustawia `is_verified = true`, nie zmienia `companies.plan` i nie omija sprawdzeń właścicielskich po NIP.
