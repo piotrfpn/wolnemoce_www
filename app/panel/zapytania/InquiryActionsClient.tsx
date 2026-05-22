@@ -17,15 +17,19 @@ export type InquiryAttachment = {
 export default function InquiryActionsClient({
   inquiryId,
   status,
+  recipientReadAt,
   attachments = [],
 }: {
   inquiryId: string;
   status: string | null;
+  recipientReadAt?: string | null;
   attachments?: InquiryAttachment[];
 }) {
   const [isPending, startTransition] = useTransition();
   const [downloadPendingId, setDownloadPendingId] = useState("");
   const [error, setError] = useState("");
+  const isUnread = !recipientReadAt && status !== "archived";
+  const hasActions = status !== "archived";
 
   function runAction(action: (id: string) => Promise<void>) {
     setError("");
@@ -70,6 +74,10 @@ export default function InquiryActionsClient({
     });
   }
 
+  if (!hasActions && attachments.length === 0 && !error) {
+    return null;
+  }
+
   return (
     <div className="mt-5 space-y-3">
       {error ? (
@@ -78,20 +86,20 @@ export default function InquiryActionsClient({
         </div>
       ) : null}
 
-      <div className="flex flex-col gap-3 sm:flex-row">
-        {status !== "read" && status !== "archived" ? (
-          <button
-            type="button"
-            disabled={isPending}
-            onClick={() => runAction(markInquiryRead)}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#1a5f3c] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#0d3d26] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            <i className="fas fa-envelope-open"></i>
-            Oznacz jako przeczytane
-          </button>
-        ) : null}
+      {hasActions ? (
+        <div className="flex flex-col gap-3 sm:flex-row">
+          {isUnread ? (
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => runAction(markInquiryRead)}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#1a5f3c] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#0d3d26] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <i className="fas fa-envelope-open"></i>
+              Oznacz jako przeczytane
+            </button>
+          ) : null}
 
-        {status !== "archived" ? (
           <button
             type="button"
             disabled={isPending}
@@ -101,8 +109,8 @@ export default function InquiryActionsClient({
             <i className="fas fa-box-archive"></i>
             Archiwizuj
           </button>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
 
       {attachments.length > 0 ? (
         <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">

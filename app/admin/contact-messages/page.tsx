@@ -26,11 +26,15 @@ type ContactMessage = {
   handled_at: string | null;
 };
 
+type AdminContactMessagesPageProps = {
+  searchParams?: Record<string, string | string[] | undefined>;
+};
+
 const statusLabels: Record<string, string> = {
-  new: "Nowa",
+  new: "Nowe",
   read: "Przeczytana",
   handled: "Obsłużona",
-  archived: "Archiwum",
+  archived: "Zarchiwizowana",
 };
 
 const statusClasses: Record<string, string> = {
@@ -53,6 +57,45 @@ function formatDate(value: string | null) {
     minute: "2-digit",
   }).format(new Date(value));
 }
+
+function getSingleParam(
+  searchParams: AdminContactMessagesPageProps["searchParams"],
+  key: string
+) {
+  const value = searchParams?.[key];
+  return Array.isArray(value) ? value[0] ?? "" : value ?? "";
+}
+
+function buildMessagesHref(params: { status?: string; sort?: string }) {
+  const query = new URLSearchParams();
+
+  if (params.status && params.status !== "all") {
+    query.set("status", params.status);
+  }
+
+  if (params.sort && params.sort !== "newest") {
+    query.set("sort", params.sort);
+  }
+
+  const queryString = query.toString();
+  return queryString
+    ? `/admin/contact-messages?${queryString}`
+    : "/admin/contact-messages";
+}
+
+const statusFilters = [
+  { label: "Wszystkie", value: "all" },
+  { label: "Nowe", value: "new" },
+  { label: "Przeczytane", value: "read" },
+  { label: "Obsłużone", value: "handled" },
+  { label: "Zarchiwizowane", value: "archived" },
+  { label: "Tylko nieobsłużone", value: "unhandled" },
+];
+
+const sortOptions = [
+  { label: "Najnowsze", value: "newest" },
+  { label: "Najstarsze", value: "oldest" },
+];
 
 async function requireAdmin() {
   const supabase = createClient();
@@ -77,14 +120,31 @@ async function requireAdmin() {
   return supabase;
 }
 
-export default async function AdminContactMessagesPage() {
+export default async function AdminContactMessagesPage({
+  searchParams,
+}: AdminContactMessagesPageProps) {
   const supabase = await requireAdmin();
-  const { data, error } = await supabase
+  const requestedStatus = getSingleParam(searchParams, "status");
+  const requestedSort = getSingleParam(searchParams, "sort");
+  const activeStatus = statusFilters.some((filter) => filter.value === requestedStatus)
+    ? requestedStatus
+    : "all";
+  const activeSort = requestedSort === "oldest" ? "oldest" : "newest";
+  const ascending = activeSort === "oldest";
+  let messagesQuery = supabase
     .from("contact_messages")
     .select(
       "id, name, email, company_name, phone, topic, message, source, status, created_at, read_at, handled_at"
-    )
-    .order("created_at", { ascending: false })
+    );
+
+  if (activeStatus === "unhandled") {
+    messagesQuery = messagesQuery.in("status", ["new", "read"]);
+  } else if (activeStatus !== "all") {
+    messagesQuery = messagesQuery.eq("status", activeStatus);
+  }
+
+  const { data, error } = await messagesQuery
+    .order("created_at", { ascending })
     .limit(100);
 
   const messages = (data ?? []) as ContactMessage[];
@@ -113,6 +173,58 @@ export default async function AdminContactMessagesPage() {
                 Wiadomości zapisane z formularza kontaktowego. Widok jest
                 dostępny wyłącznie dla administratora.
               </p>
+            </div>
+          </div>
+
+          <div className="mb-6 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div className="min-w-0">
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                  Filtr statusu
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {statusFilters.map((filter) => (
+                    <Link
+                      key={filter.value}
+                      href={buildMessagesHref({
+                        status: filter.value,
+                        sort: activeSort,
+                      })}
+                      className={`rounded-full px-3 py-2 text-xs font-bold no-underline transition ${
+                        activeStatus === filter.value
+                          ? "bg-[#1a5f3c] text-white"
+                          : "bg-slate-100 text-slate-600 hover:bg-[#1a5f3c]/10 hover:text-[#1a5f3c]"
+                      }`}
+                    >
+                      {filter.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div className="min-w-0">
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                  Sortowanie
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {sortOptions.map((option) => (
+                    <Link
+                      key={option.value}
+                      href={buildMessagesHref({
+                        status: activeStatus,
+                        sort: option.value,
+                      })}
+                      className={`rounded-full px-3 py-2 text-xs font-bold no-underline transition ${
+                        activeSort === option.value
+                          ? "bg-[#1a5f3c] text-white"
+                          : "bg-slate-100 text-slate-600 hover:bg-[#1a5f3c]/10 hover:text-[#1a5f3c]"
+                      }`}
+                    >
+                      {option.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -204,7 +316,7 @@ export default async function AdminContactMessagesPage() {
             </div>
           ) : (
             <div className="rounded-[24px] border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
-              Brak wiadomości kontaktowych.
+              Brak wiadomości kontaktowych dla wybranych filtrów.
             </div>
           )}
         </section>

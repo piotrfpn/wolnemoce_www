@@ -38,6 +38,10 @@ type CompanyInquiry = {
   attachments: InquiryAttachment[];
 };
 
+type PanelInquiriesPageProps = {
+  searchParams?: Record<string, string | string[] | undefined>;
+};
+
 function formatDate(value: string | null) {
   if (!value) {
     return "Brak daty";
@@ -54,11 +58,11 @@ function formatDate(value: string | null) {
 
 function getStatusLabel(inquiry: Pick<CompanyInquiry, "recipient_read_at" | "status">) {
   if (inquiry.status === "archived") {
-    return "Archiwum";
+    return "Zarchiwizowane";
   }
 
   if (isUnreadInquiry(inquiry)) {
-    return "Nowe";
+    return "Nieprzeczytane";
   }
 
   return "Przeczytane";
@@ -80,7 +84,44 @@ function getStatusBadgeClass(inquiry: Pick<CompanyInquiry, "recipient_read_at" |
   return "bg-slate-100 text-slate-600";
 }
 
-export default async function PanelInquiriesPage() {
+function getSingleParam(
+  searchParams: PanelInquiriesPageProps["searchParams"],
+  key: string
+) {
+  const value = searchParams?.[key];
+  return Array.isArray(value) ? value[0] ?? "" : value ?? "";
+}
+
+function buildInquiriesHref(params: { read?: string; sort?: string }) {
+  const query = new URLSearchParams();
+
+  if (params.read && params.read !== "all") {
+    query.set("read", params.read);
+  }
+
+  if (params.sort && params.sort !== "newest") {
+    query.set("sort", params.sort);
+  }
+
+  const queryString = query.toString();
+  return queryString ? `/panel/zapytania?${queryString}` : "/panel/zapytania";
+}
+
+const readFilters = [
+  { label: "Wszystkie", value: "all" },
+  { label: "Nieprzeczytane", value: "unread" },
+  { label: "Przeczytane", value: "read" },
+  { label: "Zarchiwizowane", value: "archived" },
+];
+
+const sortOptions = [
+  { label: "Najnowsze", value: "newest" },
+  { label: "Najstarsze", value: "oldest" },
+];
+
+export default async function PanelInquiriesPage({
+  searchParams,
+}: PanelInquiriesPageProps) {
   const supabase = createClient();
   const {
     data: { user },
@@ -120,11 +161,39 @@ export default async function PanelInquiriesPage() {
     );
   }
 
-  const { data: inquiries } = await supabase
+  const requestedRead = getSingleParam(searchParams, "read");
+  const requestedSort = getSingleParam(searchParams, "sort");
+  const activeRead = readFilters.some((filter) => filter.value === requestedRead)
+    ? requestedRead
+    : "all";
+  const activeSort = requestedSort === "oldest" ? "oldest" : "newest";
+  const ascending = activeSort === "oldest";
+  const unreadCountResult = await supabase
+    .from("inquiries")
+    .select("id", { count: "exact", head: true })
+    .eq("company_id", company.id)
+    .neq("status", "archived")
+    .is("recipient_read_at", null);
+  let inquiriesQuery = supabase
     .from("inquiries")
     .select("*, offers(title, slug, branch, service_type, status)")
-    .eq("company_id", company.id)
-    .order("created_at", { ascending: false });
+    .eq("company_id", company.id);
+
+  if (activeRead === "unread") {
+    inquiriesQuery = inquiriesQuery
+      .neq("status", "archived")
+      .is("recipient_read_at", null);
+  } else if (activeRead === "read") {
+    inquiriesQuery = inquiriesQuery
+      .neq("status", "archived")
+      .not("recipient_read_at", "is", null);
+  } else if (activeRead === "archived") {
+    inquiriesQuery = inquiriesQuery.eq("status", "archived");
+  }
+
+  const { data: inquiries } = await inquiriesQuery.order("created_at", {
+    ascending,
+  });
 
   const companyInquiries = (inquiries ?? []) as unknown as CompanyInquiry[];
   const inquiryIds = companyInquiries.map((inquiry) => inquiry.id);
@@ -149,9 +218,7 @@ export default async function PanelInquiriesPage() {
     ...inquiry,
     attachments: attachmentsByInquiryId.get(inquiry.id) ?? [],
   }));
-  const unreadCount = inquiriesWithAttachments.filter((inquiry) =>
-    isUnreadInquiry(inquiry)
-  ).length;
+  const unreadCount = unreadCountResult.count ?? 0;
 
   return (
     <>
@@ -176,6 +243,58 @@ export default async function PanelInquiriesPage() {
             <Link href="/panel" className="mt-5 inline-flex text-sm font-bold text-[#1a5f3c]">
               Wróć do panelu
             </Link>
+          </div>
+
+          <div className="mb-6 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div className="min-w-0">
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                  Filtr zapytań
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {readFilters.map((filter) => (
+                    <Link
+                      key={filter.value}
+                      href={buildInquiriesHref({
+                        read: filter.value,
+                        sort: activeSort,
+                      })}
+                      className={`rounded-full px-3 py-2 text-xs font-bold no-underline transition ${
+                        activeRead === filter.value
+                          ? "bg-[#1a5f3c] text-white"
+                          : "bg-slate-100 text-slate-600 hover:bg-[#1a5f3c]/10 hover:text-[#1a5f3c]"
+                      }`}
+                    >
+                      {filter.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div className="min-w-0">
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                  Sortowanie
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {sortOptions.map((option) => (
+                    <Link
+                      key={option.value}
+                      href={buildInquiriesHref({
+                        read: activeRead,
+                        sort: option.value,
+                      })}
+                      className={`rounded-full px-3 py-2 text-xs font-bold no-underline transition ${
+                        activeSort === option.value
+                          ? "bg-[#1a5f3c] text-white"
+                          : "bg-slate-100 text-slate-600 hover:bg-[#1a5f3c]/10 hover:text-[#1a5f3c]"
+                      }`}
+                    >
+                      {option.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
           {inquiriesWithAttachments.length > 0 ? (
@@ -218,6 +337,7 @@ export default async function PanelInquiriesPage() {
                     <InquiryActionsClient
                       inquiryId={inquiry.id}
                       status={inquiry.status}
+                      recipientReadAt={inquiry.recipient_read_at}
                       attachments={inquiry.attachments}
                     />
                   </div>
@@ -260,7 +380,7 @@ export default async function PanelInquiriesPage() {
             </div>
           ) : (
             <div className="rounded-[24px] border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
-              Nie masz jeszcze żadnych zapytań ofertowych.
+              Nie masz zapytań ofertowych dla wybranych filtrów.
             </div>
           )}
         </section>
