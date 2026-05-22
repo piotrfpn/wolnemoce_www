@@ -78,7 +78,8 @@ export default async function PanelPage() {
         .from("inquiries")
         .select("id", { count: "exact", head: true })
         .eq("company_id", company.id)
-        .eq("status", "new")
+        .neq("status", "archived")
+        .is("recipient_read_at", null)
     : { count: 0 };
 
   const visiblePanelItems =
@@ -130,7 +131,7 @@ export default async function PanelPage() {
                       <span
                         className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${
                           (newInquiriesCount ?? 0) > 0
-                            ? "bg-emerald-50 text-emerald-700"
+                            ? "bg-red-50 text-red-700"
                             : "bg-slate-100 text-slate-500"
                         }`}
                       >

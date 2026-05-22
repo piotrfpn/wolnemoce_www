@@ -38,7 +38,12 @@ export default async function AdminPage() {
     redirect("/panel");
   }
 
-  const [companiesResult, offersResult, serviceRequestsResult] = await Promise.all([
+  const [
+    companiesResult,
+    offersResult,
+    serviceRequestsResult,
+    contactMessagesResult,
+  ] = await Promise.all([
     supabase
       .from("companies")
       .select(
@@ -58,12 +63,17 @@ export default async function AdminPage() {
       .select("*, companies(name)")
       .eq("status", "pending")
       .order("created_at", { ascending: false }),
+    supabase
+      .from("contact_messages")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "new"),
   ]);
 
   const pendingCompanies = (companiesResult.data ?? []) as PendingCompany[];
   const pendingOffers = (offersResult.data ?? []) as PendingOffer[];
   const pendingServiceRequests = (serviceRequestsResult.data ??
     []) as PendingServiceRequest[];
+  const newContactMessagesCount = contactMessagesResult.count ?? 0;
   const pendingOfferIds = pendingOffers.map((offer) => offer.id);
   const { data: offerImages } =
     pendingOfferIds.length > 0
@@ -112,7 +122,7 @@ export default async function AdminPage() {
             </div>
           </div>
 
-          <div className="mb-8 grid min-w-0 gap-5 md:grid-cols-3">
+          <div className="mb-8 grid min-w-0 gap-5 md:grid-cols-4">
             <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
                 <i className="fas fa-building-circle-check"></i>
@@ -148,6 +158,18 @@ export default async function AdminPage() {
                 {pendingServiceRequests.length}
               </p>
             </div>
+
+            <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
+                <i className="fas fa-envelope-open-text"></i>
+              </div>
+              <p className="text-sm font-bold uppercase tracking-wide text-slate-500">
+                Nowe wiadomości
+              </p>
+              <p className="mt-2 text-3xl font-extrabold text-slate-900">
+                {newContactMessagesCount}
+              </p>
+            </div>
           </div>
 
           <section className="mb-8 min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
@@ -172,6 +194,33 @@ export default async function AdminPage() {
                 className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline transition hover:bg-[#1a5f3c] hover:text-white"
               >
                 Zarządzaj ofertami
+                <i className="fas fa-arrow-right text-xs"></i>
+              </Link>
+            </div>
+          </section>
+
+          <section className="mb-8 min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+            <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-center md:justify-between">
+              <div className="min-w-0">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
+                  <i className="fas fa-envelope-open-text"></i>
+                </div>
+                <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
+                  Kontakt
+                </p>
+                <h2 className="text-2xl font-extrabold text-slate-900">
+                  Wiadomości z formularza
+                </h2>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+                  Przeglądaj wiadomości zapisane z formularza kontaktowego i
+                  oznaczaj je jako przeczytane albo obsłużone.
+                </p>
+              </div>
+              <Link
+                href="/admin/contact-messages"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline transition hover:bg-[#1a5f3c] hover:text-white"
+              >
+                Otwórz inbox
                 <i className="fas fa-arrow-right text-xs"></i>
               </Link>
             </div>

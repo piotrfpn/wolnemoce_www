@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
-import StaticFormField from "@/components/StaticFormField";
 import { contactInfo, faqs } from "@/lib/mockData";
+import ContactFormClient from "./ContactFormClient";
 
 export const metadata: Metadata = {
   title: "Kontakt",
   description:
-    "Statyczna podstrona kontaktowa WolneMoce.pl z formularzem UI-only i FAQ.",
+    "Podstrona kontaktowa WolneMoce.pl z formularzem kontaktowym i FAQ.",
 };
 
 type ContactPageProps = {
@@ -52,7 +52,7 @@ export default function ContactPage({ searchParams }: ContactPageProps) {
         <PageHero
           label="Kontakt"
           title="Porozmawiajmy o wolnych mocach produkcyjnych"
-          description="Napisz, jeśli szukasz wykonawcy albo chcesz pokazać dostępne moce swojej firmy. Formularz w MVP jest wyłącznie elementem UI."
+          description="Napisz, jeśli szukasz wykonawcy albo chcesz pokazać dostępne moce swojej firmy."
           icon="fas fa-envelope"
         />
 
@@ -74,17 +74,7 @@ export default function ContactPage({ searchParams }: ContactPageProps) {
             ))}
           </div>
 
-          <form className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-            <div className="mb-6">
-              <h2 className="text-2xl font-extrabold text-slate-900">
-                Formularz kontaktowy
-              </h2>
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                Formularz nie wysyła danych. To statyczny widok docelowego
-                kontaktu.
-              </p>
-            </div>
-
+          <div>
             {partnerTopic ? (
               <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">
                 <div className="mb-3 flex items-center gap-3">
@@ -104,35 +94,11 @@ export default function ContactPage({ searchParams }: ContactPageProps) {
               </div>
             ) : null}
 
-            <div className="grid gap-5 md:grid-cols-2">
-              <StaticFormField label="Imię i nazwisko" name="name" icon="fas fa-user" />
-              <StaticFormField label="Firma" name="company" icon="fas fa-building" />
-              <StaticFormField label="Email" name="email" type="email" icon="fas fa-envelope" />
-              <StaticFormField label="Telefon" name="phone" type="tel" icon="fas fa-phone" />
-              <div className="md:col-span-2">
-                <StaticFormField
-                  label="Temat"
-                  name="subject"
-                  defaultValue={partnerTopic?.subject ?? ""}
-                  placeholder="Np. wolne moce, partnerstwo, wsparcie partnerskie"
-                  icon="fas fa-tag"
-                />
-              </div>
-              <div className="md:col-span-2">
-                <StaticFormField
-                  label="Wiadomość"
-                  name="message"
-                  textarea
-                  placeholder="Opisz krótko, czego szukasz lub jakie moce chcesz pokazać."
-                  icon="fas fa-message"
-                />
-              </div>
-            </div>
-
-            <button type="button" className="mt-6 btn btn-primary">
-              Wyślij wiadomość
-            </button>
-          </form>
+            <ContactFormClient
+              initialTopic={partnerTopic?.subject ?? ""}
+              source={topicParam ? `contact:${topicParam}` : "contact"}
+            />
+          </div>
         </section>
 
         <section className="bg-slate-50 px-6 py-20">

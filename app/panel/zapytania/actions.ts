@@ -45,7 +45,7 @@ async function updateInquiryStatus(inquiryId: string, status: "read" | "archived
 
   const { error } = await supabase
     .from("inquiries")
-    .update({ status })
+    .update({ status, recipient_read_at: new Date().toISOString() })
     .eq("id", inquiryId)
     .eq("company_id", companyId);
 

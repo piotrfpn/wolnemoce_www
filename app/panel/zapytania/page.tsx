@@ -27,6 +27,7 @@ type CompanyInquiry = {
   branch: string | null;
   service_type: string | null;
   created_at: string | null;
+  recipient_read_at: string | null;
   offers: {
     title: string | null;
     slug: string | null;
@@ -51,28 +52,28 @@ function formatDate(value: string | null) {
   }).format(new Date(value));
 }
 
-function getStatusLabel(status: string | null) {
-  if (status === "read") {
-    return "Przeczytane";
-  }
-
-  if (status === "archived") {
+function getStatusLabel(inquiry: Pick<CompanyInquiry, "recipient_read_at" | "status">) {
+  if (inquiry.status === "archived") {
     return "Archiwum";
   }
 
-  return "Nowe";
-}
-
-function isNewInquiry(status: string | null) {
-  return status === "new" || !status;
-}
-
-function getStatusBadgeClass(status: string | null) {
-  if (isNewInquiry(status)) {
-    return "bg-emerald-50 text-emerald-700";
+  if (isUnreadInquiry(inquiry)) {
+    return "Nowe";
   }
 
-  if (status === "archived") {
+  return "Przeczytane";
+}
+
+function isUnreadInquiry(inquiry: Pick<CompanyInquiry, "recipient_read_at" | "status">) {
+  return !inquiry.recipient_read_at && inquiry.status !== "archived";
+}
+
+function getStatusBadgeClass(inquiry: Pick<CompanyInquiry, "recipient_read_at" | "status">) {
+  if (isUnreadInquiry(inquiry)) {
+    return "bg-red-50 text-red-700";
+  }
+
+  if (inquiry.status === "archived") {
     return "bg-slate-100 text-slate-500";
   }
 
@@ -148,6 +149,9 @@ export default async function PanelInquiriesPage() {
     ...inquiry,
     attachments: attachmentsByInquiryId.get(inquiry.id) ?? [],
   }));
+  const unreadCount = inquiriesWithAttachments.filter((inquiry) =>
+    isUnreadInquiry(inquiry)
+  ).length;
 
   return (
     <>
@@ -164,6 +168,11 @@ export default async function PanelInquiriesPage() {
             <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-500">
               Tutaj zobaczysz zapytania wysłane do Twojej firmy.
             </p>
+            <div className="mt-4 inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700">
+              {unreadCount > 0
+                ? `${unreadCount} nieprzeczytanych`
+                : "Brak nieprzeczytanych"}
+            </div>
             <Link href="/panel" className="mt-5 inline-flex text-sm font-bold text-[#1a5f3c]">
               Wróć do panelu
             </Link>
@@ -175,8 +184,8 @@ export default async function PanelInquiriesPage() {
                 <article
                   key={inquiry.id}
                   className={`min-w-0 rounded-[24px] border p-6 shadow-sm ${
-                    isNewInquiry(inquiry.status)
-                      ? "border-emerald-200 bg-emerald-50/40"
+                    isUnreadInquiry(inquiry)
+                      ? "border-red-200 bg-red-50/30"
                       : "border-slate-200 bg-white"
                   }`}
                 >
@@ -185,10 +194,10 @@ export default async function PanelInquiriesPage() {
                       <div className="mb-3 flex flex-wrap gap-2">
                         <span
                           className={`rounded-full px-3 py-1 text-xs font-bold ${getStatusBadgeClass(
-                            inquiry.status
+                            inquiry
                           )}`}
                         >
-                          {getStatusLabel(inquiry.status)}
+                          {getStatusLabel(inquiry)}
                         </span>
                         <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
                           {formatDate(inquiry.created_at)}

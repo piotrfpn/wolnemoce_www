@@ -1,0 +1,82 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import {
+  archiveContactMessage,
+  markContactMessageHandled,
+  markContactMessageRead,
+} from "./actions";
+
+export default function ContactMessageActionsClient({
+  messageId,
+  status,
+}: {
+  messageId: string;
+  status: string | null;
+}) {
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState("");
+
+  function runAction(action: (id: string) => Promise<void>) {
+    setError("");
+    startTransition(async () => {
+      try {
+        await action(messageId);
+      } catch (actionError) {
+        setError(
+          actionError instanceof Error
+            ? actionError.message
+            : "Nie udało się zmienić statusu wiadomości."
+        );
+      }
+    });
+  }
+
+  return (
+    <div className="space-y-3">
+      {error ? (
+        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </div>
+      ) : null}
+
+      <div className="flex flex-col gap-2 sm:flex-row">
+        {status !== "read" && status !== "handled" && status !== "archived" ? (
+          <button
+            type="button"
+            disabled={isPending}
+            onClick={() => runAction(markContactMessageRead)}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#1a5f3c] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#0d3d26] disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <i className="fas fa-envelope-open"></i>
+            Oznacz jako przeczytane
+          </button>
+        ) : null}
+
+        {status !== "handled" && status !== "archived" ? (
+          <button
+            type="button"
+            disabled={isPending}
+            onClick={() => runAction(markContactMessageHandled)}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <i className="fas fa-circle-check"></i>
+            Obsłużone
+          </button>
+        ) : null}
+
+        {status !== "archived" ? (
+          <button
+            type="button"
+            disabled={isPending}
+            onClick={() => runAction(archiveContactMessage)}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-[#1a5f3c] hover:text-[#1a5f3c] disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <i className="fas fa-box-archive"></i>
+            Archiwizuj
+          </button>
+        ) : null}
+      </div>
+    </div>
+  );
+}
