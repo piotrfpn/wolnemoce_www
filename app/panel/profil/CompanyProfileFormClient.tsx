@@ -560,6 +560,12 @@ export default function CompanyProfileFormClient({
 
       if (freshCompany) {
         applySavedCompany(freshCompany as unknown as CompanySaveData);
+        if (data.is_verified === true && freshCompany.is_verified === false) {
+          setMessage("Dane firmy zostały zapisane. Zmiana danych publicznych wymaga ponownej weryfikacji.");
+          setIsSubmitting(false);
+          router.refresh();
+          return;
+        }
       } else {
         applySavedCompany(data as unknown as CompanySaveData);
       }

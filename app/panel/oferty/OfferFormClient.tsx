@@ -404,6 +404,7 @@ export default function OfferFormClient({
 
     const savedOfferId = offer?.id;
     let nextOfferId = savedOfferId ?? "";
+    let nextOfferStatus = currentStatus;
 
     if (mode === "new") {
       const { data: insertedOffer, error: saveError } = await supabase
@@ -425,19 +426,23 @@ export default function OfferFormClient({
 
       nextOfferId = insertedOffer.id as string;
     } else {
-      const { error: saveError } = await supabase
+      const { data: updatedOffer, error: saveError } = await supabase
         .from("offers")
         .update({
           ...basePayload,
           ...(currentStatus === "draft" ? { status: saveMode } : {}),
         })
-        .eq("id", offer?.id ?? "");
+        .eq("id", offer?.id ?? "")
+        .select("status")
+        .single();
 
       if (saveError) {
         setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
         setIsSubmitting(false);
         return;
       }
+      
+      nextOfferStatus = updatedOffer?.status ?? currentStatus;
     }
 
     if (selectedImages.length > 0) {
@@ -468,6 +473,13 @@ export default function OfferFormClient({
         setIsSubmitting(false);
         return;
       }
+    }
+
+    if (mode === "edit" && currentStatus === "active" && nextOfferStatus === "pending") {
+      setPartialSuccess("Oferta została zapisana i przekazana do ponownej moderacji.");
+      setIsSubmitting(false);
+      router.refresh();
+      return;
     }
 
     router.push("/panel/oferty");
