@@ -5,6 +5,10 @@ import { submitContactMessage } from "./actions";
 
 type ContactFormClientProps = {
   initialTopic?: string;
+  initialName?: string;
+  initialCompanyName?: string;
+  initialEmail?: string;
+  initialPhone?: string;
   source?: string;
 };
 
@@ -65,12 +69,16 @@ function Field({
 
 export default function ContactFormClient({
   initialTopic = "",
+  initialName = "",
+  initialCompanyName = "",
+  initialEmail = "",
+  initialPhone = "",
   source = "contact",
 }: ContactFormClientProps) {
-  const [name, setName] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [name, setName] = useState(initialName);
+  const [companyName, setCompanyName] = useState(initialCompanyName);
+  const [email, setEmail] = useState(initialEmail);
+  const [phone, setPhone] = useState(initialPhone);
   const [topic, setTopic] = useState(initialTopic);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -92,10 +100,10 @@ export default function ContactFormClient({
     }
 
     setSuccess(result.success ?? "Wiadomość została zapisana.");
-    setName("");
-    setCompanyName("");
-    setEmail("");
-    setPhone("");
+    setName(initialName);
+    setCompanyName(initialCompanyName);
+    setEmail(initialEmail);
+    setPhone(initialPhone);
     setTopic(initialTopic);
     setMessage("");
     setIsSubmitting(false);

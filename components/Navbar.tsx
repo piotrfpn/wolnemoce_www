@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import AddOfferLinkClient from "./AddOfferLinkClient";
-import AuthNavButton from "./AuthNavButton";
+import AuthNavButton, { useCurrentUser } from "./AuthNavButton";
 
 const navLinks = [
   { label: "Oferty", href: "/oferty", match: "/oferty" },
@@ -20,6 +20,8 @@ const navLinks = [
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { user, isLoading } = useCurrentUser();
+  const showContactCta = !isLoading && !user;
 
   const closeMenu = () => setIsOpen(false);
 
@@ -59,12 +61,14 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-3 lg:flex">
           <AuthNavButton />
-          <Link
-            href="/kontakt"
-            className="inline-flex items-center justify-center rounded-lg border-2 border-[#1a5f3c] px-5 py-2.5 text-sm font-semibold text-[#1a5f3c] no-underline transition hover:-translate-y-0.5 hover:bg-[#1a5f3c] hover:text-white hover:shadow-md"
-          >
-            Kontakt
-          </Link>
+          {showContactCta ? (
+            <Link
+              href="/kontakt"
+              className="inline-flex items-center justify-center rounded-lg border-2 border-[#1a5f3c] px-5 py-2.5 text-sm font-semibold text-[#1a5f3c] no-underline transition hover:-translate-y-0.5 hover:bg-[#1a5f3c] hover:text-white hover:shadow-md"
+            >
+              Kontakt
+            </Link>
+          ) : null}
           <AddOfferLinkClient className="inline-flex items-center justify-center rounded-lg bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-5 py-2.5 text-sm font-semibold text-white no-underline shadow-lg shadow-[#1a5f3c]/25 transition hover:-translate-y-0.5 hover:shadow-xl">
             Dodaj ofertę
           </AddOfferLinkClient>
@@ -104,13 +108,15 @@ export default function Navbar() {
 
             <div className="mt-3 grid grid-cols-1 gap-3">
               <AuthNavButton variant="mobile" onNavigate={closeMenu} />
-              <Link
-                href="/kontakt"
-                onClick={closeMenu}
-                className="inline-flex items-center justify-center rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline"
-              >
-                Kontakt
-              </Link>
+              {showContactCta ? (
+                <Link
+                  href="/kontakt"
+                  onClick={closeMenu}
+                  className="inline-flex items-center justify-center rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline"
+                >
+                  Kontakt
+                </Link>
+              ) : null}
               <AddOfferLinkClient
                 onNavigate={closeMenu}
                 className="inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-5 py-3 text-sm font-bold text-white no-underline shadow-lg shadow-[#1a5f3c]/25"

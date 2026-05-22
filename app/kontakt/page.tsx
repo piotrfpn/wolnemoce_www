@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PageHero from "@/components/PageHero";
 import { contactInfo, faqs } from "@/lib/mockData";
+import { createClient } from "@/lib/supabase/server";
 import ContactFormClient from "./ContactFormClient";
 
 export const metadata: Metadata = {
@@ -17,16 +18,28 @@ type ContactPageProps = {
 
 const partnerTopics = {
   credos: {
+    label: "Partner usługowy",
     subject: "Wsparcie księgowo-prawne Credos",
     description:
       "Pytanie dotyczy płatnego wsparcia partnerskiego Credos w zakresie księgowości, prawa i formalnej obsługi współpracy B2B. Usługa nie jest automatycznie zawarta w planach WolneMoce.pl i wymaga osobnego ustalenia zakresu oraz ceny.",
     icon: "fas fa-scale-balanced",
+    source: "contact:credos",
   },
   logimarket: {
+    label: "Partner usługowy",
     subject: "Doradztwo procesowe i łańcuch dostaw LogiMarket",
     description:
       "Pytanie dotyczy płatnego doradztwa partnerskiego LogiMarket w zakresie procesów, outsourcingu produkcji, RFQ, make-or-buy oraz łańcucha dostaw. Usługa nie jest automatycznie zawarta w planach WolneMoce.pl i wymaga osobnego ustalenia zakresu oraz ceny.",
     icon: "fas fa-route",
+    source: "contact:logimarket",
+  },
+  administracja: {
+    label: "Kontakt z administratorem",
+    subject: "Kontakt z administratorem",
+    description:
+      "Wiadomość trafi do administracji WolneMoce.pl. Użyj tego kontaktu w sprawach konta, profilu firmy, ofert, zapytań RFQ albo obsługi panelu.",
+    icon: "fas fa-user-shield",
+    source: "admin_contact",
   },
 };
 
@@ -38,12 +51,39 @@ function getSingleParam(
   return Array.isArray(value) ? value[0] ?? "" : value ?? "";
 }
 
-export default function ContactPage({ searchParams }: ContactPageProps) {
+export default async function ContactPage({ searchParams }: ContactPageProps) {
   const topicParam = getSingleParam(searchParams, "temat").toLowerCase().trim();
   const partnerTopic =
-    topicParam === "credos" || topicParam === "logimarket"
+    topicParam === "credos" ||
+    topicParam === "logimarket" ||
+    topicParam === "administracja"
       ? partnerTopics[topicParam]
       : null;
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  let initialName = "";
+  let initialCompanyName = "";
+  let initialEmail = user?.email ?? "";
+
+  if (user) {
+    const [{ data: profile }, { data: company }] = await Promise.all([
+      supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", user.id)
+        .maybeSingle(),
+      supabase
+        .from("companies")
+        .select("name")
+        .eq("user_id", user.id)
+        .maybeSingle(),
+    ]);
+
+    initialName = profile?.full_name ?? "";
+    initialCompanyName = company?.name ?? "";
+  }
 
   return (
     <>
@@ -83,7 +123,7 @@ export default function ContactPage({ searchParams }: ContactPageProps) {
                   </div>
                   <div>
                     <p className="text-xs font-bold uppercase tracking-wide text-amber-700">
-                      Partner usługowy
+                      {partnerTopic.label}
                     </p>
                     <h3 className="font-extrabold text-slate-900">
                       {partnerTopic.subject}
@@ -96,7 +136,10 @@ export default function ContactPage({ searchParams }: ContactPageProps) {
 
             <ContactFormClient
               initialTopic={partnerTopic?.subject ?? ""}
-              source={topicParam ? `contact:${topicParam}` : "contact"}
+              initialName={initialName}
+              initialCompanyName={initialCompanyName}
+              initialEmail={initialEmail}
+              source={partnerTopic?.source ?? (topicParam ? `contact:${topicParam}` : "contact")}
             />
           </div>
         </section>

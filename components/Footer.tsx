@@ -111,6 +111,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/kontakt?temat=administracja" className="text-sm text-white/60 no-underline transition hover:text-white">
+                  Kontakt z administratorem
+                </Link>
+              </li>
+              <li>
                 <Link href="/regulamin" className="text-sm text-white/60 no-underline transition hover:text-white">
                   Regulamin
                 </Link>

@@ -11,7 +11,7 @@ type AuthNavButtonProps = {
   onNavigate?: () => void;
 };
 
-function useCurrentUser() {
+export function useCurrentUser() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
