@@ -419,7 +419,11 @@ export default function OfferFormClient({
         .single();
 
       if (saveError || !insertedOffer?.id) {
-        setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
+        if (saveError?.message?.includes("FREE_PLAN_OFFER_LIMIT_REACHED")) {
+          setError("W planie FREE możesz mieć jedną ofertę oczekującą lub aktywną. Aby dodać kolejną ofertę, skontaktuj się z administracją lub wybierz wyższy plan.");
+        } else {
+          setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
+        }
         setIsSubmitting(false);
         return;
       }
@@ -437,7 +441,11 @@ export default function OfferFormClient({
         .single();
 
       if (saveError) {
-        setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
+        if (saveError?.message?.includes("FREE_PLAN_OFFER_LIMIT_REACHED")) {
+          setError("W planie FREE możesz mieć jedną ofertę oczekującą lub aktywną. Aby dodać kolejną ofertę, skontaktuj się z administracją lub wybierz wyższy plan.");
+        } else {
+          setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
+        }
         setIsSubmitting(false);
         return;
       }
