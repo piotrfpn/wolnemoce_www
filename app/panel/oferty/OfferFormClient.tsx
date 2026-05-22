@@ -475,11 +475,19 @@ export default function OfferFormClient({
       }
     }
 
-    if (mode === "edit" && currentStatus === "active" && nextOfferStatus === "pending") {
-      setPartialSuccess("Oferta została zapisana i przekazana do ponownej moderacji.");
-      setIsSubmitting(false);
-      router.refresh();
-      return;
+    if (mode === "edit" && currentStatus === "active") {
+      const { data: finalOffer } = await supabase
+        .from("offers")
+        .select("status")
+        .eq("id", offer?.id ?? "")
+        .single();
+
+      if (finalOffer?.status === "pending") {
+        setPartialSuccess("Oferta została zapisana i przekazana do ponownej moderacji.");
+        setIsSubmitting(false);
+        router.refresh();
+        return;
+      }
     }
 
     router.push("/panel/oferty");
@@ -539,9 +547,7 @@ export default function OfferFormClient({
 
       {isLockedModerationStatus ? (
         <div className="mb-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-600">
-          Zmiana treści aktywnej lub odrzuconej oferty może wymagać ponownej
-          moderacji w kolejnym sprincie. W tym sprincie status pozostaje bez
-          zmian: <strong>{statusLabels[currentStatus]}</strong>.
+          Zmiana publicznej treści aktywnej oferty spowoduje przekazanie jej do ponownej moderacji. Po zapisie oferta może tymczasowo zniknąć z publicznego katalogu do czasu akceptacji administratora.
         </div>
       ) : null}
 
