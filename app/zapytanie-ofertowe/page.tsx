@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
+import { getInitialRfqBuyerData } from "@/lib/rfqBuyerData";
 import RfqRequestClient, { type RfqOffer } from "./RfqRequestClient";
 
 export const metadata: Metadata = {
@@ -41,13 +42,20 @@ async function getActiveOffer(slug?: string) {
 export default async function RfqRequestPage({
   searchParams,
 }: RfqRequestPageProps) {
-  const selectedOffer = await getActiveOffer(searchParams?.oferta);
+  const [selectedOffer, initialBuyerData] = await Promise.all([
+    getActiveOffer(searchParams?.oferta),
+    getInitialRfqBuyerData(),
+  ]);
 
   return (
     <>
       <Navbar />
       <main className="bg-white">
-        <RfqRequestClient offer={selectedOffer} requestedSlug={searchParams?.oferta ?? ""} />
+        <RfqRequestClient
+          offer={selectedOffer}
+          requestedSlug={searchParams?.oferta ?? ""}
+          initialBuyerData={initialBuyerData}
+        />
       </main>
       <Footer />
     </>

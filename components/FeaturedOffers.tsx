@@ -1,8 +1,64 @@
 import Link from "next/link";
-import OfferCard from "@/components/OfferCard";
-import { offers } from "@/lib/mockData";
+import AddOfferLinkClient from "@/components/AddOfferLinkClient";
+import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
+import { createClient } from "@/lib/supabase/server";
 
-export default function FeaturedOffers() {
+function isActiveFeatured(offer: PublicOffer) {
+  if (!offer.is_featured) {
+    return false;
+  }
+
+  return !offer.featured_until || new Date(offer.featured_until).getTime() > Date.now();
+}
+
+async function getHomepageOffers() {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("offers")
+    .select(
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, is_featured, featured_until, featured_priority, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
+    )
+    .eq("status", "active")
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  if (error) {
+    console.error("Homepage offers query failed", error);
+    return { offers: [], mode: "empty" as const };
+  }
+
+  const activeOffers = (data ?? []) as unknown as PublicOffer[];
+  const featuredOffers = activeOffers
+    .filter(isActiveFeatured)
+    .sort((first, second) => {
+      const priorityDiff =
+        (second.featured_priority ?? 0) - (first.featured_priority ?? 0);
+
+      if (priorityDiff !== 0) {
+        return priorityDiff;
+      }
+
+      return (
+        new Date(second.created_at ?? 0).getTime() -
+        new Date(first.created_at ?? 0).getTime()
+      );
+    });
+
+  if (featuredOffers.length > 0) {
+    return { offers: featuredOffers.slice(0, 3), mode: "featured" as const };
+  }
+
+  if (activeOffers.length > 0) {
+    return { offers: activeOffers.slice(0, 3), mode: "latest" as const };
+  }
+
+  return { offers: [], mode: "empty" as const };
+}
+
+export default async function FeaturedOffers() {
+  const { offers, mode } = await getHomepageOffers();
+  const isLatestFallback = mode === "latest";
+
   return (
     <section
       className="section"
@@ -17,18 +73,46 @@ export default function FeaturedOffers() {
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
         <div className="section-header fade-in visible">
           <div className="section-label">Oferty</div>
-          <h2 className="section-title">Wyróżnione oferty produkcyjne</h2>
+          <h2 className="section-title">
+            {isLatestFallback
+              ? "Najnowsze oferty produkcyjne"
+              : "Wyróżnione oferty produkcyjne"}
+          </h2>
           <p className="section-desc">
-            Najlepsze oferty od zweryfikowanych producentów. Sprawdź dostępne
-            moce produkcyjne w Twojej branży.
+            {isLatestFallback
+              ? "Aktualne oferty od firm prezentujących dostępne moce produkcyjne, logistyczne i techniczne."
+              : "Sprawdź aktywne oferty firm B2B, które mogą wesprzeć produkcję, logistykę lub zaplecze techniczne."}
           </p>
         </div>
 
-        <div className="listings-grid">
-          {offers.slice(0, 3).map((offer) => (
-            <OfferCard key={offer.id} offer={offer} />
-          ))}
-        </div>
+        {offers.length > 0 ? (
+          <div className="grid min-w-0 gap-6 lg:grid-cols-3">
+            {offers.map((offer) => (
+              <PublicOfferCard key={offer.id} offer={offer} />
+            ))}
+          </div>
+        ) : (
+          <div className="mx-auto max-w-3xl rounded-[24px] border border-dashed border-emerald-200 bg-white p-8 text-center shadow-sm">
+            <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-[#1a5f3c]">
+              <i className="fas fa-industry text-xl"></i>
+            </div>
+            <h3 className="text-2xl font-extrabold text-slate-900">
+              Twoja oferta może znaleźć się w tym miejscu
+            </h3>
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+              Dodaj wolne moce produkcyjne swojej firmy i zyskaj większą
+              widoczność na start. Publicznie pokażemy tylko aktywne oferty.
+            </p>
+            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+              <AddOfferLinkClient className="btn btn-primary">
+                Dodaj ofertę
+              </AddOfferLinkClient>
+              <Link href="/oferty" className="btn btn-outline">
+                Przejdź do katalogu
+              </Link>
+            </div>
+          </div>
+        )}
 
         <div style={{ textAlign: "center", marginTop: "48px" }}>
           <Link

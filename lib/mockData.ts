@@ -467,17 +467,18 @@ export const blogArticles: BlogArticle[] = [
   },
 ];
 
+// TODO: twarde limity planu FREE wymagają osobnego sprintu backend/RLS.
 export const pricingPlans: PricingPlan[] = [
   {
     name: "Plan FREE",
-    subtitle: "Dla małych warsztatów i testowania portalu",
+    subtitle: "Dla firm rozpoczynających publikację ofert",
     price: "0 zł",
     priceSuffix: "/ mies.",
     features: [
-      "1 aktywna oferta",
-      "Standardowa widoczność",
-      "Limitowane zapytania",
+      "Podstawowy dostęp do publikacji i obsługi zapytań",
+      "Standardowa widoczność w katalogu ofert",
       "Podstawowy profil firmy",
+      "Możliwość sprawdzenia dopasowania portalu",
       "Możliwość zamówienia usług partnerskich",
     ],
     cta: "Rozpocznij za darmo",
@@ -564,7 +565,7 @@ export const faqs = [
   {
     question: "Czy można dodać ofertę za darmo?",
     answer:
-      "Tak, plan FREE zakłada podstawową publikację jednej aktywnej oferty.",
+      "Plan FREE jest przeznaczony dla firm rozpoczynających publikację ofert i sprawdzających dopasowanie portalu.",
   },
   {
     question: "Czy WolneMoce.pl obsługuje płatności?",

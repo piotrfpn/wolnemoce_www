@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import {
   buildBuyerRfqConfirmationEmail,
   buildCompanyRfqEmail,
@@ -17,6 +16,7 @@ import {
 } from "@/lib/rfqAttachments";
 
 export type InquiryActionResult = {
+  success?: boolean;
   error?: string;
   partialSuccess?: string;
 };
@@ -321,10 +321,11 @@ export async function submitInquiry(
 
   if (hasUploadError) {
     return {
+      success: true,
       partialSuccess:
         "Zapytanie zostało wysłane, ale nie wszystkie załączniki udało się wgrać.",
     };
   }
 
-  redirect("/zapytanie-wyslane");
+  return { success: true };
 }

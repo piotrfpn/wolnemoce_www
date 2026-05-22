@@ -1,3 +1,5 @@
+import type { ChangeEvent } from "react";
+
 type Option = {
   label: string;
   value: string;
@@ -9,6 +11,10 @@ type StaticFormFieldProps = {
   type?: string;
   placeholder?: string;
   defaultValue?: string;
+  value?: string;
+  onChange?: (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => void;
   icon?: string;
   options?: Option[];
   textarea?: boolean;
@@ -21,6 +27,8 @@ export default function StaticFormField({
   type = "text",
   placeholder,
   defaultValue = "",
+  value,
+  onChange,
   icon = "fas fa-pen",
   options,
   textarea = false,
@@ -41,11 +49,19 @@ export default function StaticFormField({
           name={name}
           rows={rows}
           placeholder={placeholder}
-          defaultValue={defaultValue}
+          defaultValue={value === undefined ? defaultValue : undefined}
+          value={value}
+          onChange={onChange}
           className={baseClass}
         />
       ) : options ? (
-        <select name={name} defaultValue={defaultValue} className={baseClass}>
+        <select
+          name={name}
+          defaultValue={value === undefined ? defaultValue : undefined}
+          value={value}
+          onChange={onChange}
+          className={baseClass}
+        >
           <option value="">{placeholder ?? "Wybierz"}</option>
           {options.map((option) => (
             <option key={option.value} value={option.value}>
@@ -58,7 +74,9 @@ export default function StaticFormField({
           name={name}
           type={type}
           placeholder={placeholder}
-          defaultValue={defaultValue}
+          defaultValue={value === undefined ? defaultValue : undefined}
+          value={value}
+          onChange={onChange}
           className={baseClass}
         />
       )}

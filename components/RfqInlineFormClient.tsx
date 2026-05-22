@@ -1,7 +1,7 @@
 "use client";
 
 import type { ChangeEvent, FormEvent } from "react";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 import StaticFormField from "@/components/StaticFormField";
 import {
@@ -9,24 +9,71 @@ import {
   validateRfqAttachmentFiles,
 } from "@/lib/rfqAttachments";
 import { submitInquiry } from "@/app/zapytanie-ofertowe/actions";
+import type { RfqBuyerData } from "@/lib/rfqBuyerData";
 
 type RfqInlineFormClientProps = {
   offerId: string;
   offerSlug: string | null;
   offerTitle?: string | null;
   companyName?: string | null;
+  initialBuyerData?: RfqBuyerData;
 };
+
+type RfqDraftValues = RfqBuyerData & {
+  quantity_scope: string;
+  expected_deadline: string;
+  budget: string;
+  message: string;
+};
+
+function getInitialFormValues(initialBuyerData?: RfqBuyerData): RfqDraftValues {
+  return {
+    buyer_name: initialBuyerData?.buyer_name ?? "",
+    buyer_company: initialBuyerData?.buyer_company ?? "",
+    buyer_email: initialBuyerData?.buyer_email ?? "",
+    buyer_phone: initialBuyerData?.buyer_phone ?? "",
+    quantity_scope: "",
+    expected_deadline: "",
+    budget: "",
+    message: "",
+  };
+}
 
 export default function RfqInlineFormClient({
   offerId,
   offerSlug,
   offerTitle,
   companyName,
+  initialBuyerData,
 }: RfqInlineFormClientProps) {
   const [error, setError] = useState("");
   const [partialSuccess, setPartialSuccess] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [formValues, setFormValues] = useState<RfqDraftValues>(() =>
+    getInitialFormValues(initialBuyerData)
+  );
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const draftKey = `rfq_draft_${offerId}`;
+
+  useEffect(() => {
+    try {
+      const rawDraft = sessionStorage.getItem(draftKey);
+      if (!rawDraft) {
+        return;
+      }
+
+      const draft = JSON.parse(rawDraft) as Partial<RfqDraftValues>;
+      setFormValues((currentValues) => ({
+        ...currentValues,
+        ...Object.fromEntries(
+          Object.entries(draft).filter(([, value]) => typeof value === "string")
+        ),
+      }));
+    } catch {
+      sessionStorage.removeItem(draftKey);
+    }
+  }, [draftKey]);
 
   function getFileKey(file: File) {
     return `${file.name}-${file.size}-${file.lastModified}`;
@@ -70,6 +117,26 @@ export default function RfqInlineFormClient({
     setPartialSuccess("");
   }
 
+  function handleFieldChange(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) {
+    const { name, value } = event.currentTarget;
+    setFormValues((currentValues) => ({
+      ...currentValues,
+      [name]: value,
+    }));
+    setPartialSuccess("");
+    setIsSubmitted(false);
+  }
+
+  function saveDraftToSession() {
+    try {
+      sessionStorage.setItem(draftKey, JSON.stringify(formValues));
+    } catch {
+      // Session storage is only a client-side handoff between RFQ screens.
+    }
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (isPending) {
@@ -95,11 +162,41 @@ export default function RfqInlineFormClient({
       const result = await submitInquiry(formData);
       if (result?.error) {
         setError(result.error);
+        return;
       }
+
       if (result?.partialSuccess) {
         setPartialSuccess(result.partialSuccess);
       }
+
+      if (result?.success) {
+        sessionStorage.removeItem(draftKey);
+        setSelectedFiles([]);
+        setIsSubmitted(true);
+      }
     });
+  }
+
+  if (isSubmitted) {
+    return (
+      <div className="min-w-0 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#1a5f3c] shadow-sm">
+          <i className="fas fa-circle-check text-xl"></i>
+        </div>
+        <h2 className="text-2xl font-extrabold text-slate-900">
+          Zapytanie zostało wysłane
+        </h2>
+        <p className="mt-3 text-sm leading-6 text-slate-600">
+          Dziękujemy. Zapytanie zostało zapisane i przekazane firmie w panelu
+          WolneMoce.pl.
+        </p>
+        {partialSuccess ? (
+          <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            {partialSuccess}
+          </p>
+        ) : null}
+      </div>
+    );
   }
 
   return (
@@ -131,17 +228,57 @@ export default function RfqInlineFormClient({
       ) : null}
 
       <div className="space-y-4">
-        <StaticFormField label="Imię i nazwisko" name="buyer_name" icon="fas fa-user" />
-        <StaticFormField label="Firma" name="buyer_company" icon="fas fa-building" />
-        <StaticFormField label="Email" name="buyer_email" type="email" icon="fas fa-envelope" />
-        <StaticFormField label="Telefon" name="buyer_phone" type="tel" icon="fas fa-phone" />
+        <StaticFormField
+          label="Imię i nazwisko"
+          name="buyer_name"
+          icon="fas fa-user"
+          value={formValues.buyer_name}
+          onChange={handleFieldChange}
+        />
+        <StaticFormField
+          label="Firma"
+          name="buyer_company"
+          icon="fas fa-building"
+          value={formValues.buyer_company}
+          onChange={handleFieldChange}
+        />
+        <StaticFormField
+          label="Email"
+          name="buyer_email"
+          type="email"
+          icon="fas fa-envelope"
+          value={formValues.buyer_email}
+          onChange={handleFieldChange}
+        />
+        <StaticFormField
+          label="Telefon"
+          name="buyer_phone"
+          type="tel"
+          icon="fas fa-phone"
+          value={formValues.buyer_phone}
+          onChange={handleFieldChange}
+        />
         <StaticFormField
           label="Ilość / zakres zamówienia"
           name="quantity_scope"
           icon="fas fa-boxes-stacked"
+          value={formValues.quantity_scope}
+          onChange={handleFieldChange}
         />
-        <StaticFormField label="Termin realizacji" name="expected_deadline" icon="fas fa-clock" />
-        <StaticFormField label="Budżet orientacyjny" name="budget" icon="fas fa-wallet" />
+        <StaticFormField
+          label="Termin realizacji"
+          name="expected_deadline"
+          icon="fas fa-clock"
+          value={formValues.expected_deadline}
+          onChange={handleFieldChange}
+        />
+        <StaticFormField
+          label="Budżet orientacyjny"
+          name="budget"
+          icon="fas fa-wallet"
+          value={formValues.budget}
+          onChange={handleFieldChange}
+        />
         <StaticFormField
           label="Wiadomość"
           name="message"
@@ -149,6 +286,8 @@ export default function RfqInlineFormClient({
           rows={5}
           placeholder="Opisz krótko zapotrzebowanie, materiał, ilość i oczekiwany termin."
           icon="fas fa-message"
+          value={formValues.message}
+          onChange={handleFieldChange}
         />
       </div>
 
@@ -237,6 +376,7 @@ export default function RfqInlineFormClient({
       {offerSlug ? (
         <Link
           href={`/zapytanie-ofertowe?oferta=${offerSlug}`}
+          onClick={saveDraftToSession}
           className="mt-4 inline-flex w-full items-center justify-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
         >
           Otwórz pełny formularz zapytania

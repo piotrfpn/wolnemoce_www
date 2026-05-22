@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
 import RfqInlineFormClient from "@/components/RfqInlineFormClient";
 import { getOfferImageByIndustry, getPublicOfferImageUrl } from "@/lib/offerImages";
+import { getInitialRfqBuyerData } from "@/lib/rfqBuyerData";
 import { createClient } from "@/lib/supabase/server";
 
 type OfferDetailsPageProps = {
@@ -153,9 +154,10 @@ export default async function OfferDetailsPage({
     notFound();
   }
 
-  const [similarOffers, offerImages] = await Promise.all([
+  const [similarOffers, offerImages, initialBuyerData] = await Promise.all([
     getSimilarOffers(offer),
     getPublicOfferImages(offer.id),
+    getInitialRfqBuyerData(),
   ]);
   const company = offer.companies;
   const companyName = company?.name ?? "Firma";
@@ -403,6 +405,7 @@ export default async function OfferDetailsPage({
                 offerSlug={offer.slug}
                 offerTitle={offer.title}
                 companyName={companyName}
+                initialBuyerData={initialBuyerData}
               />
             </div>
           </aside>
