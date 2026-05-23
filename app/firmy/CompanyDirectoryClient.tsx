@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
 
 export type DirectoryCompany = {
   id: string;
@@ -292,10 +293,7 @@ export default function CompanyDirectoryClient({
                   </div>
                   <div className="min-w-0">
                     <div className="mb-2 flex flex-wrap gap-2">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                        <i className="fas fa-check-circle"></i>
-                        Zweryfikowana
-                      </span>
+                      <VerifiedCompanyBadge isVerified={company.is_verified} />
                     </div>
                     <h3 className="break-words text-xl font-extrabold text-slate-900">
                       {company.name ?? "Firma"}

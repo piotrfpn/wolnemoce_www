@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getOfferImageByIndustry, getPublicOfferImageUrl } from "@/lib/offerImages";
+import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
 
 export type PublicOfferCompany = {
   name: string | null;
@@ -82,10 +83,10 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
               Wyróżniona
             </span>
           ) : null}
-          <span className="flex items-center gap-1 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-semibold text-emerald-600 shadow-sm backdrop-blur">
-            <i className="fas fa-check-circle"></i>
-            Zweryfikowana
-          </span>
+          <VerifiedCompanyBadge
+            isVerified={company.is_verified}
+            className="!bg-white/95 !text-[11px] !py-1 backdrop-blur"
+          />
         </div>
       ) : featured ? (
         <div className="absolute right-4 top-4 z-10 flex items-center gap-1 rounded-full bg-[#fbbf24] px-3 py-1.5 text-[11px] font-bold text-slate-900 shadow-sm">

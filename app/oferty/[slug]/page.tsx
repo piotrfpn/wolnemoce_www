@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
 import RfqInlineFormClient from "@/components/RfqInlineFormClient";
+import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
 import { getOfferImageByIndustry, getPublicOfferImageUrl } from "@/lib/offerImages";
 import { getInitialRfqBuyerData } from "@/lib/rfqBuyerData";
 import { createClient } from "@/lib/supabase/server";
@@ -205,12 +206,10 @@ export default async function OfferDetailsPage({
                   <i className="fas fa-circle-check"></i>
                   Aktywna oferta
                 </span>
-                {company?.is_verified ? (
-                  <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white">
-                    <i className="fas fa-check-circle text-[#fbbf24]"></i>
-                    Zweryfikowana firma
-                  </span>
-                ) : null}
+                <VerifiedCompanyBadge
+                  isVerified={company?.is_verified}
+                  className="bg-white/15 !text-white !px-4 !py-2 uppercase tracking-wide border border-transparent hover:border-white/20 transition-colors"
+                />
               </div>
 
               <h1 className="max-w-4xl break-words text-3xl font-black leading-tight tracking-[-1px] md:text-5xl">
@@ -343,17 +342,11 @@ export default async function OfferDetailsPage({
                 Certyfikaty i weryfikacja
               </h2>
               <div className="flex flex-wrap gap-3">
-                {company?.is_verified ? (
-                  <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-700">
-                    <i className="fas fa-check-circle"></i>
-                    Firma zweryfikowana
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm font-bold text-slate-700">
-                    <i className="fas fa-clock text-[#1a5f3c]"></i>
-                    Profil firmy
-                  </span>
-                )}
+                <VerifiedCompanyBadge
+                  isVerified={company?.is_verified}
+                  showUnverified={true}
+                  className="!px-4 !py-2 !text-sm"
+                />
               </div>
             </section>
 

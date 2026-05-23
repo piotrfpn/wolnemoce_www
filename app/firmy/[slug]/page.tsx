@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
+import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
 import { createClient } from "@/lib/supabase/server";
 
 type CompanyProfilePageProps = {
@@ -25,6 +26,13 @@ type PublicCompany = {
   website_url: string | null;
   is_verified: boolean | null;
   presentation_file_name: string | null;
+  nip: string | null;
+  regon: string | null;
+  krs: string | null;
+  legal_form: string | null;
+  business_status: string | null;
+  primary_pkd: string | null;
+  location_full_address: string | null;
 };
 
 export const dynamic = "force-dynamic";
@@ -55,7 +63,7 @@ async function getCompanyBySlug(slug: string) {
   const { data, error } = await supabase
     .from("companies")
     .select(
-      "id, slug, name, description, industry, industries, service_types, location_voivodeship, location_city, website_url, is_verified, presentation_file_name"
+      "id, slug, name, description, industry, industries, service_types, location_voivodeship, location_city, website_url, is_verified, presentation_file_name, nip, regon, krs, legal_form, business_status, primary_pkd, location_full_address"
     )
     .eq("slug", slug)
     .eq("is_verified", true)
@@ -153,18 +161,10 @@ export default async function CompanyProfilePage({
 
               <div className="min-w-0">
                 <div className="mb-4 flex flex-wrap gap-3">
-                  <span
-                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wide ${
-                      company.is_verified
-                        ? "bg-emerald-500 text-white"
-                        : "bg-white/15 text-white"
-                    }`}
-                  >
-                    <i className={company.is_verified ? "fas fa-check-circle" : "fas fa-clock"}></i>
-                    {company.is_verified
-                      ? "Firma zweryfikowana"
-                      : "Firma oczekuje na weryfikację"}
-                  </span>
+                  <VerifiedCompanyBadge
+                    isVerified={company.is_verified}
+                    className="!px-4 !py-2 !uppercase !tracking-wide"
+                  />
                   {company.industry ? (
                     <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white">
                       <i className="fas fa-industry text-[#fbbf24]"></i>
@@ -223,6 +223,73 @@ export default async function CompanyProfilePage({
                     </span>
                   </p>
                 ) : null}
+              </div>
+            </div>
+
+            <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="mb-5 text-2xl font-extrabold text-slate-900">
+                Dane rejestrowe
+              </h2>
+              <p className="mb-4 text-xs leading-5 text-slate-500">
+                Dane rejestrowe pochodzą z profilu firmy i mogą być uzupełnione na podstawie publicznych rejestrów, takich jak GUS/REGON.
+                {company.is_verified && (
+                  <span className="block mt-2 font-medium text-[#1a5f3c]">
+                    Status &quot;Firma zweryfikowana&quot; oznacza podstawową kontrolę danych rejestrowych przez administratora serwisu. Nie jest gwarancją jakości, terminowości ani wykonania usługi.
+                  </span>
+                )}
+              </p>
+              <div className="space-y-3 text-sm text-slate-600">
+                {company.nip && (
+                  <div className="flex justify-between border-b border-slate-100 pb-2">
+                    <span className="text-slate-500">NIP</span>
+                    <span className="font-bold text-slate-900">{company.nip}</span>
+                  </div>
+                )}
+                {company.regon && (
+                  <div className="flex justify-between border-b border-slate-100 pb-2">
+                    <span className="text-slate-500">REGON</span>
+                    <span className="font-bold text-slate-900">{company.regon}</span>
+                  </div>
+                )}
+                {company.krs && (
+                  <div className="flex justify-between border-b border-slate-100 pb-2">
+                    <span className="text-slate-500">KRS</span>
+                    <span className="font-bold text-slate-900">{company.krs}</span>
+                  </div>
+                )}
+                {company.legal_form && (
+                  <div className="flex justify-between border-b border-slate-100 pb-2 gap-4">
+                    <span className="text-slate-500 shrink-0">Forma prawna</span>
+                    <span className="font-bold text-slate-900 text-right">{company.legal_form}</span>
+                  </div>
+                )}
+                {company.business_status && (
+                  <div className="flex justify-between border-b border-slate-100 pb-2">
+                    <span className="text-slate-500">Status działalności</span>
+                    <span className="font-bold text-slate-900">{company.business_status}</span>
+                  </div>
+                )}
+                {company.primary_pkd && (
+                  <div className="flex justify-between border-b border-slate-100 pb-2 gap-4">
+                    <span className="text-slate-500 shrink-0">Główny PKD</span>
+                    <span className="font-bold text-slate-900 text-right">{company.primary_pkd}</span>
+                  </div>
+                )}
+                {location && (
+                  <div className="flex justify-between border-b border-slate-100 pb-2">
+                    <span className="text-slate-500">Lokalizacja</span>
+                    <span className="font-bold text-slate-900">{location}</span>
+                  </div>
+                )}
+                {company.location_full_address && (
+                  <div className="flex justify-between border-b border-slate-100 pb-2 gap-4">
+                    <span className="text-slate-500 shrink-0">Adres siedziby</span>
+                    <span className="font-bold text-slate-900 text-right">{company.location_full_address}</span>
+                  </div>
+                )}
+                {!company.nip && !company.regon && !company.krs && !company.legal_form && !company.business_status && !company.primary_pkd && !company.location_full_address && (
+                  <div className="text-slate-500 italic">Brak szczegółowych danych rejestrowych.</div>
+                )}
               </div>
             </div>
 
