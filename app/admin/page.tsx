@@ -414,6 +414,15 @@ export default async function AdminPage() {
                 Oznaczenie firmy jako zweryfikowanej pokaże badge w panelu
                 użytkownika, na kartach ofert i profilu firmy.
               </p>
+              <div className="mt-4">
+                <Link
+                  href="/admin/firmy"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline transition hover:bg-[#1a5f3c] hover:text-white"
+                >
+                  Zarządzaj firmami
+                  <i className="fas fa-arrow-right text-xs"></i>
+                </Link>
+              </div>
             </div>
             <PendingCompaniesClient companies={pendingCompanies} />
           </section>
