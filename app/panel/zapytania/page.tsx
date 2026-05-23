@@ -379,8 +379,16 @@ export default async function PanelInquiriesPage({
               ))}
             </div>
           ) : (
-            <div className="rounded-[24px] border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
-              Nie masz zapytań ofertowych dla wybranych filtrów.
+            <div className="rounded-[24px] border border-dashed border-slate-300 bg-white p-12 text-center shadow-sm">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-50 text-slate-400">
+                <i className="fas fa-inbox text-2xl"></i>
+              </div>
+              <h2 className="text-xl font-extrabold text-slate-900">
+                Brak zapytań
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-slate-500">
+                Nie masz zapytań ofertowych dla wybranych filtrów.
+              </p>
             </div>
           )}
         </section>

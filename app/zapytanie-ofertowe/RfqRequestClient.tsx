@@ -187,6 +187,7 @@ export default function RfqRequestClient({
           sessionStorage.removeItem(draftKey);
         }
         setSelectedFiles([]);
+        setFormValues(getInitialFormValues(initialBuyerData));
         setIsSubmitted(true);
       }
     });
