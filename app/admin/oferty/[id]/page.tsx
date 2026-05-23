@@ -29,8 +29,10 @@ type AdminOfferDetails = {
   featured_priority: number | null;
   created_at: string | null;
   companies: {
+    id: string;
     name: string | null;
     slug: string | null;
+    plan: string | null;
     location_city: string | null;
     location_voivodeship: string | null;
     is_verified: boolean | null;
@@ -102,7 +104,7 @@ export default async function AdminOfferDetailsPage({
   const { data, error } = await supabase
     .from("offers")
     .select(
-      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, is_featured, featured_until, featured_priority, created_at, companies!inner(name, slug, location_city, location_voivodeship, is_verified, website_url), offer_images(id, path, alt, sort_order, created_at)"
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, is_featured, featured_until, featured_priority, created_at, companies!inner(id, name, slug, plan, location_city, location_voivodeship, is_verified, website_url), offer_images(id, path, alt, sort_order, created_at)"
     )
     .eq("id", params.id)
     .maybeSingle();
@@ -113,6 +115,22 @@ export default async function AdminOfferDetailsPage({
 
   const offer = data as unknown as AdminOfferDetails;
   const company = offer.companies;
+  const { data: countedOffersData } = company?.id
+    ? await supabase
+        .from("offers")
+        .select("id, title, status")
+        .eq("company_id", company.id)
+        .in("status", ["active", "pending"])
+        .order("created_at", { ascending: false })
+    : { data: [] };
+  const countedOffers = (countedOffersData ?? []) as {
+    id: string;
+    title: string | null;
+    status: string | null;
+  }[];
+  const isFreePlan = company?.plan === "free";
+  const freeLimitCount = countedOffers.length;
+  const isFreeOverLimit = isFreePlan && freeLimitCount > 1;
   const location = [company?.location_city, company?.location_voivodeship]
     .filter(Boolean)
     .join(", ");
@@ -178,6 +196,11 @@ export default async function AdminOfferDetailsPage({
                       Firma zweryfikowana
                     </span>
                   ) : null}
+                  {isFreeOverLimit ? (
+                    <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">
+                      Przekroczony limit FREE: {freeLimitCount}/1
+                    </span>
+                  ) : null}
                 </div>
 
                 <div className="grid min-w-0 gap-4 sm:grid-cols-2">
@@ -201,6 +224,72 @@ export default async function AdminOfferDetailsPage({
                     </div>
                   ))}
                 </div>
+              </section>
+
+              <section
+                className={`rounded-[24px] border p-5 shadow-sm md:p-6 ${
+                  isFreeOverLimit
+                    ? "border-amber-200 bg-amber-50"
+                    : "border-slate-200 bg-white"
+                }`}
+              >
+                <div className="mb-5 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="min-w-0">
+                    <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
+                      Limit ofert firmy
+                    </p>
+                    <h2 className="text-2xl font-extrabold text-slate-900">
+                      {isFreePlan
+                        ? `Plan FREE: ${freeLimitCount}/1 ofert aktywnych lub w moderacji`
+                        : "Plan firmy bez limitu FREE"}
+                    </h2>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      {isFreeOverLimit
+                        ? "Legacy: firma ma więcej ofert niż aktualny limit FREE. Nie wykonujemy zmian automatycznie."
+                        : "Do limitu liczą się tylko oferty active i pending."}
+                    </p>
+                  </div>
+                  <span
+                    className={`inline-flex shrink-0 rounded-full px-3 py-1 text-xs font-bold ${
+                      isFreeOverLimit
+                        ? "bg-amber-100 text-amber-800"
+                        : "bg-slate-100 text-slate-700"
+                    }`}
+                  >
+                    {company?.plan?.toUpperCase() ?? "FREE"}
+                  </span>
+                </div>
+
+                {countedOffers.length > 0 ? (
+                  <div className="grid min-w-0 gap-3">
+                    {countedOffers.map((countedOffer) => (
+                      <div
+                        key={countedOffer.id}
+                        className="flex min-w-0 flex-col gap-2 rounded-2xl bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
+                      >
+                        <div className="min-w-0">
+                          <p className="break-words text-sm font-bold text-slate-900">
+                            {countedOffer.title ?? "Oferta bez tytułu"}
+                          </p>
+                          <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                            Status: {countedOffer.status ?? "pending"}
+                          </p>
+                        </div>
+                        <Link
+                          href={`/admin/oferty/${countedOffer.id}`}
+                          className="inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
+                        >
+                          Otwórz
+                          <i className="fas fa-arrow-right text-xs"></i>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="rounded-xl bg-white px-4 py-3 text-sm text-slate-500">
+                    Firma nie ma ofert wliczanych do limitu FREE.
+                  </p>
+                )}
               </section>
 
               <section className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">

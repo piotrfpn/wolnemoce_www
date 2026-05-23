@@ -13,6 +13,29 @@ import PendingServicesClient, {
   type PendingServiceRequest,
 } from "./PendingServicesClient";
 
+type FreeLimitOffer = {
+  id: string;
+  title: string | null;
+  status: string | null;
+  company_id: string | null;
+  companies: {
+    id: string;
+    name: string | null;
+    plan: string | null;
+  } | null;
+};
+
+type FreeLimitCompanySummary = {
+  companyId: string;
+  companyName: string;
+  count: number;
+  offers: {
+    id: string;
+    title: string;
+    status: string;
+  }[];
+};
+
 export const metadata: Metadata = {
   title: "Panel administratora",
   description: "Panel administratora WolneMoce.pl.",
@@ -43,6 +66,7 @@ export default async function AdminPage() {
     offersResult,
     serviceRequestsResult,
     contactMessagesResult,
+    freeLimitOffersResult,
   ] = await Promise.all([
     supabase
       .from("companies")
@@ -67,6 +91,11 @@ export default async function AdminPage() {
       .from("contact_messages")
       .select("id", { count: "exact", head: true })
       .eq("status", "new"),
+    supabase
+      .from("offers")
+      .select("id, title, status, company_id, companies!inner(id, name, plan)")
+      .in("status", ["active", "pending"])
+      .eq("companies.plan", "free"),
   ]);
 
   const pendingCompanies = (companiesResult.data ?? []) as PendingCompany[];
@@ -74,6 +103,35 @@ export default async function AdminPage() {
   const pendingServiceRequests = (serviceRequestsResult.data ??
     []) as PendingServiceRequest[];
   const newContactMessagesCount = contactMessagesResult.count ?? 0;
+  const freeLimitOffers = (freeLimitOffersResult.data ?? []) as unknown as FreeLimitOffer[];
+  const freeLimitCompanies = new Map<string, FreeLimitCompanySummary>();
+
+  for (const offer of freeLimitOffers) {
+    const companyId = offer.companies?.id ?? offer.company_id;
+
+    if (!companyId) {
+      continue;
+    }
+
+    const current = freeLimitCompanies.get(companyId) ?? {
+      companyId,
+      companyName: offer.companies?.name ?? "Firma bez nazwy",
+      count: 0,
+      offers: [],
+    };
+
+    current.count += 1;
+    current.offers.push({
+      id: offer.id,
+      title: offer.title ?? "Oferta bez tytułu",
+      status: offer.status ?? "pending",
+    });
+    freeLimitCompanies.set(companyId, current);
+  }
+
+  const freeLimitOverages = Array.from(freeLimitCompanies.values())
+    .filter((company) => company.count > 1)
+    .sort((first, second) => second.count - first.count);
   const pendingOfferIds = pendingOffers.map((offer) => offer.id);
   const { data: offerImages } =
     pendingOfferIds.length > 0
@@ -171,6 +229,79 @@ export default async function AdminPage() {
               </p>
             </div>
           </div>
+
+          <section className="mb-8 min-w-0 rounded-[24px] border border-amber-200 bg-amber-50 p-5 shadow-sm md:p-6">
+            <div className="flex min-w-0 flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+              <div className="min-w-0">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white text-amber-700">
+                  <i className="fas fa-scale-balanced"></i>
+                </div>
+                <p className="mb-2 text-sm font-bold uppercase tracking-wide text-amber-700">
+                  Sanity-check limitu FREE
+                </p>
+                <h2 className="text-2xl font-extrabold text-slate-900">
+                  {freeLimitOverages.length > 0
+                    ? "Firmy FREE z przekroczonym limitem"
+                    : "Brak firm FREE ponad limitem"}
+                </h2>
+                <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-700">
+                  Limit liczy oferty aktywne i oczekujące na moderację. To
+                  kontrola danych legacy - żadna oferta nie jest archiwizowana
+                  automatycznie.
+                </p>
+              </div>
+              <Link
+                href="/admin/oferty?freeLimit=over"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-amber-700 px-5 py-3 text-sm font-bold text-amber-800 no-underline transition hover:bg-amber-700 hover:text-white"
+              >
+                Pokaż oferty over limit
+                <i className="fas fa-arrow-right text-xs"></i>
+              </Link>
+            </div>
+
+            {freeLimitOffersResult.error ? (
+              <div className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                Nie udało się pobrać sanity-checku FREE:{" "}
+                {freeLimitOffersResult.error.message}
+              </div>
+            ) : freeLimitOverages.length > 0 ? (
+              <div className="mt-6 grid min-w-0 gap-4 lg:grid-cols-2">
+                {freeLimitOverages.slice(0, 6).map((company) => (
+                  <div
+                    key={company.companyId}
+                    className="min-w-0 rounded-2xl border border-amber-200 bg-white p-4"
+                  >
+                    <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="min-w-0">
+                        <h3 className="break-words text-sm font-extrabold text-slate-900">
+                          {company.companyName}
+                        </h3>
+                        <p className="mt-1 text-sm font-bold text-amber-800">
+                          Przekroczony limit FREE: {company.count}/1 ofert
+                          aktywnych lub w moderacji
+                        </p>
+                      </div>
+                      <span className="inline-flex shrink-0 rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">
+                        Legacy
+                      </span>
+                    </div>
+                    <ul className="mt-3 space-y-2 text-sm text-slate-600">
+                      {company.offers.slice(0, 3).map((offer) => (
+                        <li key={offer.id} className="flex min-w-0 gap-2">
+                          <span className="font-bold text-slate-900">
+                            {offer.status}
+                          </span>
+                          <span className="min-w-0 break-words">
+                            {offer.title}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </section>
 
           <section className="mb-8 min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
             <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-center md:justify-between">

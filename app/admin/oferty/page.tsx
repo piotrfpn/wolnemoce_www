@@ -24,10 +24,21 @@ type AdminOfferListItem = {
   featured_priority: number | null;
   created_at: string | null;
   companies: {
+    id: string;
     name: string | null;
+    plan: string | null;
     location_city: string | null;
     location_voivodeship: string | null;
     is_verified: boolean | null;
+  } | null;
+};
+
+type FreeLimitOffer = {
+  id: string;
+  company_id: string | null;
+  companies: {
+    id: string;
+    plan: string | null;
   } | null;
 };
 
@@ -96,11 +107,31 @@ export default async function AdminOffersPage({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const supabase = await requireAdmin();
+  const { data: freeLimitData } = await supabase
+    .from("offers")
+    .select("id, company_id, companies!inner(id, plan)")
+    .in("status", ["active", "pending"])
+    .eq("companies.plan", "free");
+  const freeLimitCounts = new Map<string, number>();
+
+  for (const offer of (freeLimitData ?? []) as unknown as FreeLimitOffer[]) {
+    const companyId = offer.companies?.id ?? offer.company_id;
+
+    if (companyId) {
+      freeLimitCounts.set(companyId, (freeLimitCounts.get(companyId) ?? 0) + 1);
+    }
+  }
+
+  const overLimitCompanyIds = new Set(
+    Array.from(freeLimitCounts.entries())
+      .filter(([, count]) => count > 1)
+      .map(([companyId]) => companyId)
+  );
 
   let query = supabase
     .from("offers")
     .select(
-      "id, title, slug, branch, service_type, status, is_featured, featured_until, featured_priority, created_at, companies!inner(name, location_city, location_voivodeship, is_verified)"
+      "id, title, slug, branch, service_type, status, is_featured, featured_until, featured_priority, created_at, companies!inner(id, name, plan, location_city, location_voivodeship, is_verified)"
     );
 
   const statusFilter = typeof searchParams.status === "string" ? searchParams.status : "all";
@@ -137,8 +168,12 @@ export default async function AdminOffersPage({
   const q = typeof searchParams.q === "string" ? searchParams.q.toLowerCase() : "";
   const featured = typeof searchParams.featured === "string" ? searchParams.featured : "all";
   const companyVerified = typeof searchParams.companyVerified === "string" ? searchParams.companyVerified : "all";
+  const freeLimit = typeof searchParams.freeLimit === "string" ? searchParams.freeLimit : "all";
 
   offers = offers.filter((offer) => {
+    const companyId = offer.companies?.id;
+    const isFreeOverLimit = Boolean(companyId && overLimitCompanyIds.has(companyId));
+
     if (q) {
       const searchTerms = q.split(/\s+/);
       const textToSearch = [
@@ -168,6 +203,11 @@ export default async function AdminOffersPage({
       const isVerified = offer.companies?.is_verified ?? false;
       if (companyVerified === "true" && !isVerified) return false;
       if (companyVerified === "false" && isVerified) return false;
+    }
+
+    if (freeLimit !== "all") {
+      if (freeLimit === "over" && !isFreeOverLimit) return false;
+      if (freeLimit === "ok" && isFreeOverLimit) return false;
     }
 
     return true;
@@ -206,6 +246,28 @@ export default async function AdminOffersPage({
             </div>
           ) : null}
 
+          <div className="mb-6 rounded-[20px] border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900 shadow-sm">
+            <div className="flex min-w-0 flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="min-w-0">
+                <p className="font-bold">
+                  Sanity-check FREE: {overLimitCompanyIds.size} firm ponad
+                  limitem
+                </p>
+                <p className="mt-1 text-amber-800">
+                  Over limit oznacza więcej niż 1 ofertę w statusie active lub
+                  pending przy planie FREE. Dane nie są zmieniane automatycznie.
+                </p>
+              </div>
+              <Link
+                href="/admin/oferty?freeLimit=over"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-amber-800 no-underline transition hover:bg-amber-100"
+              >
+                Filtruj over limit
+                <i className="fas fa-filter text-xs"></i>
+              </Link>
+            </div>
+          </div>
+
           {offers.length > 0 ? (
             <div className="grid min-w-0 gap-5">
               {offers.map((offer) => {
@@ -215,6 +277,11 @@ export default async function AdminOffersPage({
                   .join(", ");
                 const status = offer.status ?? "pending";
                 const featuredIndicator = isActiveFeatured(offer);
+                const freeLimitCount = company?.id
+                  ? freeLimitCounts.get(company.id) ?? 0
+                  : 0;
+                const isFreeOverLimit =
+                  company?.plan === "free" && freeLimitCount > 1;
 
                 return (
                   <article
@@ -241,6 +308,11 @@ export default async function AdminOffersPage({
                               Firma zweryfikowana
                             </span>
                           ) : null}
+                          {isFreeOverLimit ? (
+                            <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">
+                              Przekroczony limit FREE: {freeLimitCount}/1
+                            </span>
+                          ) : null}
                         </div>
 
                         <h2 className="break-words text-xl font-extrabold text-slate-900">
@@ -250,6 +322,13 @@ export default async function AdminOffersPage({
                           {company?.name ?? "Firma bez nazwy"}
                           {location ? ` · ${location}` : ""}
                         </p>
+                        {isFreeOverLimit ? (
+                          <p className="mt-3 max-w-2xl rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+                            Legacy: firma ma więcej ofert niż aktualny limit
+                            FREE. Decyzję o archiwizacji lub zmianie statusu
+                            podejmuje administrator dla wybranej oferty.
+                          </p>
+                        ) : null}
                         <p className="mt-2 text-sm text-slate-500">
                           {offer.branch ?? "Branża"} ·{" "}
                           {offer.service_type ?? "Rodzaj usługi"}

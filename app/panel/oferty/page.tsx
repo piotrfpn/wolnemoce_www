@@ -204,7 +204,10 @@ export default async function PanelOffersPage() {
                           <i className="fas fa-pen"></i>
                           Edytuj
                         </Link>
-                        <OfferActionsClient offerId={offer.id} />
+                        <OfferActionsClient
+                          offerId={offer.id}
+                          status={offer.status}
+                        />
                       </div>
                     </div>
                   </article>

@@ -12,6 +12,7 @@ export default function AdminOffersFiltersClient() {
   const currentStatus = searchParams.get("status") ?? "all";
   const currentFeatured = searchParams.get("featured") ?? "all";
   const currentCompanyVerified = searchParams.get("companyVerified") ?? "all";
+  const currentFreeLimit = searchParams.get("freeLimit") ?? "all";
   const currentSort = searchParams.get("sort") ?? "newest";
 
   const [q, setQ] = useState(currentQ);
@@ -61,7 +62,7 @@ export default function AdminOffersFiltersClient() {
         </button>
       </form>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <select
           value={currentStatus}
           onChange={(e) => updateParams({ status: e.target.value })}
@@ -96,6 +97,17 @@ export default function AdminOffersFiltersClient() {
           <option value="all">Wszystkie firmy</option>
           <option value="true">Firma zweryfikowana</option>
           <option value="false">Firma niezweryfikowana</option>
+        </select>
+
+        <select
+          value={currentFreeLimit}
+          onChange={(e) => updateParams({ freeLimit: e.target.value })}
+          className="rounded-xl border border-slate-200 px-3 py-2.5 text-sm focus:border-[#1a5f3c] focus:outline-none focus:ring-1 focus:ring-[#1a5f3c]"
+          disabled={isPending}
+        >
+          <option value="all">Wszystkie limity FREE</option>
+          <option value="over">Przekroczony limit FREE</option>
+          <option value="ok">OK / poza limitem</option>
         </select>
 
         <select

@@ -271,6 +271,14 @@ export default async function PanelPage() {
                     Do limitu planu FREE liczą się oferty aktywne i oczekujące
                     na moderację.
                   </p>
+                  {freeLimitUsed > 1 ? (
+                    <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+                      Masz więcej ofert aktywnych lub w moderacji niż przewiduje
+                      obecny limit planu FREE. To mogą być oferty dodane przed
+                      wprowadzeniem limitu. Możesz zostawić je do decyzji
+                      administratora albo zarchiwizować wybrane oferty.
+                    </p>
+                  ) : null}
                 </div>
               ) : null}
             </div>
