@@ -490,7 +490,7 @@ export const pricingPlans: PricingPlan[] = [
     price: "299 zł",
     priceSuffix: "/ mies.",
     features: [
-      "10 aktywnych ofert",
+      "5 aktywnych ofert",
       "Wyższa widoczność w wynikach",
       "Opcja zgłoszenia firmy do weryfikacji",
       "Priorytetowa moderacja",

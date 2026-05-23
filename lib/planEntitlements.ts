@@ -13,7 +13,7 @@ export function getMaxActivePendingOffers(plan: CompanyPlan | string | null | un
       return 1;
     case "pro":
       // Docelowe założenie UI dla PRO w MVP. Twarde egzekwowanie musi zostać wdrożone w DB w Sprincie 8C.
-      return 10; 
+      return 5;
     case "enterprise":
       // Reprezentuje "brak limitów" lub indywidualne limity
       return 9999; 

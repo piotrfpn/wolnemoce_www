@@ -26,8 +26,8 @@ Plan darmowy służący do walidacji platformy i weryfikacji popytu. Nie zawiera
 
 ### Plan PRO
 Plan PRO:
-- **Max ofert (active + pending):** 10
-- Uzasadnienie: 10 ofert to czytelny, łatwy do komunikacji limit dla aktywnej firmy produkcyjnej, ale nadal nie jest to model "nielimitowany" ani zachęta do spamowania katalogu.
+- **Max ofert (active + pending):** 5
+- Uzasadnienie: 5 ofert to czytelny, łatwy do komunikacji limit dla aktywnej firmy produkcyjnej.
 - Wartość PRO nadal wynika nie tylko z liczby ofert, ale też z widoczności, priorytetowej moderacji, przyszłych podbić i lepszego profilu.
 - **Wyróżnienia / Podbicia:** Możliwość wyróżnienia (Sponsorowane), cykliczne podbicia (w przyszłości)
 - **Priorytet moderacji:** Priorytetowy
@@ -53,10 +53,10 @@ Dla grup kapitałowych, większych zakładów, operatorów i partnerów.
 - **Plik:** `supabase/migrations/00018_free_plan_limits.sql`
 - **UI:** `/panel`, `/panel/oferty`, helper TS
 
-### PRO max 10 active/pending offers
+### PRO max 5 active/pending offers
 - **Status:** planned
 - **Requires:** DB trigger update / `plan_config` tabela / testy
-- **Sprint:** 8C (Nie wystarczy sam TS helper; SQL trigger lub plan_config musi dopuścić 10 ofert przy `companies.plan = 'pro'`)
+- **Sprint:** 8C (Nie wystarczy sam TS helper; SQL trigger lub plan_config musi dopuścić 5 ofert przy `companies.plan = 'pro'`)
 
 ### PRO bumps / refreshes (podbicia)
 - **Status:** planned
@@ -74,6 +74,22 @@ Dla grup kapitałowych, większych zakładów, operatorów i partnerów.
 - **Koncepcja:** Usługi partnerskie są traktowane horyzontalnie, niezależnie od głównego pionu subskrypcji (FREE -> PRO -> ENTERPRISE). Firma może mieć plan FREE i włączony add-on `credos_lead`.
 - **Requires:** Nowa kolumna `companies.active_addons text[]` lub tabela powiązań `company_addons`.
 - **Sprint:** Później, przed komercjalizacją pakietów.
+
+---
+
+## Sprint 8B — DB Plan Enforcement
+
+Przygotowano architekturę bazodanową do twardego egzekwowania planów:
+- Tabela `plan_config` stała się głównym źródłem limitów planów.
+- FREE = 1
+- PRO = 5
+- ENTERPRISE = null / indywidualny limit
+- Zabezpieczono spójność `companies.plan -> plan_config.plan_key` poprzez Foreign Key.
+- Wprowadzono trigger `enforce_plan_offer_limits`, który działa tylko na tabeli `offers` i zabezpiecza limity przy insert/update do statusu `active/pending`.
+- Nie ma jeszcze automatycznego downgrade'u ofert przy zmianie planu firmy, co zapobiega niezamierzonej utracie danych.
+- `lib/planEntitlements.ts` pozostaje helperem UI.
+- Płatności (Stripe) nie są jeszcze podłączone.
+- Mechanizm automatycznego downgrade'u PRO -> FREE pozostaje na inny sprint.
 
 ---
 

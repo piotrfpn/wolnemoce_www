@@ -70,6 +70,9 @@ const statusLabels: Record<OfferStatus, string> = {
 const freePlanLimitMessage =
   "Plan FREE pozwala utrzymywać 1 ofertę aktywną lub oczekującą na moderację. Aby dodać kolejną, zarchiwizuj obecną ofertę albo przejdź na wyższy plan.";
 
+const planLimitMessage =
+  "Osiągnięto limit aktywnych lub oczekujących ofert dla aktualnego planu firmy. Zarchiwizuj jedną z ofert albo przejdź na wyższy plan.";
+
 function slugify(value: string) {
   const normalized = value
     .toLowerCase()
@@ -421,6 +424,8 @@ export default function OfferFormClient({
       if (saveError || !insertedOffer?.id) {
         if (saveError?.message?.includes("FREE_PLAN_OFFER_LIMIT_REACHED")) {
           setError(freePlanLimitMessage);
+        } else if (saveError?.message?.includes("PLAN_OFFER_LIMIT_REACHED")) {
+          setError(planLimitMessage);
         } else {
           setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
         }
@@ -443,6 +448,8 @@ export default function OfferFormClient({
       if (saveError) {
         if (saveError?.message?.includes("FREE_PLAN_OFFER_LIMIT_REACHED")) {
           setError(freePlanLimitMessage);
+        } else if (saveError?.message?.includes("PLAN_OFFER_LIMIT_REACHED")) {
+          setError(planLimitMessage);
         } else {
           setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
         }
