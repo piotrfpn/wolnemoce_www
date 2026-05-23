@@ -15,6 +15,7 @@ Opcjonalne:
 ```env
 GUS_REGON_API_URL=https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc
 GUS_MOCK_MODE=false
+GUS_DEBUG=false
 ```
 
 `GUS_API_KEY` jest sekretem server-side. Nie używaj `NEXT_PUBLIC_GUS_API_KEY`, nie zapisuj prawdziwego klucza w repo i nie loguj klucza ani pełnych odpowiedzi GUS.
@@ -30,6 +31,8 @@ Frontend wysyła do Server Action tylko NIP. Zapytania SOAP do GUS są wykonywan
 3. `DaneSzukajPodmioty` po NIP z nagłówkiem HTTP `sid`.
 
 Wywołanie ma timeout 12 sekund. Błąd, timeout, brak konfiguracji albo brak wyniku nie blokują ręcznego zapisu profilu firmy.
+
+`DaneSzukajPodmioty` wymaga namespace DataContract dla pola `Nip`; SID jest przekazywany jako HTTP header `sid`. Przy `GUS_DEBUG=true` klient loguje wyłącznie bezpieczną diagnostykę techniczną: etap wywołania, status HTTP, obecność i długość SID, nazwę błędu oraz wartości `GetValue` po pustym wyniku. Klucz GUS i pełne payloady SOAP nie są logowane.
 
 ## Mapowanie danych
 

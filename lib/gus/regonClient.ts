@@ -29,6 +29,7 @@ export class GusApiError extends Error {
 const defaultGusApiUrl =
   "https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc";
 const requestTimeoutMs = 12000;
+const gusDebugEnabled = process.env.GUS_DEBUG === "true";
 
 function isProductionEnvironment() {
   return process.env.NODE_ENV === "production" || process.env.VERCEL_ENV === "production";
@@ -83,6 +84,17 @@ function getGusConfig() {
   return { apiKey, apiUrl };
 }
 
+function logGusDiagnostic(
+  stage: string,
+  details: Record<string, string | number | boolean | null>
+) {
+  if (!gusDebugEnabled) {
+    return;
+  }
+
+  console.info("[GUS]", stage, details);
+}
+
 async function postSoap(
   apiUrl: string,
   body: string,
@@ -103,6 +115,14 @@ async function postSoap(
       signal: controller.signal,
     });
 
+    logGusDiagnostic("soap-response", {
+      action,
+      httpStatus: response.status,
+      ok: response.ok,
+      hasSid: Boolean(sid),
+      sidLength: sid?.length ?? 0,
+    });
+
     if (!response.ok) {
       throw new GusApiError(`GUS zwrócił status ${response.status}.`);
     }
@@ -112,6 +132,13 @@ async function postSoap(
     if (error instanceof GusConfigError || error instanceof GusApiError) {
       throw error;
     }
+
+    logGusDiagnostic("soap-error", {
+      action,
+      hasSid: Boolean(sid),
+      sidLength: sid?.length ?? 0,
+      errorName: error instanceof Error ? error.name : "UnknownError",
+    });
 
     throw new GusApiError();
   } finally {
@@ -160,17 +187,32 @@ function buildLoginEnvelope(apiKey: string, apiUrl: string) {
 
 function buildSearchEnvelope(nip: string, apiUrl: string) {
   return `<?xml version="1.0" encoding="utf-8"?>
-<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope" xmlns:a="http://www.w3.org/2005/08/addressing">
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope" xmlns:a="http://www.w3.org/2005/08/addressing" xmlns:ns="http://CIS/BIR/PUBL/2014/07" xmlns:dat="http://CIS/BIR/PUBL/2014/07/DataContract">
   <s:Header>
     <a:Action s:mustUnderstand="1">http://CIS/BIR/PUBL/2014/07/IUslugaBIRzewnPubl/DaneSzukajPodmioty</a:Action>
     <a:To s:mustUnderstand="1">${apiUrl}</a:To>
   </s:Header>
   <s:Body>
-    <DaneSzukajPodmioty xmlns="http://CIS/BIR/PUBL/2014/07">
-      <pParametryWyszukiwania>
-        <Nip>${nip}</Nip>
-      </pParametryWyszukiwania>
-    </DaneSzukajPodmioty>
+    <ns:DaneSzukajPodmioty>
+      <ns:pParametryWyszukiwania>
+        <dat:Nip>${nip}</dat:Nip>
+      </ns:pParametryWyszukiwania>
+    </ns:DaneSzukajPodmioty>
+  </s:Body>
+</s:Envelope>`;
+}
+
+function buildGetValueEnvelope(parameterName: string, apiUrl: string) {
+  return `<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope" xmlns:a="http://www.w3.org/2005/08/addressing">
+  <s:Header>
+    <a:Action s:mustUnderstand="1">http://CIS/BIR/2014/07/IUslugaBIR/GetValue</a:Action>
+    <a:To s:mustUnderstand="1">${apiUrl}</a:To>
+  </s:Header>
+  <s:Body>
+    <GetValue xmlns="http://CIS/BIR/2014/07">
+      <pNazwaParametru>${parameterName}</pNazwaParametru>
+    </GetValue>
   </s:Body>
 </s:Envelope>`;
 }
@@ -188,7 +230,45 @@ async function loginToGus() {
     throw new GusApiError();
   }
 
+  logGusDiagnostic("login", {
+    hasSid: true,
+    sidLength: sid.length,
+  });
+
   return { sid, apiUrl };
+}
+
+async function getGusValue(apiUrl: string, sid: string, parameterName: string) {
+  const xml = await postSoap(
+    apiUrl,
+    buildGetValueEnvelope(parameterName, apiUrl),
+    "http://CIS/BIR/2014/07/IUslugaBIR/GetValue",
+    sid
+  );
+
+  return decodeXml(extractTag(xml, "GetValueResult"));
+}
+
+async function logEmptySearchDiagnostics(apiUrl: string, sid: string) {
+  const parameterNames = [
+    "KomunikatKod",
+    "KomunikatTresc",
+    "StatusSesji",
+    "StanDanych",
+  ];
+  const values: Record<string, string> = {};
+
+  try {
+    for (const parameterName of parameterNames) {
+      values[parameterName] = await getGusValue(apiUrl, sid, parameterName);
+    }
+
+    logGusDiagnostic("empty-search-result", values);
+  } catch (error) {
+    logGusDiagnostic("get-value-error", {
+      errorName: error instanceof Error ? error.name : "UnknownError",
+    });
+  }
 }
 
 function mapGusSearchResult(rawXml: string, fallbackNip: string): GusCompany | null {
@@ -230,6 +310,7 @@ export async function searchGusByNip(input: string) {
   const resultXml = extractTag(xml, "DaneSzukajPodmiotyResult");
 
   if (!resultXml) {
+    await logEmptySearchDiagnostics(apiUrl, sid);
     return null;
   }
 
