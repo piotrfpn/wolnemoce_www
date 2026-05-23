@@ -26,6 +26,15 @@ type CompanyData = {
   service_types: string[] | null;
   location_voivodeship: string | null;
   location_city: string | null;
+  location_postal_code: string | null;
+  location_street: string | null;
+  location_full_address: string | null;
+  regon: string | null;
+  krs: string | null;
+  legal_form: string | null;
+  business_status: string | null;
+  primary_pkd: string | null;
+  pkd_codes: PkdCode[] | null;
   is_verified: boolean | null;
   website_url: string | null;
   contact_email: string | null;
@@ -41,6 +50,12 @@ type CompanyProfileFormClientProps = {
   userEmail: string | null;
   profile: ProfileData | null;
   company: CompanyData | null;
+};
+
+type PkdCode = {
+  code: string;
+  name: string | null;
+  isPrimary: boolean;
 };
 
 const inputClass =
@@ -200,6 +215,14 @@ function canUseDevelopmentMockNip(nip: string) {
   return process.env.NODE_ENV === "development" && isGusMockNip(nip);
 }
 
+function formatPkdCodes(codes: PkdCode[]) {
+  return codes
+    .map((code) =>
+      code.name ? `${code.code} - ${code.name}` : code.code
+    )
+    .join("\n");
+}
+
 type CompanySaveData = {
   id: string;
   slug: string | null;
@@ -211,6 +234,15 @@ type CompanySaveData = {
   service_types: string[] | null;
   location_voivodeship: string | null;
   location_city: string | null;
+  location_postal_code: string | null;
+  location_street: string | null;
+  location_full_address: string | null;
+  regon: string | null;
+  krs: string | null;
+  legal_form: string | null;
+  business_status: string | null;
+  primary_pkd: string | null;
+  pkd_codes: PkdCode[] | null;
   is_verified: boolean | null;
   website_url: string | null;
   contact_email?: string | null;
@@ -222,7 +254,7 @@ type CompanySaveData = {
 };
 
 const companyProfileSelect =
-  "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at, company_contact_settings(contact_email)";
+  "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, location_postal_code, location_street, location_full_address, regon, krs, legal_form, business_status, primary_pkd, pkd_codes, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at, company_contact_settings(contact_email)";
 
 export default function CompanyProfileFormClient({
   userId,
@@ -253,6 +285,17 @@ export default function CompanyProfileFormClient({
   const [city, setCity] = useState(
     company?.location_city ? normalizeCityName(company.location_city) : ""
   );
+  const [postalCode, setPostalCode] = useState(company?.location_postal_code ?? "");
+  const [streetAddress, setStreetAddress] = useState(company?.location_street ?? "");
+  const [fullAddress, setFullAddress] = useState(company?.location_full_address ?? "");
+  const [regon, setRegon] = useState(company?.regon ?? "");
+  const [krs, setKrs] = useState(company?.krs ?? "");
+  const [legalForm, setLegalForm] = useState(company?.legal_form ?? "");
+  const [businessStatus, setBusinessStatus] = useState(
+    company?.business_status ?? ""
+  );
+  const [primaryPkd, setPrimaryPkd] = useState(company?.primary_pkd ?? "");
+  const [pkdCodes, setPkdCodes] = useState<PkdCode[]>(company?.pkd_codes ?? []);
   const [description, setDescription] = useState(company?.description ?? "");
   const [websiteUrl, setWebsiteUrl] = useState(company?.website_url ?? "");
   const [contactEmail, setContactEmail] = useState(company?.contact_email ?? "");
@@ -410,6 +453,15 @@ export default function CompanyProfileFormClient({
     setSelectedServiceTypes(data.service_types ?? []);
     setVoivodeship(data.location_voivodeship ?? "");
     setCity(data.location_city ? normalizeCityName(data.location_city) : "");
+    setPostalCode(data.location_postal_code ?? "");
+    setStreetAddress(data.location_street ?? "");
+    setFullAddress(data.location_full_address ?? "");
+    setRegon(data.regon ?? "");
+    setKrs(data.krs ?? "");
+    setLegalForm(data.legal_form ?? "");
+    setBusinessStatus(data.business_status ?? "");
+    setPrimaryPkd(data.primary_pkd ?? "");
+    setPkdCodes(data.pkd_codes ?? []);
     setWebsiteUrl(data.website_url ?? "");
     const email = Array.isArray((data as any).company_contact_settings)
       ? (data as any).company_contact_settings[0]?.contact_email
@@ -467,6 +519,15 @@ export default function CompanyProfileFormClient({
       service_types: selectedServiceTypes,
       location_voivodeship: voivodeship,
       location_city: normalizeCityName(city),
+      location_postal_code: postalCode.trim() || null,
+      location_street: streetAddress.trim() || null,
+      location_full_address: fullAddress.trim() || null,
+      regon: regon.trim() || null,
+      krs: krs.trim() || null,
+      legal_form: legalForm.trim() || null,
+      business_status: businessStatus.trim() || null,
+      primary_pkd: primaryPkd.trim() || null,
+      pkd_codes: pkdCodes,
       website_url: normalizedWebsite.value,
     };
 
@@ -631,23 +692,30 @@ export default function CompanyProfileFormClient({
 
       setNip(gusCompany.nip ?? normalizedNip);
 
-      if (gusCompany.name) {
-        if (!name.trim()) {
-          setName(gusCompany.name);
-          updatedFields += 1;
-        } else if (normalizeLookupText(name) !== normalizeLookupText(gusCompany.name)) {
-          skippedExistingFields = true;
+      const applyTextField = (
+        gusValue: string | null | undefined,
+        currentValue: string,
+        setValue: (value: string) => void,
+        normalizeValue = false
+      ) => {
+        if (!gusValue) {
+          return;
         }
-      }
 
-      if (gusCompany.city) {
-        if (!city.trim()) {
-          setCity(normalizeCityName(gusCompany.city));
+        const nextValue = normalizeValue ? normalizeCityName(gusValue) : gusValue;
+
+        if (!currentValue.trim()) {
+          setValue(nextValue);
           updatedFields += 1;
-        } else if (normalizeLookupText(city) !== normalizeLookupText(gusCompany.city)) {
+        } else if (
+          normalizeLookupText(currentValue) !== normalizeLookupText(nextValue)
+        ) {
           skippedExistingFields = true;
         }
-      }
+      };
+
+      applyTextField(gusCompany.name, name, setName);
+      applyTextField(gusCompany.city, city, setCity, true);
 
       if (nextProvince) {
         if (!voivodeship) {
@@ -656,6 +724,24 @@ export default function CompanyProfileFormClient({
         } else if (
           normalizeLookupText(voivodeship) !== normalizeLookupText(nextProvince)
         ) {
+          skippedExistingFields = true;
+        }
+      }
+
+      applyTextField(gusCompany.postalCode, postalCode, setPostalCode);
+      applyTextField(gusCompany.street, streetAddress, setStreetAddress);
+      applyTextField(gusCompany.fullAddress, fullAddress, setFullAddress);
+      applyTextField(gusCompany.regon, regon, setRegon);
+      applyTextField(gusCompany.krs, krs, setKrs);
+      applyTextField(gusCompany.legalForm, legalForm, setLegalForm);
+      applyTextField(gusCompany.businessStatus, businessStatus, setBusinessStatus);
+      applyTextField(gusCompany.primaryPkd, primaryPkd, setPrimaryPkd);
+
+      if (gusCompany.pkdCodes?.length) {
+        if (pkdCodes.length === 0) {
+          setPkdCodes(gusCompany.pkdCodes);
+          updatedFields += 1;
+        } else {
           skippedExistingFields = true;
         }
       }
@@ -1229,6 +1315,135 @@ export default function CompanyProfileFormClient({
                 ))}
               </datalist>
             </label>
+
+            <div className="min-w-0 md:col-span-2">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                <div className="mb-5">
+                  <h3 className="flex items-center gap-2 text-sm font-extrabold text-slate-900">
+                    <i className="fas fa-file-contract text-[#1a5f3c]"></i>
+                    Dane rejestrowe (GUS)
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-500">
+                    Dane pobrane z rejestru GUS są zapisywane dopiero po
+                    zapisaniu profilu firmy.
+                  </p>
+                </div>
+
+                <div className="grid min-w-0 gap-5 md:grid-cols-2">
+                  <label className="block min-w-0">
+                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                      <i className="fas fa-hashtag text-[#1a5f3c]"></i>
+                      REGON
+                    </span>
+                    <input
+                      value={regon}
+                      onChange={(event) => setRegon(event.target.value)}
+                      className={inputClass}
+                    />
+                  </label>
+
+                  <label className="block min-w-0">
+                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                      <i className="fas fa-scale-balanced text-[#1a5f3c]"></i>
+                      KRS
+                    </span>
+                    <input
+                      value={krs}
+                      onChange={(event) => setKrs(event.target.value)}
+                      className={inputClass}
+                    />
+                  </label>
+
+                  <label className="block min-w-0">
+                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                      <i className="fas fa-envelope-open-text text-[#1a5f3c]"></i>
+                      Kod pocztowy
+                    </span>
+                    <input
+                      value={postalCode}
+                      onChange={(event) => setPostalCode(event.target.value)}
+                      placeholder="Np. 00-000"
+                      className={inputClass}
+                    />
+                  </label>
+
+                  <label className="block min-w-0">
+                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                      <i className="fas fa-road text-[#1a5f3c]"></i>
+                      Ulica / adres
+                    </span>
+                    <input
+                      value={streetAddress}
+                      onChange={(event) => setStreetAddress(event.target.value)}
+                      placeholder="Np. ul. Testowa 1/2"
+                      className={inputClass}
+                    />
+                  </label>
+
+                  <label className="block min-w-0 md:col-span-2">
+                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                      <i className="fas fa-map-location-dot text-[#1a5f3c]"></i>
+                      Pełny adres siedziby
+                    </span>
+                    <input
+                      value={fullAddress}
+                      onChange={(event) => setFullAddress(event.target.value)}
+                      placeholder="Np. ul. Testowa 1/2, 00-000 Warszawa"
+                      className={inputClass}
+                    />
+                  </label>
+
+                  <label className="block min-w-0">
+                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                      <i className="fas fa-briefcase text-[#1a5f3c]"></i>
+                      Forma prawna
+                    </span>
+                    <input
+                      value={legalForm}
+                      onChange={(event) => setLegalForm(event.target.value)}
+                      className={inputClass}
+                    />
+                  </label>
+
+                  <label className="block min-w-0">
+                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                      <i className="fas fa-circle-info text-[#1a5f3c]"></i>
+                      Status działalności
+                    </span>
+                    <input
+                      value={businessStatus}
+                      onChange={(event) => setBusinessStatus(event.target.value)}
+                      className={inputClass}
+                    />
+                  </label>
+
+                  <label className="block min-w-0 md:col-span-2">
+                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                      <i className="fas fa-list-check text-[#1a5f3c]"></i>
+                      PKD przeważające
+                    </span>
+                    <input
+                      value={primaryPkd}
+                      onChange={(event) => setPrimaryPkd(event.target.value)}
+                      className={inputClass}
+                    />
+                  </label>
+
+                  <label className="block min-w-0 md:col-span-2">
+                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                      <i className="fas fa-list-ul text-[#1a5f3c]"></i>
+                      PKD
+                    </span>
+                    <textarea
+                      value={formatPkdCodes(pkdCodes)}
+                      readOnly
+                      rows={Math.min(Math.max(pkdCodes.length, 3), 8)}
+                      className={`${inputClass} resize-y`}
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
 
             <label className="block min-w-0 md:col-span-2">
               <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">

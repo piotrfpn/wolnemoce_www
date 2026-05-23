@@ -3,6 +3,12 @@ import "server-only";
 import { isGusMockNip } from "@/lib/gus/mockNips";
 import { normalizeNip } from "@/lib/validators/nip";
 
+export type GusPkdCode = {
+  code: string;
+  name: string | null;
+  isPrimary: boolean;
+};
+
 export type GusCompany = {
   name: string | null;
   nip: string | null;
@@ -11,6 +17,14 @@ export type GusCompany = {
   region: string | null;
   postalCode: string | null;
   street: string | null;
+  buildingNumber: string | null;
+  apartmentNumber: string | null;
+  fullAddress: string | null;
+  krs: string | null;
+  legalForm: string | null;
+  businessStatus: string | null;
+  primaryPkd: string | null;
+  pkdCodes: GusPkdCode[];
   rawSource: "gus";
 };
 
@@ -55,6 +69,20 @@ function getMockGusCompany(nip: string): GusCompany {
       region: "Wielkopolskie",
       postalCode: "60-001",
       street: "Testowa",
+      buildingNumber: "1",
+      apartmentNumber: "2",
+      fullAddress: "ul. Testowa 1/2, 60-001 Poznań",
+      krs: null,
+      legalForm: "Spółka z ograniczoną odpowiedzialnością",
+      businessStatus: "Aktywna",
+      primaryPkd: "25.62.Z - Obróbka mechaniczna elementów metalowych",
+      pkdCodes: [
+        {
+          code: "25.62.Z",
+          name: "Obróbka mechaniczna elementów metalowych",
+          isPrimary: true,
+        },
+      ],
       rawSource: "gus",
     },
     "1111111111": {
@@ -65,6 +93,20 @@ function getMockGusCompany(nip: string): GusCompany {
       region: "Dolnośląskie",
       postalCode: "50-001",
       street: "Przykładowa",
+      buildingNumber: "10",
+      apartmentNumber: null,
+      fullAddress: "ul. Przykładowa 10, 50-001 Wrocław",
+      krs: null,
+      legalForm: "Spółka z ograniczoną odpowiedzialnością",
+      businessStatus: "Aktywna",
+      primaryPkd: "52.29.C - Działalność pozostałych agencji transportowych",
+      pkdCodes: [
+        {
+          code: "52.29.C",
+          name: "Działalność pozostałych agencji transportowych",
+          isPrimary: true,
+        },
+      ],
       rawSource: "gus",
     },
   };
@@ -156,6 +198,16 @@ function extractTag(xml: string, tagName: string) {
   return match?.[1]?.trim() ?? "";
 }
 
+function extractTags(xml: string, tagName: string) {
+  const pattern = new RegExp(
+    `<(?:[\\w-]+:)?${tagName}[^>]*>([\\s\\S]*?)<\\/(?:[\\w-]+:)?${tagName}>`,
+    "gi"
+  );
+  const matches = xml.matchAll(pattern);
+
+  return Array.from(matches, (match) => match[1]?.trim() ?? "");
+}
+
 function decodeXml(value: string) {
   return value
     .replace(/&lt;/g, "<")
@@ -168,6 +220,88 @@ function decodeXml(value: string) {
 function getField(xml: string, fieldName: string) {
   const value = decodeXml(extractTag(xml, fieldName));
   return value ? value.trim() : null;
+}
+
+function getFirstField(xml: string, fieldNames: string[]) {
+  for (const fieldName of fieldNames) {
+    const value = getField(xml, fieldName);
+
+    if (value) {
+      return value;
+    }
+  }
+
+  return null;
+}
+
+function normalizePkdCode(value: string | null) {
+  if (!value) {
+    return null;
+  }
+
+  const compactValue = value.replace(/\s+/g, "").toUpperCase();
+
+  if (/^\d{4}[A-Z]$/.test(compactValue)) {
+    return `${compactValue.slice(0, 2)}.${compactValue.slice(2, 4)}.${compactValue.slice(4)}`;
+  }
+
+  return value;
+}
+
+function formatPkdLabel(code: string | null, name: string | null) {
+  if (!code && !name) {
+    return null;
+  }
+
+  const normalizedCode = normalizePkdCode(code);
+
+  if (normalizedCode && name) {
+    return `${normalizedCode} - ${name}`;
+  }
+
+  return normalizedCode ?? name;
+}
+
+function formatStreet(value: string | null) {
+  if (!value) {
+    return null;
+  }
+
+  return /^(ul\.|al\.|pl\.|os\.)\s/i.test(value) ? value : `ul. ${value}`;
+}
+
+function buildStreetAddress(
+  street: string | null,
+  buildingNumber: string | null,
+  apartmentNumber: string | null
+) {
+  const formattedStreet = formatStreet(street);
+  const number = buildingNumber
+    ? `${buildingNumber}${apartmentNumber ? `/${apartmentNumber}` : ""}`
+    : apartmentNumber
+      ? `/${apartmentNumber}`
+      : "";
+
+  return [formattedStreet, number].filter(Boolean).join(" ") || null;
+}
+
+function buildFullAddress({
+  street,
+  buildingNumber,
+  apartmentNumber,
+  postalCode,
+  city,
+}: {
+  street: string | null;
+  buildingNumber: string | null;
+  apartmentNumber: string | null;
+  postalCode: string | null;
+  city: string | null;
+}) {
+  const streetAddress = buildStreetAddress(street, buildingNumber, apartmentNumber);
+  const postalAddress = [postalCode, city].filter(Boolean).join(" ");
+
+  return [streetAddress, postalAddress].filter(Boolean).join(", ") || null;
 }
 
 function buildLoginEnvelope(apiKey: string, apiUrl: string) {
@@ -213,6 +347,22 @@ function buildGetValueEnvelope(parameterName: string, apiUrl: string) {
     <GetValue xmlns="http://CIS/BIR/2014/07">
       <pNazwaParametru>${parameterName}</pNazwaParametru>
     </GetValue>
+  </s:Body>
+</s:Envelope>`;
+}
+
+function buildFullReportEnvelope(regon: string, reportName: string, apiUrl: string) {
+  return `<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope" xmlns:a="http://www.w3.org/2005/08/addressing" xmlns:ns="http://CIS/BIR/PUBL/2014/07">
+  <s:Header>
+    <a:Action s:mustUnderstand="1">http://CIS/BIR/PUBL/2014/07/IUslugaBIRzewnPubl/DanePobierzPelnyRaport</a:Action>
+    <a:To s:mustUnderstand="1">${apiUrl}</a:To>
+  </s:Header>
+  <s:Body>
+    <ns:DanePobierzPelnyRaport>
+      <ns:pRegon>${regon}</ns:pRegon>
+      <ns:pNazwaRaportu>${reportName}</ns:pNazwaRaportu>
+    </ns:DanePobierzPelnyRaport>
   </s:Body>
 </s:Envelope>`;
 }
@@ -271,24 +421,157 @@ async function logEmptySearchDiagnostics(apiUrl: string, sid: string) {
   }
 }
 
-function mapGusSearchResult(rawXml: string, fallbackNip: string): GusCompany | null {
+async function getFullReportXml(apiUrl: string, sid: string, regon: string, reportName: string) {
+  const xml = await postSoap(
+    apiUrl,
+    buildFullReportEnvelope(regon, reportName, apiUrl),
+    "http://CIS/BIR/PUBL/2014/07/IUslugaBIRzewnPubl/DanePobierzPelnyRaport",
+    sid
+  );
+  const reportXml = decodeXml(extractTag(xml, "DanePobierzPelnyRaportResult"));
+  const hasGusError = Boolean(getField(reportXml, "ErrorCode"));
+
+  logGusDiagnostic("full-report", {
+    reportName,
+    hasResult: Boolean(reportXml),
+    hasGusError,
+  });
+
+  return reportXml && !hasGusError ? reportXml : "";
+}
+
+function mapBusinessStatus(reportXml: string, type: string | null) {
+  const prefix = type === "F" ? "fiz" : "praw";
+  const endDate = getFirstField(reportXml, [
+    `${prefix}_dataZakonczeniaDzialalnosci`,
+    `${prefix}_dataSkresleniazRegon`,
+    `${prefix}_dataSkresleniazRegonDzialalnosci`,
+  ]);
+  const suspendedDate = getField(reportXml, `${prefix}_dataZawieszeniaDzialalnosci`);
+  const resumedDate = getField(reportXml, `${prefix}_dataWznowieniaDzialalnosci`);
+
+  if (endDate) {
+    return "Zakończona";
+  }
+
+  if (suspendedDate && !resumedDate) {
+    return "Zawieszona";
+  }
+
+  return "Aktywna";
+}
+
+function mapPkdCodes(pkdReportXml: string): GusPkdCode[] {
+  const records = extractTags(decodeXml(pkdReportXml), "dane");
+  const sourceRecords = records.length > 0 ? records : [pkdReportXml];
+
+  return sourceRecords
+    .map((record) => {
+      const code = normalizePkdCode(
+        getFirstField(record, ["praw_pkdKod", "fiz_pkd_Kod", "fiz_pkdKod"])
+      );
+      const name = getFirstField(record, ["praw_pkdNazwa", "fiz_pkd_Nazwa", "fiz_pkdNazwa"]);
+      const primaryFlag = getFirstField(record, [
+        "praw_pkdPrzewazajace",
+        "fiz_pkd_Przewazajace",
+        "fiz_pkdPrzewazajace",
+      ]);
+
+      if (!code) {
+        return null;
+      }
+
+      return {
+        code,
+        name,
+        isPrimary: primaryFlag === "1",
+      };
+    })
+    .filter((code): code is GusPkdCode => Boolean(code));
+}
+
+function mapGusSearchResult(
+  rawXml: string,
+  fallbackNip: string,
+  reportXml = "",
+  pkdReportXml = ""
+): GusCompany | null {
   const decodedXml = decodeXml(rawXml);
   const firstRecord = extractTag(decodedXml, "dane") || decodedXml;
   const name = getField(firstRecord, "Nazwa");
   const regon = getField(firstRecord, "Regon");
+  const type = getField(firstRecord, "Typ");
 
   if (!name && !regon) {
     return null;
   }
 
+  const sourceRecord = decodeXml(reportXml) || firstRecord;
+  const city =
+    getFirstField(sourceRecord, [
+      "praw_adSiedzMiejscowosc_Nazwa",
+      "fiz_adSiedzMiejscowosc_Nazwa",
+    ]) ?? getField(firstRecord, "Miejscowosc");
+  const region =
+    getFirstField(sourceRecord, [
+      "praw_adSiedzWojewodztwo_Nazwa",
+      "fiz_adSiedzWojewodztwo_Nazwa",
+    ]) ?? getField(firstRecord, "Wojewodztwo");
+  const postalCode =
+    getFirstField(sourceRecord, [
+      "praw_adSiedzKodPocztowy",
+      "fiz_adSiedzKodPocztowy",
+    ]) ?? getField(firstRecord, "KodPocztowy");
+  const street =
+    getFirstField(sourceRecord, [
+      "praw_adSiedzUlica_Nazwa",
+      "fiz_adSiedzUlica_Nazwa",
+    ]) ?? getField(firstRecord, "Ulica");
+  const buildingNumber =
+    getFirstField(sourceRecord, [
+      "praw_adSiedzNumerNieruchomosci",
+      "fiz_adSiedzNumerNieruchomosci",
+    ]) ?? getField(firstRecord, "NrNieruchomosci");
+  const apartmentNumber =
+    getFirstField(sourceRecord, [
+      "praw_adSiedzNumerLokalu",
+      "fiz_adSiedzNumerLokalu",
+    ]) ?? getField(firstRecord, "NrLokalu");
+  const pkdCodes = mapPkdCodes(pkdReportXml);
+  const primaryPkdCode = pkdCodes.find((code) => code.isPrimary) ?? pkdCodes[0];
+
   return {
     name,
     nip: getField(firstRecord, "Nip") ?? fallbackNip,
     regon,
-    city: getField(firstRecord, "Miejscowosc"),
-    region: getField(firstRecord, "Wojewodztwo"),
-    postalCode: getField(firstRecord, "KodPocztowy"),
-    street: getField(firstRecord, "Ulica"),
+    city,
+    region,
+    postalCode,
+    street: buildStreetAddress(street, buildingNumber, apartmentNumber),
+    buildingNumber,
+    apartmentNumber,
+    fullAddress: buildFullAddress({
+      street,
+      buildingNumber,
+      apartmentNumber,
+      postalCode,
+      city,
+    }),
+    krs:
+      type === "P"
+        ? getFirstField(sourceRecord, ["praw_numerWrejestrzeEwidencji"])
+        : null,
+    legalForm: getFirstField(sourceRecord, [
+      "praw_szczegolnaFormaPrawna_Nazwa",
+      "praw_podstawowaFormaPrawna_Nazwa",
+      "fiz_szczegolnaFormaPrawna_Nazwa",
+      "fiz_podstawowaFormaPrawna_Nazwa",
+    ]),
+    businessStatus: sourceRecord !== firstRecord ? mapBusinessStatus(sourceRecord, type) : null,
+    primaryPkd: primaryPkdCode
+      ? formatPkdLabel(primaryPkdCode.code, primaryPkdCode.name)
+      : null,
+    pkdCodes,
     rawSource: "gus",
   };
 }
@@ -314,5 +597,47 @@ export async function searchGusByNip(input: string) {
     return null;
   }
 
-  return mapGusSearchResult(resultXml, nip);
+  const decodedResultXml = decodeXml(resultXml);
+  const firstRecord = extractTag(decodedResultXml, "dane") || decodedResultXml;
+  const regon = getField(firstRecord, "Regon");
+  const type = getField(firstRecord, "Typ");
+  let reportXml = "";
+  let pkdReportXml = "";
+
+  if (regon && type) {
+    const mainReportName =
+      type === "F" ? "BIR11OsFizycznaDaneOgolne" : "BIR11OsPrawna";
+    const activityReportNames =
+      type === "F"
+        ? [
+            "BIR11OsFizycznaDzialalnoscCeidg",
+            "BIR11OsFizycznaDzialalnoscRolnicza",
+            "BIR11OsFizycznaDzialalnoscPozostala",
+          ]
+        : [];
+    const pkdReportName =
+      type === "F" ? "BIR11OsFizycznaPkd" : "BIR11OsPrawnaPkd";
+
+    const mainReportXml = await getFullReportXml(apiUrl, sid, regon, mainReportName);
+    let activityReportXml = "";
+
+    for (const activityReportName of activityReportNames) {
+      const nextActivityReportXml = await getFullReportXml(
+        apiUrl,
+        sid,
+        regon,
+        activityReportName
+      );
+
+      if (nextActivityReportXml) {
+        activityReportXml = nextActivityReportXml;
+        break;
+      }
+    }
+
+    reportXml = `${mainReportXml}${activityReportXml}`;
+    pkdReportXml = await getFullReportXml(apiUrl, sid, regon, pkdReportName);
+  }
+
+  return mapGusSearchResult(resultXml, nip, reportXml, pkdReportXml);
 }
