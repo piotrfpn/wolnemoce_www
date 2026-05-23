@@ -25,8 +25,10 @@ Plan darmowy służący do walidacji platformy i weryfikacji popytu. Nie zawiera
 - **Support:** Standardowy
 
 ### Plan PRO
-Plan płatny dla aktywnych firm produkcyjnych stawiających na jakość zapytań, a nie spamowanie wieloma ofertami. Wymaga kontaktu w obecnym MVP.
-- **Max ofert (active + pending):** 3 - 5 (zamiast np. 10 - platforma B2B ceni jakość i skupienie, 3-5 ofert to rozsądne MVP dla profilu zakładu produkcyjnego).
+Plan PRO:
+- **Max ofert (active + pending):** 10
+- Uzasadnienie: 10 ofert to czytelny, łatwy do komunikacji limit dla aktywnej firmy produkcyjnej, ale nadal nie jest to model "nielimitowany" ani zachęta do spamowania katalogu.
+- Wartość PRO nadal wynika nie tylko z liczby ofert, ale też z widoczności, priorytetowej moderacji, przyszłych podbić i lepszego profilu.
 - **Wyróżnienia / Podbicia:** Możliwość wyróżnienia (Sponsorowane), cykliczne podbicia (w przyszłości)
 - **Priorytet moderacji:** Priorytetowy
 - **Weryfikacja firmy:** Brak automatycznej weryfikacji. Możliwość priorytetowego zgłoszenia do weryfikacji ręcznej przez administratora.
@@ -51,10 +53,10 @@ Dla grup kapitałowych, większych zakładów, operatorów i partnerów.
 - **Plik:** `supabase/migrations/00018_free_plan_limits.sql`
 - **UI:** `/panel`, `/panel/oferty`, helper TS
 
-### PRO max 3–5 active/pending offers
+### PRO max 10 active/pending offers
 - **Status:** planned
 - **Requires:** DB trigger update / `plan_config` tabela / testy
-- **Sprint:** 8C (Nie wystarczy sam TS helper; SQL trigger musi dopuścić 3-5 ofert przy `companies.plan = 'pro'`)
+- **Sprint:** 8C (Nie wystarczy sam TS helper; SQL trigger lub plan_config musi dopuścić 10 ofert przy `companies.plan = 'pro'`)
 
 ### PRO bumps / refreshes (podbicia)
 - **Status:** planned

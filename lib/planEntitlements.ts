@@ -12,8 +12,8 @@ export function getMaxActivePendingOffers(plan: CompanyPlan | string | null | un
     case "free":
       return 1;
     case "pro":
-      // Docelowe założenie dla PRO w B2B MVP (do ewentualnej zmiany z bazą w sprincie 8C)
-      return 5; 
+      // Docelowe założenie UI dla PRO w MVP. Twarde egzekwowanie musi zostać wdrożone w DB w Sprincie 8C.
+      return 10; 
     case "enterprise":
       // Reprezentuje "brak limitów" lub indywidualne limity
       return 9999; 
