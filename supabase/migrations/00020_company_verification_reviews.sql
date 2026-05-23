@@ -11,10 +11,16 @@ create table if not exists public.company_verification_reviews (
 
 alter table public.company_verification_reviews enable row level security;
 
+drop policy if exists "Admins can view verification reviews"
+  on public.company_verification_reviews;
+
 create policy "Admins can view verification reviews"
   on public.company_verification_reviews
   for select
   using (public.is_admin());
+
+drop policy if exists "Admins can insert verification reviews"
+  on public.company_verification_reviews;
 
 create policy "Admins can insert verification reviews"
   on public.company_verification_reviews
