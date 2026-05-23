@@ -87,6 +87,17 @@ export default function PrivacyPage() {
                   <li>identyfikatory konta Supabase i dane sesji,</li>
                   <li>dane płatnicze obsługiwane przez Stripe, jeżeli płatności zostaną wdrożone.</li>
                 </ul>
+                <p>
+                  W przypadku korzystania z funkcji pobierania danych firmy na
+                  podstawie numeru NIP, Serwis może przetwarzać dane rejestrowe
+                  przedsiębiorcy lub firmy dostępne w publicznych rejestrach, w
+                  szczególności takie jak nazwa firmy, NIP, REGON, KRS, adres
+                  siedziby, forma prawna, status działalności oraz kody PKD.
+                  Dane te są wykorzystywane w celu ułatwienia uzupełnienia
+                  profilu firmy, weryfikacji danych rejestrowych, moderacji
+                  treści oraz zapewnienia bezpieczeństwa i wiarygodności
+                  Serwisu.
+                </p>
               </Section>
 
               <Section number={5} title="Cele i podstawy prawne">

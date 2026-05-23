@@ -135,7 +135,75 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={8} title="Branże i rodzaje usług">
+              <Section number={8} title="Weryfikacja firm i danych rejestrowych">
+                <ol className="list-decimal space-y-2 pl-5">
+                  <li>
+                    Serwis może umożliwiać uzupełnianie lub sprawdzanie danych
+                    firmy na podstawie numeru NIP oraz danych dostępnych w
+                    publicznych rejestrach, w szczególności w rejestrze
+                    GUS/REGON, CEIDG, KRS lub innych źródłach publicznych.
+                  </li>
+                  <li>
+                    Pobranie danych z GUS lub innego rejestru ma charakter
+                    pomocniczy i służy ułatwieniu uzupełnienia profilu firmy.
+                    Samo pobranie danych rejestrowych nie oznacza automatycznego
+                    nadania firmie statusu <strong>Firma zweryfikowana</strong>.
+                  </li>
+                  <li>
+                    Status <strong>Firma zweryfikowana</strong> może zostać
+                    nadany przez administratora Serwisu po podstawowej kontroli
+                    wybranych danych rejestrowych, danych profilu firmy lub
+                    informacji udostępnionych przez użytkownika.
+                  </li>
+                  <li>
+                    Weryfikacja firmy w Serwisie ma charakter podstawowy i
+                    informacyjny. Nie stanowi audytu prawnego, finansowego,
+                    technicznego ani jakościowego przedsiębiorstwa, nie jest
+                    certyfikacją firmy i nie stanowi rekomendacji zawarcia umowy
+                    z daną firmą.
+                  </li>
+                  <li>
+                    WolneMoce.pl nie gwarantuje, że firma oznaczona jako
+                    zweryfikowana wykona usługę prawidłowo, terminowo, bez wad,
+                    w określonej cenie, ani że posiada określone zasoby,
+                    certyfikaty, doświadczenie lub sytuację finansową, chyba że
+                    wynika to bezpośrednio z odrębnych, pisemnych ustaleń.
+                  </li>
+                  <li>
+                    Użytkownik ponosi odpowiedzialność za prawdziwość,
+                    kompletność i aktualność danych swojej firmy, w tym danych
+                    pobranych z rejestrów publicznych, jeżeli zostały one
+                    zaakceptowane, zapisane lub opublikowane w profilu firmy.
+                  </li>
+                  <li>
+                    Administrator może odmówić nadania statusu{" "}
+                    <strong>Firma zweryfikowana</strong>, zawiesić go albo
+                    cofnąć, w szczególności gdy dane firmy są niepełne,
+                    nieaktualne, niespójne, budzą uzasadnione wątpliwości,
+                    naruszają Regulamin albo mogą wprowadzać innych użytkowników
+                    w błąd.
+                  </li>
+                  <li>
+                    Administrator może żądać od użytkownika dodatkowych
+                    informacji, wyjaśnień lub dokumentów potrzebnych do
+                    potwierdzenia danych firmy.
+                  </li>
+                  <li>
+                    Edycja profilu firmy, danych rejestrowych lub treści oferty
+                    może skutkować koniecznością ponownej moderacji lub ponownej
+                    weryfikacji przez administratora.
+                  </li>
+                  <li>
+                    Brak weryfikacji, odmowa weryfikacji, zawieszenie lub
+                    cofnięcie weryfikacji może skutkować ograniczeniem
+                    widoczności profilu firmy lub ofert, odmową publikacji oferty
+                    albo zmianą statusu oferty zgodnie z zasadami moderacji
+                    Serwisu.
+                  </li>
+                </ol>
+              </Section>
+
+              <Section number={9} title="Branże i rodzaje usług">
                 <p>
                   Słowniki branż i usług służą uporządkowaniu ofert. Użytkownik
                   może zgłosić brakującą usługę do administratora. Zgłoszenie ma
@@ -144,7 +212,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={9} title="Dodawanie i moderacja ofert">
+              <Section number={10} title="Dodawanie i moderacja ofert">
                 <p>
                   Użytkownik może dodawać, edytować i usuwać własne oferty w
                   panelu firmy. Oferta może wymagać moderacji przez Operatora
@@ -162,7 +230,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={10} title="Statusy ofert">
+              <Section number={11} title="Statusy ofert">
                 <ul className="list-disc space-y-2 pl-5">
                   <li><strong>draft</strong> - wersja robocza widoczna dla właściciela firmy.</li>
                   <li><strong>pending</strong> - oferta oczekuje na weryfikację lub publikację.</li>
@@ -173,7 +241,7 @@ export default function TermsPage() {
                 </ul>
               </Section>
 
-              <Section number={11} title="Zapytania ofertowe RFQ">
+              <Section number={12} title="Zapytania ofertowe RFQ">
                 <p>
                   RFQ umożliwia osobie zainteresowanej wysłanie zapytania do
                   firmy posiadającej aktywną ofertę. Dane zapytania trafiają do
@@ -182,7 +250,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={12} title="Załączniki RFQ i prywatne pliki">
+              <Section number={13} title="Załączniki RFQ i prywatne pliki">
                 <p>
                   Użytkownik wysyłający RFQ może dołączyć pliki, takie jak
                   rysunki, zdjęcia, specyfikacje lub dokumenty techniczne.
@@ -193,7 +261,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={13} title="Signed URLs">
+              <Section number={14} title="Signed URLs">
                 <p>
                   Dostęp do prywatnych załączników może być realizowany przez
                   czasowe signed URLs. Taki link ma ograniczony czas ważności i
@@ -203,7 +271,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={14} title="Prezentacje firmowe PDF/PPT/PPTX w prywatnym Storage">
+              <Section number={15} title="Prezentacje firmowe PDF/PPT/PPTX w prywatnym Storage">
                 <p>
                   Firma może dodać prezentację firmową w formacie PDF, PPT albo
                   PPTX. Pliki prezentacji są przechowywane w prywatnym Storage,
@@ -213,7 +281,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={15} title="Panel administratora i moderacja">
+              <Section number={16} title="Panel administratora i moderacja">
                 <p>
                   Administrator może moderować oferty, firmy oraz zgłoszenia usług.
                   Moderacja może obejmować zatwierdzanie, odrzucanie, ukrywanie
@@ -229,7 +297,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={16} title="WolneMoce.pl nie jest stroną umowy produkcyjnej">
+              <Section number={17} title="WolneMoce.pl nie jest stroną umowy produkcyjnej">
                 <p>
                   WolneMoce.pl jest dostawcą infrastruktury teleinformatycznej i
                   platformą kojarzącą firmy B2B. Serwis nie jest stroną umowy
@@ -250,7 +318,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={17} title="Plany, wyróżnienia i dodatki płatne">
+              <Section number={18} title="Plany, wyróżnienia i dodatki płatne">
                 <p>
                   Serwis może udostępniać plany FREE, PRO i ENTERPRISE. Szczegółowy
                   zakres planów, limity, funkcje i ceny są prezentowane w cenniku
@@ -271,7 +339,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={18} title="Usługi partnerskie">
+              <Section number={19} title="Usługi partnerskie">
                 <p>
                   WolneMoce.pl może prezentować płatne usługi partnerów
                   usługowych. Credos może świadczyć wsparcie księgowo-prawne, a
@@ -292,7 +360,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={19} title="Zasady treści ofert i zakaz obchodzenia platformy">
+              <Section number={20} title="Zasady treści ofert i zakaz obchodzenia platformy">
                 <p>
                   Użytkownik nie może publikować w treści oferty, zdjęciach,
                   grafikach, nazwach plików, materiałach ani innych elementach
@@ -319,7 +387,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={20} title="Zdjęcia, grafiki i materiały ofertowe">
+              <Section number={21} title="Zdjęcia, grafiki i materiały ofertowe">
                 <p>
                   Zdjęcia i materiały graficzne dodawane do ofert powinny
                   przedstawiać maszyny, park maszynowy, hale, stanowiska,
@@ -335,7 +403,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={21} title="Zgłaszanie naruszeń / notice and takedown / notice and action">
+              <Section number={22} title="Zgłaszanie naruszeń / notice and takedown / notice and action">
                 <p>
                   Użytkownik lub osoba trzecia może zgłosić treści bezprawne,
                   naruszające prawa osób trzecich, poufność, prawa autorskie,
@@ -350,7 +418,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={22} title="Płatności, subskrypcje i Stripe">
+              <Section number={23} title="Płatności, subskrypcje i Stripe">
                 <p>
                   Docelowy model Serwisu może obejmować odpłatne plany B2B SaaS
                   lub abonament miesięczny. Subskrypcja może odnawiać się
@@ -360,7 +428,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={23} title="Anulowanie subskrypcji i brak proporcjonalnych zwrotów">
+              <Section number={24} title="Anulowanie subskrypcji i brak proporcjonalnych zwrotów">
                 <p>
                   Użytkownik może anulować subskrypcję w dowolnym momencie, ze
                   skutkiem na koniec opłaconego okresu rozliczeniowego. Użytkownik
@@ -371,7 +439,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={24} title="Zawieszenie konta przy braku płatności lub naruszeniu regulaminu">
+              <Section number={25} title="Zawieszenie konta przy braku płatności lub naruszeniu regulaminu">
                 <p>
                   Operator może zawiesić lub ograniczyć dostęp do płatnych funkcji
                   w przypadku braku płatności, błędu płatności, cofnięcia płatności
@@ -381,7 +449,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={25} title="Odpowiedzialność użytkowników">
+              <Section number={26} title="Odpowiedzialność użytkowników">
                 <p>
                   Użytkownicy odpowiadają za treści ofert, dane profili, treść RFQ,
                   załączniki, legalność dokumentacji technicznej oraz działania
@@ -391,7 +459,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={26} title="Wyłączenia odpowiedzialności Operatora">
+              <Section number={27} title="Wyłączenia odpowiedzialności Operatora">
                 <p>
                   Operator nie gwarantuje zawarcia umowy, jakości usług,
                   wypłacalności firm, terminowości, dostępności mocy, kompletności
@@ -402,7 +470,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={27} title="Dostępność techniczna i przerwy serwisowe">
+              <Section number={28} title="Dostępność techniczna i przerwy serwisowe">
                 <p>
                   Operator dokłada starań, aby Serwis działał stabilnie, ale nie
                   gwarantuje nieprzerwanej dostępności. Możliwe są przerwy
@@ -411,7 +479,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={28} title="Reklamacje">
+              <Section number={29} title="Reklamacje">
                 <p>
                   Reklamacje dotyczące działania Serwisu można kierować na adres
                   [Wpisz_Email_Reklamacje]. Reklamacja powinna zawierać opis
@@ -420,7 +488,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={29} title="Zmiany regulaminu">
+              <Section number={30} title="Zmiany regulaminu">
                 <p>
                   Operator może zmienić Regulamin w szczególności w razie rozwoju
                   Serwisu, wdrożenia płatności, zmian prawnych, zmian technicznych
@@ -428,7 +496,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={30} title="Prawo właściwe i sąd właściwy">
+              <Section number={31} title="Prawo właściwe i sąd właściwy">
                 <p>
                   Regulamin podlega prawu polskiemu. Spory będą rozstrzygane przez
                   sąd właściwy zgodnie z bezwzględnie obowiązującymi przepisami
@@ -436,7 +504,7 @@ export default function TermsPage() {
                 </p>
               </Section>
 
-              <Section number={31} title="Postanowienia końcowe">
+              <Section number={32} title="Postanowienia końcowe">
                 <p>
                   W sprawach nieuregulowanych Regulaminem stosuje się przepisy
                   prawa powszechnie obowiązującego. Jeżeli którekolwiek
