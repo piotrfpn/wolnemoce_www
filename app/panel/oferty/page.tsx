@@ -15,10 +15,26 @@ type OfferStatus = "draft" | "pending" | "active" | "rejected" | "archived";
 
 const statusLabels: Record<OfferStatus, string> = {
   draft: "Szkic",
-  pending: "Oczekuje na zatwierdzenie",
+  pending: "W moderacji",
   active: "Aktywna",
   rejected: "Odrzucona",
   archived: "Zarchiwizowana",
+};
+
+const statusDescriptions: Record<OfferStatus, string> = {
+  draft: "Oferta robocza. Nie jest widoczna publicznie.",
+  pending: "Oferta czeka na akceptację administratora.",
+  active: "Oferta jest widoczna publicznie.",
+  rejected: "Oferta wymaga poprawek lub kontaktu z administracją.",
+  archived: "Oferta nie jest widoczna publicznie.",
+};
+
+const statusIcons: Record<OfferStatus, string> = {
+  draft: "fas fa-pen-ruler",
+  pending: "fas fa-clock",
+  active: "fas fa-circle-check",
+  rejected: "fas fa-triangle-exclamation",
+  archived: "fas fa-box-archive",
 };
 
 const statusClasses: Record<OfferStatus, string> = {
@@ -28,6 +44,20 @@ const statusClasses: Record<OfferStatus, string> = {
   rejected: "bg-red-50 text-red-700",
   archived: "bg-slate-100 text-slate-700",
 };
+
+function normalizeOfferStatus(value: string | null): OfferStatus {
+  if (
+    value === "draft" ||
+    value === "pending" ||
+    value === "active" ||
+    value === "rejected" ||
+    value === "archived"
+  ) {
+    return value;
+  }
+
+  return "pending";
+}
 
 function formatDate(value: string | null) {
   if (!value) {
@@ -115,7 +145,7 @@ export default async function PanelOffersPage() {
           ) : offers && offers.length > 0 ? (
             <div className="grid min-w-0 gap-5">
               {offers.map((offer) => {
-                const status = (offer.status ?? "pending") as OfferStatus;
+                const status = normalizeOfferStatus(offer.status);
 
                 return (
                   <article
@@ -126,8 +156,9 @@ export default async function PanelOffersPage() {
                       <div className="min-w-0">
                         <div className="mb-3 flex flex-wrap items-center gap-2">
                           <span
-                            className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${statusClasses[status]}`}
+                            className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold ${statusClasses[status]}`}
                           >
+                            <i className={statusIcons[status]}></i>
                             {statusLabels[status]}
                           </span>
                           <span className="text-xs font-semibold text-slate-400">
@@ -139,6 +170,9 @@ export default async function PanelOffersPage() {
                         </h2>
                         <p className="mt-2 text-sm leading-6 text-slate-500">
                           {offer.branch} · {offer.service_type}
+                        </p>
+                        <p className="mt-3 max-w-2xl rounded-xl bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-600">
+                          {statusDescriptions[status]}
                         </p>
                         <div className="mt-5 grid min-w-0 gap-3 text-sm text-slate-600 md:grid-cols-3">
                           <p className="min-w-0">

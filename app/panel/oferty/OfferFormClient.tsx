@@ -61,11 +61,14 @@ const inputClass =
 
 const statusLabels: Record<OfferStatus, string> = {
   draft: "Szkic",
-  pending: "Oczekuje na zatwierdzenie",
+  pending: "W moderacji",
   active: "Aktywna",
   rejected: "Odrzucona",
   archived: "Zarchiwizowana",
 };
+
+const freePlanLimitMessage =
+  "Plan FREE pozwala utrzymywać 1 ofertę aktywną lub oczekującą na moderację. Aby dodać kolejną, zarchiwizuj obecną ofertę albo przejdź na wyższy plan.";
 
 function slugify(value: string) {
   const normalized = value
@@ -120,10 +123,7 @@ export default function OfferFormClient({
   const companyServices = company.service_types ?? [];
   const currentStatus = offer?.status ?? "draft";
   const canChooseStatus = mode === "new" || currentStatus === "draft";
-  const isLockedModerationStatus =
-    currentStatus === "active" ||
-    currentStatus === "rejected" ||
-    currentStatus === "archived";
+  const showActiveModerationWarning = mode === "edit" && currentStatus === "active";
   const initialBranch =
     offer?.branch && companyIndustries.includes(offer.branch)
       ? offer.branch
@@ -420,7 +420,7 @@ export default function OfferFormClient({
 
       if (saveError || !insertedOffer?.id) {
         if (saveError?.message?.includes("FREE_PLAN_OFFER_LIMIT_REACHED")) {
-          setError("W planie FREE możesz mieć jedną ofertę oczekującą lub aktywną. Aby dodać kolejną ofertę, skontaktuj się z administracją lub wybierz wyższy plan.");
+          setError(freePlanLimitMessage);
         } else {
           setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
         }
@@ -442,7 +442,7 @@ export default function OfferFormClient({
 
       if (saveError) {
         if (saveError?.message?.includes("FREE_PLAN_OFFER_LIMIT_REACHED")) {
-          setError("W planie FREE możesz mieć jedną ofertę oczekującą lub aktywną. Aby dodać kolejną ofertę, skontaktuj się z administracją lub wybierz wyższy plan.");
+          setError(freePlanLimitMessage);
         } else {
           setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
         }
@@ -553,9 +553,13 @@ export default function OfferFormClient({
         </div>
       ) : null}
 
-      {isLockedModerationStatus ? (
-        <div className="mb-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-600">
-          Zmiana publicznej treści aktywnej oferty spowoduje przekazanie jej do ponownej moderacji. Po zapisie oferta może tymczasowo zniknąć z publicznego katalogu do czasu akceptacji administratora.
+      {showActiveModerationWarning ? (
+        <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-800">
+          <p className="font-bold">Uwaga: edytujesz aktywną ofertę.</p>
+          <p className="mt-2">
+            Edycja aktywnej oferty może skierować ją ponownie do moderacji. Po
+            zapisaniu zmian oferta może być tymczasowo niewidoczna publicznie.
+          </p>
         </div>
       ) : null}
 
@@ -863,8 +867,8 @@ export default function OfferFormClient({
                 },
                 {
                   value: "pending" as const,
-                  title: "Wyślij do zatwierdzenia",
-                  description: "Przekaż ofertę do późniejszej moderacji.",
+                  title: "Wyślij do moderacji",
+                  description: "Przekaż ofertę do akceptacji administratora.",
                 },
               ].map((item) => (
                 <label

@@ -51,6 +51,37 @@ const adminPanelItem = {
   cta: "Przejdź do admina",
 };
 
+const offerStatusCards = [
+  {
+    key: "active",
+    title: "Aktywne oferty",
+    description: "Widoczne publicznie",
+    icon: "fas fa-circle-check",
+    className: "bg-emerald-50 text-emerald-700",
+  },
+  {
+    key: "pending",
+    title: "W moderacji",
+    description: "Czekają na akceptację",
+    icon: "fas fa-clock",
+    className: "bg-amber-50 text-amber-700",
+  },
+  {
+    key: "rejected",
+    title: "Odrzucone",
+    description: "Wymagają poprawek",
+    icon: "fas fa-triangle-exclamation",
+    className: "bg-red-50 text-red-700",
+  },
+  {
+    key: "archived",
+    title: "Zarchiwizowane",
+    description: "Niewidoczne publicznie",
+    icon: "fas fa-box-archive",
+    className: "bg-slate-100 text-slate-600",
+  },
+] as const;
+
 export default async function PanelPage() {
   const supabase = createClient();
   const {
@@ -69,9 +100,13 @@ export default async function PanelPage() {
 
   const { data: company } = await supabase
     .from("companies")
-    .select("id")
+    .select("id, name, plan, is_verified, regon, location_city, location_voivodeship")
     .eq("user_id", user.id)
     .maybeSingle();
+
+  const { data: offers } = company?.id
+    ? await supabase.from("offers").select("status").eq("company_id", company.id)
+    : { data: [] };
 
   const { count: newInquiriesCount } = company?.id
     ? await supabase
@@ -81,6 +116,48 @@ export default async function PanelPage() {
         .neq("status", "archived")
         .is("recipient_read_at", null)
     : { count: 0 };
+
+  const offerCounts = {
+    draft: 0,
+    pending: 0,
+    active: 0,
+    rejected: 0,
+    archived: 0,
+  };
+
+  (offers ?? []).forEach((offer) => {
+    const status = offer.status as keyof typeof offerCounts;
+    if (status in offerCounts) {
+      offerCounts[status] += 1;
+    }
+  });
+
+  const plan = company?.plan ?? "free";
+  const freeLimitUsed = offerCounts.active + offerCounts.pending;
+  const freeLimitPercent = Math.min(100, freeLimitUsed * 100);
+  const profileStatus = !company
+    ? {
+        label: "Brak profilu",
+        description: "Uzupełnij profil firmy, aby dodawać oferty.",
+        className: "bg-amber-50 text-amber-700",
+      }
+    : company.is_verified
+      ? {
+          label: "Firma zweryfikowana",
+          description: "Profil firmy jest aktywny i zweryfikowany.",
+          className: "bg-emerald-50 text-emerald-700",
+        }
+      : company.regon || company.location_city || company.location_voivodeship
+        ? {
+            label: "Profil uzupełniony",
+            description: "Dane firmy są zapisane. Weryfikację kończy administrator.",
+            className: "bg-slate-100 text-slate-700",
+          }
+        : {
+            label: "Profil do uzupełnienia",
+            description: "Dodaj dane firmy i dane rejestrowe.",
+            className: "bg-amber-50 text-amber-700",
+          };
 
   const visiblePanelItems =
     profile?.role === "admin" ? [...panelItems, adminPanelItem] : panelItems;
@@ -112,6 +189,119 @@ export default async function PanelPage() {
               </div>
               <LogoutButton />
             </div>
+          </div>
+
+          <div className="mb-6 grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-5">
+            {offerStatusCards.map((item) => (
+              <div
+                key={item.key}
+                className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-5 shadow-sm"
+              >
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <span
+                    className={`flex h-10 w-10 items-center justify-center rounded-xl ${item.className}`}
+                  >
+                    <i className={item.icon}></i>
+                  </span>
+                  <strong className="text-2xl font-extrabold text-slate-900">
+                    {offerCounts[item.key]}
+                  </strong>
+                </div>
+                <h2 className="text-sm font-extrabold text-slate-900">
+                  {item.title}
+                </h2>
+                <p className="mt-1 text-xs leading-5 text-slate-500">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+
+            <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <span
+                  className={`flex h-10 w-10 items-center justify-center rounded-xl ${
+                    (newInquiriesCount ?? 0) > 0
+                      ? "bg-red-50 text-red-700"
+                      : "bg-slate-100 text-slate-600"
+                  }`}
+                >
+                  <i className="fas fa-envelope-open-text"></i>
+                </span>
+                <strong className="text-2xl font-extrabold text-slate-900">
+                  {newInquiriesCount ?? 0}
+                </strong>
+              </div>
+              <h2 className="text-sm font-extrabold text-slate-900">
+                Nieprzeczytane zapytania
+              </h2>
+              <p className="mt-1 text-xs leading-5 text-slate-500">
+                RFQ oczekujące na odpowiedź
+              </p>
+            </div>
+          </div>
+
+          <div className="mb-8 grid min-w-0 gap-5 lg:grid-cols-2">
+            <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="mb-4 flex items-start gap-3">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
+                  <i className="fas fa-gauge-high"></i>
+                </span>
+                <div className="min-w-0">
+                  <h2 className="text-lg font-extrabold text-slate-900">
+                    Limit ofert
+                  </h2>
+                  <p className="mt-1 text-sm leading-6 text-slate-500">
+                    {plan === "free"
+                      ? `Wykorzystany limit ofert: ${freeLimitUsed}/1 (Aktywne i w moderacji)`
+                      : "Nielimitowane oferty w Twoim planie"}
+                  </p>
+                </div>
+              </div>
+              {plan === "free" ? (
+                <div>
+                  <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+                    <div
+                      className={`h-full rounded-full ${
+                        freeLimitUsed >= 1 ? "bg-amber-500" : "bg-[#1a5f3c]"
+                      }`}
+                      style={{ width: `${freeLimitPercent}%` }}
+                    />
+                  </div>
+                  <p className="mt-3 text-xs leading-5 text-slate-500">
+                    Do limitu planu FREE liczą się oferty aktywne i oczekujące
+                    na moderację.
+                  </p>
+                </div>
+              ) : null}
+            </div>
+
+            <Link
+              href="/panel/profil"
+              className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-[#1a5f3c] hover:shadow-md"
+            >
+              <div className="mb-4 flex items-start gap-3">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
+                  <i className="fas fa-id-card"></i>
+                </span>
+                <div className="min-w-0">
+                  <h2 className="text-lg font-extrabold text-slate-900">
+                    Profil firmy
+                  </h2>
+                  <span
+                    className={`mt-2 inline-flex rounded-full px-3 py-1 text-xs font-bold ${profileStatus.className}`}
+                  >
+                    {profileStatus.label}
+                  </span>
+                </div>
+              </div>
+              <p className="text-sm leading-6 text-slate-500">
+                {profileStatus.description}
+              </p>
+              <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c]">
+                Zaktualizuj dane rejestrowe
+                <i className="fas fa-arrow-right text-xs"></i>
+              </span>
+            </Link>
           </div>
 
           <div className="grid min-w-0 gap-5 md:grid-cols-3">
