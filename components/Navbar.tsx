@@ -22,6 +22,9 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, isLoading } = useCurrentUser();
   const showContactCta = !isLoading && !user;
+  const hideLanguageSwitcher =
+    normalizedPathname.startsWith("/panel") ||
+    normalizedPathname.startsWith("/admin");
 
   const closeMenu = () => setIsOpen(false);
   const navLinks = [
@@ -77,9 +80,11 @@ export default function Navbar() {
         </ul>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Suspense fallback={null}>
-            <LanguageSwitcher />
-          </Suspense>
+          {!hideLanguageSwitcher ? (
+            <Suspense fallback={null}>
+              <LanguageSwitcher />
+            </Suspense>
+          ) : null}
           <AuthNavButton labels={authLabels} loginHref={loginHref} />
           {showContactCta ? (
             <Link
@@ -128,9 +133,11 @@ export default function Navbar() {
             })}
 
             <div className="mt-3 grid grid-cols-1 gap-3">
-              <Suspense fallback={null}>
-                <LanguageSwitcher />
-              </Suspense>
+              {!hideLanguageSwitcher ? (
+                <Suspense fallback={null}>
+                  <LanguageSwitcher />
+                </Suspense>
+              ) : null}
               <AuthNavButton
                 variant="mobile"
                 onNavigate={closeMenu}
