@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import LogoutButton from "@/components/LogoutButton";
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
+import { getOfferLimitDisplay } from "@/lib/planEntitlements";
 
 export const metadata: Metadata = {
   title: "Panel firmy",
@@ -100,7 +101,7 @@ export default async function PanelPage() {
 
   const { data: company } = await supabase
     .from("companies")
-    .select("id, name, plan, is_verified, regon, location_city, location_voivodeship")
+    .select("id, name, plan, custom_active_pending_offer_limit, is_verified, regon, location_city, location_voivodeship, plan_config(*)")
     .eq("user_id", user.id)
     .maybeSingle();
 
@@ -133,8 +134,24 @@ export default async function PanelPage() {
   });
 
   const plan = company?.plan ?? "free";
-  const freeLimitUsed = offerCounts.active + offerCounts.pending;
-  const freeLimitPercent = Math.min(100, freeLimitUsed * 100);
+  const activePendingCount = offerCounts.active + offerCounts.pending;
+
+  // Zależnie od tego, czy Supabase zagnieździ plan_config jako tablicę, czy obiekt:
+  const planConfigObj = Array.isArray(company?.plan_config)
+    ? company.plan_config[0]
+    : company?.plan_config;
+  const planLimit = planConfigObj?.max_active_pending_offers;
+
+  const { limit, source, isUnlimited, normalizedPlan } = getOfferLimitDisplay({
+    plan,
+    customLimit: company?.custom_active_pending_offer_limit,
+    planLimit,
+    activePendingCount
+  });
+
+  const limitPercent = isUnlimited || !limit ? 0 : Math.min(100, Math.round((activePendingCount / limit) * 100));
+  const isLimitExceeded = !isUnlimited && limit !== null && activePendingCount >= limit;
+
   const profileStatus = !company
     ? {
         label: "Brak profilu",
@@ -184,6 +201,10 @@ export default async function PanelPage() {
                   <p className="min-w-0">
                     <strong className="text-slate-900">Rola:</strong>{" "}
                     {profile?.role ?? "user"}
+                  </p>
+                  <p className="min-w-0">
+                    <strong className="text-slate-900">Plan firmy:</strong>{" "}
+                    {normalizedPlan}
                   </p>
                 </div>
               </div>
@@ -251,36 +272,48 @@ export default async function PanelPage() {
                     Limit ofert
                   </h2>
                   <p className="mt-1 text-sm leading-6 text-slate-500">
-                    {plan === "free"
-                      ? `Wykorzystany limit ofert: ${freeLimitUsed}/1 (Aktywne i w moderacji)`
-                      : "Nielimitowane oferty w Twoim planie"}
+                    {isUnlimited ? (
+                      <>
+                        Brak globalnego limitu ofert w Twoim planie
+                      </>
+                    ) : (
+                      <>
+                        {activePendingCount} / {limit} ofert aktywnych lub oczekujących
+                      </>
+                    )}
                   </p>
                 </div>
               </div>
-              {plan === "free" ? (
+              
+              {!isUnlimited && limit !== null && (
                 <div>
                   <div className="h-2 overflow-hidden rounded-full bg-slate-100">
                     <div
-                      className={`h-full rounded-full ${
-                        freeLimitUsed >= 1 ? "bg-amber-500" : "bg-[#1a5f3c]"
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        isLimitExceeded ? "bg-amber-500" : "bg-[#1a5f3c]"
                       }`}
-                      style={{ width: `${freeLimitPercent}%` }}
+                      style={{ width: `${limitPercent}%` }}
                     />
                   </div>
+                  
                   <p className="mt-3 text-xs leading-5 text-slate-500">
-                    Do limitu planu FREE liczą się oferty aktywne i oczekujące
-                    na moderację.
+                    {source === "custom" 
+                      ? "Indywidualny limit ustawiony dla Twojej firmy."
+                      : `Limit planu ${normalizedPlan}. Do limitu liczą się oferty aktywne i oczekujące.`}
                   </p>
-                  {freeLimitUsed > 1 ? (
+                  
+                  {isLimitExceeded ? (
                     <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-                      Masz więcej ofert aktywnych lub w moderacji niż przewiduje
-                      obecny limit planu FREE. To mogą być oferty dodane przed
-                      wprowadzeniem limitu. Możesz zostawić je do decyzji
-                      administratora albo zarchiwizować wybrane oferty.
+                      Przekroczono aktualny limit. Zarchiwizuj część ofert albo skontaktuj się z administratorem.
                     </p>
                   ) : null}
                 </div>
-              ) : null}
+              )}
+              {isUnlimited && (
+                <p className="mt-1 text-xs leading-5 text-slate-500">
+                  Plan {normalizedPlan}
+                </p>
+              )}
             </div>
 
             <Link

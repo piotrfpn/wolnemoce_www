@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
+import { getOfferLimitDisplay, canCreateOffer } from "@/lib/planEntitlements";
 import OfferActionsClient from "./OfferActionsClient";
 
 export const metadata: Metadata = {
@@ -83,7 +84,7 @@ export default async function PanelOffersPage() {
 
   const { data: company } = await supabase
     .from("companies")
-    .select("id, name, industry, service_types")
+    .select("id, name, industry, service_types, plan, custom_active_pending_offer_limit, plan_config(*)")
     .eq("user_id", user.id)
     .maybeSingle();
 
@@ -96,6 +97,33 @@ export default async function PanelOffersPage() {
         .eq("company_id", company.id)
         .order("created_at", { ascending: false })
     : { data: [] };
+
+  let currentActivePendingCount = 0;
+  if (offers) {
+    currentActivePendingCount = offers.filter(
+      (o) => o.status === "active" || o.status === "pending"
+    ).length;
+  }
+
+  const plan = company?.plan ?? "free";
+  const planConfigObj = Array.isArray(company?.plan_config)
+    ? company.plan_config[0]
+    : company?.plan_config;
+  const planLimit = planConfigObj?.max_active_pending_offers;
+
+  const { limit, isUnlimited, source } = getOfferLimitDisplay({
+    plan,
+    customLimit: company?.custom_active_pending_offer_limit,
+    planLimit,
+    activePendingCount: currentActivePendingCount
+  });
+
+  const canAdd = canCreateOffer(
+    plan,
+    company?.custom_active_pending_offer_limit,
+    currentActivePendingCount,
+    planLimit
+  );
 
   return (
     <>
@@ -113,15 +141,35 @@ export default async function PanelOffersPage() {
               <p className="mt-3 text-sm leading-6 text-slate-500">
                 Zarządzaj ofertami swojej firmy.
               </p>
+              
+              {company && (
+                <div className="mt-4 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 shadow-sm inline-flex items-center gap-3">
+                  <i className="fas fa-gauge-high text-slate-400"></i>
+                  {isUnlimited ? (
+                    <span>Brak globalnego limitu w planie</span>
+                  ) : (
+                    <span>
+                      {currentActivePendingCount} / {limit} ofert w limitach 
+                      {source === "custom" ? " (limit indywidualny)" : ""}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link href="/panel" className="btn btn-outline">
                 Wróć do panelu
               </Link>
               {company ? (
-                <Link href="/panel/oferty/nowa" className="btn btn-primary">
-                  Dodaj ofertę
-                </Link>
+                canAdd ? (
+                  <Link href="/panel/oferty/nowa" className="btn btn-primary">
+                    Dodaj ofertę
+                  </Link>
+                ) : (
+                  <button className="btn btn-primary opacity-50 cursor-not-allowed" disabled title="Limit ofert wykorzystany">
+                    Dodaj ofertę
+                  </button>
+                )
               ) : null}
             </div>
           </div>
