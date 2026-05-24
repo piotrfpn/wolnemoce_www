@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import { getOfferLimitDisplay, canCreateOffer } from "@/lib/planEntitlements";
 import OfferActionsClient from "./OfferActionsClient";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export const metadata: Metadata = {
   title: "Moje oferty",
@@ -14,13 +15,7 @@ export const metadata: Metadata = {
 
 type OfferStatus = "draft" | "pending" | "active" | "rejected" | "archived";
 
-const statusLabels: Record<OfferStatus, string> = {
-  draft: "Szkic",
-  pending: "W moderacji",
-  active: "Aktywna",
-  rejected: "Odrzucona",
-  archived: "Zarchiwizowana",
-};
+
 
 const statusDescriptions: Record<OfferStatus, string> = {
   draft: "Oferta robocza. Nie jest widoczna publicznie.",
@@ -73,6 +68,18 @@ function formatDate(value: string | null) {
 }
 
 export default async function PanelOffersPage() {
+  const dictionary = getDictionary("pl");
+  const t = dictionary.panel.offers;
+  const tc = dictionary.panel.common;
+
+  const statusLabels: Record<OfferStatus, string> = {
+    draft: t.statusDraft,
+    pending: t.statusPending,
+    active: t.statusActive,
+    rejected: t.statusRejected,
+    archived: t.statusArchived,
+  };
+
   const supabase = createClient();
   const {
     data: { user },
@@ -133,24 +140,24 @@ export default async function PanelOffersPage() {
           <div className="mb-8 flex min-w-0 flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div className="min-w-0">
               <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-                Panel firmy
+                {dictionary.panel.dashboard.title}
               </p>
               <h1 className="text-3xl font-extrabold text-slate-900">
-                Moje oferty
+                {t.title}
               </h1>
               <p className="mt-3 text-sm leading-6 text-slate-500">
-                Zarządzaj ofertami swojej firmy.
+                {t.subtitle}
               </p>
               
               {company && (
                 <div className="mt-4 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 shadow-sm inline-flex items-center gap-3">
                   <i className="fas fa-gauge-high text-slate-400"></i>
                   {isUnlimited ? (
-                    <span>Brak globalnego limitu w planie</span>
+                    <span>{t.noGlobalLimit}</span>
                   ) : (
                     <span>
-                      {currentActivePendingCount} / {limit} ofert w limitach 
-                      {source === "custom" ? " (limit indywidualny)" : ""}
+                      {currentActivePendingCount} / {limit} {t.limitUsed}
+                      {source === "custom" ? ` (${t.individualLimit})` : ` (${t.planLimit})`}
                     </span>
                   )}
                 </div>
@@ -158,16 +165,16 @@ export default async function PanelOffersPage() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link href="/panel" className="btn btn-outline">
-                Wróć do panelu
+                {t.backToPanel}
               </Link>
               {company ? (
                 canAdd ? (
                   <Link href="/panel/oferty/nowa" className="btn btn-primary">
-                    Dodaj ofertę
+                    {t.addOffer}
                   </Link>
                 ) : (
-                  <button className="btn btn-primary opacity-50 cursor-not-allowed" disabled title="Limit ofert wykorzystany">
-                    Dodaj ofertę
+                  <button className="btn btn-primary opacity-50 cursor-not-allowed" disabled title={t.limitReached}>
+                    {t.addOffer}
                   </button>
                 )
               ) : null}
@@ -250,11 +257,12 @@ export default async function PanelOffersPage() {
                           className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#1a5f3c] px-4 py-2.5 text-sm font-bold text-white no-underline transition hover:bg-[#164f32] sm:w-auto"
                         >
                           <i className="fas fa-pen"></i>
-                          Edytuj
+                          {t.editOffer}
                         </Link>
                         <OfferActionsClient
                           offerId={offer.id}
                           status={offer.status}
+                          dict={tc}
                         />
                       </div>
                     </div>
@@ -268,14 +276,13 @@ export default async function PanelOffersPage() {
                 <i className="fas fa-list-check text-xl"></i>
               </div>
               <h2 className="text-2xl font-extrabold text-slate-900">
-                Nie masz jeszcze ofert
+                {t.emptyTitle}
               </h2>
               <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-500">
-                Dodaj pierwszą ofertę wolnych mocy, aby rozpocząć pracę w
-                panelu firmy.
+                {t.emptyDescription}
               </p>
               <Link href="/panel/oferty/nowa" className="mt-6 btn btn-primary">
-                Dodaj ofertę
+                {t.addOffer}
               </Link>
             </div>
           )}

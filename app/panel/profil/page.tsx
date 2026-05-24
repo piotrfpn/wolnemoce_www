@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import CompanyProfileFormClient from "./CompanyProfileFormClient";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export const metadata: Metadata = {
   title: "Profil firmy",
@@ -11,6 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default async function CompanyProfilePage() {
+  const dictionary = getDictionary("pl");
+  const t = dictionary.panel.profile;
+  const tc = dictionary.panel.common;
+
   const supabase = createClient();
   const {
     data: { user },
@@ -50,14 +55,13 @@ export default async function CompanyProfilePage() {
         <section className="mx-auto max-w-[1200px] px-6 py-16">
           <div className="mb-8">
             <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-              Panel firmy
+              {dictionary.panel.dashboard.title}
             </p>
             <h1 className="text-3xl font-extrabold text-slate-900">
-              Profil firmy
+              {t.title}
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-500">
-              Uzupełnij dane firmy, które będą wykorzystywane przy ofertach i
-              zapytaniach.
+              {t.subtitle}
             </p>
           </div>
 
@@ -66,6 +70,8 @@ export default async function CompanyProfilePage() {
             userEmail={user.email ?? null}
             profile={profile}
             company={company}
+            dict={t}
+            dictCommon={tc}
           />
         </section>
       </main>

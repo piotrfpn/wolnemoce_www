@@ -5,14 +5,18 @@ import { useState } from "react";
 import { OFFER_IMAGES_BUCKET } from "@/lib/offerImageUploads";
 import { createClient } from "@/lib/supabase/client";
 
+import type { PanelCommonDictionary } from "@/lib/i18n/types";
+
 type OfferActionsClientProps = {
   offerId: string;
   status: string | null;
+  dict: PanelCommonDictionary;
 };
 
 export default function OfferActionsClient({
   offerId,
   status,
+  dict,
 }: OfferActionsClientProps) {
   const router = useRouter();
   const [error, setError] = useState("");
@@ -112,7 +116,7 @@ export default function OfferActionsClient({
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
             <i className="fas fa-box-archive"></i>
-            {isArchiving ? "Archiwizowanie..." : "Archiwizuj"}
+            {isArchiving ? "Archiwizowanie..." : dict.archive}
           </button>
         ) : null}
         <button
@@ -122,7 +126,7 @@ export default function OfferActionsClient({
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-red-200 px-4 py-2.5 text-sm font-bold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
         >
           <i className="fas fa-trash"></i>
-          {isDeleting ? "Usuwanie..." : "Usuń"}
+          {isDeleting ? "Usuwanie..." : dict.delete}
         </button>
       </div>
       {error ? <p className="mt-2 text-sm text-red-600">{error}</p> : null}

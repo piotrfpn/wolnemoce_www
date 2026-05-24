@@ -9,6 +9,10 @@ import { industryServiceTypes, provinces } from "@/lib/mockData";
 import { createClient } from "@/lib/supabase/client";
 import { isValidNip, normalizeNip } from "@/lib/validators/nip";
 import { lookupCompanyInGus } from "./actions";
+import type {
+  PanelCommonDictionary,
+  PanelProfileDictionary,
+} from "@/lib/i18n/types";
 
 type ProfileData = {
   role: string | null;
@@ -50,6 +54,8 @@ type CompanyProfileFormClientProps = {
   userEmail: string | null;
   profile: ProfileData | null;
   company: CompanyData | null;
+  dict: PanelProfileDictionary;
+  dictCommon: PanelCommonDictionary;
 };
 
 type PkdCode = {
@@ -261,6 +267,8 @@ export default function CompanyProfileFormClient({
   userEmail,
   profile,
   company,
+  dict,
+  dictCommon,
 }: CompanyProfileFormClientProps) {
   const router = useRouter();
   const initialIndustries = getInitialIndustries(company);

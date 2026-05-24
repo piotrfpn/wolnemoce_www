@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import LogoutButton from "@/components/LogoutButton";
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export const metadata: Metadata = {
   title: "Ustawienia konta",
@@ -27,6 +28,11 @@ export default async function AccountSettingsPage() {
     .eq("id", user.id)
     .maybeSingle();
 
+  const dictionary = getDictionary("pl");
+  const t = dictionary.panel.settings;
+  const tc = dictionary.panel.common;
+  const tProfile = dictionary.panel.profile;
+
   return (
     <>
       <Navbar />
@@ -38,17 +44,16 @@ export default async function AccountSettingsPage() {
               className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
             >
               <i className="fas fa-arrow-left text-xs"></i>
-              Wróć do panelu
+              {tc.back}
             </Link>
             <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-              Panel firmy
+              {tc.companyPanel}
             </p>
             <h1 className="text-3xl font-extrabold text-slate-900">
-              Ustawienia konta
+              {t.title}
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-500">
-              Zarządzaj podstawowymi danymi użytkownika, bezpieczeństwem konta
-              i preferencjami.
+              {t.subtitle}
             </p>
           </div>
 
@@ -71,7 +76,7 @@ export default async function AccountSettingsPage() {
               <dl className="grid min-w-0 gap-4">
                 <div className="min-w-0 rounded-2xl bg-slate-50 p-4">
                   <dt className="mb-1 text-xs font-bold uppercase tracking-wide text-slate-500">
-                    E-mail logowania
+                    {t.email}
                   </dt>
                   <dd className="break-words text-sm font-bold text-slate-900">
                     {user.email ?? "Brak e-maila"}
@@ -80,7 +85,7 @@ export default async function AccountSettingsPage() {
 
                 <div className="min-w-0 rounded-2xl bg-slate-50 p-4">
                   <dt className="mb-1 text-xs font-bold uppercase tracking-wide text-slate-500">
-                    Rola
+                    {dictionary.panel.dashboard.role}
                   </dt>
                   <dd className="text-sm font-bold text-slate-900">
                     {profile?.role ?? "user"}
@@ -146,13 +151,13 @@ export default async function AccountSettingsPage() {
                   Bezpieczeństwo
                 </p>
                 <h2 className="text-2xl font-extrabold text-slate-900">
-                  Hasło i logowanie
+                  {t.passwordSettings}
                 </h2>
                 <p className="mt-3 text-sm leading-6 text-slate-500">
                   Hasło i logowanie obsługiwane są przez Supabase Auth.
                 </p>
                 <Link href="/panel/ustawienia/haslo" className="btn btn-outline mt-6">
-                  Zmień hasło
+                  {t.changePassword}
                 </Link>
               </section>
 

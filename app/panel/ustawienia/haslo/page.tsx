@@ -3,6 +3,7 @@ import Link from "next/link";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ChangePasswordFormClient from "./ChangePasswordFormClient";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export const metadata: Metadata = {
   title: "Zmień hasło",
@@ -10,6 +11,10 @@ export const metadata: Metadata = {
 };
 
 export default function ChangePasswordPage() {
+  const dictionary = getDictionary("pl");
+  const t = dictionary.panel.settings;
+  const tc = dictionary.panel.common;
+
   return (
     <>
       <Navbar />
@@ -20,10 +25,10 @@ export default function ChangePasswordPage() {
             className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
           >
             <i className="fas fa-arrow-left text-xs"></i>
-            Wróć do ustawień
+            {tc.back}
           </Link>
 
-          <ChangePasswordFormClient />
+          <ChangePasswordFormClient dictionary={t} tc={tc} />
         </section>
       </main>
       <Footer />

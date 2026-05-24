@@ -1,10 +1,20 @@
 "use client";
 
+import type {
+  PanelCommonDictionary,
+  PanelSettingsDictionary,
+} from "@/lib/i18n/types";
+
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-export default function ChangePasswordFormClient() {
+type ChangePasswordFormClientProps = {
+  dictionary: PanelSettingsDictionary;
+  tc: PanelCommonDictionary;
+};
+
+export default function ChangePasswordFormClient(_props: ChangePasswordFormClientProps) {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

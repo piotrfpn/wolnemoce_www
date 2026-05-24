@@ -6,84 +6,90 @@ import LogoutButton from "@/components/LogoutButton";
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import { getOfferLimitDisplay } from "@/lib/planEntitlements";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export const metadata: Metadata = {
   title: "Panel firmy",
   description: "Panel użytkownika WolneMoce.pl.",
 };
 
-const panelItems = [
-  {
-    title: "Profil firmy",
-    description: "Uzupełnij dane firmy",
-    icon: "fas fa-building",
-    href: "/panel/profil",
-    cta: "Przejdź do profilu",
-  },
-  {
-    title: "Moje oferty",
-    description: "Dodawaj i edytuj oferty firmy",
-    icon: "fas fa-list-check",
-    href: "/panel/oferty",
-    cta: "Przejdź do ofert",
-  },
-  {
-    title: "Zapytania ofertowe",
-    description: "Przeglądaj zapytania wysłane do Twojej firmy.",
-    icon: "fas fa-inbox",
-    href: "/panel/zapytania",
-    cta: "Przejdź do zapytań",
-  },
-  {
-    title: "Ustawienia konta",
-    description: "Dane użytkownika, email i bezpieczeństwo konta.",
-    icon: "fas fa-gear",
-    href: "/panel/ustawienia",
-    cta: "Przejdź do ustawień",
-  },
-];
 
-const adminPanelItem = {
-  title: "ADMIN",
-  description:
-    "Zarządzaj ofertami, firmami i zgłoszeniami w panelu administracyjnym.",
-  icon: "fas fa-user-shield",
-  href: "/admin",
-  cta: "Przejdź do admina",
-};
-
-const offerStatusCards = [
-  {
-    key: "active",
-    title: "Aktywne oferty",
-    description: "Widoczne publicznie",
-    icon: "fas fa-circle-check",
-    className: "bg-emerald-50 text-emerald-700",
-  },
-  {
-    key: "pending",
-    title: "W moderacji",
-    description: "Czekają na akceptację",
-    icon: "fas fa-clock",
-    className: "bg-amber-50 text-amber-700",
-  },
-  {
-    key: "rejected",
-    title: "Odrzucone",
-    description: "Wymagają poprawek",
-    icon: "fas fa-triangle-exclamation",
-    className: "bg-red-50 text-red-700",
-  },
-  {
-    key: "archived",
-    title: "Zarchiwizowane",
-    description: "Niewidoczne publicznie",
-    icon: "fas fa-box-archive",
-    className: "bg-slate-100 text-slate-600",
-  },
-] as const;
 
 export default async function PanelPage() {
+  const dictionary = getDictionary("pl");
+  const t = dictionary.panel.dashboard;
+  const tc = dictionary.panel.common;
+
+  const panelItems = [
+    {
+      title: dictionary.panel.profile.title,
+      description: dictionary.panel.profile.subtitle,
+      icon: "fas fa-building",
+      href: "/panel/profil",
+      cta: t.goToProfile,
+    },
+    {
+      title: dictionary.panel.offers.title,
+      description: dictionary.panel.offers.subtitle,
+      icon: "fas fa-list-check",
+      href: "/panel/oferty",
+      cta: t.goToOffers,
+    },
+    {
+      title: dictionary.panel.inquiries.title,
+      description: dictionary.panel.inquiries.subtitle,
+      icon: "fas fa-inbox",
+      href: "/panel/zapytania",
+      cta: t.goToInquiries,
+    },
+    {
+      title: dictionary.panel.settings.title,
+      description: dictionary.panel.settings.subtitle,
+      icon: "fas fa-gear",
+      href: "/panel/ustawienia",
+      cta: t.settings,
+    },
+  ];
+
+  const adminPanelItem = {
+    title: "ADMIN",
+    description: t.adminCard,
+    icon: "fas fa-user-shield",
+    href: "/admin",
+    cta: "Przejdź do admina",
+  };
+
+  const offerStatusCards = [
+    {
+      key: "active",
+      title: t.activeOffers,
+      description: "Widoczne publicznie",
+      icon: "fas fa-circle-check",
+      className: "bg-emerald-50 text-emerald-700",
+    },
+    {
+      key: "pending",
+      title: t.pendingOffers,
+      description: "Czekają na akceptację",
+      icon: "fas fa-clock",
+      className: "bg-amber-50 text-amber-700",
+    },
+    {
+      key: "rejected",
+      title: t.rejectedOffers,
+      description: "Wymagają poprawek",
+      icon: "fas fa-triangle-exclamation",
+      className: "bg-red-50 text-red-700",
+    },
+    {
+      key: "archived",
+      title: t.archivedOffers,
+      description: "Niewidoczne publicznie",
+      icon: "fas fa-box-archive",
+      className: "bg-slate-100 text-slate-600",
+    },
+  ] as const;
+
   const supabase = createClient();
   const {
     data: { user },
@@ -154,25 +160,25 @@ export default async function PanelPage() {
 
   const profileStatus = !company
     ? {
-        label: "Brak profilu",
-        description: "Uzupełnij profil firmy, aby dodawać oferty.",
+        label: dictionary.panel.dashboard.notVerifiedCompany,
+        description: dictionary.panel.profile.subtitle,
         className: "bg-amber-50 text-amber-700",
       }
     : company.is_verified
       ? {
-          label: "Firma zweryfikowana",
+          label: t.verifiedCompany,
           description: "Profil firmy jest aktywny i zweryfikowany.",
           className: "bg-emerald-50 text-emerald-700",
         }
       : company.regon || company.location_city || company.location_voivodeship
         ? {
-            label: "Profil uzupełniony",
+            label: dictionary.panel.profile.submittedForModeration,
             description: "Dane firmy są zapisane. Weryfikację kończy administrator.",
             className: "bg-slate-100 text-slate-700",
           }
         : {
-            label: "Profil do uzupełnienia",
-            description: "Dodaj dane firmy i dane rejestrowe.",
+            label: dictionary.panel.dashboard.notVerifiedCompany,
+            description: dictionary.panel.profile.subtitle,
             className: "bg-amber-50 text-amber-700",
           };
 
@@ -188,22 +194,22 @@ export default async function PanelPage() {
             <div className="flex min-w-0 flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div className="min-w-0">
                 <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-                  Panel użytkownika
+                  {dictionary.nav.panel}
                 </p>
                 <h1 className="text-3xl font-extrabold text-slate-900">
-                  Panel firmy
+                  {t.title}
                 </h1>
                 <div className="mt-4 grid gap-2 text-sm text-slate-600 sm:grid-cols-2">
                   <p className="min-w-0 break-words">
-                    <strong className="text-slate-900">Email:</strong>{" "}
+                    <strong className="text-slate-900">{t.email}:</strong>{" "}
                     {user.email}
                   </p>
                   <p className="min-w-0">
-                    <strong className="text-slate-900">Rola:</strong>{" "}
+                    <strong className="text-slate-900">{t.role}:</strong>{" "}
                     {profile?.role ?? "user"}
                   </p>
                   <p className="min-w-0">
-                    <strong className="text-slate-900">Plan firmy:</strong>{" "}
+                    <strong className="text-slate-900">{t.plan}:</strong>{" "}
                     {normalizedPlan}
                   </p>
                 </div>
@@ -253,7 +259,7 @@ export default async function PanelPage() {
                 </strong>
               </div>
               <h2 className="text-sm font-extrabold text-slate-900">
-                Nieprzeczytane zapytania
+                {t.unreadInquiries}
               </h2>
               <p className="mt-1 text-xs leading-5 text-slate-500">
                 RFQ oczekujące na odpowiedź
@@ -269,7 +275,7 @@ export default async function PanelPage() {
                 </span>
                 <div className="min-w-0">
                   <h2 className="text-lg font-extrabold text-slate-900">
-                    Limit ofert
+                    {t.offerLimit}
                   </h2>
                   <p className="mt-1 text-sm leading-6 text-slate-500">
                     {isUnlimited ? (
@@ -326,7 +332,7 @@ export default async function PanelPage() {
                 </span>
                 <div className="min-w-0">
                   <h2 className="text-lg font-extrabold text-slate-900">
-                    Profil firmy
+                    {t.companyProfile}
                   </h2>
                   <span
                     className={`mt-2 inline-flex rounded-full px-3 py-1 text-xs font-bold ${profileStatus.className}`}

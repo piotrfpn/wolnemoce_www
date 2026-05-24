@@ -8,6 +8,8 @@ import InquiryActionsClient, {
   type InquiryAttachment,
 } from "./InquiryActionsClient";
 
+import { getDictionary } from "@/lib/i18n/getDictionary";
+
 export const metadata: Metadata = {
   title: "Zapytania ofertowe",
   description: "Zapytania ofertowe wysłane do Twojej firmy.",
@@ -127,6 +129,10 @@ export default async function PanelInquiriesPage({
     data: { user },
   } = await supabase.auth.getUser();
 
+  const dictionary = getDictionary("pl");
+  const t = dictionary.panel.inquiries;
+  const tc = dictionary.panel.common;
+
   if (!user) {
     redirect("/logowanie");
   }
@@ -151,7 +157,7 @@ export default async function PanelInquiriesPage({
                 Zapytania ofertowe są przypisane do profilu firmy.
               </p>
               <Link href="/panel/profil" className="mt-6 btn btn-primary">
-                Uzupełnij profil firmy
+                {dictionary.panel.dashboard.goToProfile}
               </Link>
             </div>
           </section>
@@ -227,21 +233,21 @@ export default async function PanelInquiriesPage({
         <section className="mx-auto max-w-[1200px] px-6 py-16">
           <div className="mb-8 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-              Panel firmy
+              {dictionary.panel.common.companyPanel}
             </p>
             <h1 className="text-3xl font-extrabold text-slate-900">
-              Zapytania ofertowe
+              {t.title}
             </h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-500">
-              Tutaj zobaczysz zapytania wysłane do Twojej firmy.
+              {t.subtitle}
             </p>
             <div className="mt-4 inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700">
               {unreadCount > 0
-                ? `${unreadCount} nieprzeczytanych`
+                ? `${unreadCount} ${t.unread.toLowerCase()}`
                 : "Brak nieprzeczytanych"}
             </div>
             <Link href="/panel" className="mt-5 inline-flex text-sm font-bold text-[#1a5f3c]">
-              Wróć do panelu
+              {tc.back}
             </Link>
           </div>
 
@@ -344,7 +350,7 @@ export default async function PanelInquiriesPage({
 
                   <div className="mt-6 grid min-w-0 gap-4 md:grid-cols-2">
                     {[
-                      ["Imię i nazwisko", inquiry.buyer_name],
+                      [t.buyerData, inquiry.buyer_name],
                       ["Firma kupującego", inquiry.buyer_company],
                       ["Email", inquiry.buyer_email],
                       ["Telefon", inquiry.buyer_phone],
@@ -369,7 +375,7 @@ export default async function PanelInquiriesPage({
 
                   <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50 p-4">
                     <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                      Wiadomość
+                      {t.message}
                     </p>
                     <p className="whitespace-pre-line break-words text-sm leading-7 text-slate-700">
                       {inquiry.message}
@@ -384,10 +390,10 @@ export default async function PanelInquiriesPage({
                 <i className="fas fa-inbox text-2xl"></i>
               </div>
               <h2 className="text-xl font-extrabold text-slate-900">
-                Brak zapytań
+                {t.noInquiries}
               </h2>
               <p className="mt-2 text-sm leading-6 text-slate-500">
-                Nie masz zapytań ofertowych dla wybranych filtrów.
+                {tc.emptyState}
               </p>
             </div>
           )}
