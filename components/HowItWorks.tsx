@@ -1,52 +1,29 @@
 // components/HowItWorks.tsx
 
-export default function HowItWorks() {
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
+
+export default function HowItWorks({ locale = defaultLocale }: { locale?: Locale }) {
+  const t = getDictionary(locale).howItWorks;
+
   return (
     <section className="how-it-works" id="jak-to-dziala">
       <div className="section-header fade-in visible">
-        <div className="section-label">Proces</div>
-        <h2 className="section-title">Jak to działa?</h2>
+        <div className="section-label">{t.label}</div>
+        <h2 className="section-title">{t.title}</h2>
         <p className="section-desc">
-          Prosty i przejrzysty proces łączący firmy poszukujące z producentami
-          dysponującymi wolnymi możliwościami.
+          {t.description}
         </p>
       </div>
 
       <div className="steps-grid">
-        <div className="step-card fade-in visible">
-          <div className="step-number">1</div>
-          <h3>Zarejestruj firmę</h3>
-          <p>
-            Utwórz konto i załóż bezpłatny profil swojej firmy. To zajmuje
-            tylko 5 minut.
-          </p>
-        </div>
-
-        <div className="step-card fade-in visible">
-          <div className="step-number">2</div>
-          <h3>Dodaj ofertę</h3>
-          <p>
-            Opisz swoje wolne moce produkcyjne, maszyny, certyfikaty i
-            dostępność.
-          </p>
-        </div>
-
-        <div className="step-card fade-in visible">
-          <div className="step-number">3</div>
-          <h3>Otrzymuj zapytania</h3>
-          <p>
-            Firmy zainteresowane Twoimi możliwościami wysyłają zapytania
-            ofertowe.
-          </p>
-        </div>
-
-        <div className="step-card fade-in visible">
-          <div className="step-number">4</div>
-          <h3>Realizuj zlecenia</h3>
-          <p>
-            Negocjuj warunki, podpisuj umowy i realizuj zlecenia przez portal.
-          </p>
-        </div>
+        {t.steps.map((step, index) => (
+          <div key={step.title} className="step-card fade-in visible">
+            <div className="step-number">{index + 1}</div>
+            <h3>{step.title}</h3>
+            <p>{step.description}</p>
+          </div>
+        ))}
       </div>
     </section>
   );

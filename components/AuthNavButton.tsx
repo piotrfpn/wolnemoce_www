@@ -9,6 +9,12 @@ import { createClient } from "@/lib/supabase/client";
 type AuthNavButtonProps = {
   variant?: "desktop" | "mobile";
   onNavigate?: () => void;
+  labels?: {
+    login: string;
+    panel: string;
+    logout: string;
+    loggingOut: string;
+  };
 };
 
 export function useCurrentUser() {
@@ -47,6 +53,12 @@ export function useCurrentUser() {
 export default function AuthNavButton({
   variant = "desktop",
   onNavigate,
+  labels = {
+    login: "Zaloguj się",
+    panel: "Panel",
+    logout: "Wyloguj",
+    loggingOut: "Wylogowywanie...",
+  },
 }: AuthNavButtonProps) {
   const router = useRouter();
   const { user, isLoading } = useCurrentUser();
@@ -77,13 +89,13 @@ export default function AuthNavButton({
       : "inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-600 no-underline transition hover:bg-slate-50 hover:text-[#1a5f3c] disabled:cursor-not-allowed disabled:opacity-60";
 
   if (isLoading) {
-    return <span className={loginClass}>Zaloguj się</span>;
+    return <span className={loginClass}>{labels.login}</span>;
   }
 
   if (!user) {
     return (
       <Link href="/logowanie" onClick={onNavigate} className={loginClass}>
-        Zaloguj się
+        {labels.login}
       </Link>
     );
   }
@@ -97,7 +109,7 @@ export default function AuthNavButton({
       }
     >
       <Link href="/panel" onClick={onNavigate} className={panelClass}>
-        Panel
+        {labels.panel}
       </Link>
       <button
         type="button"
@@ -105,7 +117,7 @@ export default function AuthNavButton({
         disabled={isSigningOut}
         className={logoutClass}
       >
-        {isSigningOut ? "Wylogowywanie..." : "Wyloguj"}
+        {isSigningOut ? labels.loggingOut : labels.logout}
       </button>
     </div>
   );

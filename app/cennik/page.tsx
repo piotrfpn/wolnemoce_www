@@ -1,29 +1,14 @@
 import type { Metadata } from "next";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import PageHero from "@/components/PageHero";
-import Pricing from "@/components/Pricing";
+import PricingView from "@/components/views/PricingView";
+import { getDictionary } from "@/lib/i18n/getDictionary";
+
+const dictionary = getDictionary("pl");
 
 export const metadata: Metadata = {
-  title: "Cennik",
-  description:
-    "Statyczny cennik WolneMoce.pl: FREE, PRO, ENTERPRISE oraz dodatki promocyjne.",
+  title: dictionary.seo.pricing.title,
+  description: dictionary.seo.pricing.description,
 };
 
 export default function PricingPage() {
-  return (
-    <>
-      <Navbar />
-      <main>
-        <PageHero
-          label="Cennik MVP"
-          title="Proste plany dla firm produkcyjnych"
-          description="Cennik jest statyczną prezentacją modelu. Przyciski prowadzą do formularza dodania oferty lub kontaktu, bez płatności i bez integracji Stripe."
-          icon="fas fa-tags"
-        />
-        <Pricing />
-      </main>
-      <Footer />
-    </>
-  );
+  return <PricingView locale="pl" />;
 }

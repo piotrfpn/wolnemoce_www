@@ -1,13 +1,18 @@
 import Link from "next/link";
 import AddOfferLinkClient from "./AddOfferLinkClient";
+import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
-export default function Footer() {
+export default function Footer({ locale = defaultLocale }: { locale?: Locale }) {
+  const dictionary = getDictionary(locale);
+  const t = dictionary.footer;
+
   return (
     <footer className="bg-slate-800 px-6 py-16 text-white">
       <div className="mx-auto max-w-[1400px]">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1.5fr]">
           <div>
-            <Link href="/" className="mb-5 flex items-center gap-3 no-underline">
+            <Link href={getLocalizedPath("/", locale)} className="mb-5 flex items-center gap-3 no-underline">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] text-xl text-white shadow-md">
                 <i className="fas fa-industry"></i>
               </div>
@@ -17,9 +22,7 @@ export default function Footer() {
             </Link>
 
             <p className="mb-6 max-w-sm text-sm leading-7 text-white/60">
-              #1 Portal wolnych mocy produkcyjnych w Polsce. Łączymy firmy
-              poszukujące możliwości produkcyjnych z zakładami dysponującymi
-              wolnymi zdolnościami.
+              {t.description}
             </p>
 
             <div className="flex gap-3">
@@ -42,36 +45,36 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-6 text-base font-bold text-white">Portal</h4>
+            <h4 className="mb-6 text-base font-bold text-white">{t.portal}</h4>
             <ul className="space-y-3 list-none">
               <li>
-                <Link href="/oferty" className="text-sm text-white/60 no-underline transition hover:text-white">
-                  Oferty produkcyjne
+                <Link href={getLocalizedPath("/oferty", locale)} className="text-sm text-white/60 no-underline transition hover:text-white">
+                  {t.productionOffers}
                 </Link>
               </li>
               <li>
-                <Link href="/firmy" className="text-sm text-white/60 no-underline transition hover:text-white">
-                  Katalog firm
+                <Link href={getLocalizedPath("/firmy", locale)} className="text-sm text-white/60 no-underline transition hover:text-white">
+                  {t.companyCatalog}
                 </Link>
               </li>
               <li>
                 <AddOfferLinkClient className="text-sm text-white/60 no-underline transition hover:text-white">
-                  Dodaj ofertę
+                  {t.addOffer}
                 </AddOfferLinkClient>
               </li>
               <li>
-                <Link href="/jak-to-dziala" className="text-sm text-white/60 no-underline transition hover:text-white">
-                  Jak to działa
+                <Link href={getLocalizedPath("/jak-to-dziala", locale)} className="text-sm text-white/60 no-underline transition hover:text-white">
+                  {dictionary.nav.howItWorks}
                 </Link>
               </li>
               <li>
-                <Link href="/cennik" className="text-sm text-white/60 no-underline transition hover:text-white">
-                  Cennik
+                <Link href={getLocalizedPath("/cennik", locale)} className="text-sm text-white/60 no-underline transition hover:text-white">
+                  {dictionary.nav.pricing}
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-sm text-white/60 no-underline transition hover:text-white">
-                  Blog
+                <Link href={getLocalizedPath("/blog", locale)} className="text-sm text-white/60 no-underline transition hover:text-white">
+                  {dictionary.nav.blog}
                 </Link>
               </li>
               <li>
@@ -83,72 +86,70 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-6 text-base font-bold text-white">Branże</h4>
+            <h4 className="mb-6 text-base font-bold text-white">{t.industries}</h4>
             <ul className="space-y-3 list-none">
-              {["Metalurgia", "Tworzywa sztuczne", "Automatyka", "Logistyka", "Magazynowanie"].map(
-                (category) => (
-                  <li key={category}>
-                    <Link href="/#kategorie" className="text-sm text-white/60 no-underline transition hover:text-white">
-                      {category}
+              {dictionary.categories.items.slice(0, 5).map((category) => (
+                  <li key={category.name}>
+                    <Link href={getLocalizedPath("/#kategorie", locale)} className="text-sm text-white/60 no-underline transition hover:text-white">
+                      {category.name}
                     </Link>
                   </li>
-                )
-              )}
+              ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="mb-6 text-base font-bold text-white">Firma</h4>
+            <h4 className="mb-6 text-base font-bold text-white">{t.company}</h4>
             <ul className="space-y-3 list-none">
               <li>
-                <Link href="/#ekspert" className="text-sm text-white/60 no-underline transition hover:text-white">
-                  Ekspert
+                <Link href={getLocalizedPath("/#ekspert", locale)} className="text-sm text-white/60 no-underline transition hover:text-white">
+                  {dictionary.nav.expert}
                 </Link>
               </li>
               <li>
-                <Link href="/kontakt" className="text-sm text-white/60 no-underline transition hover:text-white">
-                  Kontakt
+                <Link href={getLocalizedPath("/kontakt", locale)} className="text-sm text-white/60 no-underline transition hover:text-white">
+                  {dictionary.nav.contact}
                 </Link>
               </li>
               <li>
-                <Link href="/kontakt?temat=administracja" className="text-sm text-white/60 no-underline transition hover:text-white">
-                  Kontakt z administratorem
+                <Link href={`${getLocalizedPath("/kontakt", locale)}?temat=administracja`} className="text-sm text-white/60 no-underline transition hover:text-white">
+                  {t.adminContact}
                 </Link>
               </li>
               <li>
                 <Link href="/regulamin" className="text-sm text-white/60 no-underline transition hover:text-white">
-                  Regulamin
+                  {t.terms}
                 </Link>
               </li>
               <li>
                 <Link href="/polityka-prywatnosci" className="text-sm text-white/60 no-underline transition hover:text-white">
-                  Polityka prywatności
+                  {t.privacy}
                 </Link>
               </li>
               <li>
                 <Link href="/polityka-cookies" className="text-sm text-white/60 no-underline transition hover:text-white">
-                  Polityka cookies
+                  {t.cookies}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="mb-4 text-base font-bold text-white">Newsletter</h4>
+            <h4 className="mb-4 text-base font-bold text-white">{t.newsletter}</h4>
             <p className="mb-5 text-sm leading-6 text-white/60">
-              Otrzymuj najnowsze oferty i artykuły eksperckie prosto na email.
+              {t.newsletterCopy}
             </p>
 
             <form className="flex gap-2">
               <input
                 type="email"
-                placeholder="Twój email"
+                placeholder={t.emailPlaceholder}
                 className="min-w-0 flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-white/40 focus:border-[#2d8a5e]"
               />
               <button
                 type="button"
                 className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#1a5f3c] text-white transition hover:bg-[#2d8a5e]"
-                aria-label="Zapisz do newslettera"
+                aria-label={t.newsletterSubmit}
               >
                 <i className="fas fa-paper-plane"></i>
               </button>
@@ -157,14 +158,14 @@ export default function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/40 md:flex-row md:items-center md:justify-between">
-          <p>© 2026 WolneMoce.pl. Wszelkie prawa zastrzeżone.</p>
+          <p>{t.rights}</p>
 
           <div className="flex flex-wrap gap-5">
             <Link href="/regulamin" className="text-white/40 no-underline transition hover:text-white">
-              Regulamin
+              {t.terms}
             </Link>
             <Link href="/polityka-prywatnosci" className="text-white/40 no-underline transition hover:text-white">
-              Polityka prywatności
+              {t.privacy}
             </Link>
             <Link href="/polityka-cookies" className="text-white/40 no-underline transition hover:text-white">
               Cookies

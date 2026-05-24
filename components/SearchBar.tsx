@@ -1,27 +1,32 @@
 import { categories, provinces } from "@/lib/mockData";
+import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
-export default function SearchBar() {
+export default function SearchBar({ locale = defaultLocale }: { locale?: Locale }) {
+  const dictionary = getDictionary(locale);
+  const t = dictionary.search;
+
   return (
     <section className="search-section">
-      <form action="/oferty" className="search-bar">
+      <form action={getLocalizedPath("/oferty", locale)} className="search-bar">
         <div className="search-field">
-          <label>Szukaj oferty</label>
+          <label>{t.offerLabel}</label>
           <div className="input-wrap">
             <i className="fas fa-search"></i>
             <input
               name="q"
               type="text"
-              placeholder="Np. obróbka CNC, druk 3D..."
+              placeholder={t.offerPlaceholder}
             />
           </div>
         </div>
 
         <div className="search-field">
-          <label>Branża</label>
+          <label>{t.industryLabel}</label>
           <div className="input-wrap">
             <i className="fas fa-industry"></i>
             <select name="industry">
-              <option value="">Wszystkie branże</option>
+              <option value="">{t.allIndustries}</option>
               {categories.map((category) => (
                 <option key={category} value={category}>
                   {category}
@@ -32,11 +37,11 @@ export default function SearchBar() {
         </div>
 
         <div className="search-field">
-          <label>Lokalizacja</label>
+          <label>{t.locationLabel}</label>
           <div className="input-wrap">
             <i className="fas fa-map-marker-alt"></i>
             <select name="voivodeship">
-              <option value="">Cała Polska</option>
+              <option value="">{t.allPoland}</option>
               {provinces.map((province) => (
                 <option key={province} value={province}>
                   {province}
@@ -47,7 +52,7 @@ export default function SearchBar() {
         </div>
 
         <button type="submit" className="btn btn-primary search-btn">
-          <i className="fas fa-search"></i> Szukaj
+          <i className="fas fa-search"></i> {t.submit}
         </button>
       </form>
     </section>

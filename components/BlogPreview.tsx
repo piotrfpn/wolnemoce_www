@@ -1,5 +1,7 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import BlogCard, { type BlogCardArticle } from "@/components/BlogCard";
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
 type BlogPostRow = {
   id: string;
@@ -102,9 +104,14 @@ function toBlogCardArticle(
   };
 }
 
-export default async function BlogPreview() {
+export default async function BlogPreview({
+  locale = defaultLocale,
+}: {
+  locale?: Locale;
+}) {
   const supabase = createPublicSupabaseClient();
   const posts = await getLatestBlogPosts();
+  const t = getDictionary(locale).blogPreview;
 
   return (
     <section
@@ -119,11 +126,10 @@ export default async function BlogPreview() {
     >
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
         <div className="section-header fade-in visible">
-          <div className="section-label">Wiedza</div>
-          <h2 className="section-title">Z perspektywy eksperta</h2>
+          <div className="section-label">{t.label}</div>
+          <h2 className="section-title">{t.title}</h2>
           <p className="section-desc">
-            Artykuły, poradniki i case studies od ekspertów branżowych.
-            Rozwijaj swoją wiedzę o outsourcingu produkcji.
+            {t.description}
           </p>
         </div>
 
@@ -138,7 +144,7 @@ export default async function BlogPreview() {
           </div>
         ) : (
           <div className="rounded-[24px] border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
-            Brak opublikowanych wpisów blogowych.
+            {t.empty}
           </div>
         )}
       </div>

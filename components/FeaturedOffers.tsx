@@ -1,6 +1,8 @@
 import Link from "next/link";
 import AddOfferLinkClient from "@/components/AddOfferLinkClient";
 import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
+import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createClient } from "@/lib/supabase/server";
 
 function isActiveFeatured(offer: PublicOffer) {
@@ -55,9 +57,15 @@ async function getHomepageOffers() {
   return { offers: [], mode: "empty" as const };
 }
 
-export default async function FeaturedOffers() {
+export default async function FeaturedOffers({
+  locale = defaultLocale,
+}: {
+  locale?: Locale;
+}) {
   const { offers, mode } = await getHomepageOffers();
   const isLatestFallback = mode === "latest";
+  const t = getDictionary(locale).offers;
+  const offersHref = getLocalizedPath("/oferty", locale);
 
   return (
     <section
@@ -72,16 +80,12 @@ export default async function FeaturedOffers() {
     >
       <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
         <div className="section-header fade-in visible">
-          <div className="section-label">Oferty</div>
+          <div className="section-label">{t.label}</div>
           <h2 className="section-title">
-            {isLatestFallback
-              ? "Najnowsze oferty produkcyjne"
-              : "Wyróżnione oferty produkcyjne"}
+            {isLatestFallback ? t.latestTitle : t.featuredTitle}
           </h2>
           <p className="section-desc">
-            {isLatestFallback
-              ? "Aktualne oferty od firm prezentujących dostępne moce produkcyjne, logistyczne i techniczne."
-              : "Sprawdź aktywne oferty firm B2B, które mogą wesprzeć produkcję, logistykę lub zaplecze techniczne."}
+            {isLatestFallback ? t.latestDescription : t.featuredDescription}
           </p>
         </div>
 
@@ -97,18 +101,17 @@ export default async function FeaturedOffers() {
               <i className="fas fa-industry text-xl"></i>
             </div>
             <h3 className="text-2xl font-extrabold text-slate-900">
-              Twoja oferta może znaleźć się w tym miejscu
+              {t.emptyTitle}
             </h3>
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-              Dodaj wolne moce produkcyjne swojej firmy i zyskaj większą
-              widoczność na start. Publicznie pokażemy tylko aktywne oferty.
+              {t.emptyDescription}
             </p>
             <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
               <AddOfferLinkClient className="btn btn-primary">
-                Dodaj ofertę
+                {t.addOffer}
               </AddOfferLinkClient>
-              <Link href="/oferty" className="btn btn-outline">
-                Przejdź do katalogu
+              <Link href={offersHref} className="btn btn-outline">
+                {t.goToCatalog}
               </Link>
             </div>
           </div>
@@ -116,11 +119,11 @@ export default async function FeaturedOffers() {
 
         <div style={{ textAlign: "center", marginTop: "48px" }}>
           <Link
-            href="/oferty"
+            href={offersHref}
             className="btn btn-outline"
             style={{ padding: "14px 40px" }}
           >
-            Zobacz wszystkie oferty <i className="fas fa-arrow-right"></i>
+            {t.viewAll} <i className="fas fa-arrow-right"></i>
           </Link>
         </div>
       </div>

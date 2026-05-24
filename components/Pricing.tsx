@@ -1,19 +1,21 @@
-import { pricingAddOns, pricingPlans } from "@/lib/mockData";
+import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
-export default function Pricing() {
+export default function Pricing({ locale = defaultLocale }: { locale?: Locale }) {
+  const t = getDictionary(locale).pricing;
+
   return (
     <section className="section" id="cennik">
       <div className="section-header fade-in visible">
-        <div className="section-label">Cennik</div>
-        <h2 className="section-title">Wybierz plan dla swojej firmy</h2>
+        <div className="section-label">{t.label}</div>
+        <h2 className="section-title">{t.title}</h2>
         <p className="section-desc">
-          Dopasuj plan do swoich potrzeb. Zwiększ widoczność, pozyskuj więcej
-          zapytań i rozwijaj swój biznes.
+          {t.description}
         </p>
       </div>
 
       <div className="pricing-grid">
-        {pricingPlans.map((plan) => (
+        {t.plans.map((plan) => (
           <div
             key={plan.name}
             className={`pricing-card fade-in visible ${
@@ -21,7 +23,7 @@ export default function Pricing() {
             }`}
           >
             {plan.isFeatured && (
-              <div className="pricing-badge">Najpopularniejszy</div>
+              <div className="pricing-badge">{t.mostPopular}</div>
             )}
 
             <h3>{plan.name}</h3>
@@ -39,13 +41,13 @@ export default function Pricing() {
               ))}
             </ul>
 
-            {plan.cta === "Wkrótce" ? (
+            {plan.disabled ? (
               <span className="btn btn-outline cursor-not-allowed opacity-60">
                 {plan.cta}
               </span>
             ) : (
               <a
-                href={plan.ctaHref}
+                href={getLocalizedPath(plan.ctaHref, locale)}
                 className={plan.isFeatured ? "btn btn-primary" : "btn btn-outline"}
               >
                 {plan.cta}
@@ -56,10 +58,10 @@ export default function Pricing() {
       </div>
 
       <div className="pricing-addons fade-in visible">
-        <h4>Dodatkowe opcje</h4>
+        <h4>{t.addOnsTitle}</h4>
 
         <div className="addons-grid">
-          {pricingAddOns.map((addOn) => (
+          {t.addOns.map((addOn) => (
             <div key={addOn.name} className="addon-card">
               <h5>{addOn.name}</h5>
               <p>{addOn.description}</p>
