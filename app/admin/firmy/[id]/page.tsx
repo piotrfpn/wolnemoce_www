@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import AdminCompanyVerificationClient from "./AdminCompanyVerificationClient";
 import AdminCompanyPlanClient from "./AdminCompanyPlanClient";
+import AdminCompanyOfferLimitClient from "./AdminCompanyOfferLimitClient";
 
 export const metadata: Metadata = {
   title: "Szczegóły firmy - Admin",
@@ -63,6 +64,14 @@ export default async function AdminCompanyDetailsPage({
     .from("company_plan_changes")
     .select("*")
     .eq("company_id", company.id)
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  const { data: limitHistory } = await supabase
+    .from("company_entitlement_changes")
+    .select("*")
+    .eq("company_id", company.id)
+    .eq("field_name", "custom_active_pending_offer_limit")
     .order("created_at", { ascending: false })
     .limit(10);
 
@@ -192,6 +201,12 @@ export default async function AdminCompanyDetailsPage({
                   planHistory={planHistory || []}
                 />
               </div>
+
+              <AdminCompanyOfferLimitClient
+                companyId={company.id}
+                customLimit={company.custom_active_pending_offer_limit}
+                limitHistory={limitHistory || []}
+              />
             </div>
           </div>
         </section>
