@@ -30,9 +30,6 @@ export default function BlogCard({ article }: { article: BlogCardArticle }) {
           <span>
             <i className="fas fa-calendar"></i> {article.date ?? "Blog"}
           </span>
-          <span>
-            <i className="fas fa-clock"></i> {article.readTime ?? "5 min"}
-          </span>
         </div>
 
         <h3 className="blog-title">{article.title}</h3>

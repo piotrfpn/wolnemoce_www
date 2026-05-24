@@ -91,8 +91,8 @@ export default function ExpertSection() {
 
           <div className="expert-stat-card">
             <i className="fas fa-users"></i>
-            <h3>500+</h3>
-            <p>Zweryfikowanych firm</p>
+            <h3>Rosnąca baza</h3>
+            <p>Sprawdzonych firm i partnerów</p>
           </div>
 
           <div className="expert-stat-card">

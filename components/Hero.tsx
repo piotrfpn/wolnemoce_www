@@ -32,24 +32,24 @@ export default function Hero() {
           <div className="mb-10 flex flex-wrap gap-10">
             <div>
               <div className="text-3xl font-extrabold leading-none text-white">
-                500+
+                Wiele
               </div>
               <div className="mt-1 text-sm text-white/70">Aktywnych ofert</div>
             </div>
             <div>
               <div className="text-3xl font-extrabold leading-none text-white">
-                200+
+                Stale rosnąca
               </div>
               <div className="mt-1 text-sm text-white/70">
-                Zweryfikowanych firm
+                Liczba zweryfikowanych firm
               </div>
             </div>
             <div>
               <div className="text-3xl font-extrabold leading-none text-white">
-                50+
+                Codziennie
               </div>
               <div className="mt-1 text-sm text-white/70">
-                Zrealizowanych transakcji
+                Nowe zapytania
               </div>
             </div>
           </div>
@@ -118,9 +118,9 @@ export default function Hero() {
             <i className="fas fa-check flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-sm text-emerald-600"></i>
             <div className="text-xs text-slate-400">
               <strong className="block text-sm text-slate-900">
-                Firma zweryfikowana
+                Zaufani partnerzy
               </strong>
-              KRS / CEIDG
+              Sprawdzone firmy
             </div>
           </div>
 

@@ -81,7 +81,6 @@ function toBlogCardArticle(post: BlogPostRow): BlogCardArticle {
     category: post.category,
     date: formatDate(post.published_at ?? post.created_at),
     author: post.author_name,
-    readTime: "5 min",
     excerpt: post.excerpt,
     image: getBlogImageUrl(post.featured_image_path),
     imageAlt: post.featured_image_alt || post.title,

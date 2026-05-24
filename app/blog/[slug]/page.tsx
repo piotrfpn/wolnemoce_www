@@ -120,7 +120,6 @@ function toBlogCardArticle(post: BlogPost): BlogCardArticle {
     category: post.category,
     date: formatDate(post.published_at ?? post.created_at),
     author: post.author_name,
-    readTime: "5 min",
     excerpt: post.excerpt,
     image: getBlogImageUrl(post.featured_image_path),
     imageAlt: post.featured_image_alt || post.title,
@@ -195,17 +194,19 @@ export default async function BlogArticlePage({
           <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(circle_at_20%_50%,white_2px,transparent_2px),radial-gradient(circle_at_80%_20%,white_1px,transparent_1px),radial-gradient(circle_at_40%_80%,white_1.5px,transparent_1.5px)] [background-size:60px_60px,40px_40px,80px_80px]" />
 
           <div className="relative z-10 mx-auto max-w-[980px] min-w-0">
-            <Link
-              href="/blog"
-              className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-white/80 no-underline transition hover:text-white"
-            >
-              <i className="fas fa-arrow-left text-xs"></i>
-              Wróć do bloga
-            </Link>
+            <div className="mb-6 flex flex-col items-start gap-4 md:mb-8">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-white/80 no-underline transition hover:text-white"
+              >
+                <i className="fas fa-arrow-left text-xs"></i>
+                Wróć do bloga
+              </Link>
 
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-5 py-2 text-sm font-medium backdrop-blur">
-              <i className="fas fa-newspaper text-[#fbbf24]"></i>
-              {post.category ?? "Blog"}
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur">
+                <i className="fas fa-newspaper text-[#fbbf24] text-[10px]"></i>
+                {post.category ?? "Blog"}
+              </div>
             </div>
 
             <h1 className="text-3xl font-black leading-tight tracking-[-1px] md:text-5xl">
@@ -220,10 +221,6 @@ export default async function BlogArticlePage({
               <span className="inline-flex items-center gap-2">
                 <i className="fas fa-user text-[#fbbf24]"></i>
                 {post.author_name ?? "WolneMoce.pl"}
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <i className="fas fa-clock text-[#fbbf24]"></i>
-                5 min
               </span>
             </div>
 

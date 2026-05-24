@@ -15,7 +15,7 @@ export default function CtaSection() {
           </h2>
 
           <p className="mx-auto mb-8 max-w-2xl text-lg leading-8 text-white/80">
-            Dołącz do 500+ firm, które już korzystają z WolneMoce.pl. Znajdź
+            Dołącz do firm, które już korzystają z WolneMoce.pl. Znajdź
             wolne moce lub dodaj swoją ofertę już dziś.
           </p>
 

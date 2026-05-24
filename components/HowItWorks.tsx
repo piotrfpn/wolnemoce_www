@@ -17,7 +17,7 @@ export default function HowItWorks() {
           <div className="step-number">1</div>
           <h3>Zarejestruj firmę</h3>
           <p>
-            Utwórz konto i zweryfikuj swoją firmę przez KRS/CEIDG. To zajmuje
+            Utwórz konto i załóż bezpłatny profil swojej firmy. To zajmuje
             tylko 5 minut.
           </p>
         </div>
