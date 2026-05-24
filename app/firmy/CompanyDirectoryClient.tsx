@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export type DirectoryCompany = {
   id: string;
@@ -53,9 +55,13 @@ function getInitials(name: string | null) {
     .join("");
 }
 
-function truncateDescription(description: string | null, maxLength = 150) {
+function truncateDescription(
+  description: string | null,
+  fallback: string,
+  maxLength = 150
+) {
   if (!description) {
-    return "Firma nie dodała jeszcze opisu.";
+    return fallback;
   }
 
   if (description.length <= maxLength) {
@@ -67,9 +73,13 @@ function truncateDescription(description: string | null, maxLength = 150) {
 
 export default function CompanyDirectoryClient({
   companies,
+  locale = defaultLocale,
 }: {
   companies: DirectoryCompany[];
+  locale?: Locale;
 }) {
+  const labels = getDictionary(locale).companiesList;
+  const badgeLabels = getDictionary(locale).offerCard;
   const [query, setQuery] = useState("");
   const [voivodeship, setVoivodeship] = useState("");
   const [city, setCity] = useState("");
@@ -142,47 +152,47 @@ export default function CompanyDirectoryClient({
     <section className="mx-auto max-w-[1400px] px-6 py-16">
       <div className="mb-8 flex min-w-0 flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div className="min-w-0">
-          <div className="section-label">Firmy</div>
-          <h2 className="section-title">Zweryfikowani dostawcy B2B</h2>
+          <div className="section-label">{labels.sectionLabel}</div>
+          <h2 className="section-title">{labels.sectionTitle}</h2>
         </div>
         <p className="text-sm font-semibold text-slate-500">
-          Znaleziono {filteredCompanies.length} z {companies.length} firm
+          {labels.found} {filteredCompanies.length} {labels.of} {companies.length} {labels.companies}
         </p>
       </div>
 
       <div className="mb-8 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
         <div className="mb-5 flex min-w-0 flex-col gap-2">
           <h3 className="text-xl font-extrabold text-slate-900">
-            Filtry katalogu
+            {labels.filtersTitle}
           </h3>
           <p className="text-sm leading-6 text-slate-500">
-            Zawęź listę firm po lokalizacji, branży i rodzaju usługi.
+            {labels.filtersDescription}
           </p>
         </div>
 
         <div className="grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-3">
           <label className="block min-w-0">
             <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-              Szukaj firmy
+              {labels.searchCompany}
             </span>
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               className={inputClass}
-              placeholder="Nazwa firmy lub opis"
+              placeholder={labels.searchPlaceholder}
             />
           </label>
 
           <label className="block min-w-0">
             <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-              Województwo
+              {labels.voivodeship}
             </span>
             <select
               value={voivodeship}
               onChange={(event) => setVoivodeship(event.target.value)}
               className={inputClass}
             >
-              <option value="">Wszystkie województwa</option>
+              <option value="">{labels.allVoivodeships}</option>
               {options.voivodeships.map((item) => (
                 <option key={item} value={item}>
                   {item}
@@ -193,14 +203,14 @@ export default function CompanyDirectoryClient({
 
           <label className="block min-w-0">
             <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-              Miasto
+              {labels.city}
             </span>
             <select
               value={city}
               onChange={(event) => setCity(event.target.value)}
               className={inputClass}
             >
-              <option value="">Wszystkie miasta</option>
+              <option value="">{labels.allCities}</option>
               {options.cities.map((item) => (
                 <option key={item} value={item}>
                   {item}
@@ -211,14 +221,14 @@ export default function CompanyDirectoryClient({
 
           <label className="block min-w-0">
             <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-              Branża
+              {labels.industry}
             </span>
             <select
               value={industry}
               onChange={(event) => setIndustry(event.target.value)}
               className={inputClass}
             >
-              <option value="">Wszystkie branże</option>
+              <option value="">{labels.allIndustries}</option>
               {options.industries.map((item) => (
                 <option key={item} value={item}>
                   {item}
@@ -229,14 +239,14 @@ export default function CompanyDirectoryClient({
 
           <label className="block min-w-0">
             <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-              Rodzaj usługi
+              {labels.serviceType}
             </span>
             <select
               value={serviceType}
               onChange={(event) => setServiceType(event.target.value)}
               className={inputClass}
             >
-              <option value="">Wszystkie usługi</option>
+              <option value="">{labels.allServices}</option>
               {options.services.map((item) => (
                 <option key={item} value={item}>
                   {item}
@@ -247,15 +257,15 @@ export default function CompanyDirectoryClient({
 
           <label className="block min-w-0">
             <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-              Sortowanie
+              {labels.sort}
             </span>
             <select
               value={sort}
               onChange={(event) => setSort(event.target.value as "az" | "newest")}
               className={inputClass}
             >
-              <option value="az">Alfabetycznie A-Z</option>
-              <option value="newest">Najnowsze</option>
+              <option value="az">{labels.sortAz}</option>
+              <option value="newest">{labels.sortNewest}</option>
             </select>
           </label>
         </div>
@@ -266,7 +276,7 @@ export default function CompanyDirectoryClient({
           className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white"
         >
           <i className="fas fa-rotate-left"></i>
-          Wyczyść filtry
+          {labels.clearFilters}
         </button>
       </div>
 
@@ -293,10 +303,16 @@ export default function CompanyDirectoryClient({
                   </div>
                   <div className="min-w-0">
                     <div className="mb-2 flex flex-wrap gap-2">
-                      <VerifiedCompanyBadge isVerified={company.is_verified} />
+                      <VerifiedCompanyBadge
+                        isVerified={company.is_verified}
+                        verifiedLabel={badgeLabels.verifiedCompanyLabel}
+                        unverifiedLabel={badgeLabels.publicProfileLabel}
+                        verifiedTitle={badgeLabels.verifiedTitle}
+                        unverifiedTitle={badgeLabels.publicProfileTitle}
+                      />
                     </div>
                     <h3 className="break-words text-xl font-extrabold text-slate-900">
-                      {company.name ?? "Firma"}
+                      {company.name ?? labels.companyFallback}
                     </h3>
                     {location ? (
                       <p className="mt-1 flex items-center gap-2 text-sm text-slate-500">
@@ -308,13 +324,13 @@ export default function CompanyDirectoryClient({
                 </div>
 
                 <p className="mb-5 text-sm leading-6 text-slate-600">
-                  {truncateDescription(company.description)}
+                  {truncateDescription(company.description, labels.noDescription)}
                 </p>
 
                 <div className="mb-5 space-y-4">
                   <div>
                     <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                      Branże
+                      {labels.industriesLabel}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {industries.length > 0 ? (
@@ -327,14 +343,14 @@ export default function CompanyDirectoryClient({
                           </span>
                         ))
                       ) : (
-                        <span className="text-sm text-slate-400">Brak danych</span>
+                        <span className="text-sm text-slate-400">{labels.noData}</span>
                       )}
                     </div>
                   </div>
 
                   <div>
                     <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                      Usługi
+                      {labels.servicesLabel}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {services.length > 0 ? (
@@ -347,7 +363,7 @@ export default function CompanyDirectoryClient({
                           </span>
                         ))
                       ) : (
-                        <span className="text-sm text-slate-400">Brak danych</span>
+                        <span className="text-sm text-slate-400">{labels.noData}</span>
                       )}
                     </div>
                   </div>
@@ -359,7 +375,7 @@ export default function CompanyDirectoryClient({
                       href={`/firmy/${company.slug}`}
                       className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-[#1a5f3c] px-4 py-3 text-sm font-bold text-white no-underline transition hover:bg-[#0d3d26]"
                     >
-                      Zobacz profil
+                      {labels.viewProfile}
                       <i className="fas fa-arrow-right text-xs"></i>
                     </Link>
                   ) : null}
@@ -386,21 +402,21 @@ export default function CompanyDirectoryClient({
           </div>
           <h3 className="mb-2 text-xl font-extrabold text-slate-900">
             {companies.length > 0
-              ? "Nie znaleziono firm spełniających wybrane kryteria."
-              : "Nie ma jeszcze firm do wyświetlenia."}
+              ? labels.emptyFilteredTitle
+              : labels.emptyTitle}
           </h3>
           <p className="mx-auto mb-6 max-w-2xl text-sm leading-6 text-slate-500">
             {companies.length > 0
-              ? "Zmień filtry albo wyczyść kryteria wyszukiwania."
-              : "Katalog pokaże firmy po weryfikacji przez administratora."}
+              ? labels.emptyFilteredDescription
+              : labels.emptyDescription}
           </p>
           {companies.length > 0 ? (
             <button type="button" onClick={clearFilters} className="btn btn-outline">
-              Wyczyść filtry
+              {labels.clearFilters}
             </button>
           ) : (
             <Link href="/oferty" className="btn btn-outline">
-              Zobacz dostępne oferty
+              {labels.viewOffers}
             </Link>
           )}
         </div>

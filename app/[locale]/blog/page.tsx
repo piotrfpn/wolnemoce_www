@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import BlogPage, {
-  dynamic,
-} from "@/app/blog/page";
+import BlogListView from "@/components/views/BlogListView";
 import {
   getLocalizedPath,
   isSupportedLocale,
@@ -17,7 +15,7 @@ type LocaleBlogPageProps = {
   };
 };
 
-export { dynamic };
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return prefixedLocales.map((locale) => ({ locale }));
@@ -49,6 +47,5 @@ export default function LocalizedBlogPage({ params }: LocaleBlogPageProps) {
     notFound();
   }
 
-  return <BlogPage />;
+  return <BlogListView locale={params.locale} />;
 }
-

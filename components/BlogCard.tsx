@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export type BlogCardArticle = {
   id: string | number;
@@ -14,7 +16,14 @@ export type BlogCardArticle = {
   tags?: string[] | null;
 };
 
-export default function BlogCard({ article }: { article: BlogCardArticle }) {
+export default function BlogCard({
+  article,
+  locale = defaultLocale,
+}: {
+  article: BlogCardArticle;
+  locale?: Locale;
+}) {
+  const labels = getDictionary(locale).blogList;
   const image = article.image ?? "/images/offers/automation.jpg";
   const imageAlt = article.imageAlt ?? article.title;
 
@@ -22,13 +31,13 @@ export default function BlogCard({ article }: { article: BlogCardArticle }) {
     <article className="blog-card fade-in visible">
       <div className="blog-image">
         <img src={image} alt={imageAlt} loading="lazy" />
-        <span className="blog-category">{article.category ?? "Blog"}</span>
+        <span className="blog-category">{article.category ?? labels.categoryFallback}</span>
       </div>
 
       <div className="blog-content">
         <div className="blog-meta">
           <span>
-            <i className="fas fa-calendar"></i> {article.date ?? "Blog"}
+            <i className="fas fa-calendar"></i> {article.date ?? labels.dateFallback}
           </span>
         </div>
 
@@ -49,7 +58,7 @@ export default function BlogCard({ article }: { article: BlogCardArticle }) {
         ) : null}
 
         <Link href={`/blog/${article.slug}`} className="blog-read-more">
-          Czytaj więcej <i className="fas fa-arrow-right"></i>
+          {labels.readMore} <i className="fas fa-arrow-right"></i>
         </Link>
       </div>
     </article>

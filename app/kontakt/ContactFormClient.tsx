@@ -2,6 +2,8 @@
 
 import { type FormEvent, useState } from "react";
 import { submitContactMessage } from "./actions";
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 
 type ContactFormClientProps = {
   initialTopic?: string;
@@ -10,6 +12,7 @@ type ContactFormClientProps = {
   initialEmail?: string;
   initialPhone?: string;
   source?: string;
+  locale?: Locale;
 };
 
 const inputClass =
@@ -74,7 +77,9 @@ export default function ContactFormClient({
   initialEmail = "",
   initialPhone = "",
   source = "contact",
+  locale = defaultLocale,
 }: ContactFormClientProps) {
+  const labels = getDictionary(locale).contactPage.form;
   const [name, setName] = useState(initialName);
   const [companyName, setCompanyName] = useState(initialCompanyName);
   const [email, setEmail] = useState(initialEmail);
@@ -99,7 +104,7 @@ export default function ContactFormClient({
       return;
     }
 
-    setSuccess(result.success ?? "Wiadomość została zapisana.");
+    setSuccess(result.success ?? labels.success);
     setName(initialName);
     setCompanyName(initialCompanyName);
     setEmail(initialEmail);
@@ -118,10 +123,10 @@ export default function ContactFormClient({
 
       <div className="mb-6">
         <h2 className="text-2xl font-extrabold text-slate-900">
-          Formularz kontaktowy
+          {labels.title}
         </h2>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          Wiadomość zostanie zapisana w systemie i przekazana do obsługi.
+          {labels.description}
         </p>
       </div>
 
@@ -139,7 +144,7 @@ export default function ContactFormClient({
 
       <div className="grid gap-5 md:grid-cols-2">
         <Field
-          label="Imię i nazwisko"
+          label={labels.name}
           name="name"
           icon="fas fa-user"
           value={name}
@@ -147,14 +152,14 @@ export default function ContactFormClient({
           required
         />
         <Field
-          label="Firma"
+          label={labels.company}
           name="company_name"
           icon="fas fa-building"
           value={companyName}
           onChange={setCompanyName}
         />
         <Field
-          label="Email"
+          label={labels.email}
           name="email"
           type="email"
           icon="fas fa-envelope"
@@ -163,7 +168,7 @@ export default function ContactFormClient({
           required
         />
         <Field
-          label="Telefon"
+          label={labels.phone}
           name="phone"
           type="tel"
           icon="fas fa-phone"
@@ -172,9 +177,9 @@ export default function ContactFormClient({
         />
         <div className="md:col-span-2">
           <Field
-            label="Temat"
+            label={labels.topic}
             name="topic"
-            placeholder="Np. wolne moce, partnerstwo, wsparcie partnerskie"
+            placeholder={labels.topicPlaceholder}
             icon="fas fa-tag"
             value={topic}
             onChange={setTopic}
@@ -182,10 +187,10 @@ export default function ContactFormClient({
         </div>
         <div className="md:col-span-2">
           <Field
-            label="Wiadomość"
+            label={labels.message}
             name="message"
             textarea
-            placeholder="Opisz krótko, czego szukasz lub jakie moce chcesz pokazać."
+            placeholder={labels.messagePlaceholder}
             icon="fas fa-message"
             value={message}
             onChange={setMessage}
@@ -199,7 +204,7 @@ export default function ContactFormClient({
         disabled={isSubmitting}
         className="mt-6 btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isSubmitting ? "Wysyłanie..." : "Wyślij wiadomość"}
+        {isSubmitting ? labels.submitting : labels.submit}
       </button>
     </form>
   );

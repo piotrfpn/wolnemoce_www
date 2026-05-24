@@ -121,6 +121,266 @@ const pl: Dictionary = {
     verified: "zweryfikowana",
     publicProfile: "profil publiczny",
   },
+  offerCard: {
+    companyFallback: "Firma",
+    offerFallback: "Oferta WolneMoce.pl",
+    capacityFallback: "wolne moce",
+    countryFallback: "Polska",
+    industryFallback: "Branża",
+    verified: "zweryfikowana",
+    publicProfile: "profil publiczny",
+    verifiedCompanyLabel: "Firma zweryfikowana",
+    publicProfileLabel: "Profil publiczny",
+    verifiedTitle:
+      "Podstawowa weryfikacja danych rejestrowych firmy. Nie stanowi gwarancji wykonania usługi.",
+    publicProfileTitle: "Firma zarejestrowana w systemie, oczekuje na weryfikację.",
+    featured: "Wyróżniona",
+    active: "Aktywna",
+    details: "Szczegóły",
+  },
+  offersList: {
+    heroLabel: "Aktywne oferty z firm",
+    title: "Znajdź dostępne moce produkcyjne w Polsce",
+    subtitle:
+      "Przeglądaj aktywne oferty firm produkcyjnych, magazynowych, logistycznych i technicznych. Publicznie pokazujemy tylko oferty zatwierdzone jako aktywne.",
+    resultsForFilters: "Wyników dla filtrów",
+    industriesCount: "Branż B2B",
+    publicStatus: "Status widoczny publicznie",
+    marketPreviewTitle: "Szybki podgląd rynku",
+    marketPreviewSubtitle: "Oferty według branż i lokalizacji",
+    filterChip: "Filtr",
+    filtersTitle: "Filtry",
+    filtersDescription: "Źródłem prawdy jest adres URL.",
+    filtersLoading: "Ładowanie filtrów...",
+    addBoxTitle: "Masz wolne moce?",
+    addBoxDescription:
+      "Dodaj ofertę w panelu firmy i wyślij ją do zatwierdzenia.",
+    addOffer: "Dodaj ofertę",
+    foundLabel: "Znaleziono",
+    offerSingular: "ofertę",
+    offerPlural: "ofert",
+    clearFilters: "Wyczyść filtry",
+    emptyTitle: "Brak ofert dla wybranych filtrów.",
+    emptyDescription:
+      "Publicznie widoczne są tylko oferty ze statusem active. Zmień kryteria albo wyczyść filtry.",
+    filters: {
+      search: "Szukaj",
+      searchPlaceholder: "Np. spawanie, CNC, kataforeza",
+      industry: "Branża",
+      allIndustries: "Wszystkie branże",
+      serviceType: "Rodzaj usługi",
+      allServices: "Wszystkie usługi",
+      voivodeship: "Województwo",
+      allPoland: "Cała Polska",
+      city: "Miasto",
+      allCities: "Wszystkie miasta",
+      verifiedOnly: "Tylko zweryfikowane firmy",
+      verifiedDescription:
+        "Pokaż oferty firm zweryfikowanych przez administratora.",
+      sort: "Sortowanie",
+      newest: "Najnowsze",
+      alphabetical: "Alfabetycznie",
+      featured: "Wyróżnione",
+      submit: "Szukaj",
+      clear: "Wyczyść filtry",
+    },
+  },
+  companiesList: {
+    heroLabel: "Zweryfikowane firmy",
+    title: "Katalog firm",
+    subtitle:
+      "Przeglądaj zweryfikowane firmy oferujące wolne moce produkcyjne, logistyczne i techniczne.",
+    browseOffers: "Zobacz dostępne oferty",
+    addCompanyAndOffer: "Dodaj firmę i ofertę",
+    sectionLabel: "Firmy",
+    sectionTitle: "Zweryfikowani dostawcy B2B",
+    found: "Znaleziono",
+    of: "z",
+    companies: "firm",
+    filtersTitle: "Filtry katalogu",
+    filtersDescription:
+      "Zawęź listę firm po lokalizacji, branży i rodzaju usługi.",
+    searchCompany: "Szukaj firmy",
+    searchPlaceholder: "Nazwa firmy lub opis",
+    voivodeship: "Województwo",
+    allVoivodeships: "Wszystkie województwa",
+    city: "Miasto",
+    allCities: "Wszystkie miasta",
+    industry: "Branża",
+    allIndustries: "Wszystkie branże",
+    serviceType: "Rodzaj usługi",
+    allServices: "Wszystkie usługi",
+    sort: "Sortowanie",
+    sortAz: "Alfabetycznie A-Z",
+    sortNewest: "Najnowsze",
+    clearFilters: "Wyczyść filtry",
+    companyFallback: "Firma",
+    noDescription: "Firma nie dodała jeszcze opisu.",
+    industriesLabel: "Branże",
+    servicesLabel: "Usługi",
+    noData: "Brak danych",
+    viewProfile: "Zobacz profil",
+    emptyFilteredTitle: "Nie znaleziono firm spełniających wybrane kryteria.",
+    emptyFilteredDescription: "Zmień filtry albo wyczyść kryteria wyszukiwania.",
+    emptyTitle: "Nie ma jeszcze firm do wyświetlenia.",
+    emptyDescription: "Katalog pokaże firmy po weryfikacji przez administratora.",
+    viewOffers: "Zobacz dostępne oferty",
+  },
+  howItWorksPage: {
+    heroLabel: "Proces współpracy",
+    heroTitle:
+      "Jedno miejsce dla firm szukających wykonawców i firm z wolnymi mocami",
+    heroDescription:
+      "Statyczny proces MVP pokazuje, jak docelowo portal będzie skracał drogę od potrzeby produkcyjnej do sprawdzonego partnera B2B.",
+    browseOffers: "Przeglądaj oferty",
+    addOffer: "Dodaj ofertę",
+    sectionLabel: "Dwie strony rynku",
+    sectionTitle: "Proces dopasowany do roli firmy",
+    sectionDescription:
+      "WolneMoce.pl porządkuje komunikację między zleceniodawcą a firmą, która może szybko przyjąć dodatkową pracę.",
+    buyerTitle: "Firma szukająca podwykonawcy",
+    supplierTitle: "Firma posiadająca wolne moce",
+    buyerSteps: [
+      "Opisz zapotrzebowanie produkcyjne",
+      "Przejrzyj pasujące oferty",
+      "Skontaktuj się z wybraną firmą",
+      "Uzgodnij zakres i rozpocznij współpracę",
+    ],
+    supplierSteps: [
+      "Dodaj profil firmy i ofertę",
+      "Pokaż dostępne moce oraz certyfikaty",
+      "Odbieraj zapytania od firm B2B",
+      "Wypełniaj wolne terminy produkcyjne",
+    ],
+    benefits: [
+      {
+        icon: "fas fa-clock",
+        title: "Szybsze decyzje",
+        description: "Oferty i parametry są zebrane w jednym miejscu.",
+      },
+      {
+        icon: "fas fa-shield-alt",
+        title: "Weryfikacja",
+        description:
+          "Profil firmy, dane rejestrowe i certyfikaty budują zaufanie.",
+      },
+      {
+        icon: "fas fa-handshake",
+        title: "Kontakt B2B",
+        description: "Portal wspiera rozpoczęcie rozmowy między firmami.",
+      },
+    ],
+    safetyTitle: "Bezpieczeństwo i weryfikacja",
+    safetyDescription:
+      "Wersja MVP pokazuje docelową ścieżkę: dane firmy, certyfikaty, zakres możliwości i jasny kontakt. Pełna automatyzacja weryfikacji nie jest częścią tego sprintu.",
+    safetyTags: ["KRS / CEIDG", "Certyfikaty", "Profil firmy", "Historia współpracy"],
+  },
+  contactPage: {
+    heroLabel: "Kontakt",
+    heroTitle: "Porozmawiajmy o wolnych mocach produkcyjnych",
+    heroDescription:
+      "Napisz, jeśli szukasz wykonawcy albo chcesz pokazać dostępne moce swojej firmy.",
+    labels: {
+      email: "Email",
+      phone: "Telefon",
+      location: "Lokalizacja",
+      hours: "Godziny",
+    },
+    partnerTopics: {
+      credos: {
+        label: "Partner usługowy",
+        subject: "Wsparcie księgowo-prawne Credos",
+        description:
+          "Pytanie dotyczy płatnego wsparcia partnerskiego Credos w zakresie księgowości, prawa i formalnej obsługi współpracy B2B. Usługa nie jest automatycznie zawarta w planach WolneMoce.pl i wymaga osobnego ustalenia zakresu oraz ceny.",
+        icon: "fas fa-scale-balanced",
+        source: "contact:credos",
+      },
+      logimarket: {
+        label: "Partner usługowy",
+        subject: "Doradztwo procesowe i łańcuch dostaw LogiMarket",
+        description:
+          "Pytanie dotyczy płatnego doradztwa partnerskiego LogiMarket w zakresie procesów, outsourcingu produkcji, RFQ, make-or-buy oraz łańcucha dostaw. Usługa nie jest automatycznie zawarta w planach WolneMoce.pl i wymaga osobnego ustalenia zakresu oraz ceny.",
+        icon: "fas fa-route",
+        source: "contact:logimarket",
+      },
+      administracja: {
+        label: "Kontakt z administratorem",
+        subject: "Kontakt z administratorem",
+        description:
+          "Wiadomość trafi do administracji WolneMoce.pl. Użyj tego kontaktu w sprawach konta, profilu firmy, ofert, zapytań RFQ albo obsługi panelu.",
+        icon: "fas fa-user-shield",
+        source: "admin_contact",
+      },
+    },
+    buyerBoxTitle: "Dla firm szukających wykonawcy",
+    buyerBoxDescription:
+      "Pomagamy uporządkować zapytanie i znaleźć firmy z dostępnymi mocami w konkretnej branży.",
+    supplierBoxTitle: "Dla firm z wolnymi mocami",
+    supplierBoxDescription:
+      "Możesz pokazać dostępność, kompetencje, certyfikaty i typowe parametry realizacji.",
+    faqLabel: "FAQ",
+    faqTitle: "Najczęstsze pytania",
+    faqs: [
+      {
+        question: "Czy formularze wysyłają dane?",
+        answer:
+          "Tak. Formularz kontaktowy zapisuje wiadomość w systemie i przekazuje ją do obsługi.",
+      },
+      {
+        question: "Czy oferty są filtrowane dynamicznie?",
+        answer:
+          "Tak. Publiczny listing ofert korzysta z parametrów w adresie URL, aby zachować wybrane filtry.",
+      },
+      {
+        question: "Jak działa weryfikacja firm?",
+        answer:
+          "Firma może zostać oznaczona jako zweryfikowana po podstawowej kontroli danych przez administratora.",
+      },
+      {
+        question: "Czy można dodać ofertę za darmo?",
+        answer:
+          "Tak. W planie FREE firma może mieć jedną ofertę oczekującą lub aktywną.",
+      },
+      {
+        question: "Czy WolneMoce.pl obsługuje płatności?",
+        answer:
+          "Nie w tym etapie. Cennik pokazuje model planów bez integracji płatności.",
+      },
+      {
+        question: "Czy usługi Credos i LogiMarket są częścią planu PRO?",
+        answer:
+          "Nie. To opcjonalne usługi partnerskie, ustalane osobno co do zakresu i ceny.",
+      },
+    ],
+    form: {
+      title: "Formularz kontaktowy",
+      description:
+        "Wiadomość zostanie zapisana w systemie i przekazana do obsługi.",
+      name: "Imię i nazwisko",
+      company: "Firma",
+      email: "Email",
+      phone: "Telefon",
+      topic: "Temat",
+      topicPlaceholder: "Np. wolne moce, partnerstwo, wsparcie partnerskie",
+      message: "Wiadomość",
+      messagePlaceholder:
+        "Opisz krótko, czego szukasz lub jakie moce chcesz pokazać.",
+      submit: "Wyślij wiadomość",
+      submitting: "Wysyłanie...",
+      success: "Wiadomość została zapisana.",
+    },
+  },
+  blogList: {
+    heroLabel: "Wiedza B2B",
+    title: "Blog o wolnych mocach i outsourcingu produkcji",
+    subtitle:
+      "Poradniki, trendy i case studies dla firm, które chcą lepiej planować produkcję oraz współpracę z podwykonawcami.",
+    allCategories: "Wszystkie",
+    empty: "Brak opublikowanych wpisów blogowych.",
+    categoryFallback: "Blog",
+    dateFallback: "Blog",
+    readMore: "Czytaj więcej",
+  },
   howItWorks: {
     label: "Proces",
     title: "Jak to działa?",
@@ -315,4 +575,3 @@ const pl: Dictionary = {
 };
 
 export default pl;
-

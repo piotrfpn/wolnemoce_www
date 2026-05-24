@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import CompaniesPage from "@/app/firmy/page";
+import CompaniesListView from "@/components/views/CompaniesListView";
 import {
   getLocalizedPath,
   isSupportedLocale,
@@ -49,6 +49,5 @@ export default function LocalizedCompaniesPage({
     notFound();
   }
 
-  return <CompaniesPage />;
+  return <CompaniesListView locale={params.locale} />;
 }
-

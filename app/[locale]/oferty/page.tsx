@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import OffersPage, {
-  dynamic,
-} from "@/app/oferty/page";
+import OffersListView from "@/components/views/OffersListView";
 import {
   getLocalizedPath,
   isSupportedLocale,
@@ -18,7 +16,7 @@ type LocaleOffersPageProps = {
   searchParams?: Record<string, string | string[] | undefined>;
 };
 
-export { dynamic };
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return prefixedLocales.map((locale) => ({ locale }));
@@ -53,6 +51,5 @@ export default function LocalizedOffersPage({
     notFound();
   }
 
-  return <OffersPage searchParams={searchParams} />;
+  return <OffersListView searchParams={searchParams} locale={params.locale} />;
 }
-

@@ -3,12 +3,15 @@
 import { type FormEvent, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cityToSlug, type CityOption } from "@/lib/location";
+import { getDictionary } from "@/lib/i18n/getDictionary";
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
 
 type OffersFiltersClientProps = {
   categories: string[];
   services: string[];
   provinces: string[];
   cities: CityOption[];
+  locale?: Locale;
 };
 
 function getParam(searchParams: { get: (key: string) => string | null }, key: string) {
@@ -62,7 +65,9 @@ export default function OffersFiltersClient({
   services,
   provinces,
   cities,
+  locale = defaultLocale,
 }: OffersFiltersClientProps) {
+  const labels = getDictionary(locale).offersList.filters;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -120,14 +125,14 @@ export default function OffersFiltersClient({
     <form onSubmit={handleSubmit} className="space-y-7">
       <div>
         <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-          Szukaj
+          {labels.search}
         </label>
         <div className="relative">
           <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Np. spawanie, CNC, kataforeza"
+            placeholder={labels.searchPlaceholder}
             className="h-12 min-w-0 w-full max-w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
           />
         </div>
@@ -135,7 +140,7 @@ export default function OffersFiltersClient({
 
       <div>
         <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-          Branża
+          {labels.industry}
         </label>
         <select
           value={current.industry}
@@ -147,7 +152,7 @@ export default function OffersFiltersClient({
           }
           className="h-12 min-w-0 w-full max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
         >
-          <option value="">Wszystkie branże</option>
+          <option value="">{labels.allIndustries}</option>
           {categories.map((category) => (
             <option key={category} value={category}>
               {category}
@@ -158,7 +163,7 @@ export default function OffersFiltersClient({
 
       <div>
         <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-          Rodzaj usługi
+          {labels.serviceType}
         </label>
         <select
           value={current.serviceType}
@@ -167,7 +172,7 @@ export default function OffersFiltersClient({
           }
           className="h-12 min-w-0 w-full max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
         >
-          <option value="">Wszystkie usługi</option>
+          <option value="">{labels.allServices}</option>
           {services.map((service) => (
             <option key={service} value={service}>
               {service}
@@ -178,7 +183,7 @@ export default function OffersFiltersClient({
 
       <div>
         <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-          Województwo
+          {labels.voivodeship}
         </label>
         <select
           value={current.voivodeship}
@@ -187,7 +192,7 @@ export default function OffersFiltersClient({
           }
           className="h-12 min-w-0 w-full max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
         >
-          <option value="">Cała Polska</option>
+          <option value="">{labels.allPoland}</option>
           {provinces.map((province) => (
             <option key={province} value={province}>
               {province}
@@ -198,7 +203,7 @@ export default function OffersFiltersClient({
 
       <div>
         <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-          Miasto
+          {labels.city}
         </label>
         <select
           value={current.city}
@@ -207,7 +212,7 @@ export default function OffersFiltersClient({
           }
           className="h-12 min-w-0 w-full max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
         >
-          <option value="">Wszystkie miasta</option>
+          <option value="">{labels.allCities}</option>
           {cities.map((city) => (
             <option key={city.slug} value={city.slug}>
               {city.label}
@@ -227,33 +232,33 @@ export default function OffersFiltersClient({
         />
         <span className="min-w-0">
           <span className="block font-bold text-slate-900">
-            Tylko zweryfikowane firmy
+            {labels.verifiedOnly}
           </span>
           <span className="mt-1 block text-xs leading-5 text-slate-500">
-            Pokaż oferty firm zweryfikowanych przez administratora.
+            {labels.verifiedDescription}
           </span>
         </span>
       </label>
 
       <div>
         <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-          Sortowanie
+          {labels.sort}
         </label>
         <select
           value={current.sort}
           onChange={(event) => updateUrl({ sort: event.target.value })}
           className="h-12 min-w-0 w-full max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
         >
-          <option value="newest">Najnowsze</option>
-          <option value="az">Alfabetycznie</option>
-          <option value="featured">Wyróżnione</option>
+          <option value="newest">{labels.newest}</option>
+          <option value="az">{labels.alphabetical}</option>
+          <option value="featured">{labels.featured}</option>
         </select>
       </div>
 
       <div className="flex min-w-0 flex-col gap-3">
         <button type="submit" className="btn btn-primary w-full">
           <i className="fas fa-search"></i>
-          Szukaj
+          {labels.submit}
         </button>
         <button
           type="button"
@@ -263,7 +268,7 @@ export default function OffersFiltersClient({
           }}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white"
         >
-          Wyczyść filtry
+          {labels.clear}
         </button>
       </div>
     </form>

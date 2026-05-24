@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getOfferImageByIndustry, getPublicOfferImageUrl } from "@/lib/offerImages";
 import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
+import { getDictionary } from "@/lib/i18n/getDictionary";
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
 
 export type PublicOfferCompany = {
   name: string | null;
@@ -57,9 +59,16 @@ function isActiveFeatured(offer: PublicOffer) {
   return !offer.featured_until || new Date(offer.featured_until).getTime() > Date.now();
 }
 
-export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
+export default function PublicOfferCard({
+  offer,
+  locale = defaultLocale,
+}: {
+  offer: PublicOffer;
+  locale?: Locale;
+}) {
+  const labels = getDictionary(locale).offerCard;
   const company = offer.companies;
-  const companyName = company?.name ?? "Firma";
+  const companyName = company?.name ?? labels.companyFallback;
   const location = [company?.location_city, company?.location_voivodeship]
     .filter(Boolean)
     .join(", ");
@@ -70,7 +79,7 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
     getPublicOfferImageUrl(mainImage?.path) ?? getOfferImageByIndustry(offer.branch);
   const imageAlt =
     mainImage?.alt ||
-    `${offer.title ?? "Oferta WolneMoce.pl"} - ${offer.branch ?? "wolne moce"}`;
+    `${offer.title ?? labels.offerFallback} - ${offer.branch ?? labels.capacityFallback}`;
   const featured = isActiveFeatured(offer);
 
   return (
@@ -80,18 +89,22 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
           {featured ? (
             <span className="flex items-center gap-1 rounded-full bg-[#fbbf24] px-3 py-1.5 text-[11px] font-bold text-slate-900 shadow-sm">
               <i className="fas fa-star"></i>
-              Wyróżniona
+              {labels.featured}
             </span>
           ) : null}
           <VerifiedCompanyBadge
             isVerified={company.is_verified}
             className="!bg-white/95 !text-[11px] !py-1 backdrop-blur"
+            verifiedLabel={labels.verifiedCompanyLabel}
+            unverifiedLabel={labels.publicProfileLabel}
+            verifiedTitle={labels.verifiedTitle}
+            unverifiedTitle={labels.publicProfileTitle}
           />
         </div>
       ) : featured ? (
         <div className="absolute right-4 top-4 z-10 flex items-center gap-1 rounded-full bg-[#fbbf24] px-3 py-1.5 text-[11px] font-bold text-slate-900 shadow-sm">
           <i className="fas fa-star"></i>
-          Wyróżniona
+          {labels.featured}
         </div>
       ) : null}
 
@@ -106,7 +119,7 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4 text-white">
           <span className="flex items-center gap-2 text-xs font-medium">
             <i className="fas fa-map-marker-alt"></i>
-            {location || "Polska"}
+            {location || labels.countryFallback}
           </span>
         </div>
       </div>
@@ -130,7 +143,7 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
               </h3>
             )}
             <p className="truncate text-[11px] text-slate-400">
-              {offer.branch ?? "Branża"} · {company?.is_verified ? "zweryfikowana" : "profil publiczny"}
+              {offer.branch ?? labels.industryFallback} · {company?.is_verified ? labels.verified : labels.publicProfile}
             </p>
           </div>
         </div>
@@ -173,7 +186,7 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
         <div className="flex items-center justify-between gap-4">
           <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
             <i className="fas fa-circle-check"></i>
-            Aktywna
+            {labels.active}
           </span>
 
           {offer.slug ? (
@@ -181,7 +194,7 @@ export default function PublicOfferCard({ offer }: { offer: PublicOffer }) {
               href={`/oferty/${offer.slug}`}
               className="inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] transition hover:text-[#0d3d26]"
             >
-              Szczegóły
+              {labels.details}
               <i className="fas fa-arrow-right text-xs"></i>
             </Link>
           ) : null}

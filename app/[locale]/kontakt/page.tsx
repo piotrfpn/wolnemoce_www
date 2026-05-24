@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import ContactPage from "@/app/kontakt/page";
+import ContactView from "@/components/views/ContactView";
 import {
   getLocalizedPath,
   isSupportedLocale,
@@ -49,6 +49,5 @@ export default function LocalizedContactPage({
     notFound();
   }
 
-  return <ContactPage searchParams={searchParams} />;
+  return <ContactView searchParams={searchParams} locale={params.locale} />;
 }
-

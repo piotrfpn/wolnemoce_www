@@ -123,6 +123,250 @@ const en: Dictionary = {
     verified: "verified",
     publicProfile: "public profile",
   },
+  offerCard: {
+    companyFallback: "Company",
+    offerFallback: "WolneMoce.pl offer",
+    capacityFallback: "available capacity",
+    countryFallback: "Poland",
+    industryFallback: "Industry",
+    verified: "verified",
+    publicProfile: "public profile",
+    verifiedCompanyLabel: "Verified company",
+    publicProfileLabel: "Public profile",
+    verifiedTitle:
+      "Basic verification of company registration data. It is not a guarantee of service delivery.",
+    publicProfileTitle: "Company registered in the system, awaiting verification.",
+    featured: "Featured",
+    active: "Active",
+    details: "Details",
+  },
+  offersList: {
+    heroLabel: "Active company offers",
+    title: "Find available production capacity in Poland",
+    subtitle:
+      "Browse active offers from production, warehouse, logistics and technical companies. Only approved active offers are shown publicly.",
+    resultsForFilters: "Results for filters",
+    industriesCount: "B2B industries",
+    publicStatus: "Publicly visible status",
+    marketPreviewTitle: "Quick market preview",
+    marketPreviewSubtitle: "Offers by industry and location",
+    filterChip: "Filter",
+    filtersTitle: "Filters",
+    filtersDescription: "The URL is the source of truth.",
+    filtersLoading: "Loading filters...",
+    addBoxTitle: "Do you have available capacity?",
+    addBoxDescription:
+      "Add an offer in the company panel and send it for approval.",
+    addOffer: "Add offer",
+    foundLabel: "Found",
+    offerSingular: "offer",
+    offerPlural: "offers",
+    clearFilters: "Clear filters",
+    emptyTitle: "No offers match the selected filters.",
+    emptyDescription:
+      "Only offers with active status are visible publicly. Change criteria or clear filters.",
+    filters: {
+      search: "Search",
+      searchPlaceholder: "E.g. welding, CNC, cataphoresis",
+      industry: "Industry",
+      allIndustries: "All industries",
+      serviceType: "Service type",
+      allServices: "All services",
+      voivodeship: "Voivodeship",
+      allPoland: "All Poland",
+      city: "City",
+      allCities: "All cities",
+      verifiedOnly: "Verified companies only",
+      verifiedDescription: "Show offers from companies verified by the administrator.",
+      sort: "Sorting",
+      newest: "Newest",
+      alphabetical: "Alphabetical",
+      featured: "Featured",
+      submit: "Search",
+      clear: "Clear filters",
+    },
+  },
+  companiesList: {
+    heroLabel: "Verified companies",
+    title: "Company directory",
+    subtitle:
+      "Browse verified companies offering available production, logistics and technical capacity.",
+    browseOffers: "View available offers",
+    addCompanyAndOffer: "Add company and offer",
+    sectionLabel: "Companies",
+    sectionTitle: "Verified B2B suppliers",
+    found: "Found",
+    of: "of",
+    companies: "companies",
+    filtersTitle: "Directory filters",
+    filtersDescription: "Narrow the company list by location, industry and service type.",
+    searchCompany: "Search company",
+    searchPlaceholder: "Company name or description",
+    voivodeship: "Voivodeship",
+    allVoivodeships: "All voivodeships",
+    city: "City",
+    allCities: "All cities",
+    industry: "Industry",
+    allIndustries: "All industries",
+    serviceType: "Service type",
+    allServices: "All services",
+    sort: "Sorting",
+    sortAz: "Alphabetical A-Z",
+    sortNewest: "Newest",
+    clearFilters: "Clear filters",
+    companyFallback: "Company",
+    noDescription: "The company has not added a description yet.",
+    industriesLabel: "Industries",
+    servicesLabel: "Services",
+    noData: "No data",
+    viewProfile: "View profile",
+    emptyFilteredTitle: "No companies match the selected criteria.",
+    emptyFilteredDescription: "Change filters or clear search criteria.",
+    emptyTitle: "There are no companies to display yet.",
+    emptyDescription: "The directory will show companies after administrator verification.",
+    viewOffers: "View available offers",
+  },
+  howItWorksPage: {
+    heroLabel: "Cooperation process",
+    heroTitle:
+      "One place for companies looking for contractors and companies with available capacity",
+    heroDescription:
+      "The MVP process shows how the portal can shorten the path from production need to a checked B2B partner.",
+    browseOffers: "Browse offers",
+    addOffer: "Add offer",
+    sectionLabel: "Two sides of the market",
+    sectionTitle: "A process matched to the company role",
+    sectionDescription:
+      "WolneMoce.pl organizes communication between the buyer and the company that can accept additional work.",
+    buyerTitle: "Company looking for a subcontractor",
+    supplierTitle: "Company with available capacity",
+    buyerSteps: [
+      "Describe the production need",
+      "Browse matching offers",
+      "Contact the selected company",
+      "Agree the scope and start cooperation",
+    ],
+    supplierSteps: [
+      "Add a company profile and offer",
+      "Show available capacity and certificates",
+      "Receive inquiries from B2B companies",
+      "Fill available production slots",
+    ],
+    benefits: [
+      { icon: "fas fa-clock", title: "Faster decisions", description: "Offers and parameters are collected in one place." },
+      { icon: "fas fa-shield-alt", title: "Verification", description: "Company profiles, registration data and certificates build trust." },
+      { icon: "fas fa-handshake", title: "B2B contact", description: "The portal supports starting conversations between companies." },
+    ],
+    safetyTitle: "Safety and verification",
+    safetyDescription:
+      "The MVP shows the target path: company data, certificates, capability scope and clear contact. Full verification automation is not part of this sprint.",
+    safetyTags: ["KRS / CEIDG", "Certificates", "Company profile", "Cooperation history"],
+  },
+  contactPage: {
+    heroLabel: "Contact",
+    heroTitle: "Let’s talk about available production capacity",
+    heroDescription:
+      "Write if you are looking for a contractor or want to show your company’s available capacity.",
+    labels: {
+      email: "Email",
+      phone: "Phone",
+      location: "Location",
+      hours: "Hours",
+    },
+    partnerTopics: {
+      credos: {
+        label: "Service partner",
+        subject: "Credos accounting and legal support",
+        description:
+          "This inquiry concerns paid Credos partner support in accounting, legal and formal B2B cooperation areas. The service is not automatically included in WolneMoce.pl plans and requires separate scope and price agreement.",
+        icon: "fas fa-scale-balanced",
+        source: "contact:credos",
+      },
+      logimarket: {
+        label: "Service partner",
+        subject: "LogiMarket process and supply-chain consulting",
+        description:
+          "This inquiry concerns paid LogiMarket partner consulting for processes, production outsourcing, RFQ, make-or-buy and supply chain. The service is not automatically included in WolneMoce.pl plans and requires separate scope and price agreement.",
+        icon: "fas fa-route",
+        source: "contact:logimarket",
+      },
+      administracja: {
+        label: "Administrator contact",
+        subject: "Administrator contact",
+        description:
+          "The message will go to WolneMoce.pl administration. Use this contact for account, company profile, offers, RFQ inquiries or panel support topics.",
+        icon: "fas fa-user-shield",
+        source: "admin_contact",
+      },
+    },
+    buyerBoxTitle: "For companies looking for a contractor",
+    buyerBoxDescription:
+      "We help organize the inquiry and find companies with available capacity in a specific industry.",
+    supplierBoxTitle: "For companies with available capacity",
+    supplierBoxDescription:
+      "You can show availability, competencies, certificates and typical delivery parameters.",
+    faqLabel: "FAQ",
+    faqTitle: "Frequently asked questions",
+    faqs: [
+      {
+        question: "Does the contact form send data?",
+        answer:
+          "Yes. The contact form saves the message in the system and passes it to support.",
+      },
+      {
+        question: "Are offers filtered dynamically?",
+        answer:
+          "Yes. The public offer listing uses URL parameters to preserve selected filters.",
+      },
+      {
+        question: "How does company verification work?",
+        answer:
+          "A company may be marked as verified after a basic data check by the administrator.",
+      },
+      {
+        question: "Can I add an offer for free?",
+        answer:
+          "Yes. In the FREE plan, a company may have one pending or active offer.",
+      },
+      {
+        question: "Does WolneMoce.pl handle payments?",
+        answer:
+          "Not at this stage. Pricing presents the plan model without payment integration.",
+      },
+      {
+        question: "Are Credos and LogiMarket services part of PRO?",
+        answer:
+          "No. They are optional partner services agreed separately in scope and price.",
+      },
+    ],
+    form: {
+      title: "Contact form",
+      description: "The message will be saved in the system and passed to support.",
+      name: "Full name",
+      company: "Company",
+      email: "Email",
+      phone: "Phone",
+      topic: "Topic",
+      topicPlaceholder: "E.g. available capacity, partnership, partner support",
+      message: "Message",
+      messagePlaceholder:
+        "Briefly describe what you are looking for or what capacity you want to show.",
+      submit: "Send message",
+      submitting: "Sending...",
+      success: "The message has been saved.",
+    },
+  },
+  blogList: {
+    heroLabel: "B2B knowledge",
+    title: "Blog about available capacity and production outsourcing",
+    subtitle:
+      "Guides, trends and case studies for companies that want to plan production and subcontracting cooperation better.",
+    allCategories: "All",
+    empty: "No published blog posts.",
+    categoryFallback: "Blog",
+    dateFallback: "Blog",
+    readMore: "Read more",
+  },
   howItWorks: {
     label: "Process",
     title: "How does it work?",
@@ -306,4 +550,3 @@ const en: Dictionary = {
 };
 
 export default en;
-

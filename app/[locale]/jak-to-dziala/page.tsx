@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import HowItWorksPage from "@/app/jak-to-dziala/page";
+import HowItWorksView from "@/components/views/HowItWorksView";
 import {
   getLocalizedPath,
   isSupportedLocale,
@@ -47,6 +47,5 @@ export default function LocalizedHowItWorksPage({
     notFound();
   }
 
-  return <HowItWorksPage />;
+  return <HowItWorksView locale={params.locale} />;
 }
-
