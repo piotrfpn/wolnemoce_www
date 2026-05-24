@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import AdminCompanyVerificationClient from "./AdminCompanyVerificationClient";
+import AdminCompanyPlanClient from "./AdminCompanyPlanClient";
 
 export const metadata: Metadata = {
   title: "Szczegóły firmy - Admin",
@@ -57,6 +58,13 @@ export default async function AdminCompanyDetailsPage({
     .limit(1);
 
   const latestReview = reviews && reviews.length > 0 ? reviews[0] : null;
+
+  const { data: planHistory } = await supabase
+    .from("company_plan_changes")
+    .select("*")
+    .eq("company_id", company.id)
+    .order("created_at", { ascending: false })
+    .limit(10);
 
   return (
     <>
@@ -174,6 +182,14 @@ export default async function AdminCompanyDetailsPage({
                   isVerified={Boolean(company.is_verified)}
                   latestNote={latestReview?.verification_note || null}
                   latestVerifiedAt={latestReview?.verified_at || null}
+                />
+              </div>
+
+              <div className="rounded-[24px] border-2 border-slate-200 bg-white p-6 shadow-sm">
+                <AdminCompanyPlanClient
+                  companyId={company.id}
+                  currentPlan={company.plan}
+                  planHistory={planHistory || []}
                 />
               </div>
             </div>
