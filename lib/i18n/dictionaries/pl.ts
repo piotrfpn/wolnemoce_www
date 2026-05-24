@@ -381,6 +381,61 @@ const pl: Dictionary = {
     dateFallback: "Blog",
     readMore: "Czytaj więcej",
   },
+  auth: {
+    login: {
+      title: "Zaloguj się",
+      subtitle: "Wejdź do panelu firmy lub panelu administratora.",
+      email: "Email",
+      password: "Hasło",
+      submit: "Zaloguj się",
+      submitting: "Logowanie...",
+      forgotPassword: "Nie pamiętasz hasła?",
+      noAccount: "Nie masz konta?",
+      createAccount: "Utwórz konto",
+      errorFallback: "Nie udało się zalogować.",
+    },
+    register: {
+      title: "Utwórz konto",
+      subtitle:
+        "Załóż konto firmowe. Profil firmy zostanie dodany w kolejnym etapie.",
+      fullName: "Imię i nazwisko",
+      email: "Email",
+      password: "Hasło",
+      submit: "Utwórz konto",
+      submitting: "Tworzenie konta...",
+      alreadyHaveAccount: "Masz konto?",
+      loginLink: "Zaloguj się",
+      termsPrefix: "Akceptuję",
+      termsLink: "Regulamin Serwisu",
+      privacyPrefix: "oraz potwierdzam zapoznanie się z",
+      privacyLink: "Polityką Prywatności",
+      termsSuffix: ".",
+      termsRequired: "Musisz zaakceptować regulamin, aby założyć konto.",
+      success: "Konto zostało utworzone. Możesz się zalogować.",
+      continue: "Przejdź dalej",
+    },
+  },
+  legal: {
+    label: "Dokument prawny",
+    notice: "Dokument prawny jest obecnie dostępny w języku polskim.",
+    betaNotice:
+      "Wersja MVP / beta. Dokument powinien zostać zweryfikowany przez profesjonalnego prawnika przed pełnym publicznym uruchomieniem komercyjnym.",
+    terms: {
+      title: "Regulamin Serwisu",
+      description:
+        "Zasady korzystania z portalu WolneMoce.pl, kont firmowych, ofert, RFQ i usług partnerskich.",
+    },
+    privacy: {
+      title: "Polityka prywatności",
+      description:
+        "Informacje o przetwarzaniu danych osobowych w portalu WolneMoce.pl.",
+    },
+    cookies: {
+      title: "Polityka Cookies",
+      description:
+        "Informacje o plikach cookies i podobnych technologiach wykorzystywanych w WolneMoce.pl.",
+    },
+  },
   howItWorks: {
     label: "Proces",
     title: "Jak to działa?",

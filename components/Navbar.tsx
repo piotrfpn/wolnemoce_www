@@ -40,6 +40,7 @@ export default function Navbar() {
     logout: t.logout,
     loggingOut: t.loggingOut,
   };
+  const loginHref = getLocalizedPath("/logowanie", locale);
   return (
     <nav className="fixed left-0 right-0 top-0 z-[1000] border-b border-slate-200 bg-white/95 backdrop-blur-xl">
       <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between px-6">
@@ -79,7 +80,7 @@ export default function Navbar() {
           <Suspense fallback={null}>
             <LanguageSwitcher />
           </Suspense>
-          <AuthNavButton labels={authLabels} />
+          <AuthNavButton labels={authLabels} loginHref={loginHref} />
           {showContactCta ? (
             <Link
               href={getLocalizedPath("/kontakt", locale)}
@@ -130,7 +131,12 @@ export default function Navbar() {
               <Suspense fallback={null}>
                 <LanguageSwitcher />
               </Suspense>
-              <AuthNavButton variant="mobile" onNavigate={closeMenu} labels={authLabels} />
+              <AuthNavButton
+                variant="mobile"
+                onNavigate={closeMenu}
+                labels={authLabels}
+                loginHref={loginHref}
+              />
               {showContactCta ? (
                 <Link
                   href={getLocalizedPath("/kontakt", locale)}

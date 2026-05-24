@@ -344,6 +344,61 @@ const fr: Dictionary = {
     empty: "Aucun article de blog publié.",
     readMore: "Lire la suite",
   },
+  auth: {
+    login: {
+      title: "Connexion",
+      subtitle: "Accédez au panneau entreprise ou administrateur.",
+      email: "Email",
+      password: "Mot de passe",
+      submit: "Se connecter",
+      submitting: "Connexion...",
+      forgotPassword: "Mot de passe oublié ?",
+      noAccount: "Pas encore de compte ?",
+      createAccount: "Créer un compte",
+      errorFallback: "Connexion impossible.",
+    },
+    register: {
+      title: "Créer un compte",
+      subtitle:
+        "Créez un compte entreprise. Le profil de l'entreprise sera ajouté à l'étape suivante.",
+      fullName: "Nom complet",
+      email: "Email",
+      password: "Mot de passe",
+      submit: "Créer un compte",
+      submitting: "Création du compte...",
+      alreadyHaveAccount: "Vous avez déjà un compte ?",
+      loginLink: "Se connecter",
+      termsPrefix: "J'accepte les",
+      termsLink: "conditions d'utilisation",
+      privacyPrefix: "et confirme avoir lu la",
+      privacyLink: "politique de confidentialité",
+      termsSuffix: ".",
+      termsRequired: "Vous devez accepter les conditions pour créer un compte.",
+      success: "Le compte a été créé. Vous pouvez vous connecter.",
+      continue: "Continuer",
+    },
+  },
+  legal: {
+    label: "Document juridique",
+    notice: "Ce document juridique est actuellement disponible en polonais.",
+    betaNotice:
+      "Version MVP / beta. Ce document doit être vérifié par un juriste professionnel avant le lancement commercial complet.",
+    terms: {
+      title: "Conditions d'utilisation",
+      description:
+        "Règles d'utilisation de WolneMoce.pl, des comptes entreprise, des offres, RFQ et services partenaires.",
+    },
+    privacy: {
+      title: "Politique de confidentialité",
+      description:
+        "Informations sur le traitement des données personnelles dans WolneMoce.pl.",
+    },
+    cookies: {
+      title: "Politique de cookies",
+      description:
+        "Informations sur les cookies et technologies similaires utilisés par WolneMoce.pl.",
+    },
+  },
   howItWorks: {
     label: "Processus",
     title: "Comment ça marche ?",

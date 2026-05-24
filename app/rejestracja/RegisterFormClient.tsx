@@ -4,9 +4,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { registerUser } from "./actions";
+import type { Dictionary } from "@/lib/i18n/types";
 
 type RegisterFormClientProps = {
+  labels: Dictionary["auth"]["register"];
+  loginHref: string;
   nextPath?: string;
+  privacyHref: string;
+  termsHref: string;
 };
 
 function getSafeNextPath(nextPath?: string) {
@@ -17,12 +22,15 @@ function getSafeNextPath(nextPath?: string) {
   return nextPath;
 }
 
-export default function RegisterFormClient({ nextPath }: RegisterFormClientProps) {
+export default function RegisterFormClient({
+  labels,
+  loginHref,
+  nextPath,
+  privacyHref,
+  termsHref,
+}: RegisterFormClientProps) {
   const router = useRouter();
   const safeNextPath = getSafeNextPath(nextPath);
-  const loginHref = safeNextPath
-    ? `/logowanie?next=${encodeURIComponent(safeNextPath)}`
-    : "/logowanie";
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +45,7 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
     setMessage("");
 
     if (!acceptedTerms) {
-      setError("Musisz zaakceptować regulamin, aby założyć konto.");
+      setError(labels.termsRequired);
       return;
     }
 
@@ -58,7 +66,7 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
       return;
     }
 
-    setMessage(result.message ?? "Konto zostało utworzone. Możesz się zalogować.");
+    setMessage(labels.success);
     setIsSubmitting(false);
   }
 
@@ -73,9 +81,9 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
           <i className="fas fa-user-plus text-xl"></i>
         </div>
-        <h1 className="text-2xl font-extrabold text-slate-900">Utwórz konto</h1>
+        <h1 className="text-2xl font-extrabold text-slate-900">{labels.title}</h1>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          Załóż konto firmowe. Profil firmy zostanie dodany w kolejnym etapie.
+          {labels.subtitle}
         </p>
       </div>
 
@@ -93,7 +101,7 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
               href={safeNextPath}
               className="mt-2 block font-semibold text-[#1a5f3c] no-underline"
             >
-              Przejdź dalej
+              {labels.continue}
             </Link>
           ) : null}
         </div>
@@ -103,7 +111,7 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-user text-[#1a5f3c]"></i>
-            Imię i nazwisko
+            {labels.fullName}
           </span>
           <input
             name="fullName"
@@ -117,7 +125,7 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-envelope text-[#1a5f3c]"></i>
-            Email
+            {labels.email}
           </span>
           <input
             name="email"
@@ -132,7 +140,7 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-lock text-[#1a5f3c]"></i>
-            Hasło
+            {labels.password}
           </span>
           <input
             name="password"
@@ -156,25 +164,25 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
             className="mt-1 h-4 w-4 rounded border-slate-300 accent-[#1a5f3c]"
           />
           <span className="min-w-0">
-            Akceptuję{" "}
+            {labels.termsPrefix}{" "}
             <Link
-              href="/regulamin"
+              href={termsHref}
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-[#1a5f3c] no-underline"
             >
-              Regulamin Serwisu
+              {labels.termsLink}
             </Link>{" "}
-            oraz potwierdzam zapoznanie się z{" "}
+            {labels.privacyPrefix}{" "}
             <Link
-              href="/polityka-prywatnosci"
+              href={privacyHref}
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-[#1a5f3c] no-underline"
             >
-              Polityką Prywatności
+              {labels.privacyLink}
             </Link>
-            .
+            {labels.termsSuffix}
           </span>
         </label>
       </div>
@@ -184,13 +192,13 @@ export default function RegisterFormClient({ nextPath }: RegisterFormClientProps
         disabled={isSubmitting}
         className="btn btn-primary mt-6 w-full disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isSubmitting ? "Tworzenie konta..." : "Utwórz konto"}
+        {isSubmitting ? labels.submitting : labels.submit}
       </button>
 
       <p className="mt-6 text-center text-sm text-slate-500">
-        Masz konto?{" "}
+        {labels.alreadyHaveAccount}{" "}
         <Link href={loginHref} className="font-semibold text-[#1a5f3c] no-underline">
-          Zaloguj się
+          {labels.loginLink}
         </Link>
       </p>
     </form>

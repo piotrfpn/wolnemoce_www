@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import RegisterFormClient from "./RegisterFormClient";
+import RegisterView from "@/components/views/RegisterView";
+import { getDictionary } from "@/lib/i18n/getDictionary";
+
+const dictionary = getDictionary("pl");
 
 export const metadata: Metadata = {
-  title: "Rejestracja",
-  description: "Utwórz konto firmowe w WolneMoce.pl.",
+  title: dictionary.auth.register.title,
+  description: dictionary.auth.register.subtitle,
 };
 
 type RegisterPageProps = {
@@ -14,26 +15,6 @@ type RegisterPageProps = {
   };
 };
 
-function getSafeNextPath(nextPath?: string) {
-  if (!nextPath || !nextPath.startsWith("/") || nextPath.startsWith("//")) {
-    return "";
-  }
-
-  return nextPath;
-}
-
 export default function RegisterPage({ searchParams }: RegisterPageProps) {
-  const nextPath = getSafeNextPath(searchParams?.next);
-
-  return (
-    <>
-      <Navbar />
-      <main className="bg-slate-50 pt-[72px]">
-        <section className="mx-auto flex min-h-[calc(100vh-72px)] max-w-[560px] items-center px-6 py-16">
-          <RegisterFormClient nextPath={nextPath} />
-        </section>
-      </main>
-      <Footer />
-    </>
-  );
+  return <RegisterView locale="pl" nextPath={searchParams?.next} />;
 }

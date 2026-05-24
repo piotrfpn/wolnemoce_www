@@ -117,17 +117,17 @@ export default function Footer({ locale = defaultLocale }: { locale?: Locale }) 
                 </Link>
               </li>
               <li>
-                <Link href="/regulamin" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <Link href={getLocalizedPath("/regulamin", locale)} className="text-sm text-white/60 no-underline transition hover:text-white">
                   {t.terms}
                 </Link>
               </li>
               <li>
-                <Link href="/polityka-prywatnosci" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <Link href={getLocalizedPath("/polityka-prywatnosci", locale)} className="text-sm text-white/60 no-underline transition hover:text-white">
                   {t.privacy}
                 </Link>
               </li>
               <li>
-                <Link href="/polityka-cookies" className="text-sm text-white/60 no-underline transition hover:text-white">
+                <Link href={getLocalizedPath("/polityka-cookies", locale)} className="text-sm text-white/60 no-underline transition hover:text-white">
                   {t.cookies}
                 </Link>
               </li>
@@ -161,13 +161,13 @@ export default function Footer({ locale = defaultLocale }: { locale?: Locale }) 
           <p>{t.rights}</p>
 
           <div className="flex flex-wrap gap-5">
-            <Link href="/regulamin" className="text-white/40 no-underline transition hover:text-white">
+            <Link href={getLocalizedPath("/regulamin", locale)} className="text-white/40 no-underline transition hover:text-white">
               {t.terms}
             </Link>
-            <Link href="/polityka-prywatnosci" className="text-white/40 no-underline transition hover:text-white">
+            <Link href={getLocalizedPath("/polityka-prywatnosci", locale)} className="text-white/40 no-underline transition hover:text-white">
               {t.privacy}
             </Link>
-            <Link href="/polityka-cookies" className="text-white/40 no-underline transition hover:text-white">
+            <Link href={getLocalizedPath("/polityka-cookies", locale)} className="text-white/40 no-underline transition hover:text-white">
               Cookies
             </Link>
           </div>

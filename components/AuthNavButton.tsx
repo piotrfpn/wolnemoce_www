@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/client";
 type AuthNavButtonProps = {
   variant?: "desktop" | "mobile";
   onNavigate?: () => void;
+  loginHref?: string;
   labels?: {
     login: string;
     panel: string;
@@ -53,6 +54,7 @@ export function useCurrentUser() {
 export default function AuthNavButton({
   variant = "desktop",
   onNavigate,
+  loginHref = "/logowanie",
   labels = {
     login: "Zaloguj się",
     panel: "Panel",
@@ -94,7 +96,7 @@ export default function AuthNavButton({
 
   if (!user) {
     return (
-      <Link href="/logowanie" onClick={onNavigate} className={loginClass}>
+      <Link href={loginHref} onClick={onNavigate} className={loginClass}>
         {labels.login}
       </Link>
     );

@@ -344,6 +344,61 @@ const es: Dictionary = {
     empty: "No hay entradas de blog publicadas.",
     readMore: "Leer más",
   },
+  auth: {
+    login: {
+      title: "Iniciar sesión",
+      subtitle: "Accede al panel de empresa o al panel de administrador.",
+      email: "Email",
+      password: "Contraseña",
+      submit: "Iniciar sesión",
+      submitting: "Iniciando sesión...",
+      forgotPassword: "¿Has olvidado la contraseña?",
+      noAccount: "¿No tienes cuenta?",
+      createAccount: "Crear cuenta",
+      errorFallback: "No se pudo iniciar sesión.",
+    },
+    register: {
+      title: "Crear cuenta",
+      subtitle:
+        "Crea una cuenta de empresa. El perfil se añadirá en el siguiente paso.",
+      fullName: "Nombre y apellidos",
+      email: "Email",
+      password: "Contraseña",
+      submit: "Crear cuenta",
+      submitting: "Creando cuenta...",
+      alreadyHaveAccount: "¿Ya tienes cuenta?",
+      loginLink: "Iniciar sesión",
+      termsPrefix: "Acepto",
+      termsLink: "los términos del servicio",
+      privacyPrefix: "y confirmo que he leído la",
+      privacyLink: "política de privacidad",
+      termsSuffix: ".",
+      termsRequired: "Debes aceptar los términos para crear una cuenta.",
+      success: "La cuenta ha sido creada. Puedes iniciar sesión.",
+      continue: "Continuar",
+    },
+  },
+  legal: {
+    label: "Documento legal",
+    notice: "Este documento legal está disponible actualmente en polaco.",
+    betaNotice:
+      "Versión MVP / beta. Este documento debe ser revisado por un abogado profesional antes del lanzamiento comercial completo.",
+    terms: {
+      title: "Términos del servicio",
+      description:
+        "Reglas de uso de WolneMoce.pl, cuentas de empresa, ofertas, RFQ y servicios de partners.",
+    },
+    privacy: {
+      title: "Política de privacidad",
+      description:
+        "Información sobre el tratamiento de datos personales en WolneMoce.pl.",
+    },
+    cookies: {
+      title: "Política de cookies",
+      description:
+        "Información sobre cookies y tecnologías similares utilizadas por WolneMoce.pl.",
+    },
+  },
   howItWorks: {
     label: "Proceso",
     title: "¿Cómo funciona?",

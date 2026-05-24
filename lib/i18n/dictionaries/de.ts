@@ -351,6 +351,62 @@ const de: Dictionary = {
     empty: "Keine veröffentlichten Blogbeiträge.",
     readMore: "Mehr lesen",
   },
+  auth: {
+    login: {
+      title: "Anmelden",
+      subtitle: "Zugang zum Firmenbereich oder Administratorbereich.",
+      email: "E-Mail",
+      password: "Passwort",
+      submit: "Anmelden",
+      submitting: "Anmeldung...",
+      forgotPassword: "Passwort vergessen?",
+      noAccount: "Noch kein Konto?",
+      createAccount: "Konto erstellen",
+      errorFallback: "Anmeldung fehlgeschlagen.",
+    },
+    register: {
+      title: "Konto erstellen",
+      subtitle:
+        "Erstellen Sie ein Firmenkonto. Das Firmenprofil wird im nächsten Schritt ergänzt.",
+      fullName: "Vor- und Nachname",
+      email: "E-Mail",
+      password: "Passwort",
+      submit: "Konto erstellen",
+      submitting: "Konto wird erstellt...",
+      alreadyHaveAccount: "Sie haben bereits ein Konto?",
+      loginLink: "Anmelden",
+      termsPrefix: "Ich akzeptiere die",
+      termsLink: "Nutzungsbedingungen",
+      privacyPrefix: "und bestätige, dass ich die",
+      privacyLink: "Datenschutzerklärung",
+      termsSuffix: "gelesen habe.",
+      termsRequired:
+        "Sie müssen die Nutzungsbedingungen akzeptieren, um ein Konto zu erstellen.",
+      success: "Das Konto wurde erstellt. Sie können sich anmelden.",
+      continue: "Weiter",
+    },
+  },
+  legal: {
+    label: "Rechtsdokument",
+    notice: "Dieses Rechtsdokument ist derzeit auf Polnisch verfügbar.",
+    betaNotice:
+      "MVP-/Beta-Version. Dieses Dokument sollte vor dem vollständigen kommerziellen Start von einem professionellen Juristen geprüft werden.",
+    terms: {
+      title: "Nutzungsbedingungen",
+      description:
+        "Regeln für die Nutzung von WolneMoce.pl, Firmenkonten, Angeboten, RFQ und Partnerdiensten.",
+    },
+    privacy: {
+      title: "Datenschutzerklärung",
+      description:
+        "Informationen zur Verarbeitung personenbezogener Daten bei WolneMoce.pl.",
+    },
+    cookies: {
+      title: "Cookie-Richtlinie",
+      description:
+        "Informationen zu Cookies und ähnlichen Technologien bei WolneMoce.pl.",
+    },
+  },
   howItWorks: {
     label: "Prozess",
     title: "Wie funktioniert es?",

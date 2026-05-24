@@ -367,6 +367,61 @@ const en: Dictionary = {
     dateFallback: "Blog",
     readMore: "Read more",
   },
+  auth: {
+    login: {
+      title: "Log in",
+      subtitle: "Access your company panel or administrator panel.",
+      email: "Email",
+      password: "Password",
+      submit: "Log in",
+      submitting: "Logging in...",
+      forgotPassword: "Forgot your password?",
+      noAccount: "No account?",
+      createAccount: "Create account",
+      errorFallback: "Could not log in.",
+    },
+    register: {
+      title: "Create account",
+      subtitle:
+        "Create a company account. The company profile is added in the next step.",
+      fullName: "Full name",
+      email: "Email",
+      password: "Password",
+      submit: "Create account",
+      submitting: "Creating account...",
+      alreadyHaveAccount: "Already have an account?",
+      loginLink: "Log in",
+      termsPrefix: "I accept",
+      termsLink: "Terms of Service",
+      privacyPrefix: "and confirm that I have read the",
+      privacyLink: "Privacy Policy",
+      termsSuffix: ".",
+      termsRequired: "You must accept the terms to create an account.",
+      success: "The account has been created. You can log in.",
+      continue: "Continue",
+    },
+  },
+  legal: {
+    label: "Legal document",
+    notice: "This legal document is currently available in Polish.",
+    betaNotice:
+      "MVP / beta version. This document should be reviewed by a professional lawyer before full commercial public launch.",
+    terms: {
+      title: "Terms of Service",
+      description:
+        "Rules for using WolneMoce.pl, company accounts, offers, RFQ and partner services.",
+    },
+    privacy: {
+      title: "Privacy Policy",
+      description:
+        "Information about personal data processing in WolneMoce.pl.",
+    },
+    cookies: {
+      title: "Cookie Policy",
+      description:
+        "Information about cookies and similar technologies used by WolneMoce.pl.",
+    },
+  },
   howItWorks: {
     label: "Process",
     title: "How does it work?",

@@ -4,9 +4,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import type { Dictionary } from "@/lib/i18n/types";
 
 type LoginFormClientProps = {
+  labels: Dictionary["auth"]["login"];
   nextPath?: string;
+  registerHref: string;
 };
 
 function getSafeNextPath(nextPath?: string) {
@@ -17,12 +20,13 @@ function getSafeNextPath(nextPath?: string) {
   return nextPath;
 }
 
-export default function LoginFormClient({ nextPath }: LoginFormClientProps) {
+export default function LoginFormClient({
+  labels,
+  nextPath,
+  registerHref,
+}: LoginFormClientProps) {
   const router = useRouter();
   const safeNextPath = getSafeNextPath(nextPath);
-  const registerHref = safeNextPath
-    ? `/rejestracja?next=${encodeURIComponent(safeNextPath)}`
-    : "/rejestracja";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -40,7 +44,7 @@ export default function LoginFormClient({ nextPath }: LoginFormClientProps) {
     });
 
     if (signInError || !data.user) {
-      setError(signInError?.message ?? "Nie udało się zalogować.");
+      setError(signInError?.message ?? labels.errorFallback);
       setIsSubmitting(false);
       return;
     }
@@ -58,9 +62,9 @@ export default function LoginFormClient({ nextPath }: LoginFormClientProps) {
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
           <i className="fas fa-right-to-bracket text-xl"></i>
         </div>
-        <h1 className="text-2xl font-extrabold text-slate-900">Zaloguj się</h1>
+        <h1 className="text-2xl font-extrabold text-slate-900">{labels.title}</h1>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          Wejdź do panelu firmy lub panelu administratora.
+          {labels.subtitle}
         </p>
       </div>
 
@@ -74,7 +78,7 @@ export default function LoginFormClient({ nextPath }: LoginFormClientProps) {
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-envelope text-[#1a5f3c]"></i>
-            Email
+            {labels.email}
           </span>
           <input
             type="email"
@@ -88,7 +92,7 @@ export default function LoginFormClient({ nextPath }: LoginFormClientProps) {
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-lock text-[#1a5f3c]"></i>
-            Hasło
+            {labels.password}
           </span>
           <input
             type="password"
@@ -105,17 +109,17 @@ export default function LoginFormClient({ nextPath }: LoginFormClientProps) {
         disabled={isSubmitting}
         className="mt-6 btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isSubmitting ? "Logowanie..." : "Zaloguj się"}
+        {isSubmitting ? labels.submitting : labels.submit}
       </button>
 
       <div className="mt-6 flex flex-col gap-2 text-center text-sm text-slate-500">
         <Link href="/reset-hasla" className="font-semibold text-[#1a5f3c] no-underline">
-          Nie pamiętasz hasła?
+          {labels.forgotPassword}
         </Link>
         <span>
-          Nie masz konta?{" "}
+          {labels.noAccount}{" "}
           <Link href={registerHref} className="font-semibold text-[#1a5f3c] no-underline">
-            Utwórz konto
+            {labels.createAccount}
           </Link>
         </span>
       </div>

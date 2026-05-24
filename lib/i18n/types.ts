@@ -290,6 +290,56 @@ export type Dictionary = {
     dateFallback: string;
     readMore: string;
   };
+  auth: {
+    login: {
+      title: string;
+      subtitle: string;
+      email: string;
+      password: string;
+      submit: string;
+      submitting: string;
+      forgotPassword: string;
+      noAccount: string;
+      createAccount: string;
+      errorFallback: string;
+    };
+    register: {
+      title: string;
+      subtitle: string;
+      fullName: string;
+      email: string;
+      password: string;
+      submit: string;
+      submitting: string;
+      alreadyHaveAccount: string;
+      loginLink: string;
+      termsPrefix: string;
+      termsLink: string;
+      privacyPrefix: string;
+      privacyLink: string;
+      termsSuffix: string;
+      termsRequired: string;
+      success: string;
+      continue: string;
+    };
+  };
+  legal: {
+    label: string;
+    notice: string;
+    betaNotice: string;
+    terms: {
+      title: string;
+      description: string;
+    };
+    privacy: {
+      title: string;
+      description: string;
+    };
+    cookies: {
+      title: string;
+      description: string;
+    };
+  };
   howItWorks: {
     label: string;
     title: string;
