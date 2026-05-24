@@ -40,12 +40,6 @@ export default function Navbar() {
     logout: t.logout,
     loggingOut: t.loggingOut,
   };
-  const languageSwitcher = (
-    <Suspense fallback={null}>
-      <LanguageSwitcher />
-    </Suspense>
-  );
-
   return (
     <nav className="fixed left-0 right-0 top-0 z-[1000] border-b border-slate-200 bg-white/95 backdrop-blur-xl">
       <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between px-6">
@@ -82,7 +76,9 @@ export default function Navbar() {
         </ul>
 
         <div className="hidden items-center gap-3 lg:flex">
-          {languageSwitcher}
+          <Suspense fallback={null}>
+            <LanguageSwitcher />
+          </Suspense>
           <AuthNavButton labels={authLabels} />
           {showContactCta ? (
             <Link
@@ -131,7 +127,9 @@ export default function Navbar() {
             })}
 
             <div className="mt-3 grid grid-cols-1 gap-3">
-              {languageSwitcher}
+              <Suspense fallback={null}>
+                <LanguageSwitcher />
+              </Suspense>
               <AuthNavButton variant="mobile" onNavigate={closeMenu} labels={authLabels} />
               {showContactCta ? (
                 <Link
