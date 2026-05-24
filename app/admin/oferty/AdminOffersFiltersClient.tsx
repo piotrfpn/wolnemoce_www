@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 
 export default function AdminOffersFiltersClient() {
   const router = useRouter();
@@ -11,14 +11,30 @@ export default function AdminOffersFiltersClient() {
   const currentQ = searchParams.get("q") ?? "";
   const currentStatus = searchParams.get("status") ?? "all";
   const currentFeatured = searchParams.get("featured") ?? "all";
-  const currentCompanyVerified = searchParams.get("companyVerified") ?? "all";
-  const currentFreeLimit = searchParams.get("freeLimit") ?? "all";
+  const currentCompanyVerified = searchParams.get("verified") ?? "all";
+  const currentPlan = searchParams.get("plan") ?? "all";
   const currentSort = searchParams.get("sort") ?? "newest";
 
   const [q, setQ] = useState(currentQ);
 
+  // Debounce search
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (q !== currentQ) {
+        updateParams({ q, page: "1" });
+      }
+    }, 400);
+    return () => clearTimeout(timeoutId);
+  }, [q, currentQ]);
+
   function updateParams(updates: Record<string, string | null>) {
     const params = new URLSearchParams(searchParams.toString());
+
+    // Reset page to 1 on filter change, unless we explicitly passed a page param
+    if (!updates.page) {
+      params.set("page", "1");
+    }
+
     for (const [key, value] of Object.entries(updates)) {
       if (value === null || value === "all" || value === "") {
         params.delete(key);
@@ -33,7 +49,7 @@ export default function AdminOffersFiltersClient() {
 
   function handleSearchSubmit(e: React.FormEvent) {
     e.preventDefault();
-    updateParams({ q });
+    updateParams({ q, page: "1" });
   }
 
   function clearFilters() {
@@ -78,36 +94,37 @@ export default function AdminOffersFiltersClient() {
         </select>
 
         <select
+          value={currentPlan}
+          onChange={(e) => updateParams({ plan: e.target.value })}
+          className="rounded-xl border border-slate-200 px-3 py-2.5 text-sm focus:border-[#1a5f3c] focus:outline-none focus:ring-1 focus:ring-[#1a5f3c]"
+          disabled={isPending}
+        >
+          <option value="all">Wszystkie plany</option>
+          <option value="free">FREE</option>
+          <option value="pro">PRO</option>
+          <option value="enterprise">ENTERPRISE</option>
+        </select>
+
+        <select
+          value={currentCompanyVerified}
+          onChange={(e) => updateParams({ verified: e.target.value })}
+          className="rounded-xl border border-slate-200 px-3 py-2.5 text-sm focus:border-[#1a5f3c] focus:outline-none focus:ring-1 focus:ring-[#1a5f3c]"
+          disabled={isPending}
+        >
+          <option value="all">Weryfikacja: Wszystkie</option>
+          <option value="verified">Tylko zweryfikowane</option>
+          <option value="unverified">Niezweryfikowane</option>
+        </select>
+
+        <select
           value={currentFeatured}
           onChange={(e) => updateParams({ featured: e.target.value })}
           className="rounded-xl border border-slate-200 px-3 py-2.5 text-sm focus:border-[#1a5f3c] focus:outline-none focus:ring-1 focus:ring-[#1a5f3c]"
           disabled={isPending}
         >
-          <option value="all">Wszystkie wyróżnienia</option>
-          <option value="true">Tylko wyróżnione</option>
-          <option value="false">Tylko niewyróżnione</option>
-        </select>
-
-        <select
-          value={currentCompanyVerified}
-          onChange={(e) => updateParams({ companyVerified: e.target.value })}
-          className="rounded-xl border border-slate-200 px-3 py-2.5 text-sm focus:border-[#1a5f3c] focus:outline-none focus:ring-1 focus:ring-[#1a5f3c]"
-          disabled={isPending}
-        >
-          <option value="all">Wszystkie firmy</option>
-          <option value="true">Firma zweryfikowana</option>
-          <option value="false">Firma niezweryfikowana</option>
-        </select>
-
-        <select
-          value={currentFreeLimit}
-          onChange={(e) => updateParams({ freeLimit: e.target.value })}
-          className="rounded-xl border border-slate-200 px-3 py-2.5 text-sm focus:border-[#1a5f3c] focus:outline-none focus:ring-1 focus:ring-[#1a5f3c]"
-          disabled={isPending}
-        >
-          <option value="all">Wszystkie limity FREE</option>
-          <option value="over">Przekroczony limit FREE</option>
-          <option value="ok">OK / poza limitem</option>
+          <option value="all">Wyróżnienie: Wszystkie</option>
+          <option value="featured">Tylko wyróżnione</option>
+          <option value="not_featured">Tylko niewyróżnione</option>
         </select>
 
         <select
@@ -118,14 +135,16 @@ export default function AdminOffersFiltersClient() {
         >
           <option value="newest">Najnowsze</option>
           <option value="oldest">Najstarsze</option>
-          <option value="alpha">Alfabetycznie</option>
+          <option value="title_az">Tytuł A-Z</option>
           <option value="status">Status</option>
-          <option value="priority">Priorytet wyróżnienia</option>
-          <option value="featured_until">Wyróżnienie do</option>
+          <option value="featured">Wyróżnienie (Priorytet)</option>
         </select>
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex justify-end items-center">
+        {isPending && (
+          <span className="text-sm text-slate-400 mr-4">Ładowanie...</span>
+        )}
         <button
           type="button"
           onClick={clearFilters}
