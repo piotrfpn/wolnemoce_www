@@ -488,6 +488,24 @@ const de: Dictionary = {
       { name: "LogiMarket Prozessberatung", description: "Bezahlte Partnerberatung für Prozesse, RFQ und Lieferkette.", price: "Angebot", suffix: "individuell" },
     ],
   },
+  expert: {
+    label: "Expertenblick",
+    title: "Warum WolneMoce.pl nutzen?",
+    description:
+      "Mit Erfahrung in Produktion und Lieferketten sehen wir den Wert darin, freie Kapazitäten transparenter zu nutzen.",
+    features: [
+      { icon: "fas fa-shield-alt", title: "Verifizierung und Vertrauen", description: "Firmendaten und öffentliche Profile unterstützen Vertrauen zwischen den Parteien." },
+      { icon: "fas fa-chart-line", title: "Kostenoptimierung", description: "Nutzen Sie freie Produktionskapazitäten und reduzieren Sie ungenutzte Maschinenzeit." },
+      { icon: "fas fa-handshake", title: "Direkter B2B-Kontakt", description: "Starten Sie Gespräche direkt mit Herstellern und Einkäufern." },
+      { icon: "fas fa-file-contract", title: "Partnerunterstützung", description: "Optionale rechtliche, buchhalterische und prozessbezogene Leistungen können separat vereinbart werden." },
+    ],
+    stats: [
+      { icon: "fas fa-industry", value: "12", label: "Produktionsbranchen" },
+      { icon: "fas fa-map-marked-alt", value: "16", label: "Woiwodschaften" },
+      { icon: "fas fa-users", value: "Wachsende Basis", label: "Geprüfte Firmen und Partner" },
+      { icon: "fas fa-lock", value: "Transparent", label: "Kooperationsmodelle ohne versteckte Kosten" },
+    ],
+  },
   partners: {
     ...en.partners,
     label: "Partner",
@@ -508,6 +526,31 @@ const de: Dictionary = {
           : "Unterstützung bei Prozessanalyse, Produktionsoutsourcing, Make-or-Buy, RFQ und Lieferkettenoptimierung als bezahlte Partnerleistung.",
       cta: item.name === "Credos" ? "Unterstützung anfragen" : "Beratung anfragen",
     })),
+  },
+  testimonials: {
+    label: "Meinungen",
+    title: "Was sagen Unternehmen?",
+    description:
+      "Sehen Sie, wie Unternehmen das Portal nutzen, um Produktionskooperationen zu organisieren.",
+    items: [
+      { text: "WolneMoce.pl half uns, einen Hersteller für eine dringende Teile-Serie zu finden. Der Prozess war klar und professionell.", author: "Andrzej Kowalski", role: "Operations Director, TechParts Sp. z o.o.", initials: "AK" },
+      { text: "Unsere freien Kapazitäten können wir den passenden B2B-Kunden leichter zeigen.", author: "Marta Nowak", role: "Inhaberin, PlastForm S.A.", initials: "MN", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
+      { text: "Firmenverifizierung und klare Profile helfen uns, Produktionspartner schneller zu bewerten.", author: "Piotr Wiśniewski", role: "Einkaufsleiter, ElektroMax Sp. z o.o.", initials: "PW", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
+    ],
+  },
+  blogPreview: {
+    label: "Wissen",
+    title: "Aus Expertensicht",
+    description:
+      "Artikel, Leitfäden und Case Studies für Unternehmen, die Produktionsoutsourcing entwickeln.",
+    empty: "Noch keine veröffentlichten Blogbeiträge.",
+  },
+  cta: {
+    title: "Bereit, Produktion zu optimieren?",
+    description:
+      "Finden Sie freie Kapazitäten oder fügen Sie noch heute das Angebot Ihres Unternehmens hinzu.",
+    addOffer: "Angebot kostenlos hinzufügen",
+    browseOffers: "Angebote ansehen",
   },
   seo: {
     ...en.seo,
