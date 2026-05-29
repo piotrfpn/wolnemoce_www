@@ -667,6 +667,131 @@ const en: Dictionary = {
       noGlobalLimit: "No limit",
       limitReached: "Limit reached",
     },
+    offerForm: {
+      metadata: {
+        newTitle: "Add offer",
+        newDescription: "Add a company offer in the WolneMoce.pl panel.",
+        editTitle: "Edit offer",
+        editDescription: "Edit a company offer in the WolneMoce.pl panel.",
+      },
+      backToOffers: "Back to offers",
+      eyebrowNew: "New offer",
+      eyebrowEdit: "Offer editing",
+      titleNew: "Add offer",
+      titleEdit: "Edit offer",
+      description:
+        "Each offer uses one specific industry and one service selected from the company profile.",
+      profileMissingTitle:
+        "First complete industries and services in the Company profile tab.",
+      profileMissingDescription:
+        "Without industries and services, you cannot add an offer linked to the company.",
+      completeProfile: "Complete company profile",
+      branchServicesMissing:
+        "No services have been selected for this industry in the company profile.",
+      activeWarningTitle: "Warning: you are editing an active offer.",
+      activeWarningDescription:
+        "Editing an active offer may send it back to moderation. After saving changes, the offer may be temporarily hidden from the public listing.",
+      fields: {
+        title: {
+          label: "Offer title",
+          placeholder: "E.g. CNC machining - 500 pcs/month capacity",
+        },
+        branch: {
+          label: "Offer industry",
+          placeholder: "Select offer industry",
+        },
+        serviceType: {
+          label: "Service type",
+          placeholder: "Select service type",
+        },
+        description: {
+          label: "Production capacity description",
+          placeholder:
+            "Describe the technology, scope of work, materials, batch sizes and availability.",
+        },
+        powerAvailable: {
+          label: "Available capacity",
+          placeholder: "E.g. 500 pcs/month",
+        },
+        minOrder: {
+          label: "Minimum order",
+          placeholder: "E.g. 50 pcs",
+        },
+        leadTime: {
+          label: "Lead time",
+          placeholder: "E.g. 2 weeks",
+        },
+      },
+      images: {
+        altFallback: "Offer image",
+        sectionTitle: "Offer images",
+        description:
+          "Add photos of machines, the production hall or sample projects. Images will be publicly visible with the offer.",
+        requirements: "JPG, PNG or WEBP, max. 5 MB per file, up to {count} images.",
+        chooseButton: "Choose images",
+        dragHint: "Click or drag and drop images here.",
+        uploadDelay:
+          "Images are not uploaded immediately. They will be sent to Storage only after saving the offer.",
+        contactWarning:
+          "Images should not include phone numbers, email addresses, QR codes or contact details. Such materials may be hidden by the administrator.",
+        savedTitle: "Saved images",
+        mainImage: "Main image",
+        offerImage: "Offer image",
+        deleting: "Deleting...",
+        delete: "Delete",
+        readyTitle: "Ready to upload after saving the offer",
+        previewFallback: "Image preview",
+        ready: "Ready to upload",
+        emptyNew: "No new images selected.",
+        duplicateError: "This file has already been added.",
+        deleteConfirm: "Are you sure you want to delete this image?",
+        storageDeleteError: "Could not delete the image file from Storage.",
+      },
+      saveMode: {
+        legend: "Save mode",
+        draftTitle: "Draft",
+        draftDescription: "Save the offer as a working draft without sending it to moderation.",
+        pendingTitle: "Send to moderation",
+        pendingDescription: "Submit the offer for administrator approval.",
+        statusUnchangedPrefix: "After saving, the status will remain unchanged:",
+      },
+      statusLabels: {
+        draft: "Draft",
+        pending: "In moderation",
+        active: "Active",
+        rejected: "Rejected",
+        archived: "Archived",
+      },
+      validation: {
+        titleRequired: "Enter the offer title.",
+        branchRequired: "Select the offer industry.",
+        serviceTypeRequired: "Select a service type matching the offer industry.",
+        descriptionRequired: "Enter the production capacity description.",
+        powerRequired: "Enter available capacity.",
+        leadTimeRequired: "Enter the lead time.",
+        profileRequired:
+          "First complete industries and services in the Company profile tab.",
+        saveError: "Could not save the data. Check the form and try again.",
+      },
+      limits: {
+        freePlan:
+          "The FREE plan allows 1 active offer or offer awaiting moderation. To add another one, archive the current offer or move to a higher plan.",
+        plan:
+          "The limit of active or pending offers for the current company plan has been reached. Archive one offer or move to a higher plan.",
+      },
+      partialSuccess: {
+        authImageUpload:
+          "The offer was saved, but images could not be uploaded. Try adding them while editing the offer.",
+        failedImageUpload:
+          "The offer was saved, but some images were not uploaded. Try again while editing the offer.",
+        activeResubmitted:
+          "The offer was saved and submitted for moderation again.",
+      },
+      submit: {
+        saving: "Saving...",
+        save: "Save offer",
+      },
+    },
     profile: {
       title: "Company Profile",
       subtitle: "Complete your company data visible to clients.",

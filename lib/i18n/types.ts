@@ -524,6 +524,116 @@ export type Dictionary = {
       noGlobalLimit: string;
       limitReached: string;
     };
+    offerForm: {
+      metadata: {
+        newTitle: string;
+        newDescription: string;
+        editTitle: string;
+        editDescription: string;
+      };
+      backToOffers: string;
+      eyebrowNew: string;
+      eyebrowEdit: string;
+      titleNew: string;
+      titleEdit: string;
+      description: string;
+      profileMissingTitle: string;
+      profileMissingDescription: string;
+      completeProfile: string;
+      branchServicesMissing: string;
+      activeWarningTitle: string;
+      activeWarningDescription: string;
+      fields: {
+        title: {
+          label: string;
+          placeholder: string;
+        };
+        branch: {
+          label: string;
+          placeholder: string;
+        };
+        serviceType: {
+          label: string;
+          placeholder: string;
+        };
+        description: {
+          label: string;
+          placeholder: string;
+        };
+        powerAvailable: {
+          label: string;
+          placeholder: string;
+        };
+        minOrder: {
+          label: string;
+          placeholder: string;
+        };
+        leadTime: {
+          label: string;
+          placeholder: string;
+        };
+      };
+      images: {
+        altFallback: string;
+        sectionTitle: string;
+        description: string;
+        requirements: string;
+        chooseButton: string;
+        dragHint: string;
+        uploadDelay: string;
+        contactWarning: string;
+        savedTitle: string;
+        mainImage: string;
+        offerImage: string;
+        deleting: string;
+        delete: string;
+        readyTitle: string;
+        previewFallback: string;
+        ready: string;
+        emptyNew: string;
+        duplicateError: string;
+        deleteConfirm: string;
+        storageDeleteError: string;
+      };
+      saveMode: {
+        legend: string;
+        draftTitle: string;
+        draftDescription: string;
+        pendingTitle: string;
+        pendingDescription: string;
+        statusUnchangedPrefix: string;
+      };
+      statusLabels: {
+        draft: string;
+        pending: string;
+        active: string;
+        rejected: string;
+        archived: string;
+      };
+      validation: {
+        titleRequired: string;
+        branchRequired: string;
+        serviceTypeRequired: string;
+        descriptionRequired: string;
+        powerRequired: string;
+        leadTimeRequired: string;
+        profileRequired: string;
+        saveError: string;
+      };
+      limits: {
+        freePlan: string;
+        plan: string;
+      };
+      partialSuccess: {
+        authImageUpload: string;
+        failedImageUpload: string;
+        activeResubmitted: string;
+      };
+      submit: {
+        saving: string;
+        save: string;
+      };
+    };
     profile: {
       title: string;
       subtitle: string;
@@ -573,6 +683,7 @@ export type PanelDictionary = Dictionary["panel"];
 export type PanelCommonDictionary = Dictionary["panel"]["common"];
 export type PanelDashboardDictionary = Dictionary["panel"]["dashboard"];
 export type PanelOffersDictionary = Dictionary["panel"]["offers"];
+export type PanelOfferFormDictionary = Dictionary["panel"]["offerForm"];
 export type PanelProfileDictionary = Dictionary["panel"]["profile"];
 export type PanelInquiriesDictionary = Dictionary["panel"]["inquiries"];
 export type PanelSettingsDictionary = Dictionary["panel"]["settings"];

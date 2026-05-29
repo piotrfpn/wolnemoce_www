@@ -3,15 +3,21 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createClient } from "@/lib/supabase/server";
 import NewOfferFormClient from "./NewOfferFormClient";
 
+const dictionary = getDictionary("pl");
+
 export const metadata: Metadata = {
-  title: "Dodaj ofertę",
-  description: "Dodaj ofertę firmy w panelu WolneMoce.pl.",
+  title: dictionary.panel.offerForm.metadata.newTitle,
+  description: dictionary.panel.offerForm.metadata.newDescription,
 };
 
 export default async function NewPanelOfferPage() {
+  const dictionary = getDictionary("pl");
+  const t = dictionary.panel.offerForm;
+  const tc = dictionary.panel.common;
   const supabase = createClient();
   const {
     data: { user },
@@ -42,10 +48,10 @@ export default async function NewPanelOfferPage() {
               className="mb-4 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
             >
               <i className="fas fa-arrow-left"></i>
-              Wróć do ofert
+              {t.backToOffers}
             </Link>
           </div>
-          <NewOfferFormClient company={company} />
+          <NewOfferFormClient company={company} dict={t} dictCommon={tc} />
         </section>
       </main>
       <Footer />

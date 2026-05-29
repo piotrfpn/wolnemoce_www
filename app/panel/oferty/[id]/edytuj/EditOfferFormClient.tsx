@@ -1,6 +1,10 @@
 "use client";
 
 import OfferFormClient from "../../OfferFormClient";
+import type {
+  PanelCommonDictionary,
+  PanelOfferFormDictionary,
+} from "@/lib/i18n/types";
 
 type CompanyData = {
   id: string;
@@ -35,10 +39,14 @@ export default function EditOfferFormClient({
   company,
   offer,
   offerImages,
+  dict,
+  dictCommon,
 }: {
   company: CompanyData;
   offer: OfferData;
   offerImages: OfferImageData[];
+  dict: PanelOfferFormDictionary;
+  dictCommon: PanelCommonDictionary;
 }) {
   return (
     <OfferFormClient
@@ -46,6 +54,8 @@ export default function EditOfferFormClient({
       company={company}
       offer={offer}
       offerImages={offerImages}
+      dict={dict}
+      dictCommon={dictCommon}
     />
   );
 }

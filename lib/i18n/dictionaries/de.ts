@@ -630,6 +630,132 @@ const de: Dictionary = {
       noGlobalLimit: "Kein Limit",
       limitReached: "Limit erreicht",
     },
+    offerForm: {
+      metadata: {
+        newTitle: "Angebot hinzufügen",
+        newDescription: "Fügen Sie ein Firmenangebot im Panel von WolneMoce.pl hinzu.",
+        editTitle: "Angebot bearbeiten",
+        editDescription: "Bearbeiten Sie ein Firmenangebot im Panel von WolneMoce.pl.",
+      },
+      backToOffers: "Zurück zu den Angeboten",
+      eyebrowNew: "Neues Angebot",
+      eyebrowEdit: "Angebot bearbeiten",
+      titleNew: "Angebot hinzufügen",
+      titleEdit: "Angebot bearbeiten",
+      description:
+        "Jedes Angebot hat eine konkrete Branche und eine Leistung aus dem Firmenprofil.",
+      profileMissingTitle:
+        "Ergänzen Sie zuerst Branchen und Leistungen im Reiter Firmenprofil.",
+      profileMissingDescription:
+        "Ohne Branchen und Leistungen kann kein mit der Firma verknüpftes Angebot hinzugefügt werden.",
+      completeProfile: "Firmenprofil vervollständigen",
+      branchServicesMissing:
+        "Für diese Branche wurden im Firmenprofil keine Leistungen ausgewählt.",
+      activeWarningTitle: "Hinweis: Sie bearbeiten ein aktives Angebot.",
+      activeWarningDescription:
+        "Die Bearbeitung eines aktiven Angebots kann es erneut zur Moderation senden. Nach dem Speichern kann das Angebot vorübergehend öffentlich nicht sichtbar sein.",
+      fields: {
+        title: {
+          label: "Angebotstitel",
+          placeholder: "Z. B. CNC-Bearbeitung - Kapazität 500 Stk./Monat",
+        },
+        branch: {
+          label: "Branche des Angebots",
+          placeholder: "Branche des Angebots auswählen",
+        },
+        serviceType: {
+          label: "Leistungsart",
+          placeholder: "Leistungsart auswählen",
+        },
+        description: {
+          label: "Beschreibung der Produktionskapazitäten",
+          placeholder:
+            "Beschreiben Sie Technologie, Leistungsumfang, Materialien, Seriengrößen und Verfügbarkeit.",
+        },
+        powerAvailable: {
+          label: "Verfügbare Kapazität",
+          placeholder: "Z. B. 500 Stk./Monat",
+        },
+        minOrder: {
+          label: "Mindestbestellung",
+          placeholder: "Z. B. 50 Stk.",
+        },
+        leadTime: {
+          label: "Lieferzeit",
+          placeholder: "Z. B. 2 Wochen",
+        },
+      },
+      images: {
+        altFallback: "Angebotsbild",
+        sectionTitle: "Angebotsbilder",
+        description:
+          "Fügen Sie Fotos von Maschinen, Halle oder Beispielprojekten hinzu. Die Bilder sind öffentlich beim Angebot sichtbar.",
+        requirements: "JPG, PNG oder WEBP, max. 5 MB pro Datei, bis zu {count} Bilder.",
+        chooseButton: "Bilder auswählen",
+        dragHint: "Klicken oder Bilder hierher ziehen und ablegen.",
+        uploadDelay:
+          "Bilder werden nicht sofort hochgeladen. Sie werden erst nach dem Speichern des Angebots an Storage gesendet.",
+        contactWarning:
+          "Bilder sollten keine Telefonnummern, E-Mail-Adressen, QR-Codes oder Kontaktdaten enthalten. Solches Material kann vom Administrator ausgeblendet werden.",
+        savedTitle: "Gespeicherte Bilder",
+        mainImage: "Hauptbild",
+        offerImage: "Angebotsbild",
+        deleting: "Wird gelöscht...",
+        delete: "Löschen",
+        readyTitle: "Bereit zum Hochladen nach dem Speichern des Angebots",
+        previewFallback: "Bildvorschau",
+        ready: "Bereit zum Hochladen",
+        emptyNew: "Keine neuen Bilder ausgewählt.",
+        duplicateError: "Diese Datei wurde bereits hinzugefügt.",
+        deleteConfirm: "Möchten Sie dieses Bild wirklich löschen?",
+        storageDeleteError: "Die Bilddatei konnte nicht aus Storage gelöscht werden.",
+      },
+      saveMode: {
+        legend: "Speichermodus",
+        draftTitle: "Entwurf",
+        draftDescription: "Angebot als Arbeitsentwurf speichern, ohne es zur Moderation zu senden.",
+        pendingTitle: "Zur Moderation senden",
+        pendingDescription: "Angebot zur Freigabe durch den Administrator übermitteln.",
+        statusUnchangedPrefix: "Der Status bleibt nach dem Speichern unverändert:",
+      },
+      statusLabels: {
+        draft: "Entwurf",
+        pending: "In Moderation",
+        active: "Aktiv",
+        rejected: "Abgelehnt",
+        archived: "Archiviert",
+      },
+      validation: {
+        titleRequired: "Geben Sie den Angebotstitel ein.",
+        branchRequired: "Wählen Sie die Branche des Angebots aus.",
+        serviceTypeRequired: "Wählen Sie eine zur Angebotsbranche passende Leistungsart.",
+        descriptionRequired: "Geben Sie die Beschreibung der Produktionskapazitäten ein.",
+        powerRequired: "Geben Sie die verfügbare Kapazität ein.",
+        leadTimeRequired: "Geben Sie die Lieferzeit ein.",
+        profileRequired:
+          "Ergänzen Sie zuerst Branchen und Leistungen im Reiter Firmenprofil.",
+        saveError:
+          "Die Daten konnten nicht gespeichert werden. Prüfen Sie das Formular und versuchen Sie es erneut.",
+      },
+      limits: {
+        freePlan:
+          "Der FREE-Plan erlaubt 1 aktives Angebot oder ein Angebot in Moderation. Um ein weiteres hinzuzufügen, archivieren Sie das aktuelle Angebot oder wechseln Sie in einen höheren Plan.",
+        plan:
+          "Das Limit aktiver oder ausstehender Angebote für den aktuellen Firmenplan wurde erreicht. Archivieren Sie ein Angebot oder wechseln Sie in einen höheren Plan.",
+      },
+      partialSuccess: {
+        authImageUpload:
+          "Das Angebot wurde gespeichert, aber die Bilder konnten nicht hochgeladen werden. Fügen Sie sie in der Bearbeitung des Angebots hinzu.",
+        failedImageUpload:
+          "Das Angebot wurde gespeichert, aber einige Bilder wurden nicht hochgeladen. Versuchen Sie es erneut in der Bearbeitung des Angebots.",
+        activeResubmitted:
+          "Das Angebot wurde gespeichert und erneut zur Moderation übermittelt.",
+      },
+      submit: {
+        saving: "Speichern...",
+        save: "Angebot speichern",
+      },
+    },
     profile: {
       title: "Firmenprofil",
       subtitle: "Vervollständigen Sie Ihre Firmendaten, die für Kunden sichtbar sind.",

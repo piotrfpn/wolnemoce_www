@@ -691,6 +691,131 @@ const pl: Dictionary = {
       noGlobalLimit: "Brak limitu",
       limitReached: "Limit wykorzystany",
     },
+    offerForm: {
+      metadata: {
+        newTitle: "Dodaj ofertę",
+        newDescription: "Dodaj ofertę firmy w panelu WolneMoce.pl.",
+        editTitle: "Edytuj ofertę",
+        editDescription: "Edytuj ofertę firmy w panelu WolneMoce.pl.",
+      },
+      backToOffers: "Wróć do ofert",
+      eyebrowNew: "Nowa oferta",
+      eyebrowEdit: "Edycja oferty",
+      titleNew: "Dodaj ofertę",
+      titleEdit: "Edytuj ofertę",
+      description:
+        "Każda oferta ma jedną konkretną branżę i jedną usługę wybraną z profilu firmy.",
+      profileMissingTitle:
+        "Musisz najpierw uzupełnić branże i usługi w zakładce Profil firmy.",
+      profileMissingDescription:
+        "Bez branż i usług nie można dodać oferty powiązanej z firmą.",
+      completeProfile: "Uzupełnij profil firmy",
+      branchServicesMissing: "Dla tej branży nie wybrano usług w profilu firmy.",
+      activeWarningTitle: "Uwaga: edytujesz aktywną ofertę.",
+      activeWarningDescription:
+        "Edycja aktywnej oferty może skierować ją ponownie do moderacji. Po zapisaniu zmian oferta może być tymczasowo niewidoczna publicznie.",
+      fields: {
+        title: {
+          label: "Tytuł oferty",
+          placeholder: "Np. Obróbka CNC - wolne moce 500 szt/miesiąc",
+        },
+        branch: {
+          label: "Branża oferty",
+          placeholder: "Wybierz branżę oferty",
+        },
+        serviceType: {
+          label: "Rodzaj usługi",
+          placeholder: "Wybierz rodzaj usługi",
+        },
+        description: {
+          label: "Opis możliwości produkcyjnych",
+          placeholder:
+            "Opisz technologię, zakres prac, materiały, serie i dostępność.",
+        },
+        powerAvailable: {
+          label: "Dostępna moc",
+          placeholder: "Np. 500 szt/mies.",
+        },
+        minOrder: {
+          label: "Minimalne zamówienie",
+          placeholder: "Np. 50 szt.",
+        },
+        leadTime: {
+          label: "Termin realizacji",
+          placeholder: "Np. 2 tygodnie",
+        },
+      },
+      images: {
+        altFallback: "Zdjęcie oferty",
+        sectionTitle: "Zdjęcia oferty",
+        description:
+          "Dodaj zdjęcia maszyn, hali lub przykładowych realizacji. Zdjęcia będą widoczne publicznie przy ofercie.",
+        requirements: "JPG, PNG lub WEBP, maks. 5 MB na plik, do {count} zdjęć.",
+        chooseButton: "Wybierz zdjęcia",
+        dragHint: "Kliknij albo przeciągnij i upuść zdjęcia w tym miejscu.",
+        uploadDelay:
+          "Zdjęcia nie są wysyłane od razu. Trafią do Storage dopiero po zapisaniu oferty.",
+        contactWarning:
+          "Zdjęcia nie powinny zawierać numerów telefonów, adresów e-mail, kodów QR ani danych kontaktowych. Takie materiały mogą zostać ukryte przez administratora.",
+        savedTitle: "Zapisane zdjęcia",
+        mainImage: "Zdjęcie główne",
+        offerImage: "Zdjęcie oferty",
+        deleting: "Usuwanie...",
+        delete: "Usuń",
+        readyTitle: "Gotowe do wysłania po zapisie oferty",
+        previewFallback: "Podgląd zdjęcia",
+        ready: "Gotowe do wysłania",
+        emptyNew: "Nie wybrano nowych zdjęć.",
+        duplicateError: "Ten plik został już dodany.",
+        deleteConfirm: "Czy na pewno chcesz usunąć to zdjęcie?",
+        storageDeleteError: "Nie udało się usunąć pliku zdjęcia ze Storage.",
+      },
+      saveMode: {
+        legend: "Tryb zapisu",
+        draftTitle: "Szkic",
+        draftDescription: "Zapisz ofertę roboczo bez wysyłania do moderacji.",
+        pendingTitle: "Wyślij do moderacji",
+        pendingDescription: "Przekaż ofertę do akceptacji administratora.",
+        statusUnchangedPrefix: "Status po zapisie pozostanie bez zmian:",
+      },
+      statusLabels: {
+        draft: "Szkic",
+        pending: "W moderacji",
+        active: "Aktywna",
+        rejected: "Odrzucona",
+        archived: "Zarchiwizowana",
+      },
+      validation: {
+        titleRequired: "Podaj tytuł oferty.",
+        branchRequired: "Wybierz branżę oferty.",
+        serviceTypeRequired: "Wybierz rodzaj usługi zgodny z branżą oferty.",
+        descriptionRequired: "Podaj opis możliwości produkcyjnych.",
+        powerRequired: "Podaj dostępną moc.",
+        leadTimeRequired: "Podaj termin realizacji.",
+        profileRequired:
+          "Najpierw uzupełnij branże i usługi w zakładce Profil firmy.",
+        saveError:
+          "Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.",
+      },
+      limits: {
+        freePlan:
+          "Plan FREE pozwala utrzymywać 1 ofertę aktywną lub oczekującą na moderację. Aby dodać kolejną, zarchiwizuj obecną ofertę albo przejdź na wyższy plan.",
+        plan:
+          "Osiągnięto limit aktywnych lub oczekujących ofert dla aktualnego planu firmy. Zarchiwizuj jedną z ofert albo przejdź na wyższy plan.",
+      },
+      partialSuccess: {
+        authImageUpload:
+          "Oferta została zapisana, ale nie udało się wgrać zdjęć. Spróbuj dodać je w edycji oferty.",
+        failedImageUpload:
+          "Oferta została zapisana, ale część zdjęć nie została wgrana. Spróbuj ponownie w edycji oferty.",
+        activeResubmitted:
+          "Oferta została zapisana i przekazana do ponownej moderacji.",
+      },
+      submit: {
+        saving: "Zapisywanie...",
+        save: "Zapisz ofertę",
+      },
+    },
     profile: {
       title: "Profil firmy",
       subtitle: "Uzupełnij dane firmy widoczne dla klientów.",

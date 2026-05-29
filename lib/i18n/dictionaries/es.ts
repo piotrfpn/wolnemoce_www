@@ -616,6 +616,132 @@ const es: Dictionary = {
       noGlobalLimit: "Sin límite",
       limitReached: "Límite alcanzado",
     },
+    offerForm: {
+      metadata: {
+        newTitle: "Añadir oferta",
+        newDescription: "Añade una oferta de empresa en el panel de WolneMoce.pl.",
+        editTitle: "Editar oferta",
+        editDescription: "Edita una oferta de empresa en el panel de WolneMoce.pl.",
+      },
+      backToOffers: "Volver a las ofertas",
+      eyebrowNew: "Nueva oferta",
+      eyebrowEdit: "Edición de oferta",
+      titleNew: "Añadir oferta",
+      titleEdit: "Editar oferta",
+      description:
+        "Cada oferta tiene un sector concreto y un servicio seleccionado desde el perfil de empresa.",
+      profileMissingTitle:
+        "Primero completa los sectores y servicios en la pestaña Perfil de empresa.",
+      profileMissingDescription:
+        "Sin sectores y servicios no puedes añadir una oferta vinculada a la empresa.",
+      completeProfile: "Completar perfil de empresa",
+      branchServicesMissing:
+        "No se han seleccionado servicios para este sector en el perfil de empresa.",
+      activeWarningTitle: "Aviso: estás editando una oferta activa.",
+      activeWarningDescription:
+        "Editar una oferta activa puede enviarla de nuevo a moderación. Después de guardar los cambios, la oferta puede quedar temporalmente oculta al público.",
+      fields: {
+        title: {
+          label: "Título de la oferta",
+          placeholder: "Ej. mecanizado CNC - capacidad de 500 uds./mes",
+        },
+        branch: {
+          label: "Sector de la oferta",
+          placeholder: "Selecciona el sector de la oferta",
+        },
+        serviceType: {
+          label: "Tipo de servicio",
+          placeholder: "Selecciona el tipo de servicio",
+        },
+        description: {
+          label: "Descripción de la capacidad productiva",
+          placeholder:
+            "Describe la tecnología, el alcance del trabajo, los materiales, las series y la disponibilidad.",
+        },
+        powerAvailable: {
+          label: "Capacidad disponible",
+          placeholder: "Ej. 500 uds./mes",
+        },
+        minOrder: {
+          label: "Pedido mínimo",
+          placeholder: "Ej. 50 uds.",
+        },
+        leadTime: {
+          label: "Plazo de ejecución",
+          placeholder: "Ej. 2 semanas",
+        },
+      },
+      images: {
+        altFallback: "Imagen de la oferta",
+        sectionTitle: "Imágenes de la oferta",
+        description:
+          "Añade fotos de máquinas, nave o ejemplos de trabajos realizados. Las imágenes serán visibles públicamente junto a la oferta.",
+        requirements: "JPG, PNG o WEBP, máx. 5 MB por archivo, hasta {count} imágenes.",
+        chooseButton: "Elegir imágenes",
+        dragHint: "Haz clic o arrastra y suelta imágenes aquí.",
+        uploadDelay:
+          "Las imágenes no se suben de inmediato. Se enviarán a Storage solo después de guardar la oferta.",
+        contactWarning:
+          "Las imágenes no deben contener números de teléfono, direcciones de correo electrónico, códigos QR ni datos de contacto. El administrador puede ocultar ese material.",
+        savedTitle: "Imágenes guardadas",
+        mainImage: "Imagen principal",
+        offerImage: "Imagen de la oferta",
+        deleting: "Eliminando...",
+        delete: "Eliminar",
+        readyTitle: "Listas para subir después de guardar la oferta",
+        previewFallback: "Vista previa de la imagen",
+        ready: "Lista para subir",
+        emptyNew: "No se han seleccionado nuevas imágenes.",
+        duplicateError: "Este archivo ya se ha añadido.",
+        deleteConfirm: "¿Seguro que quieres eliminar esta imagen?",
+        storageDeleteError: "No se pudo eliminar el archivo de imagen de Storage.",
+      },
+      saveMode: {
+        legend: "Modo de guardado",
+        draftTitle: "Borrador",
+        draftDescription: "Guarda la oferta como borrador sin enviarla a moderación.",
+        pendingTitle: "Enviar a moderación",
+        pendingDescription: "Envía la oferta para aprobación del administrador.",
+        statusUnchangedPrefix: "Después de guardar, el estado permanecerá sin cambios:",
+      },
+      statusLabels: {
+        draft: "Borrador",
+        pending: "En moderación",
+        active: "Activa",
+        rejected: "Rechazada",
+        archived: "Archivada",
+      },
+      validation: {
+        titleRequired: "Introduce el título de la oferta.",
+        branchRequired: "Selecciona el sector de la oferta.",
+        serviceTypeRequired: "Selecciona un tipo de servicio compatible con el sector de la oferta.",
+        descriptionRequired: "Introduce la descripción de la capacidad productiva.",
+        powerRequired: "Introduce la capacidad disponible.",
+        leadTimeRequired: "Introduce el plazo de ejecución.",
+        profileRequired:
+          "Primero completa los sectores y servicios en la pestaña Perfil de empresa.",
+        saveError:
+          "No se pudieron guardar los datos. Revisa el formulario e inténtalo de nuevo.",
+      },
+      limits: {
+        freePlan:
+          "El plan FREE permite mantener 1 oferta activa o pendiente de moderación. Para añadir otra, archiva la oferta actual o cambia a un plan superior.",
+        plan:
+          "Se ha alcanzado el límite de ofertas activas o pendientes para el plan actual de la empresa. Archiva una oferta o cambia a un plan superior.",
+      },
+      partialSuccess: {
+        authImageUpload:
+          "La oferta se ha guardado, pero no se pudieron subir las imágenes. Intenta añadirlas al editar la oferta.",
+        failedImageUpload:
+          "La oferta se ha guardado, pero algunas imágenes no se subieron. Inténtalo de nuevo al editar la oferta.",
+        activeResubmitted:
+          "La oferta se ha guardado y se ha enviado de nuevo a moderación.",
+      },
+      submit: {
+        saving: "Guardando...",
+        save: "Guardar oferta",
+      },
+    },
     profile: {
       title: "Perfil de la empresa",
       subtitle: "Complete los datos de su empresa visibles para los clientes.",

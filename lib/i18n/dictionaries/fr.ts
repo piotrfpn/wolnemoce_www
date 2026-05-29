@@ -616,6 +616,132 @@ const fr: Dictionary = {
       noGlobalLimit: "Pas de limite",
       limitReached: "Limite atteinte",
     },
+    offerForm: {
+      metadata: {
+        newTitle: "Ajouter une offre",
+        newDescription: "Ajoutez une offre d'entreprise dans le panel WolneMoce.pl.",
+        editTitle: "Modifier l'offre",
+        editDescription: "Modifiez une offre d'entreprise dans le panel WolneMoce.pl.",
+      },
+      backToOffers: "Retour aux offres",
+      eyebrowNew: "Nouvelle offre",
+      eyebrowEdit: "Modification de l'offre",
+      titleNew: "Ajouter une offre",
+      titleEdit: "Modifier l'offre",
+      description:
+        "Chaque offre utilise un secteur précis et un service sélectionné dans le profil de l'entreprise.",
+      profileMissingTitle:
+        "Complétez d'abord les secteurs et services dans l'onglet Profil de l'entreprise.",
+      profileMissingDescription:
+        "Sans secteurs et services, vous ne pouvez pas ajouter une offre liée à l'entreprise.",
+      completeProfile: "Compléter le profil de l'entreprise",
+      branchServicesMissing:
+        "Aucun service n'a été sélectionné pour ce secteur dans le profil de l'entreprise.",
+      activeWarningTitle: "Attention : vous modifiez une offre active.",
+      activeWarningDescription:
+        "La modification d'une offre active peut la renvoyer en modération. Après l'enregistrement des changements, l'offre peut être temporairement masquée au public.",
+      fields: {
+        title: {
+          label: "Titre de l'offre",
+          placeholder: "Ex. usinage CNC - capacité 500 pcs/mois",
+        },
+        branch: {
+          label: "Secteur de l'offre",
+          placeholder: "Sélectionnez le secteur de l'offre",
+        },
+        serviceType: {
+          label: "Type de service",
+          placeholder: "Sélectionnez le type de service",
+        },
+        description: {
+          label: "Description des capacités de production",
+          placeholder:
+            "Décrivez la technologie, le périmètre des travaux, les matériaux, les séries et la disponibilité.",
+        },
+        powerAvailable: {
+          label: "Capacité disponible",
+          placeholder: "Ex. 500 pcs/mois",
+        },
+        minOrder: {
+          label: "Commande minimale",
+          placeholder: "Ex. 50 pcs",
+        },
+        leadTime: {
+          label: "Délai de réalisation",
+          placeholder: "Ex. 2 semaines",
+        },
+      },
+      images: {
+        altFallback: "Image de l'offre",
+        sectionTitle: "Images de l'offre",
+        description:
+          "Ajoutez des photos de machines, d'atelier ou d'exemples de réalisations. Les images seront visibles publiquement avec l'offre.",
+        requirements: "JPG, PNG ou WEBP, max. 5 MB par fichier, jusqu'à {count} images.",
+        chooseButton: "Choisir des images",
+        dragHint: "Cliquez ou glissez-déposez des images ici.",
+        uploadDelay:
+          "Les images ne sont pas envoyées immédiatement. Elles seront envoyées vers Storage seulement après l'enregistrement de l'offre.",
+        contactWarning:
+          "Les images ne doivent pas contenir de numéros de téléphone, d'adresses e-mail, de codes QR ni de coordonnées. L'administrateur peut masquer ces contenus.",
+        savedTitle: "Images enregistrées",
+        mainImage: "Image principale",
+        offerImage: "Image de l'offre",
+        deleting: "Suppression...",
+        delete: "Supprimer",
+        readyTitle: "Prêtes à envoyer après l'enregistrement de l'offre",
+        previewFallback: "Aperçu de l'image",
+        ready: "Prête à envoyer",
+        emptyNew: "Aucune nouvelle image sélectionnée.",
+        duplicateError: "Ce fichier a déjà été ajouté.",
+        deleteConfirm: "Voulez-vous vraiment supprimer cette image ?",
+        storageDeleteError: "Impossible de supprimer le fichier image de Storage.",
+      },
+      saveMode: {
+        legend: "Mode d'enregistrement",
+        draftTitle: "Brouillon",
+        draftDescription: "Enregistrer l'offre comme brouillon sans l'envoyer en modération.",
+        pendingTitle: "Envoyer en modération",
+        pendingDescription: "Soumettre l'offre à l'approbation de l'administrateur.",
+        statusUnchangedPrefix: "Après l'enregistrement, le statut restera inchangé :",
+      },
+      statusLabels: {
+        draft: "Brouillon",
+        pending: "En modération",
+        active: "Active",
+        rejected: "Rejetée",
+        archived: "Archivée",
+      },
+      validation: {
+        titleRequired: "Saisissez le titre de l'offre.",
+        branchRequired: "Sélectionnez le secteur de l'offre.",
+        serviceTypeRequired: "Sélectionnez un type de service correspondant au secteur de l'offre.",
+        descriptionRequired: "Saisissez la description des capacités de production.",
+        powerRequired: "Saisissez la capacité disponible.",
+        leadTimeRequired: "Saisissez le délai de réalisation.",
+        profileRequired:
+          "Complétez d'abord les secteurs et services dans l'onglet Profil de l'entreprise.",
+        saveError:
+          "Impossible d'enregistrer les données. Vérifiez le formulaire et réessayez.",
+      },
+      limits: {
+        freePlan:
+          "Le plan FREE permet de conserver 1 offre active ou en attente de modération. Pour en ajouter une autre, archivez l'offre actuelle ou passez à un plan supérieur.",
+        plan:
+          "La limite d'offres actives ou en attente pour le plan actuel de l'entreprise est atteinte. Archivez une offre ou passez à un plan supérieur.",
+      },
+      partialSuccess: {
+        authImageUpload:
+          "L'offre a été enregistrée, mais les images n'ont pas pu être envoyées. Essayez de les ajouter lors de la modification de l'offre.",
+        failedImageUpload:
+          "L'offre a été enregistrée, mais certaines images n'ont pas été envoyées. Réessayez lors de la modification de l'offre.",
+        activeResubmitted:
+          "L'offre a été enregistrée et renvoyée en modération.",
+      },
+      submit: {
+        saving: "Enregistrement...",
+        save: "Enregistrer l'offre",
+      },
+    },
     profile: {
       title: "Profil de l'entreprise",
       subtitle: "Complétez les données de votre entreprise visibles pour les clients.",

@@ -19,6 +19,10 @@ import {
   validateOfferImageFiles,
 } from "@/lib/offerImageUploads";
 import { createClient } from "@/lib/supabase/client";
+import type {
+  PanelCommonDictionary,
+  PanelOfferFormDictionary,
+} from "@/lib/i18n/types";
 
 type CompanyData = {
   id: string;
@@ -54,24 +58,12 @@ type OfferFormClientProps = {
   offer?: OfferData;
   offerImages?: OfferImageData[];
   mode: "new" | "edit";
+  dict: PanelOfferFormDictionary;
+  dictCommon: PanelCommonDictionary;
 };
 
 const inputClass =
   "min-w-0 max-w-full w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400";
-
-const statusLabels: Record<OfferStatus, string> = {
-  draft: "Szkic",
-  pending: "W moderacji",
-  active: "Aktywna",
-  rejected: "Odrzucona",
-  archived: "Zarchiwizowana",
-};
-
-const freePlanLimitMessage =
-  "Plan FREE pozwala utrzymywać 1 ofertę aktywną lub oczekującą na moderację. Aby dodać kolejną, zarchiwizuj obecną ofertę albo przejdź na wyższy plan.";
-
-const planLimitMessage =
-  "Osiągnięto limit aktywnych lub oczekujących ofert dla aktualnego planu firmy. Zarchiwizuj jedną z ofert albo przejdź na wyższy plan.";
 
 function slugify(value: string) {
   const normalized = value
@@ -120,6 +112,8 @@ export default function OfferFormClient({
   offer,
   offerImages = [],
   mode,
+  dict,
+  dictCommon,
 }: OfferFormClientProps) {
   const router = useRouter();
   const companyIndustries = getCompanyIndustries(company);
@@ -185,27 +179,27 @@ export default function OfferFormClient({
 
   function validateForm() {
     if (!title.trim()) {
-      return "Podaj tytuł oferty.";
+      return dict.validation.titleRequired;
     }
 
     if (!selectedBranch) {
-      return "Wybierz branżę oferty.";
+      return dict.validation.branchRequired;
     }
 
     if (!serviceType || !branchServices.includes(serviceType)) {
-      return "Wybierz rodzaj usługi zgodny z branżą oferty.";
+      return dict.validation.serviceTypeRequired;
     }
 
     if (!description.trim()) {
-      return "Podaj opis możliwości produkcyjnych.";
+      return dict.validation.descriptionRequired;
     }
 
     if (!powerAvailable.trim()) {
-      return "Podaj dostępną moc.";
+      return dict.validation.powerRequired;
     }
 
     if (!leadTime.trim()) {
-      return "Podaj termin realizacji.";
+      return dict.validation.leadTimeRequired;
     }
 
     return "";
@@ -225,7 +219,7 @@ export default function OfferFormClient({
     );
 
     if (uniqueNewFiles.length === 0) {
-      setError("Ten plik został już dodany.");
+      setError(dict.images.duplicateError);
       return;
     }
 
@@ -313,7 +307,7 @@ export default function OfferFormClient({
           offer_id: params.offerId,
           user_id: params.userId,
           path,
-          alt: title.trim() || "Zdjęcie oferty",
+          alt: title.trim() || dict.images.altFallback,
           sort_order: params.startOrder + index,
         });
 
@@ -327,7 +321,7 @@ export default function OfferFormClient({
   }
 
   async function deleteExistingImage(image: OfferImageData) {
-    const confirmed = window.confirm("Czy na pewno chcesz usunąć to zdjęcie?");
+    const confirmed = window.confirm(dict.images.deleteConfirm);
 
     if (!confirmed) {
       return;
@@ -343,7 +337,7 @@ export default function OfferFormClient({
       .remove([image.path]);
 
     if (storageError) {
-      setError("Nie udało się usunąć pliku zdjęcia ze Storage.");
+      setError(dict.images.storageDeleteError);
       setDeletingImageId("");
       return;
     }
@@ -373,7 +367,7 @@ export default function OfferFormClient({
     setPartialSuccess("");
 
     if (!canSaveOffer) {
-      setError("Najpierw uzupełnij branże i usługi w zakładce Profil firmy.");
+      setError(dict.validation.profileRequired);
       return;
     }
 
@@ -423,11 +417,11 @@ export default function OfferFormClient({
 
       if (saveError || !insertedOffer?.id) {
         if (saveError?.message?.includes("FREE_PLAN_OFFER_LIMIT_REACHED")) {
-          setError(freePlanLimitMessage);
+          setError(dict.limits.freePlan);
         } else if (saveError?.message?.includes("PLAN_OFFER_LIMIT_REACHED")) {
-          setError(planLimitMessage);
+          setError(dict.limits.plan);
         } else {
-          setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
+          setError(dict.validation.saveError);
         }
         setIsSubmitting(false);
         return;
@@ -447,11 +441,11 @@ export default function OfferFormClient({
 
       if (saveError) {
         if (saveError?.message?.includes("FREE_PLAN_OFFER_LIMIT_REACHED")) {
-          setError(freePlanLimitMessage);
+          setError(dict.limits.freePlan);
         } else if (saveError?.message?.includes("PLAN_OFFER_LIMIT_REACHED")) {
-          setError(planLimitMessage);
+          setError(dict.limits.plan);
         } else {
-          setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
+          setError(dict.validation.saveError);
         }
         setIsSubmitting(false);
         return;
@@ -467,9 +461,7 @@ export default function OfferFormClient({
       } = await supabase.auth.getUser();
 
       if (userError || !user) {
-        setPartialSuccess(
-          "Oferta została zapisana, ale nie udało się wgrać zdjęć. Spróbuj dodać je w edycji oferty."
-        );
+        setPartialSuccess(dict.partialSuccess.authImageUpload);
         setIsSubmitting(false);
         return;
       }
@@ -482,9 +474,7 @@ export default function OfferFormClient({
       });
 
       if (failedUploads > 0) {
-        setPartialSuccess(
-          "Oferta została zapisana, ale część zdjęć nie została wgrana. Spróbuj ponownie w edycji oferty."
-        );
+        setPartialSuccess(dict.partialSuccess.failedImageUpload);
         setIsSubmitting(false);
         return;
       }
@@ -498,7 +488,7 @@ export default function OfferFormClient({
         .single();
 
       if (finalOffer?.status === "pending") {
-        setPartialSuccess("Oferta została zapisana i przekazana do ponownej moderacji.");
+        setPartialSuccess(dict.partialSuccess.activeResubmitted);
         setIsSubmitting(false);
         router.refresh();
         return;
@@ -516,30 +506,29 @@ export default function OfferFormClient({
     >
       <div className="mb-8">
         <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-          {mode === "new" ? "Nowa oferta" : "Edycja oferty"}
+          {mode === "new" ? dict.eyebrowNew : dict.eyebrowEdit}
         </p>
         <h1 className="text-2xl font-extrabold text-slate-900">
-          {mode === "new" ? "Dodaj ofertę" : "Edytuj ofertę"}
+          {mode === "new" ? dict.titleNew : dict.titleEdit}
         </h1>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          Każda oferta ma jedną konkretną branżę i jedną usługę wybraną z
-          profilu firmy.
+          {dict.description}
         </p>
       </div>
 
       {!hasProfileSetup ? (
         <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
           <p className="font-bold">
-            Musisz najpierw uzupełnić branże i usługi w zakładce Profil firmy.
+            {dict.profileMissingTitle}
           </p>
           <p className="mt-2 leading-6">
-            Bez branż i usług nie można dodać oferty powiązanej z firmą.
+            {dict.profileMissingDescription}
           </p>
           <Link
             href="/panel/profil"
             className="mt-4 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-bold text-[#1a5f3c] no-underline"
           >
-            Uzupełnij profil firmy
+            {dict.completeProfile}
             <i className="fas fa-arrow-right text-xs"></i>
           </Link>
         </div>
@@ -548,13 +537,13 @@ export default function OfferFormClient({
       {hasProfileSetup && selectedBranch && branchServices.length === 0 ? (
         <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-800">
           <p className="font-bold">
-            Dla tej branży nie wybrano usług w profilu firmy.
+            {dict.branchServicesMissing}
           </p>
           <Link
             href="/panel/profil"
             className="mt-4 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-sm font-bold text-[#1a5f3c] no-underline"
           >
-            Uzupełnij profil firmy
+            {dict.completeProfile}
             <i className="fas fa-arrow-right text-xs"></i>
           </Link>
         </div>
@@ -562,10 +551,9 @@ export default function OfferFormClient({
 
       {showActiveModerationWarning ? (
         <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-800">
-          <p className="font-bold">Uwaga: edytujesz aktywną ofertę.</p>
+          <p className="font-bold">{dict.activeWarningTitle}</p>
           <p className="mt-2">
-            Edycja aktywnej oferty może skierować ją ponownie do moderacji. Po
-            zapisaniu zmian oferta może być tymczasowo niewidoczna publicznie.
+            {dict.activeWarningDescription}
           </p>
         </div>
       ) : null}
@@ -586,13 +574,13 @@ export default function OfferFormClient({
         <label className="block min-w-0 md:col-span-2">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-heading text-[#1a5f3c]"></i>
-            Tytuł oferty
+            {dict.fields.title.label}
           </span>
           <input
             value={title}
             onChange={(event) => setTitle(event.target.value)}
             className={inputClass}
-            placeholder="Np. Obróbka CNC - wolne moce 500 szt/miesiąc"
+            placeholder={dict.fields.title.placeholder}
             disabled={!hasProfileSetup}
           />
         </label>
@@ -600,7 +588,7 @@ export default function OfferFormClient({
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-industry text-[#1a5f3c]"></i>
-            Branża oferty
+            {dict.fields.branch.label}
           </span>
           <select
             value={selectedBranch}
@@ -611,7 +599,7 @@ export default function OfferFormClient({
             className={inputClass}
             disabled={!hasProfileSetup}
           >
-            <option value="">Wybierz branżę oferty</option>
+            <option value="">{dict.fields.branch.placeholder}</option>
             {companyIndustries.map((industry) => (
               <option key={industry} value={industry}>
                 {industry}
@@ -623,7 +611,7 @@ export default function OfferFormClient({
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-screwdriver-wrench text-[#1a5f3c]"></i>
-            Rodzaj usługi
+            {dict.fields.serviceType.label}
           </span>
           <select
             value={serviceType}
@@ -631,7 +619,7 @@ export default function OfferFormClient({
             className={inputClass}
             disabled={!canSaveOffer}
           >
-            <option value="">Wybierz rodzaj usługi</option>
+            <option value="">{dict.fields.serviceType.placeholder}</option>
             {branchServices.map((item) => (
               <option key={item} value={item}>
                 {item}
@@ -643,14 +631,14 @@ export default function OfferFormClient({
         <label className="block min-w-0 md:col-span-2">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-align-left text-[#1a5f3c]"></i>
-            Opis możliwości produkcyjnych
+            {dict.fields.description.label}
           </span>
           <textarea
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             rows={6}
             className={inputClass}
-            placeholder="Opisz technologię, zakres prac, materiały, serie i dostępność."
+            placeholder={dict.fields.description.placeholder}
             disabled={!hasProfileSetup}
           />
         </label>
@@ -658,13 +646,13 @@ export default function OfferFormClient({
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-chart-bar text-[#1a5f3c]"></i>
-            Dostępna moc
+            {dict.fields.powerAvailable.label}
           </span>
           <input
             value={powerAvailable}
             onChange={(event) => setPowerAvailable(event.target.value)}
             className={inputClass}
-            placeholder="Np. 500 szt/mies."
+            placeholder={dict.fields.powerAvailable.placeholder}
             disabled={!hasProfileSetup}
           />
         </label>
@@ -672,13 +660,13 @@ export default function OfferFormClient({
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-boxes-stacked text-[#1a5f3c]"></i>
-            Minimalne zamówienie
+            {dict.fields.minOrder.label}
           </span>
           <input
             value={minOrder}
             onChange={(event) => setMinOrder(event.target.value)}
             className={inputClass}
-            placeholder="Np. 50 szt."
+            placeholder={dict.fields.minOrder.placeholder}
             disabled={!hasProfileSetup}
           />
         </label>
@@ -686,13 +674,13 @@ export default function OfferFormClient({
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-clock text-[#1a5f3c]"></i>
-            Termin realizacji
+            {dict.fields.leadTime.label}
           </span>
           <input
             value={leadTime}
             onChange={(event) => setLeadTime(event.target.value)}
             className={inputClass}
-            placeholder="Np. 2 tygodnie"
+            placeholder={dict.fields.leadTime.placeholder}
             disabled={!hasProfileSetup}
           />
         </label>
@@ -702,14 +690,13 @@ export default function OfferFormClient({
             <div className="min-w-0">
               <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                 <i className="fas fa-images text-[#1a5f3c]"></i>
-                Zdjęcia oferty
+                {dict.images.sectionTitle}
               </p>
               <p className="text-sm leading-6 text-slate-500">
-                Dodaj zdjęcia maszyn, hali lub przykładowych realizacji.
-                Zdjęcia będą widoczne publicznie przy ofercie.
+                {dict.images.description}
               </p>
               <p className="mt-2 text-xs leading-5 text-slate-400">
-                JPG, PNG lub WEBP, maks. 5 MB na plik, do {MAX_OFFER_IMAGES} zdjęć.
+                {dict.images.requirements.replace("{count}", String(MAX_OFFER_IMAGES))}
               </p>
             </div>
             <div
@@ -724,7 +711,7 @@ export default function OfferFormClient({
             >
               <label className="mx-auto inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] bg-white px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white">
                 <i className="fas fa-cloud-arrow-up"></i>
-                Wybierz zdjęcia
+                {dict.images.chooseButton}
                 <input
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
@@ -739,16 +726,13 @@ export default function OfferFormClient({
                 />
               </label>
               <p className="mt-3 text-sm font-semibold text-slate-700">
-                Kliknij albo przeciągnij i upuść zdjęcia w tym miejscu.
+                {dict.images.dragHint}
               </p>
               <p className="mt-2 text-xs leading-5 text-slate-500">
-                Zdjęcia nie są wysyłane od razu. Trafią do Storage dopiero po
-                zapisaniu oferty.
+                {dict.images.uploadDelay}
               </p>
               <p className="mt-3 rounded-xl bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-800">
-                Zdjęcia nie powinny zawierać numerów telefonów, adresów e-mail,
-                kodów QR ani danych kontaktowych. Takie materiały mogą zostać
-                ukryte przez administratora.
+                {dict.images.contactWarning}
               </p>
             </div>
           </div>
@@ -756,7 +740,7 @@ export default function OfferFormClient({
           {existingImages.length > 0 ? (
             <div className="mb-5">
               <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
-                Zapisane zdjęcia
+                {dict.images.savedTitle}
               </p>
               <div className="grid min-w-0 gap-3 sm:grid-cols-2">
                 {existingImages.map((image) => (
@@ -767,7 +751,7 @@ export default function OfferFormClient({
                     <div className="aspect-video bg-slate-100">
                       <img
                         src={getOfferImagePublicUrl(image.path)}
-                        alt={image.alt ?? title ?? "Zdjęcie oferty"}
+                        alt={image.alt ?? title ?? dict.images.altFallback}
                         loading="lazy"
                         decoding="async"
                         className="h-full w-full object-cover"
@@ -775,7 +759,7 @@ export default function OfferFormClient({
                     </div>
                     <div className="flex items-center justify-between gap-3 p-3">
                       <span className="text-xs font-semibold text-slate-500">
-                        {image.sort_order === 0 ? "Zdjęcie główne" : "Zdjęcie oferty"}
+                        {image.sort_order === 0 ? dict.images.mainImage : dict.images.offerImage}
                       </span>
                       <button
                         type="button"
@@ -784,7 +768,7 @@ export default function OfferFormClient({
                         className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-xs font-bold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         <i className="fas fa-trash"></i>
-                        {deletingImageId === image.id ? "Usuwanie..." : "Usuń"}
+                        {deletingImageId === image.id ? dict.images.deleting : dict.images.delete}
                       </button>
                     </div>
                   </div>
@@ -796,7 +780,7 @@ export default function OfferFormClient({
           {selectedImages.length > 0 ? (
             <div>
               <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
-                Gotowe do wysłania po zapisie oferty
+                {dict.images.readyTitle}
               </p>
               <div className="grid min-w-0 gap-3 sm:grid-cols-2">
                 {selectedImages.map((file) => {
@@ -821,7 +805,7 @@ export default function OfferFormClient({
                           />
                         ) : (
                           <div className="flex h-full items-center justify-center text-xs font-semibold text-slate-400">
-                            Podgląd zdjęcia
+                            {dict.images.previewFallback}
                           </div>
                         )}
                       </div>
@@ -834,7 +818,7 @@ export default function OfferFormClient({
                             {formatImageSize(file.size)}
                           </p>
                           <p className="mt-1 text-xs font-semibold text-[#1a5f3c]">
-                            Gotowe do wysłania
+                            {dict.images.ready}
                           </p>
                         </div>
                         <button
@@ -844,7 +828,7 @@ export default function OfferFormClient({
                           className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 transition hover:border-red-200 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                           <i className="fas fa-xmark"></i>
-                          Usuń
+                          {dict.images.delete}
                         </button>
                       </div>
                     </div>
@@ -854,7 +838,7 @@ export default function OfferFormClient({
             </div>
           ) : (
             <p className="rounded-xl bg-white px-4 py-3 text-sm text-slate-500">
-              Nie wybrano nowych zdjęć.
+              {dict.images.emptyNew}
             </p>
           )}
         </section>
@@ -863,19 +847,19 @@ export default function OfferFormClient({
           <fieldset className="min-w-0 md:col-span-2">
             <legend className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
               <i className="fas fa-floppy-disk text-[#1a5f3c]"></i>
-              Tryb zapisu
+              {dict.saveMode.legend}
             </legend>
             <div className="grid min-w-0 gap-3 sm:grid-cols-2">
               {[
                 {
                   value: "draft" as const,
-                  title: "Szkic",
-                  description: "Zapisz ofertę roboczo bez wysyłania do moderacji.",
+                  title: dict.saveMode.draftTitle,
+                  description: dict.saveMode.draftDescription,
                 },
                 {
                   value: "pending" as const,
-                  title: "Wyślij do moderacji",
-                  description: "Przekaż ofertę do akceptacji administratora.",
+                  title: dict.saveMode.pendingTitle,
+                  description: dict.saveMode.pendingDescription,
                 },
               ].map((item) => (
                 <label
@@ -907,8 +891,8 @@ export default function OfferFormClient({
           </fieldset>
         ) : (
           <div className="min-w-0 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
-            Status po zapisie pozostanie bez zmian:{" "}
-            <strong>{statusLabels[currentStatus]}</strong>.
+            {dict.saveMode.statusUnchangedPrefix}{" "}
+            <strong>{dict.statusLabels[currentStatus]}</strong>.
           </div>
         )}
       </div>
@@ -919,10 +903,10 @@ export default function OfferFormClient({
           disabled={!canSaveOffer}
           className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isSubmitting ? "Zapisywanie..." : "Zapisz ofertę"}
+          {isSubmitting ? dict.submit.saving : dict.submit.save}
         </button>
         <Link href="/panel/oferty" className="btn btn-outline">
-          Anuluj
+          {dictCommon.cancel}
         </Link>
       </div>
     </form>

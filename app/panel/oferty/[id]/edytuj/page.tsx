@@ -3,12 +3,15 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createClient } from "@/lib/supabase/server";
 import EditOfferFormClient from "./EditOfferFormClient";
 
+const dictionary = getDictionary("pl");
+
 export const metadata: Metadata = {
-  title: "Edytuj ofertę",
-  description: "Edytuj ofertę firmy w panelu WolneMoce.pl.",
+  title: dictionary.panel.offerForm.metadata.editTitle,
+  description: dictionary.panel.offerForm.metadata.editDescription,
 };
 
 export default async function EditPanelOfferPage({
@@ -16,6 +19,9 @@ export default async function EditPanelOfferPage({
 }: {
   params: { id: string };
 }) {
+  const dictionary = getDictionary("pl");
+  const t = dictionary.panel.offerForm;
+  const tc = dictionary.panel.common;
   const supabase = createClient();
   const {
     data: { user },
@@ -65,13 +71,15 @@ export default async function EditPanelOfferPage({
               className="mb-4 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
             >
               <i className="fas fa-arrow-left"></i>
-              Wróć do ofert
+              {t.backToOffers}
             </Link>
           </div>
           <EditOfferFormClient
             company={company}
             offer={offer}
             offerImages={offerImages ?? []}
+            dict={t}
+            dictCommon={tc}
           />
         </section>
       </main>
