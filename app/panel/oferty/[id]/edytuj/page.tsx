@@ -6,20 +6,25 @@ import Navbar from "@/components/Navbar";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createClient } from "@/lib/supabase/server";
 import EditOfferFormClient from "./EditOfferFormClient";
+import { getPanelLocale } from "@/lib/i18n/panelLocale";
 
-const dictionary = getDictionary("pl");
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getPanelLocale();
+  const dictionary = getDictionary(locale);
 
-export const metadata: Metadata = {
-  title: dictionary.panel.offerForm.metadata.editTitle,
-  description: dictionary.panel.offerForm.metadata.editDescription,
-};
+  return {
+    title: dictionary.panel.offerForm.metadata.editTitle,
+    description: dictionary.panel.offerForm.metadata.editDescription,
+  };
+}
 
 export default async function EditPanelOfferPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const dictionary = getDictionary("pl");
+  const locale = getPanelLocale();
+  const dictionary = getDictionary(locale);
   const t = dictionary.panel.offerForm;
   const tc = dictionary.panel.common;
   const supabase = createClient();

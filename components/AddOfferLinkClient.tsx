@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   getLocaleFromPathname,
@@ -27,6 +27,7 @@ export default function AddOfferLinkClient({
   locale,
 }: AddOfferLinkClientProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const resolvedLocale = locale ?? getLocaleFromPathname(pathname);
   const publicHref = getLocalizedPath("/dodaj-oferte", resolvedLocale);
   const [href, setHref] = useState(publicHref);
@@ -55,8 +56,36 @@ export default function AddOfferLinkClient({
     };
   }, [publicHref]);
 
+  const isPanel = href === "/panel/oferty/nowa";
+
+  if (isPanel) {
+    return (
+      <a
+        href={href}
+        onClick={(e) => {
+          e.preventDefault();
+          document.cookie = `wm_locale=${resolvedLocale}; path=/; max-age=31536000; SameSite=Lax`;
+          router.push(href);
+          if (onNavigate) onNavigate();
+        }}
+        className={className}
+        aria-label={ariaLabel}
+      >
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <Link href={href} onClick={onNavigate} className={className} aria-label={ariaLabel}>
+    <Link
+      href={href}
+      onClick={() => {
+        document.cookie = `wm_locale=${resolvedLocale}; path=/; max-age=31536000; SameSite=Lax`;
+        if (onNavigate) onNavigate();
+      }}
+      className={className}
+      aria-label={ariaLabel}
+    >
       {children}
     </Link>
   );

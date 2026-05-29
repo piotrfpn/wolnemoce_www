@@ -81,7 +81,10 @@ export default function LanguageSwitcher() {
               <Link
                 key={locale}
                 href={getLocalizedHref(pathname, locale, query)}
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  document.cookie = `wm_locale=${locale}; path=/; max-age=31536000; SameSite=Lax`;
+                  setIsOpen(false);
+                }}
                 className={`flex items-center justify-center rounded-lg px-3 py-2 text-xs font-extrabold no-underline transition ${
                   isActive
                     ? "bg-[#1a5f3c] text-white"
