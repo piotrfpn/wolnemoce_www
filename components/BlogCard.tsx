@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 
 export type BlogCardArticle = {
@@ -57,7 +57,10 @@ export default function BlogCard({
           </div>
         ) : null}
 
-        <Link href={`/blog/${article.slug}`} className="blog-read-more">
+        <Link
+          href={getLocalizedPath(`/blog/${article.slug}`, locale)}
+          className="blog-read-more"
+        >
           {labels.readMore} <i className="fas fa-arrow-right"></i>
         </Link>
       </div>

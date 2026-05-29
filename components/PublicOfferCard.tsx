@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getOfferImageByIndustry, getPublicOfferImageUrl } from "@/lib/offerImages";
 import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
 import { getDictionary } from "@/lib/i18n/getDictionary";
-import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 
 export type PublicOfferCompany = {
   name: string | null;
@@ -132,7 +132,7 @@ export default function PublicOfferCard({
           <div className="min-w-0">
             {company?.slug ? (
               <Link
-                href={`/firmy/${company.slug}`}
+                href={getLocalizedPath(`/firmy/${company.slug}`, locale)}
                 className="block truncate text-sm font-bold text-slate-900 transition hover:text-[#1a5f3c]"
               >
                 {companyName}
@@ -191,7 +191,7 @@ export default function PublicOfferCard({
 
           {offer.slug ? (
             <Link
-              href={`/oferty/${offer.slug}`}
+              href={getLocalizedPath(`/oferty/${offer.slug}`, locale)}
               className="inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] transition hover:text-[#0d3d26]"
             >
               {labels.details}
