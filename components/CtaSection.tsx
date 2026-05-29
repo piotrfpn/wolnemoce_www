@@ -24,6 +24,7 @@ export default function CtaSection({ locale = defaultLocale }: { locale?: Locale
 
           <div className="flex flex-wrap justify-center gap-4">
             <AddOfferLinkClient
+              locale={locale}
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-[#f59e0b] to-[#fbbf24] px-10 py-4 text-base font-bold text-white no-underline shadow-lg shadow-[#f59e0b]/30 transition hover:-translate-y-0.5 hover:shadow-xl"
             >
               {t.addOffer}

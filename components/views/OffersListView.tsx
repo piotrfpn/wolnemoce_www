@@ -256,7 +256,7 @@ export default async function OffersListView({
 
   return (
     <>
-      <Navbar />
+      <Navbar locale={locale} />
 
       <main className="bg-white">
         <section className="relative overflow-hidden bg-gradient-to-br from-[#0d3d26] via-[#1a5f3c] to-[#2d8a5e] px-6 pb-24 pt-36 text-white">
@@ -361,6 +361,7 @@ export default async function OffersListView({
                 {t.addBoxDescription}
               </p>
               <AddOfferLinkClient
+                locale={locale}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#1a5f3c]"
               >
                 {t.addOffer}
@@ -404,7 +405,7 @@ export default async function OffersListView({
                   {t.emptyDescription}
                 </p>
                 <div className="flex flex-col justify-center gap-3 sm:flex-row">
-                  <AddOfferLinkClient className="btn btn-primary">
+                  <AddOfferLinkClient locale={locale} className="btn btn-primary">
                     {t.addOffer}
                   </AddOfferLinkClient>
                   <Link href={getLocalizedPath("/oferty", locale)} className="btn btn-outline">

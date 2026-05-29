@@ -30,7 +30,7 @@ export default function AddOfferPublicView({
 
   return (
     <>
-      <Navbar />
+      <Navbar locale={locale} />
       <main>
         <PageHero
           label={t.heroLabel}

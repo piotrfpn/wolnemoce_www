@@ -14,7 +14,7 @@ export default function PricingView({
 
   return (
     <>
-      <Navbar />
+      <Navbar locale={locale} />
       <main>
         <PageHero
           label={dictionary.pricing.pageLabel}
@@ -28,4 +28,3 @@ export default function PricingView({
     </>
   );
 }
-

@@ -14,7 +14,7 @@ export default function HowItWorksView({
   const t = getDictionary(locale).howItWorksPage;
   return (
     <>
-      <Navbar />
+      <Navbar locale={locale} />
 
       <main>
         <PageHero
@@ -27,7 +27,7 @@ export default function HowItWorksView({
               <Link href={getLocalizedPath("/oferty", locale)} className="btn btn-accent">
                 {t.browseOffers} <i className="fas fa-arrow-right"></i>
               </Link>
-              <AddOfferLinkClient className="btn btn-outline bg-white text-[#1a5f3c]">
+              <AddOfferLinkClient locale={locale} className="btn btn-outline bg-white text-[#1a5f3c]">
                 {t.addOffer}
               </AddOfferLinkClient>
             </>

@@ -58,7 +58,7 @@ export default function Footer({ locale = defaultLocale }: { locale?: Locale }) 
                 </Link>
               </li>
               <li>
-                <AddOfferLinkClient className="text-sm text-white/60 no-underline transition hover:text-white">
+                <AddOfferLinkClient locale={locale} className="text-sm text-white/60 no-underline transition hover:text-white">
                   {t.addOffer}
                 </AddOfferLinkClient>
               </li>

@@ -60,7 +60,7 @@ export default async function ContactView({
 
   return (
     <>
-      <Navbar />
+      <Navbar locale={locale} />
       <main>
         <PageHero
           label={t.heroLabel}

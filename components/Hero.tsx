@@ -66,6 +66,7 @@ export default function Hero({ locale = defaultLocale }: { locale?: Locale }) {
               {t.ctaPrimary}
             </Link>
             <AddOfferLinkClient
+              locale={locale}
               className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/15 px-8 py-4 text-base font-bold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/20"
             >
               <i className="fas fa-plus"></i>

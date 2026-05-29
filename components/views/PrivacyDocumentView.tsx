@@ -34,7 +34,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
 
   return (
     <>
-      <Navbar />
+      <Navbar locale={locale} />
       <main>
         <PageHero
           label={t.label}

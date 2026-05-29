@@ -34,7 +34,7 @@ export default function LoginView({
 
   return (
     <>
-      <Navbar />
+      <Navbar locale={locale} />
       <main className="bg-slate-50 pt-[72px]">
         <section className="mx-auto flex min-h-[calc(100vh-72px)] max-w-[560px] items-center px-6 py-16">
           <LoginFormClient

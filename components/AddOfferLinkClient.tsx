@@ -4,7 +4,11 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getLocaleFromPathname, getLocalizedPath } from "@/lib/i18n/config";
+import {
+  getLocaleFromPathname,
+  getLocalizedPath,
+  type Locale,
+} from "@/lib/i18n/config";
 import { createClient } from "@/lib/supabase/client";
 
 type AddOfferLinkClientProps = {
@@ -12,6 +16,7 @@ type AddOfferLinkClientProps = {
   className?: string;
   ariaLabel?: string;
   onNavigate?: () => void;
+  locale?: Locale;
 };
 
 export default function AddOfferLinkClient({
@@ -19,10 +24,11 @@ export default function AddOfferLinkClient({
   className,
   ariaLabel,
   onNavigate,
+  locale,
 }: AddOfferLinkClientProps) {
   const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
-  const publicHref = getLocalizedPath("/dodaj-oferte", locale);
+  const resolvedLocale = locale ?? getLocaleFromPathname(pathname);
+  const publicHref = getLocalizedPath("/dodaj-oferte", resolvedLocale);
   const [href, setHref] = useState(publicHref);
 
   useEffect(() => {

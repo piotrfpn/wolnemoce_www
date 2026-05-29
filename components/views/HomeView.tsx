@@ -20,7 +20,7 @@ export default function HomeView({
 }) {
   return (
     <>
-      <Navbar />
+      <Navbar locale={locale} />
       <Hero locale={locale} />
       <SearchBar locale={locale} />
       <Categories locale={locale} />
@@ -36,4 +36,3 @@ export default function HomeView({
     </>
   );
 }
-

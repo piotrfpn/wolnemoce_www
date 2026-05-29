@@ -34,7 +34,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
 
   return (
     <>
-      <Navbar />
+      <Navbar locale={locale} />
       <main>
         <PageHero
           label={t.label}

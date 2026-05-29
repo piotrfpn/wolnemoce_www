@@ -7,15 +7,16 @@ import AddOfferLinkClient from "./AddOfferLinkClient";
 import AuthNavButton, { useCurrentUser } from "./AuthNavButton";
 import LanguageSwitcher from "./LanguageSwitcher";
 import {
+  type Locale,
   getLocaleFromPathname,
   getLocalizedPath,
   stripLocalePrefix,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 
-export default function Navbar() {
+export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
   const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
+  const locale = localeProp ?? getLocaleFromPathname(pathname);
   const normalizedPathname = stripLocalePrefix(pathname);
   const dictionary = getDictionary(locale);
   const t = dictionary.nav;
@@ -94,7 +95,7 @@ export default function Navbar() {
               {t.contact}
             </Link>
           ) : null}
-          <AddOfferLinkClient className="inline-flex items-center justify-center rounded-lg bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-5 py-2.5 text-sm font-semibold text-white no-underline shadow-lg shadow-[#1a5f3c]/25 transition hover:-translate-y-0.5 hover:shadow-xl">
+          <AddOfferLinkClient locale={locale} className="inline-flex items-center justify-center rounded-lg bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-5 py-2.5 text-sm font-semibold text-white no-underline shadow-lg shadow-[#1a5f3c]/25 transition hover:-translate-y-0.5 hover:shadow-xl">
             {t.addOffer}
           </AddOfferLinkClient>
         </div>
@@ -154,6 +155,7 @@ export default function Navbar() {
                 </Link>
               ) : null}
               <AddOfferLinkClient
+                locale={locale}
                 onNavigate={closeMenu}
                 className="inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-5 py-3 text-sm font-bold text-white no-underline shadow-lg shadow-[#1a5f3c]/25"
               >

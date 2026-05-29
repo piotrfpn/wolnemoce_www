@@ -107,7 +107,7 @@ export default async function FeaturedOffers({
               {t.emptyDescription}
             </p>
             <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-              <AddOfferLinkClient className="btn btn-primary">
+              <AddOfferLinkClient locale={locale} className="btn btn-primary">
                 {t.addOffer}
               </AddOfferLinkClient>
               <Link href={offersHref} className="btn btn-outline">
