@@ -255,6 +255,47 @@ const es: Dictionary = {
     safetyDescription: "El MVP muestra el camino objetivo: datos de empresa, certificados, alcance de capacidades y contacto claro. La automatización completa de verificación no forma parte de este sprint.",
     safetyTags: ["KRS / CEIDG", "Certificados", "Perfil de empresa", "Historial de cooperación"],
   },
+  addOfferPage: {
+    seoTitle: "Añadir oferta",
+    seoDescription:
+      "Añade una oferta de capacidad productiva disponible después de crear una cuenta de empresa en WolneMoce.pl.",
+    heroLabel: "Añadir oferta",
+    title: "Añadir oferta",
+    subtitle:
+      "Para añadir una oferta de tu capacidad productiva disponible, crea una cuenta de empresa gratuita o inicia sesión en el panel.",
+    cardTitle: "Las ofertas se añaden en el panel de empresa",
+    cardDescription:
+      "Así la oferta queda vinculada al perfil de empresa, puede pasar la verificación del administrador y después aparecer en la lista pública de ofertas.",
+    createAccount: "Crear cuenta",
+    login: "Iniciar sesión",
+    viewOffers: "Ver ofertas",
+    stepLabel: "Paso",
+    steps: [
+      {
+        title: "Crea una cuenta",
+        description:
+          "Crea una cuenta de empresa gratuita o inicia sesión en un panel existente.",
+      },
+      {
+        title: "Completa el perfil de empresa",
+        description: "Añade los datos básicos de la empresa, sectores y tipos de servicios.",
+      },
+      {
+        title: "Añade una oferta",
+        description:
+          "Describe la capacidad disponible, plazos de ejecución y pedido mínimo.",
+      },
+      {
+        title: "Espera la aprobación",
+        description: "Un administrador revisará la oferta antes de publicarla.",
+      },
+      {
+        title: "La oferta será pública",
+        description:
+          "Tras la aprobación, la oferta será visible en la lista pública de ofertas.",
+      },
+    ],
+  },
   contactPage: {
     ...en.contactPage,
     heroLabel: "Contacto",

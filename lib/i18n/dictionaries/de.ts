@@ -260,6 +260,47 @@ const de: Dictionary = {
       "Der MVP zeigt den Zielpfad: Firmendaten, Zertifikate, Leistungsumfang und klarer Kontakt. Vollautomatische Verifizierung ist nicht Teil dieses Sprints.",
     safetyTags: ["KRS / CEIDG", "Zertifikate", "Firmenprofil", "Kooperationshistorie"],
   },
+  addOfferPage: {
+    seoTitle: "Angebot hinzufügen",
+    seoDescription:
+      "Fügen Sie nach Erstellung eines Firmenkontos bei WolneMoce.pl ein Angebot für freie Produktionskapazitäten hinzu.",
+    heroLabel: "Angebot hinzufügen",
+    title: "Angebot hinzufügen",
+    subtitle:
+      "Um ein Angebot für freie Produktionskapazitäten hinzuzufügen, erstellen Sie ein kostenloses Firmenkonto oder melden Sie sich im Panel an.",
+    cardTitle: "Angebote werden im Firmenpanel hinzugefügt",
+    cardDescription:
+      "So wird das Angebot mit dem Firmenprofil verknüpft, kann durch den Administrator geprüft werden und anschließend in der öffentlichen Angebotsliste erscheinen.",
+    createAccount: "Konto erstellen",
+    login: "Anmelden",
+    viewOffers: "Angebote ansehen",
+    stepLabel: "Schritt",
+    steps: [
+      {
+        title: "Konto erstellen",
+        description:
+          "Erstellen Sie ein kostenloses Firmenkonto oder melden Sie sich in einem bestehenden Panel an.",
+      },
+      {
+        title: "Firmenprofil vervollständigen",
+        description: "Ergänzen Sie Firmendaten, Branchen und Leistungsarten.",
+      },
+      {
+        title: "Angebot hinzufügen",
+        description:
+          "Beschreiben Sie freie Kapazitäten, Lieferzeiten und Mindestbestellung.",
+      },
+      {
+        title: "Freigabe abwarten",
+        description: "Ein Administrator prüft das Angebot vor der Veröffentlichung.",
+      },
+      {
+        title: "Das Angebot wird öffentlich sichtbar",
+        description:
+          "Nach der Freigabe erscheint das Angebot in der öffentlichen Angebotsliste.",
+      },
+    ],
+  },
   contactPage: {
     ...en.contactPage,
     heroLabel: "Kontakt",

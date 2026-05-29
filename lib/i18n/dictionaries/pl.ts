@@ -277,6 +277,47 @@ const pl: Dictionary = {
       "Wersja MVP pokazuje docelową ścieżkę: dane firmy, certyfikaty, zakres możliwości i jasny kontakt. Pełna automatyzacja weryfikacji nie jest częścią tego sprintu.",
     safetyTags: ["KRS / CEIDG", "Certyfikaty", "Profil firmy", "Historia współpracy"],
   },
+  addOfferPage: {
+    seoTitle: "Dodaj ofertę",
+    seoDescription:
+      "Dodaj ofertę wolnych mocy produkcyjnych po utworzeniu konta firmy w WolneMoce.pl.",
+    heroLabel: "Dodaj ofertę",
+    title: "Dodaj ofertę",
+    subtitle:
+      "Aby dodać ofertę swoich wolnych mocy produkcyjnych, utwórz darmowe konto firmy lub zaloguj się do panelu.",
+    cardTitle: "Dodawanie ofert odbywa się w panelu firmy",
+    cardDescription:
+      "Dzięki temu oferta jest powiązana z profilem firmy, może przejść weryfikację administratora i później trafić do publicznej listy ofert.",
+    createAccount: "Utwórz konto",
+    login: "Zaloguj się",
+    viewOffers: "Zobacz oferty",
+    stepLabel: "Krok",
+    steps: [
+      {
+        title: "Załóż konto",
+        description:
+          "Utwórz darmowe konto firmowe albo zaloguj się do istniejącego panelu.",
+      },
+      {
+        title: "Uzupełnij profil firmy",
+        description: "Dodaj podstawowe dane firmy, branże oraz rodzaje usług.",
+      },
+      {
+        title: "Dodaj ofertę",
+        description:
+          "Opisz dostępne moce, terminy realizacji i minimalne zamówienie.",
+      },
+      {
+        title: "Poczekaj na zatwierdzenie",
+        description: "Administrator sprawdzi ofertę przed jej publikacją.",
+      },
+      {
+        title: "Oferta pojawi się publicznie",
+        description:
+          "Po akceptacji oferta będzie widoczna na publicznej liście ofert.",
+      },
+    ],
+  },
   contactPage: {
     heroLabel: "Kontakt",
     heroTitle: "Porozmawiajmy o wolnych mocach produkcyjnych",

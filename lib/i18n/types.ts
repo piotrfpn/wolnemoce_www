@@ -221,6 +221,23 @@ export type Dictionary = {
     safetyDescription: string;
     safetyTags: string[];
   };
+  addOfferPage: {
+    seoTitle: string;
+    seoDescription: string;
+    heroLabel: string;
+    title: string;
+    subtitle: string;
+    cardTitle: string;
+    cardDescription: string;
+    createAccount: string;
+    login: string;
+    viewOffers: string;
+    stepLabel: string;
+    steps: Array<{
+      title: string;
+      description: string;
+    }>;
+  };
   contactPage: {
     heroLabel: string;
     heroTitle: string;

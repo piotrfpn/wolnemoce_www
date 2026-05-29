@@ -264,6 +264,47 @@ const en: Dictionary = {
       "The MVP shows the target path: company data, certificates, capability scope and clear contact. Full verification automation is not part of this sprint.",
     safetyTags: ["KRS / CEIDG", "Certificates", "Company profile", "Cooperation history"],
   },
+  addOfferPage: {
+    seoTitle: "Add offer",
+    seoDescription:
+      "Add an available production capacity offer after creating a company account on WolneMoce.pl.",
+    heroLabel: "Add offer",
+    title: "Add offer",
+    subtitle:
+      "To add an offer for your available production capacity, create a free company account or log in to the panel.",
+    cardTitle: "Offers are added in the company panel",
+    cardDescription:
+      "This links the offer to the company profile, allows administrator verification and then makes it available in the public offer list.",
+    createAccount: "Create account",
+    login: "Log in",
+    viewOffers: "View offers",
+    stepLabel: "Step",
+    steps: [
+      {
+        title: "Create an account",
+        description:
+          "Create a free company account or log in to an existing panel.",
+      },
+      {
+        title: "Complete the company profile",
+        description: "Add basic company data, industries and service types.",
+      },
+      {
+        title: "Add an offer",
+        description:
+          "Describe available capacity, lead times and minimum order size.",
+      },
+      {
+        title: "Wait for approval",
+        description: "An administrator will review the offer before publication.",
+      },
+      {
+        title: "The offer goes public",
+        description:
+          "After approval, the offer will be visible on the public offer list.",
+      },
+    ],
+  },
   contactPage: {
     heroLabel: "Contact",
     heroTitle: "Let’s talk about available production capacity",

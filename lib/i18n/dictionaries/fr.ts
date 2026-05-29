@@ -255,6 +255,47 @@ const fr: Dictionary = {
     safetyDescription: "Le MVP montre le parcours cible : données d’entreprise, certificats, périmètre des capacités et contact clair. L’automatisation complète de la vérification n’est pas dans ce sprint.",
     safetyTags: ["KRS / CEIDG", "Certificats", "Profil d’entreprise", "Historique de coopération"],
   },
+  addOfferPage: {
+    seoTitle: "Ajouter une offre",
+    seoDescription:
+      "Ajoutez une offre de capacités de production disponibles après avoir créé un compte entreprise sur WolneMoce.pl.",
+    heroLabel: "Ajouter une offre",
+    title: "Ajouter une offre",
+    subtitle:
+      "Pour ajouter une offre présentant vos capacités de production disponibles, créez un compte entreprise gratuit ou connectez-vous au panel.",
+    cardTitle: "Les offres sont ajoutées dans le panel entreprise",
+    cardDescription:
+      "L'offre est ainsi liée au profil de l'entreprise, peut être vérifiée par l'administrateur puis publiée dans la liste publique des offres.",
+    createAccount: "Créer un compte",
+    login: "Se connecter",
+    viewOffers: "Voir les offres",
+    stepLabel: "Étape",
+    steps: [
+      {
+        title: "Créez un compte",
+        description:
+          "Créez un compte entreprise gratuit ou connectez-vous à un panel existant.",
+      },
+      {
+        title: "Complétez le profil de l'entreprise",
+        description: "Ajoutez les données de base de l'entreprise, ses secteurs et types de services.",
+      },
+      {
+        title: "Ajoutez une offre",
+        description:
+          "Décrivez les capacités disponibles, les délais de réalisation et la commande minimale.",
+      },
+      {
+        title: "Attendez l'approbation",
+        description: "Un administrateur vérifiera l'offre avant sa publication.",
+      },
+      {
+        title: "L'offre devient publique",
+        description:
+          "Après approbation, l'offre sera visible dans la liste publique des offres.",
+      },
+    ],
+  },
   contactPage: {
     ...en.contactPage,
     heroLabel: "Contact",
