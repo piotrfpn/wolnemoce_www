@@ -166,9 +166,9 @@ export default async function AdminPage() {
   return (
     <>
       <PanelNavbar />
-      <main className="bg-slate-50 pt-[72px]">
-        <section className="mx-auto max-w-[1400px] px-6 py-16">
-          <div className="mb-8 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+      <main className="bg-slate-50 pt-[72px] min-h-screen">
+        <section className="mx-auto max-w-[1400px] px-6 py-12 md:py-16">
+          <div className="mb-10 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <div className="flex min-w-0 flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div className="min-w-0">
                 <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
@@ -186,69 +186,117 @@ export default async function AdminPage() {
             </div>
           </div>
 
-          <div className="mb-8 grid min-w-0 gap-5 md:grid-cols-3 lg:grid-cols-5">
-            <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
-                <i className="fas fa-building-circle-check"></i>
-              </div>
-              <p className="text-sm font-bold uppercase tracking-wide text-slate-500">
-                Firmy do weryfikacji
-              </p>
-              <p className="mt-2 text-3xl font-extrabold text-slate-900">
-                {pendingCompanies.length}
-              </p>
+          <section className="mb-10">
+            <div className="mb-5">
+              <h2 className="text-2xl font-extrabold text-slate-900">Do obsługi</h2>
+              <p className="mt-2 text-sm text-slate-500">Sprawy wymagające decyzji administratora.</p>
             </div>
-
-            <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
-                <i className="fas fa-clipboard-check"></i>
-              </div>
-              <p className="text-sm font-bold uppercase tracking-wide text-slate-500">
-                Oferty pending
-              </p>
-              <p className="mt-2 text-3xl font-extrabold text-slate-900">
-                {pendingOffers.length}
-              </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {[
+                {
+                  title: "Firmy do weryfikacji",
+                  count: pendingCompanies.length,
+                  icon: "fa-building-circle-check",
+                  href: "#pending-companies",
+                  alert: pendingCompanies.length > 0,
+                },
+                {
+                  title: "Oferty pending",
+                  count: pendingOffers.length,
+                  icon: "fa-clipboard-check",
+                  href: "#pending-offers",
+                  alert: pendingOffers.length > 0,
+                },
+                {
+                  title: "Certyfikaty do weryfikacji",
+                  count: pendingCertificatesCount,
+                  icon: "fa-certificate",
+                  href: "/admin/certyfikaty?status=declared",
+                  alert: pendingCertificatesCount > 0,
+                },
+                {
+                  title: "Zgłoszenia usług pending",
+                  count: pendingServiceRequests.length,
+                  icon: "fa-screwdriver-wrench",
+                  href: "#pending-services",
+                  alert: pendingServiceRequests.length > 0,
+                },
+                {
+                  title: "Nowe wiadomości",
+                  count: newContactMessagesCount,
+                  icon: "fa-envelope-open-text",
+                  href: "/admin/contact-messages",
+                  alert: newContactMessagesCount > 0,
+                },
+              ].map((stat, i) => (
+                <Link
+                  key={i}
+                  href={stat.href}
+                  className={`group flex min-w-0 flex-col rounded-[20px] border p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
+                    stat.alert
+                      ? "border-amber-200 bg-amber-50/30 hover:border-amber-300"
+                      : "border-slate-200 bg-white hover:border-[#1a5f3c]/30"
+                  }`}
+                >
+                  <div className="mb-4 flex items-center justify-between">
+                    <div
+                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition ${
+                        stat.alert
+                          ? "bg-amber-100 text-amber-700 group-hover:bg-amber-200"
+                          : "bg-[#1a5f3c]/10 text-[#1a5f3c] group-hover:bg-[#1a5f3c]/20"
+                      }`}
+                    >
+                      <i className={`fas ${stat.icon}`}></i>
+                    </div>
+                    {stat.alert && (
+                      <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-amber-800">
+                        <span className="relative flex h-2 w-2">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
+                          <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500"></span>
+                        </span>
+                        Wymaga
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[11px] font-bold uppercase tracking-wide text-slate-500">
+                    {stat.title}
+                  </p>
+                  <p className="mt-1 text-3xl font-extrabold text-slate-900">
+                    {stat.count}
+                  </p>
+                </Link>
+              ))}
             </div>
+          </section>
 
-            <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
-                <i className="fas fa-screwdriver-wrench"></i>
-              </div>
-              <p className="text-sm font-bold uppercase tracking-wide text-slate-500">
-                Zgłoszenia usług pending
-              </p>
-              <p className="mt-2 text-3xl font-extrabold text-slate-900">
-                {pendingServiceRequests.length}
-              </p>
+          <section className="mb-10">
+            <div className="mb-5">
+              <h2 className="text-2xl font-extrabold text-slate-900">Szybkie akcje</h2>
+              <p className="mt-2 text-sm text-slate-500">Najczęściej używane sekcje panelu administracyjnego.</p>
             </div>
-
-            <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
-                <i className="fas fa-envelope-open-text"></i>
-              </div>
-              <p className="text-sm font-bold uppercase tracking-wide text-slate-500">
-                Nowe wiadomości
-              </p>
-              <p className="mt-2 text-3xl font-extrabold text-slate-900">
-                {newContactMessagesCount}
-              </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {[
+                { title: "Przejdź do firm", icon: "fa-building", href: "/admin/firmy" },
+                { title: "Przejdź do ofert", icon: "fa-list-check", href: "/admin/oferty" },
+                { title: "Przejdź do certyfikatów", icon: "fa-certificate", href: "/admin/certyfikaty" },
+                { title: "Przejdź do wiadomości", icon: "fa-envelope", href: "/admin/contact-messages" },
+                { title: "Przejdź do bloga", icon: "fa-newspaper", href: "/admin/blog" },
+              ].map((action, i) => (
+                <Link
+                  key={i}
+                  href={action.href}
+                  className="group flex items-center gap-4 rounded-[20px] border border-slate-200 bg-white p-4 shadow-sm transition hover:border-[#1a5f3c] hover:shadow-md"
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-500 transition group-hover:bg-[#1a5f3c]/10 group-hover:text-[#1a5f3c]">
+                    <i className={`fas ${action.icon}`}></i>
+                  </div>
+                  <span className="text-sm font-bold text-slate-700 transition group-hover:text-[#1a5f3c]">{action.title}</span>
+                </Link>
+              ))}
             </div>
+          </section>
 
-            <Link href="/admin/certyfikaty?status=declared" className="block min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#1a5f3c] hover:shadow-md">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
-                <i className="fas fa-certificate"></i>
-              </div>
-              <p className="text-sm font-bold uppercase tracking-wide text-slate-500">
-                Certyfikaty pending
-              </p>
-              <p className="mt-2 text-3xl font-extrabold text-slate-900">
-                {pendingCertificatesCount}
-              </p>
-            </Link>
-          </div>
-
-          <section className="mb-8 min-w-0 rounded-[24px] border border-amber-200 bg-amber-50 p-5 shadow-sm md:p-6">
+          <section className="mb-10 min-w-0 rounded-[24px] border border-amber-200 bg-amber-50 p-5 shadow-sm md:p-6">
             <div className="flex min-w-0 flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
               <div className="min-w-0">
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white text-amber-700">
@@ -321,112 +369,6 @@ export default async function AdminPage() {
             ) : null}
           </section>
 
-          <section className="mb-8 min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
-            <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-center md:justify-between">
-              <div className="min-w-0">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
-                  <i className="fas fa-list-check"></i>
-                </div>
-                <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-                  Oferty
-                </p>
-                <h2 className="text-2xl font-extrabold text-slate-900">
-                  Zarządzanie ofertami
-                </h2>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-                  Przeglądaj wszystkie oferty, zmieniaj statusy i ustawiaj ręczne
-                  wyróżnienia.
-                </p>
-              </div>
-              <Link
-                href="/admin/oferty"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline transition hover:bg-[#1a5f3c] hover:text-white"
-              >
-                Zarządzaj ofertami
-                <i className="fas fa-arrow-right text-xs"></i>
-              </Link>
-            </div>
-          </section>
-
-          <section className="mb-8 min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
-            <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-center md:justify-between">
-              <div className="min-w-0">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
-                  <i className="fas fa-certificate"></i>
-                </div>
-                <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-                  Certyfikaty
-                </p>
-                <h2 className="text-2xl font-extrabold text-slate-900">
-                  Certyfikaty firm
-                </h2>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-                  Przeglądaj i moderuj certyfikaty dodane przez firmy.
-                </p>
-              </div>
-              <Link
-                href="/admin/certyfikaty"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline transition hover:bg-[#1a5f3c] hover:text-white"
-              >
-                Zarządzaj certyfikatami
-                <i className="fas fa-arrow-right text-xs"></i>
-              </Link>
-            </div>
-          </section>
-
-          <section className="mb-8 min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
-            <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-center md:justify-between">
-              <div className="min-w-0">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
-                  <i className="fas fa-envelope-open-text"></i>
-                </div>
-                <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-                  Kontakt
-                </p>
-                <h2 className="text-2xl font-extrabold text-slate-900">
-                  Wiadomości z formularza
-                </h2>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-                  Przeglądaj wiadomości zapisane z formularza kontaktowego i
-                  oznaczaj je jako przeczytane albo obsłużone.
-                </p>
-              </div>
-              <Link
-                href="/admin/contact-messages"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline transition hover:bg-[#1a5f3c] hover:text-white"
-              >
-                Otwórz inbox
-                <i className="fas fa-arrow-right text-xs"></i>
-              </Link>
-            </div>
-          </section>
-
-          <section className="mb-8 min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
-            <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-center md:justify-between">
-              <div className="min-w-0">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
-                  <i className="fas fa-newspaper"></i>
-                </div>
-                <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-                  Blog
-                </p>
-                <h2 className="text-2xl font-extrabold text-slate-900">
-                  Zarządzanie blogiem
-                </h2>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-                  Zarządzaj artykułami, poradnikami i aktualnościami.
-                </p>
-              </div>
-              <Link
-                href="/admin/blog"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline transition hover:bg-[#1a5f3c] hover:text-white"
-              >
-                Zarządzaj blogiem
-                <i className="fas fa-arrow-right text-xs"></i>
-              </Link>
-            </div>
-          </section>
-
           {companiesResult.error ? (
             <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               Nie udało się pobrać firm: {companiesResult.error.message}
@@ -446,33 +388,26 @@ export default async function AdminPage() {
             </div>
           ) : null}
 
-          <section className="mb-8 min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
-            <div className="mb-6">
-              <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-                Weryfikacja firm
-              </p>
-              <h2 className="text-2xl font-extrabold text-slate-900">
-                Firmy oczekujące na weryfikację
-              </h2>
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                Oznaczenie firmy jako zweryfikowanej pokaże badge w panelu
-                użytkownika, na kartach ofert i profilu firmy.
-              </p>
-              <div className="mt-4">
-                <Link
-                  href="/admin/firmy"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline transition hover:bg-[#1a5f3c] hover:text-white"
-                >
-                  Zarządzaj firmami
-                  <i className="fas fa-arrow-right text-xs"></i>
-                </Link>
+          <div id="pending-companies" className="mb-8 scroll-mt-32">
+            <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+              <div className="mb-6">
+                <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
+                  Weryfikacja firm
+                </p>
+                <h2 className="text-2xl font-extrabold text-slate-900">
+                  Firmy oczekujące na weryfikację
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  Oznaczenie firmy jako zweryfikowanej pokaże badge w panelu
+                  użytkownika, na kartach ofert i profilu firmy.
+                </p>
               </div>
-            </div>
-            <PendingCompaniesClient companies={pendingCompanies} />
-          </section>
+              <PendingCompaniesClient companies={pendingCompanies} />
+            </section>
+          </div>
 
           <div className="grid min-w-0 gap-8 xl:grid-cols-[1.2fr_0.8fr]">
-            <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+            <section id="pending-offers" className="min-w-0 scroll-mt-32 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
               <div className="mb-6">
                 <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
                   Moderacja ofert
@@ -488,7 +423,7 @@ export default async function AdminPage() {
               <PendingOffersClient offers={pendingOffersWithImages} />
             </section>
 
-            <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+            <section id="pending-services" className="min-w-0 scroll-mt-32 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
               <div className="mb-6">
                 <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
                   Słownik usług
