@@ -187,6 +187,9 @@ export type Dictionary = {
     certificatesAll: string;
     certificatesYes: string;
     certificatesNo: string;
+    companyVerifiedBadge: string;
+    declaredCertificatesBadge: string;
+    verifiedCertificateBadge: string;
     sort: string;
     sortAz: string;
     sortNewest: string;

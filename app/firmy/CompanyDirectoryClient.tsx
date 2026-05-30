@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
+
 import { defaultLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 
@@ -21,6 +21,7 @@ export type DirectoryCompany = {
   is_verified: boolean | null;
   created_at: string | null;
   has_public_certificates?: boolean;
+  has_admin_verified_certificate?: boolean;
 };
 
 type CertificatesFilter = "all" | "yes" | "no";
@@ -87,7 +88,6 @@ export default function CompanyDirectoryClient({
   const router = useRouter();
   const pathname = usePathname();
   const labels = getDictionary(locale).companiesList;
-  const badgeLabels = getDictionary(locale).offerCard;
   const [query, setQuery] = useState("");
   const [voivodeship, setVoivodeship] = useState("");
   const [city, setCity] = useState("");
@@ -367,13 +367,23 @@ export default function CompanyDirectoryClient({
                   </div>
                   <div className="min-w-0">
                     <div className="mb-2 flex flex-wrap gap-2">
-                      <VerifiedCompanyBadge
-                        isVerified={company.is_verified}
-                        verifiedLabel={badgeLabels.verifiedCompanyLabel}
-                        unverifiedLabel={badgeLabels.publicProfileLabel}
-                        verifiedTitle={badgeLabels.verifiedTitle}
-                        unverifiedTitle={badgeLabels.publicProfileTitle}
-                      />
+                      {company.is_verified && (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 border border-emerald-100">
+                          <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
+                          {labels.companyVerifiedBadge}
+                        </span>
+                      )}
+                      {company.has_admin_verified_certificate ? (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 border border-emerald-100">
+                          <i className="fas fa-check-circle text-[10px]"></i>
+                          {labels.verifiedCertificateBadge}
+                        </span>
+                      ) : company.has_public_certificates ? (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-2.5 py-1 text-xs font-bold text-slate-600 border border-slate-200">
+                          <i className="fas fa-file-contract text-[10px] text-slate-400"></i>
+                          {labels.declaredCertificatesBadge}
+                        </span>
+                      ) : null}
                     </div>
                     <h3 className="break-words text-xl font-extrabold text-slate-900">
                       {company.name ?? labels.companyFallback}

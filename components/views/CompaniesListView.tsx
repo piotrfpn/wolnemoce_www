@@ -75,9 +75,12 @@ async function getVerifiedCompanies() {
     return [];
   }
 
+  const displayedCompanyIds = companies.map((company) => company.id);
+
   const { data: certificatesData, error: certificatesError } = await supabase
     .from("company_certificates")
-    .select("company_id")
+    .select("company_id, verification_status")
+    .in("company_id", displayedCompanyIds)
     .eq("visibility", "public")
     .neq("verification_status", "rejected");
 
@@ -86,19 +89,28 @@ async function getVerifiedCompanies() {
     return companies.map((company) => ({
       ...company,
       has_public_certificates: false,
+      has_admin_verified_certificate: false,
     }));
   }
 
-  const certifiedCompanyIds = new Set(
-    (certificatesData ?? [])
-      .map((certificate) => certificate.company_id)
-      .filter(Boolean)
-  );
+  const certificateMap = new Map<string, { hasPublicCertificates: boolean; hasAdminVerifiedCertificate: boolean }>();
 
-  return companies.map((company) => ({
-    ...company,
-    has_public_certificates: certifiedCompanyIds.has(company.id),
-  }));
+  (certificatesData ?? []).forEach((cert) => {
+    const existing = certificateMap.get(cert.company_id) || { hasPublicCertificates: true, hasAdminVerifiedCertificate: false };
+    if (cert.verification_status === "admin_verified") {
+      existing.hasAdminVerifiedCertificate = true;
+    }
+    certificateMap.set(cert.company_id, existing);
+  });
+
+  return companies.map((company) => {
+    const certInfo = certificateMap.get(company.id);
+    return {
+      ...company,
+      has_public_certificates: !!certInfo?.hasPublicCertificates,
+      has_admin_verified_certificate: !!certInfo?.hasAdminVerifiedCertificate,
+    };
+  });
 }
 
 export default async function CompaniesListView({
