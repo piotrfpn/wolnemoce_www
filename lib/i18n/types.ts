@@ -1,4 +1,39 @@
 export type Dictionary = {
+  panelInquiries: {
+    title: string;
+    subtitle: string;
+    filtersAll: string;
+    filtersUnread: string;
+    filtersRead: string;
+    filtersArchived: string;
+    sortNewest: string;
+    sortOldest: string;
+    statusUnread: string;
+    statusRead: string;
+    statusArchived: string;
+    viewOffer: string;
+    archive: string;
+    archived: string;
+    reporterData: string;
+    buyerCompany: string;
+    email: string;
+    phone: string;
+    quantityOrScope: string;
+    deliveryTerm: string;
+    budget: string;
+    industryAndService: string;
+    message: string;
+    replyByEmail: string;
+    copyEmail: string;
+    copyPhone: string;
+    call: string;
+    copied: string;
+    copyFailed: string;
+    noEmail: string;
+    noPhone: string;
+    emptyTitle: string;
+    emptyDescription: string;
+  };
   common: {
     localeName: string;
     legalNotice: string;

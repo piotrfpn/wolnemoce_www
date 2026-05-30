@@ -19,17 +19,57 @@ export default function InquiryActionsClient({
   status,
   recipientReadAt,
   attachments = [],
+  buyerEmail,
+  buyerPhone,
+  offerTitle,
+  actionLabels,
 }: {
   inquiryId: string;
   status: string | null;
   recipientReadAt?: string | null;
   attachments?: InquiryAttachment[];
+  buyerEmail?: string | null;
+  buyerPhone?: string | null;
+  offerTitle?: string | null;
+  actionLabels: {
+    replyByEmail: string;
+    copyEmail: string;
+    copyPhone: string;
+    call: string;
+    copied: string;
+    copyFailed: string;
+    statusRead: string;
+    archive: string;
+    noEmail: string;
+    noPhone: string;
+  };
 }) {
   const [isPending, startTransition] = useTransition();
   const [downloadPendingId, setDownloadPendingId] = useState("");
   const [error, setError] = useState("");
+  const [copyStatus, setCopyStatus] = useState<string>("");
+
   const isUnread = !recipientReadAt && status !== "archived";
   const hasActions = status !== "archived";
+
+  async function handleCopy(value: string, type: string) {
+    setError("");
+    if (!navigator.clipboard) {
+      setError(actionLabels.copyFailed);
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopyStatus(type);
+      setTimeout(() => setCopyStatus(""), 2000);
+    } catch (e) {
+      setError(actionLabels.copyFailed);
+    }
+  }
+
+  const telHrefValue = buyerPhone ? buyerPhone.replace(/[\s()-]/g, "") : "";
+  const mailSubject = encodeURIComponent(`${actionLabels.replyByEmail}: ${offerTitle || ""}`);
+  const mailHref = `mailto:${buyerEmail}?subject=${mailSubject}`;
 
   function runAction(action: (id: string) => Promise<void>) {
     setError("");
@@ -87,7 +127,7 @@ export default function InquiryActionsClient({
       ) : null}
 
       {hasActions ? (
-        <div className="flex flex-col gap-3 sm:flex-row">
+        <div className="flex flex-wrap gap-2 sm:gap-3">
           {isUnread ? (
             <button
               type="button"
@@ -96,18 +136,58 @@ export default function InquiryActionsClient({
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#1a5f3c] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#0d3d26] disabled:cursor-not-allowed disabled:opacity-60"
             >
               <i className="fas fa-envelope-open"></i>
-              Oznacz jako przeczytane
+              {actionLabels.statusRead}
             </button>
+          ) : null}
+
+          {buyerEmail ? (
+            <>
+              <a
+                href={mailHref}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white"
+              >
+                <i className="fas fa-reply"></i>
+                {actionLabels.replyByEmail}
+              </a>
+              <button
+                type="button"
+                onClick={() => handleCopy(buyerEmail, "email")}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+              >
+                <i className={copyStatus === "email" ? "fas fa-check text-[#1a5f3c]" : "far fa-copy"}></i>
+                {copyStatus === "email" ? actionLabels.copied : actionLabels.copyEmail}
+              </button>
+            </>
+          ) : null}
+
+          {buyerPhone ? (
+            <>
+              <a
+                href={`tel:${telHrefValue}`}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-[#1a5f3c] hover:text-[#1a5f3c]"
+              >
+                <i className="fas fa-phone"></i>
+                {actionLabels.call}
+              </a>
+              <button
+                type="button"
+                onClick={() => handleCopy(buyerPhone, "phone")}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+              >
+                <i className={copyStatus === "phone" ? "fas fa-check text-[#1a5f3c]" : "far fa-copy"}></i>
+                {copyStatus === "phone" ? actionLabels.copied : actionLabels.copyPhone}
+              </button>
+            </>
           ) : null}
 
           <button
             type="button"
             disabled={isPending}
             onClick={() => runAction(archiveInquiry)}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-[#1a5f3c] hover:text-[#1a5f3c] disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-red-600 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <i className="fas fa-box-archive"></i>
-            Archiwizuj
+            {actionLabels.archive}
           </button>
         </div>
       ) : null}

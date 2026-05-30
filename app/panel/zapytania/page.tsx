@@ -9,6 +9,7 @@ import InquiryActionsClient, {
 } from "./InquiryActionsClient";
 
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { getPanelLocale } from "@/lib/i18n/panelLocale";
 
 export const metadata: Metadata = {
   title: "Zapytania ofertowe",
@@ -58,16 +59,16 @@ function formatDate(value: string | null) {
   }).format(new Date(value));
 }
 
-function getStatusLabel(inquiry: Pick<CompanyInquiry, "recipient_read_at" | "status">) {
+function getStatusLabel(inquiry: Pick<CompanyInquiry, "recipient_read_at" | "status">, t: any) {
   if (inquiry.status === "archived") {
-    return "Zarchiwizowane";
+    return t.statusArchived;
   }
 
   if (isUnreadInquiry(inquiry)) {
-    return "Nieprzeczytane";
+    return t.statusUnread;
   }
 
-  return "Przeczytane";
+  return t.statusRead;
 }
 
 function isUnreadInquiry(inquiry: Pick<CompanyInquiry, "recipient_read_at" | "status">) {
@@ -110,15 +111,15 @@ function buildInquiriesHref(params: { read?: string; sort?: string }) {
 }
 
 const readFilters = [
-  { label: "Wszystkie", value: "all" },
-  { label: "Nieprzeczytane", value: "unread" },
-  { label: "Przeczytane", value: "read" },
-  { label: "Zarchiwizowane", value: "archived" },
+  { label: "filtersAll", value: "all" },
+  { label: "filtersUnread", value: "unread" },
+  { label: "filtersRead", value: "read" },
+  { label: "filtersArchived", value: "archived" },
 ];
 
 const sortOptions = [
-  { label: "Najnowsze", value: "newest" },
-  { label: "Najstarsze", value: "oldest" },
+  { label: "sortNewest", value: "newest" },
+  { label: "sortOldest", value: "oldest" },
 ];
 
 export default async function PanelInquiriesPage({
@@ -129,8 +130,9 @@ export default async function PanelInquiriesPage({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const dictionary = getDictionary("pl");
-  const t = dictionary.panel.inquiries;
+  const locale = getPanelLocale();
+  const dictionary = getDictionary(locale);
+  const t = dictionary.panelInquiries;
   const tc = dictionary.panel.common;
 
   if (!user) {
@@ -243,8 +245,8 @@ export default async function PanelInquiriesPage({
             </p>
             <div className="mt-4 inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700">
               {unreadCount > 0
-                ? `${unreadCount} ${t.unread.toLowerCase()}`
-                : "Brak nieprzeczytanych"}
+                ? `${unreadCount} ${t.statusUnread.toLowerCase()}`
+                : t.filtersRead}
             </div>
             <Link href="/panel" className="mt-5 inline-flex text-sm font-bold text-[#1a5f3c]">
               {tc.back}
@@ -271,7 +273,7 @@ export default async function PanelInquiriesPage({
                           : "bg-slate-100 text-slate-600 hover:bg-[#1a5f3c]/10 hover:text-[#1a5f3c]"
                       }`}
                     >
-                      {filter.label}
+                      {t[filter.label as keyof typeof t]}
                     </Link>
                   ))}
                 </div>
@@ -295,7 +297,7 @@ export default async function PanelInquiriesPage({
                           : "bg-slate-100 text-slate-600 hover:bg-[#1a5f3c]/10 hover:text-[#1a5f3c]"
                       }`}
                     >
-                      {option.label}
+                      {t[option.label as keyof typeof t]}
                     </Link>
                   ))}
                 </div>
@@ -322,21 +324,21 @@ export default async function PanelInquiriesPage({
                             inquiry
                           )}`}
                         >
-                          {getStatusLabel(inquiry)}
+                          {getStatusLabel(inquiry, t)}
                         </span>
                         <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
                           {formatDate(inquiry.created_at)}
                         </span>
                       </div>
                       <h2 className="break-words text-xl font-extrabold text-slate-900">
-                        {inquiry.offers?.title ?? "Zapytanie ofertowe"}
+                        {inquiry.offers?.title ?? t.title}
                       </h2>
                       {inquiry.offers?.slug && inquiry.offers.status === "active" ? (
                         <Link
                           href={`/oferty/${inquiry.offers.slug}`}
                           className="mt-2 inline-flex text-sm font-bold text-[#1a5f3c]"
                         >
-                          Zobacz ofertę
+                          {t.viewOffer}
                         </Link>
                       ) : null}
                     </div>
@@ -345,19 +347,34 @@ export default async function PanelInquiriesPage({
                       status={inquiry.status}
                       recipientReadAt={inquiry.recipient_read_at}
                       attachments={inquiry.attachments}
+                      buyerEmail={inquiry.buyer_email}
+                      buyerPhone={inquiry.buyer_phone}
+                      offerTitle={inquiry.offers?.title}
+                      actionLabels={{
+                        replyByEmail: t.replyByEmail,
+                        copyEmail: t.copyEmail,
+                        copyPhone: t.copyPhone,
+                        call: t.call,
+                        copied: t.copied,
+                        copyFailed: t.copyFailed,
+                        statusRead: t.statusRead,
+                        archive: t.archive,
+                        noEmail: t.noEmail,
+                        noPhone: t.noPhone,
+                      }}
                     />
                   </div>
 
                   <div className="mt-6 grid min-w-0 gap-4 md:grid-cols-2">
                     {[
-                      [t.buyerData, inquiry.buyer_name],
-                      ["Firma kupującego", inquiry.buyer_company],
-                      ["Email", inquiry.buyer_email],
-                      ["Telefon", inquiry.buyer_phone],
-                      ["Ilość / zakres", inquiry.quantity_scope],
-                      ["Termin realizacji", inquiry.expected_deadline],
-                      ["Budżet", inquiry.budget],
-                      ["Branża / usługa", `${inquiry.branch ?? "-"} / ${inquiry.service_type ?? "-"}`],
+                      [t.reporterData, inquiry.buyer_name],
+                      [t.buyerCompany, inquiry.buyer_company],
+                      [t.email, inquiry.buyer_email],
+                      [t.phone, inquiry.buyer_phone],
+                      [t.quantityOrScope, inquiry.quantity_scope],
+                      [t.deliveryTerm, inquiry.expected_deadline],
+                      [t.budget, inquiry.budget],
+                      [t.industryAndService, `${inquiry.branch ?? "-"} / ${inquiry.service_type ?? "-"}`],
                     ].map(([label, value]) => (
                       <div
                         key={label}
@@ -367,7 +384,7 @@ export default async function PanelInquiriesPage({
                           {label}
                         </p>
                         <p className="break-words text-sm font-bold text-slate-900">
-                          {value || "Brak"}
+                          {value || "-"}
                         </p>
                       </div>
                     ))}
@@ -390,10 +407,10 @@ export default async function PanelInquiriesPage({
                 <i className="fas fa-inbox text-2xl"></i>
               </div>
               <h2 className="text-xl font-extrabold text-slate-900">
-                {t.noInquiries}
+                {t.emptyTitle}
               </h2>
               <p className="mt-2 text-sm leading-6 text-slate-500">
-                {tc.emptyState}
+                {t.emptyDescription}
               </p>
             </div>
           )}
