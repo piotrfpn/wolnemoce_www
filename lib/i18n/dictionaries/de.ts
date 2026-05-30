@@ -927,6 +927,7 @@ const de: Dictionary = {
       },
     },
     profile: {
+      ...en.panel.profile,
       title: "Firmenprofil",
       subtitle: "Vervollständigen Sie die Firmendaten, die für Kunden sichtbar sind.",
       companyData: "Firmendaten",

@@ -911,6 +911,7 @@ const es: Dictionary = {
       },
     },
     profile: {
+      ...en.panel.profile,
       title: "Perfil de la empresa",
       subtitle: "Complete los datos de su empresa visibles para los clientes.",
       companyData: "Datos de la empresa",

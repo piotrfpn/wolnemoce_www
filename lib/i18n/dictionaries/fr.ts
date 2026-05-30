@@ -911,6 +911,7 @@ const fr: Dictionary = {
       },
     },
     profile: {
+      ...en.panel.profile,
       title: "Profil de l'entreprise",
       subtitle: "Complétez les détails de l'entreprise utilisés dans les offres et les demandes.",
       companyData: "Données de l'entreprise",

@@ -5,6 +5,8 @@ import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 import type { Database } from "@/lib/database.types";
 import { createClient } from "@/lib/supabase/client";
 
+import type { PanelProfileDictionary } from "@/lib/i18n/types";
+
 type CompanyCertificate =
   Database["public"]["Tables"]["company_certificates"]["Row"];
 
@@ -13,6 +15,7 @@ type CertificateVisibility = "public" | "private";
 type CompanyCertificatesSectionProps = {
   companyId: string;
   initialCertificates: CompanyCertificate[];
+  dict: PanelProfileDictionary;
 };
 
 const publicBucket = "company-certificates-public";
@@ -46,19 +49,19 @@ function getSafeFileName(fileName: string) {
   return extension ? `${safeBaseName}.${extension}` : safeBaseName;
 }
 
-function validateCertificateFile(file: File) {
+function validateCertificateFile(file: File, dict: PanelProfileDictionary) {
   const extension = getFileExtension(file.name);
 
   if (file.size > maxCertificateFileSize) {
-    return "Plik certyfikatu może mieć maksymalnie 5 MB.";
+    return dict.certificateFileTooLarge;
   }
 
   if (!allowedMimeTypes.has(file.type)) {
-    return "Dozwolone formaty pliku to PDF, JPG i PNG.";
+    return dict.certificateInvalidFormat;
   }
 
   if (!allowedExtensions.has(extension)) {
-    return "Dozwolone rozszerzenia pliku to .pdf, .jpg, .jpeg i .png.";
+    return dict.certificateInvalidExtension;
   }
 
   return "";
@@ -69,9 +72,9 @@ function normalizeOptionalValue(value: string) {
   return trimmed === "" ? null : trimmed;
 }
 
-function formatDate(value: string | null) {
+function formatDate(value: string | null, notSpecifiedLabel: string) {
   if (!value) {
-    return "Nie podano";
+    return notSpecifiedLabel;
   }
 
   return new Intl.DateTimeFormat("pl-PL").format(new Date(value));
@@ -122,6 +125,7 @@ function triggerDownload(url: string, fileName: string | null) {
 export default function CompanyCertificatesSection({
   companyId,
   initialCertificates,
+  dict,
 }: CompanyCertificatesSectionProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -157,7 +161,7 @@ export default function CompanyCertificatesSection({
     setError("");
 
     if (nextFile) {
-      const validationError = validateCertificateFile(nextFile);
+      const validationError = validateCertificateFile(nextFile, dict);
 
       if (validationError) {
         setFile(null);
@@ -178,12 +182,12 @@ export default function CompanyCertificatesSection({
     const trimmedName = name.trim();
 
     if (!trimmedName) {
-      setError("Podaj nazwę certyfikatu.");
+      setError(dict.certificateNameRequired);
       return;
     }
 
     if (file) {
-      const validationError = validateCertificateFile(file);
+      const validationError = validateCertificateFile(file, dict);
 
       if (validationError) {
         setError(validationError);
@@ -266,7 +270,7 @@ export default function CompanyCertificatesSection({
 
     setCertificates((current) => [data as CompanyCertificate, ...current]);
     resetForm();
-    setMessage("Certyfikat został dodany.");
+    setMessage(dict.certificateAddedSuccess);
     setIsSubmitting(false);
     router.refresh();
   }
@@ -275,7 +279,7 @@ export default function CompanyCertificatesSection({
     setError("");
     setMessage("");
 
-    const confirmed = window.confirm("Czy na pewno usunąć certyfikat?");
+    const confirmed = window.confirm(dict.certificateDeleteConfirm);
     if (!confirmed) {
       return;
     }
@@ -312,7 +316,7 @@ export default function CompanyCertificatesSection({
     setCertificates((current) =>
       current.filter((item) => item.id !== certificate.id)
     );
-    setMessage("Certyfikat został usunięty.");
+    setMessage(dict.certificateDeletedSuccess);
     setBusyCertificateId(null);
     router.refresh();
   }
@@ -322,7 +326,7 @@ export default function CompanyCertificatesSection({
     setMessage("");
 
     if (!certificate.file_bucket || !certificate.file_path) {
-      setError("Ten certyfikat nie ma pliku do pobrania.");
+      setError(dict.certificateNoFileToDownload);
       return;
     }
 
@@ -349,7 +353,7 @@ export default function CompanyCertificatesSection({
       .createSignedUrl(certificate.file_path, 60);
 
     if (signedUrlError || !data?.signedUrl) {
-      setError(signedUrlError?.message || "Nie udało się wygenerować linku pobierania.");
+      setError(signedUrlError?.message || dict.certificateDownloadError);
       setBusyCertificateId(null);
       return;
     }
@@ -362,15 +366,13 @@ export default function CompanyCertificatesSection({
     <section className="mt-8 min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
       <div className="mb-6">
         <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-          Certyfikaty firmy
+          {dict.certificatesTitle}
         </p>
         <h2 className="text-2xl font-extrabold text-slate-900">
-          Zarządzanie certyfikatami
+          {dict.certificatesSubtitle}
         </h2>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
-          Dodaj certyfikaty jakości, zgodności lub branżowe. Certyfikaty
-          publiczne będą mogły być pokazane w profilu firmy po kolejnym etapie
-          wdrożenia.
+          {dict.certificatesDescription}
         </p>
       </div>
 
@@ -389,7 +391,7 @@ export default function CompanyCertificatesSection({
       <form onSubmit={handleSubmit} className="grid min-w-0 gap-4 md:grid-cols-2">
         <label className="block min-w-0">
           <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-            Nazwa certyfikatu
+            {dict.certificateNameLabel}
           </span>
           <input
             value={name}
@@ -401,7 +403,7 @@ export default function CompanyCertificatesSection({
 
         <label className="block min-w-0">
           <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-            Organ wydający
+            {dict.certificateIssuerLabel}
           </span>
           <input
             value={issuer}
@@ -413,7 +415,7 @@ export default function CompanyCertificatesSection({
 
         <label className="block min-w-0">
           <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-            Numer certyfikatu
+            {dict.certificateNumberLabel}
           </span>
           <input
             value={certificateNumber}
@@ -425,7 +427,7 @@ export default function CompanyCertificatesSection({
 
         <label className="block min-w-0">
           <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-            Widoczność
+            {dict.certificateVisibilityLabel}
           </span>
           <select
             value={visibility}
@@ -434,14 +436,14 @@ export default function CompanyCertificatesSection({
             }
             className={inputClass}
           >
-            <option value="public">Publiczny</option>
-            <option value="private">Prywatny</option>
+            <option value="public">{dict.certificateVisibilityPublic}</option>
+            <option value="private">{dict.certificateVisibilityPrivate}</option>
           </select>
         </label>
 
         <label className="block min-w-0">
           <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-            Data wydania
+            {dict.certificateIssuedDateLabel}
           </span>
           <input
             type="date"
@@ -453,7 +455,7 @@ export default function CompanyCertificatesSection({
 
         <label className="block min-w-0">
           <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-            Data ważności
+            {dict.certificateExpiryDateLabel}
           </span>
           <input
             type="date"
@@ -465,7 +467,7 @@ export default function CompanyCertificatesSection({
 
         <label className="block min-w-0 md:col-span-2">
           <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-            Plik certyfikatu
+            {dict.certificateFileLabel}
           </span>
           <input
             ref={fileInputRef}
@@ -475,9 +477,7 @@ export default function CompanyCertificatesSection({
             className="min-w-0 max-w-full w-full rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600 file:mr-4 file:rounded-lg file:border-0 file:bg-[#1a5f3c] file:px-4 file:py-2 file:text-sm file:font-bold file:text-white"
           />
           <span className="mt-2 block text-xs leading-5 text-slate-500">
-            PDF, JPG lub PNG, maksymalnie 5 MB. Widoczności certyfikatu z
-            plikiem nie można zmienić po dodaniu. Aby zmienić widoczność, usuń
-            certyfikat i dodaj go ponownie.
+            {dict.certificateFileHelp}
           </span>
         </label>
 
@@ -487,7 +487,7 @@ export default function CompanyCertificatesSection({
             disabled={isSubmitting}
             className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isSubmitting ? "Dodawanie..." : "Dodaj certyfikat"}
+            {isSubmitting ? dict.certificateAdding : dict.certificateAddBtn}
           </button>
         </div>
       </form>
@@ -507,27 +507,31 @@ export default function CompanyCertificatesSection({
                   <div className="mt-3 grid gap-2 text-sm text-slate-600 md:grid-cols-2">
                     <p>
                       <span className="font-bold text-slate-800">Organ:</span>{" "}
-                      {certificate.issuer || "Nie podano"}
+                      {certificate.issuer || dict.certificateNotSpecified}
                     </p>
                     <p>
                       <span className="font-bold text-slate-800">Numer:</span>{" "}
-                      {certificate.certificate_number || "Nie podano"}
+                      {certificate.certificate_number || dict.certificateNotSpecified}
                     </p>
                     <p>
                       <span className="font-bold text-slate-800">Wydany:</span>{" "}
-                      {formatDate(certificate.issued_at)}
+                      {formatDate(certificate.issued_at, dict.certificateNotSpecified)}
                     </p>
                     <p>
                       <span className="font-bold text-slate-800">Ważny do:</span>{" "}
-                      {formatDate(certificate.expires_at)}
+                      {formatDate(certificate.expires_at, dict.certificateNotSpecified)}
                     </p>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-700">
-                      {getVisibilityLabel(certificate.visibility)}
+                      {certificate.visibility === "public" ? dict.certificateVisibilityPublic : dict.certificateVisibilityPrivate}
                     </span>
                     <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                      {getVerificationLabel(certificate.verification_status)}
+                      {certificate.verification_status === "admin_verified"
+                        ? dict.certificateStatusVerified
+                        : certificate.verification_status === "rejected"
+                          ? dict.certificateStatusRejected
+                          : dict.certificateStatusDeclared}
                     </span>
                     {certificate.file_name ? (
                       <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-700">
@@ -549,7 +553,7 @@ export default function CompanyCertificatesSection({
                       className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-2 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       <i className="fas fa-download"></i>
-                      Pobierz plik
+                      {dict.certificateDownloadBtn}
                     </button>
                   ) : null}
                   <button
@@ -559,7 +563,7 @@ export default function CompanyCertificatesSection({
                     className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-red-200 px-4 py-2 text-sm font-bold text-red-700 transition hover:border-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     <i className="fas fa-trash"></i>
-                    Usuń
+                    {dict.certificateDeleteBtn}
                   </button>
                 </div>
               </div>
@@ -567,7 +571,7 @@ export default function CompanyCertificatesSection({
           ))
         ) : (
           <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-sm text-slate-500">
-            Nie dodano jeszcze certyfikatów firmy.
+            {dict.certificatesEmpty}
           </div>
         )}
       </div>

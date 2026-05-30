@@ -911,6 +911,7 @@ const uk: Dictionary = {
       },
     },
     profile: {
+      ...en.panel.profile,
       title: "Профіль компанії",
       subtitle: "Заповніть дані компанії, видимі для клієнтів.",
       companyData: "Дані компанії",

@@ -657,7 +657,7 @@ export default function CompanyProfileFormClient({
       }
     }
 
-    setMessage("Profil firmy został zapisany.");
+    setMessage(dict.profileSaved);
     setIsSubmitting(false);
     router.refresh();
   }
@@ -779,7 +779,7 @@ export default function CompanyProfileFormClient({
     setRequestMessage("");
 
     if (!companyId) {
-      setRequestError("Zapisz profil firmy, aby móc zgłaszać propozycje nowych usług.");
+      setRequestError(dict.serviceRequestSaveFirst);
       return;
     }
 
@@ -814,7 +814,7 @@ export default function CompanyProfileFormClient({
 
     setProposedService("");
     setRequestReason("");
-    setRequestMessage("Zgłoszenie zostało wysłane do administratora.");
+    setRequestMessage(dict.serviceRequestSuccess);
     setIsRequestSubmitting(false);
   }
 
@@ -847,9 +847,7 @@ export default function CompanyProfileFormClient({
     setPresentationMessage("");
 
     if (!companyId) {
-      setPresentationError(
-        "Najpierw zapisz profil firmy, aby móc dodać prezentację."
-      );
+      setPresentationError(dict.presentationSaveFirst);
       return;
     }
 
@@ -916,7 +914,7 @@ export default function CompanyProfileFormClient({
     setPresentationSizeBytes(presentationFile.size);
     setPresentationUploadedAt(uploadedAt);
     setPresentationFile(null);
-    setPresentationMessage("Prezentacja firmy została wgrana.");
+    setPresentationMessage(dict.presentationUploadedSuccess);
     setIsPresentationSubmitting(false);
     router.refresh();
   }
@@ -929,7 +927,7 @@ export default function CompanyProfileFormClient({
       return;
     }
 
-    const confirmed = window.confirm("Czy na pewno usunąć prezentację firmy?");
+    const confirmed = window.confirm(dict.presentationDeleteConfirm);
     if (!confirmed) {
       return;
     }
@@ -969,7 +967,7 @@ export default function CompanyProfileFormClient({
     setPresentationSizeBytes(null);
     setPresentationUploadedAt("");
     setPresentationFile(null);
-    setPresentationMessage("Prezentacja firmy została usunięta.");
+    setPresentationMessage(dict.presentationDeletedSuccess);
     setIsPresentationSubmitting(false);
     router.refresh();
   }
@@ -1475,19 +1473,18 @@ export default function CompanyProfileFormClient({
 
         <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
           <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-            Prezentacja firmy
+            {dict.presentationSubtitle}
           </p>
           <h2 className="text-2xl font-extrabold text-slate-900">
-            PDF lub PowerPoint
+            {dict.presentationTitle}
           </h2>
           <p className="mt-2 text-sm leading-6 text-slate-500">
-            Dodaj prezentację firmy w PDF lub PowerPoint. Plik będzie
-            wykorzystywany w profilu firmy i przy ofertach.
+            {dict.presentationDescription}
           </p>
 
           {!companyId ? (
             <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm text-slate-500">
-              Najpierw zapisz profil firmy, aby móc dodać prezentację.
+              {dict.presentationSaveFirst}
             </div>
           ) : (
             <div className="mt-6 space-y-5">
@@ -1511,7 +1508,7 @@ export default function CompanyProfileFormClient({
                     </div>
                     <div className="min-w-0">
                       <p className="break-words text-sm font-bold text-slate-900">
-                        {presentationFileName || "Prezentacja firmy"}
+                        {presentationFileName || dict.presentationTitle}
                       </p>
                       <p className="mt-1 text-xs leading-5 text-slate-500">
                         {formatPresentationSize(presentationSizeBytes)}
@@ -1529,7 +1526,7 @@ export default function CompanyProfileFormClient({
                 <label className="block min-w-0">
                   <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                     <i className="fas fa-upload text-[#1a5f3c]"></i>
-                    Plik prezentacji
+                    {dict.presentationFileLabel}
                   </span>
                   <input
                     type="file"
@@ -1548,8 +1545,8 @@ export default function CompanyProfileFormClient({
                     className="btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                   >
                     {isPresentationSubmitting
-                      ? "Przetwarzanie..."
-                      : "Wgraj prezentację"}
+                      ? dict.presentationUploading
+                      : dict.presentationUploadBtn}
                   </button>
 
                   {presentationPath ? (
@@ -1560,7 +1557,7 @@ export default function CompanyProfileFormClient({
                       className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-red-200 px-5 py-3 text-sm font-bold text-red-700 transition hover:border-red-600 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                     >
                       <i className="fas fa-trash"></i>
-                      Usuń prezentację
+                      {dict.presentationDeleteBtn}
                     </button>
                   ) : null}
                 </div>
@@ -1571,19 +1568,18 @@ export default function CompanyProfileFormClient({
 
         <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
           <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-            Nie widzisz usługi na liście?
+            {dict.serviceRequestSubtitle}
           </p>
           <h2 className="text-2xl font-extrabold text-slate-900">
-            Zgłoś brakującą usługę
+            {dict.serviceRequestTitle}
           </h2>
           <p className="mt-2 text-sm leading-6 text-slate-500">
-            Zgłoś brakującą usługę do administratora. Po weryfikacji może
-            zostać dodana do słownika branż.
+            {dict.serviceRequestDescription}
           </p>
 
           {!companyId ? (
             <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm text-slate-500">
-              Zapisz profil firmy, aby móc zgłaszać propozycje nowych usług.
+              {dict.serviceRequestSaveFirst}
             </div>
           ) : (
             <form onSubmit={handleServiceRequestSubmit} className="mt-6">
@@ -1603,7 +1599,7 @@ export default function CompanyProfileFormClient({
                 <label className="block min-w-0">
                   <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                     <i className="fas fa-industry text-[#1a5f3c]"></i>
-                    Branża zgłoszenia
+                    {dict.serviceRequestBranchLabel}
                   </span>
                   <select
                     value={requestIndustry}
@@ -1611,7 +1607,7 @@ export default function CompanyProfileFormClient({
                     className={inputClass}
                     disabled={selectedIndustries.length === 0}
                   >
-                    <option value="">Wybierz branżę</option>
+                    <option value="">{dict.serviceRequestBranchPlaceholder}</option>
                     {selectedIndustries.map((industryName) => (
                       <option key={industryName} value={industryName}>
                         {industryName}
@@ -1623,13 +1619,13 @@ export default function CompanyProfileFormClient({
                 <label className="block min-w-0">
                   <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                     <i className="fas fa-plus text-[#1a5f3c]"></i>
-                    Proponowana nazwa usługi
+                    {dict.serviceRequestNameLabel}
                   </span>
                   <input
                     value={proposedService}
                     onChange={(event) => setProposedService(event.target.value)}
                     className={inputClass}
-                    placeholder="Np. nowa usługa technologiczna"
+                    placeholder={dict.serviceRequestNamePlaceholder}
                     disabled={selectedIndustries.length === 0}
                   />
                 </label>
@@ -1637,14 +1633,14 @@ export default function CompanyProfileFormClient({
                 <label className="block min-w-0 md:col-span-2">
                   <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                     <i className="fas fa-align-left text-[#1a5f3c]"></i>
-                    Uzasadnienie / opis
+                    {dict.serviceRequestReasonLabel}
                   </span>
                   <textarea
                     value={requestReason}
                     onChange={(event) => setRequestReason(event.target.value)}
                     rows={4}
                     className={inputClass}
-                    placeholder="Opcjonalnie opisz, dlaczego ta usługa powinna znaleźć się w słowniku."
+                    placeholder={dict.serviceRequestReasonPlaceholder}
                     disabled={selectedIndustries.length === 0}
                   />
                 </label>
@@ -1655,7 +1651,7 @@ export default function CompanyProfileFormClient({
                 disabled={isRequestSubmitting || selectedIndustries.length === 0}
                 className="mt-6 btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isRequestSubmitting ? "Wysyłanie..." : "Zgłoś usługę"}
+                {isRequestSubmitting ? dict.serviceRequestSubmitting : dict.serviceRequestSubmitBtn}
               </button>
             </form>
           )}

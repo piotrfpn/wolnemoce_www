@@ -97,10 +97,11 @@ export default async function CompanyProfilePage() {
             <CompanyCertificatesSection
               companyId={company.id}
               initialCertificates={certificates}
+              dict={t}
             />
           ) : (
             <section className="mt-8 rounded-[24px] border border-dashed border-slate-300 bg-white p-6 text-sm text-slate-500 shadow-sm md:p-8">
-              Zapisz profil firmy, aby móc dodać certyfikaty.
+              {t.certificatesSaveFirst}
             </section>
           )}
         </section>
