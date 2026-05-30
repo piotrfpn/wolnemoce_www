@@ -7,6 +7,7 @@ import PanelNavbar from "@/components/PanelNavbar";
 import { createClient } from "@/lib/supabase/server";
 import { getOfferLimitDisplay } from "@/lib/planEntitlements";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { getPanelLocale } from "@/lib/i18n/panelLocale";
 
 export const metadata: Metadata = {
   title: "Panel firmy",
@@ -15,8 +16,11 @@ export const metadata: Metadata = {
 
 
 
+export const dynamic = "force-dynamic";
+
 export default async function PanelPage() {
-  const dictionary = getDictionary("pl");
+  const locale = getPanelLocale();
+  const dictionary = getDictionary(locale);
   const t = dictionary.panel.dashboard;
   const tc = dictionary.panel.common;
 
@@ -167,13 +171,13 @@ export default async function PanelPage() {
     : company.is_verified
       ? {
           label: t.verifiedCompany,
-          description: "Profil firmy jest aktywny i zweryfikowany.",
+          description: t.verifiedCompanyDescription,
           className: "bg-emerald-50 text-emerald-700",
         }
       : company.regon || company.location_city || company.location_voivodeship
         ? {
             label: dictionary.panel.profile.submittedForModeration,
-            description: "Dane firmy są zapisane. Weryfikację kończy administrator.",
+            description: t.submittedForModerationDescription,
             className: "bg-slate-100 text-slate-700",
           }
         : {

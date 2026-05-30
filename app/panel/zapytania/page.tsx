@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   description: "Zapytania ofertowe wysłane do Twojej firmy.",
 };
 
+export const dynamic = "force-dynamic";
+
 type CompanyInquiry = {
   id: string;
   status: string | null;

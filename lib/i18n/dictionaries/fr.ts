@@ -758,6 +758,9 @@ const fr: Dictionary = {
       companyProfile: "Profil de l'entreprise",
       verifiedCompany: "Entreprise vérifiée",
       notVerifiedCompany: "Entreprise non vérifiée",
+      verifiedCompanyDescription: "Le profil de l'entreprise est actif et vérifié.",
+      submittedForModerationDescription:
+        "Les informations de l'entreprise ont été enregistrées. Un administrateur finalisera la vérification.",
       goToProfile: "Aller au profil",
       goToOffers: "Aller aux offres",
       goToInquiries: "Aller aux demandes",

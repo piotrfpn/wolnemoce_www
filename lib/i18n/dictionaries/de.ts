@@ -774,6 +774,9 @@ const de: Dictionary = {
       companyProfile: "Firmenprofil",
       verifiedCompany: "Verifizierte Firma",
       notVerifiedCompany: "Nicht verifizierte Firma",
+      verifiedCompanyDescription: "Das Firmenprofil ist aktiv und verifiziert.",
+      submittedForModerationDescription:
+        "Die Firmendaten wurden gespeichert. Die Verifizierung wird durch einen Administrator abgeschlossen.",
       goToProfile: "Zum Profil",
       goToOffers: "Zu den Angeboten",
       goToInquiries: "Zu den Anfragen",

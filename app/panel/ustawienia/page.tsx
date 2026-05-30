@@ -6,11 +6,14 @@ import LogoutButton from "@/components/LogoutButton";
 import PanelNavbar from "@/components/PanelNavbar";
 import { createClient } from "@/lib/supabase/server";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { getPanelLocale } from "@/lib/i18n/panelLocale";
 
 export const metadata: Metadata = {
   title: "Ustawienia konta",
   description: "Ustawienia konta użytkownika WolneMoce.pl.",
 };
+
+export const dynamic = "force-dynamic";
 
 export default async function AccountSettingsPage() {
   const supabase = createClient();
@@ -28,7 +31,8 @@ export default async function AccountSettingsPage() {
     .eq("id", user.id)
     .maybeSingle();
 
-  const dictionary = getDictionary("pl");
+  const locale = getPanelLocale();
+  const dictionary = getDictionary(locale);
   const t = dictionary.panel.settings;
   const tc = dictionary.panel.common;
   const tProfile = dictionary.panel.profile;

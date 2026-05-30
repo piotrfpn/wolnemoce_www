@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getOfferLimitDisplay, canCreateOffer } from "@/lib/planEntitlements";
 import OfferActionsClient from "./OfferActionsClient";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { getPanelLocale } from "@/lib/i18n/panelLocale";
 
 export const metadata: Metadata = {
   title: "Moje oferty",
@@ -14,6 +15,8 @@ export const metadata: Metadata = {
 };
 
 type OfferStatus = "draft" | "pending" | "active" | "rejected" | "archived";
+
+export const dynamic = "force-dynamic";
 
 
 
@@ -68,7 +71,8 @@ function formatDate(value: string | null) {
 }
 
 export default async function PanelOffersPage() {
-  const dictionary = getDictionary("pl");
+  const locale = getPanelLocale();
+  const dictionary = getDictionary(locale);
   const t = dictionary.panel.offers;
   const tc = dictionary.panel.common;
 

@@ -14,7 +14,10 @@ type ChangePasswordFormClientProps = {
   tc: PanelCommonDictionary;
 };
 
-export default function ChangePasswordFormClient(_props: ChangePasswordFormClientProps) {
+export default function ChangePasswordFormClient({
+  dictionary,
+  tc,
+}: ChangePasswordFormClientProps) {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -59,7 +62,7 @@ export default function ChangePasswordFormClient(_props: ChangePasswordFormClien
 
     setPassword("");
     setConfirmPassword("");
-    setMessage("Hasło zostało zmienione.");
+    setMessage(dictionary.passwordChanged);
     setIsSubmitting(false);
     router.refresh();
   }
@@ -74,13 +77,13 @@ export default function ChangePasswordFormClient(_props: ChangePasswordFormClien
           <i className="fas fa-lock text-xl"></i>
         </div>
         <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-          Bezpieczeństwo konta
+          {dictionary.passwordSettings}
         </p>
         <h1 className="text-3xl font-extrabold text-slate-900">
-          Zmień hasło
+          {dictionary.changePassword}
         </h1>
         <p className="mt-3 text-sm leading-6 text-slate-500">
-          Ustaw nowe hasło dla swojego konta.
+          {dictionary.subtitle}
         </p>
       </div>
 
@@ -100,7 +103,7 @@ export default function ChangePasswordFormClient(_props: ChangePasswordFormClien
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-key text-[#1a5f3c]"></i>
-            Nowe hasło
+            {dictionary.newPassword}
           </span>
           <input
             type="password"
@@ -116,7 +119,7 @@ export default function ChangePasswordFormClient(_props: ChangePasswordFormClien
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-key text-[#1a5f3c]"></i>
-            Powtórz nowe hasło
+            {dictionary.confirmPassword}
           </span>
           <input
             type="password"
@@ -138,10 +141,10 @@ export default function ChangePasswordFormClient(_props: ChangePasswordFormClien
         {isSubmitting ? (
           <>
             <i className="fas fa-spinner fa-spin"></i>
-            Zapisywanie...
+            {tc.saving}
           </>
         ) : (
-          "Zapisz nowe hasło"
+          dictionary.savePassword
         )}
       </button>
     </form>

@@ -803,6 +803,9 @@ const en: Dictionary = {
       companyProfile: "Company Profile",
       verifiedCompany: "Verified Company",
       notVerifiedCompany: "Unverified Company",
+      verifiedCompanyDescription: "The company profile is active and verified.",
+      submittedForModerationDescription:
+        "Company details have been saved. An administrator will complete the verification.",
       goToProfile: "Go to Profile",
       goToOffers: "Go to Offers",
       goToInquiries: "Go to Inquiries",

@@ -675,6 +675,8 @@ export type Dictionary = {
       companyProfile: string;
       verifiedCompany: string;
       notVerifiedCompany: string;
+      verifiedCompanyDescription: string;
+      submittedForModerationDescription: string;
       goToProfile: string;
       goToOffers: string;
       goToInquiries: string;

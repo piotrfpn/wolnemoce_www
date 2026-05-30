@@ -21,7 +21,7 @@ export const dynamic = "force-dynamic";
 
 export default async function CompanyProfilePage() {
   const locale = getPanelLocale();
-  const dictionary = getDictionary(locale as any);
+  const dictionary = getDictionary(locale);
   const t = dictionary.panel.profile;
   const tc = dictionary.panel.common;
 

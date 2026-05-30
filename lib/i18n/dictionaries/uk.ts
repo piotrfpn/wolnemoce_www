@@ -758,6 +758,9 @@ const uk: Dictionary = {
       companyProfile: "Профіль компанії",
       verifiedCompany: "Перевірена компанія",
       notVerifiedCompany: "Неперевірена компанія",
+      verifiedCompanyDescription: "Профіль компанії активний і перевірений.",
+      submittedForModerationDescription:
+        "Дані компанії збережено. Перевірку завершить адміністратор.",
       goToProfile: "Перейти до профілю",
       goToOffers: "Перейти до пропозицій",
       goToInquiries: "Перейти до запитів",

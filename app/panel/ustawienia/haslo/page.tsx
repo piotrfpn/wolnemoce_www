@@ -4,14 +4,18 @@ import Footer from "@/components/Footer";
 import PanelNavbar from "@/components/PanelNavbar";
 import ChangePasswordFormClient from "./ChangePasswordFormClient";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { getPanelLocale } from "@/lib/i18n/panelLocale";
 
 export const metadata: Metadata = {
   title: "Zmień hasło",
   description: "Zmień hasło zalogowanego użytkownika WolneMoce.pl.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function ChangePasswordPage() {
-  const dictionary = getDictionary("pl");
+  const locale = getPanelLocale();
+  const dictionary = getDictionary(locale);
   const t = dictionary.panel.settings;
   const tc = dictionary.panel.common;
 
