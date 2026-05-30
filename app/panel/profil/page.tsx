@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "Uzupełnij profil firmy w panelu WolneMoce.pl.",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function CompanyProfilePage() {
   const locale = getPanelLocale();
   const dictionary = getDictionary(locale as any);
