@@ -5,6 +5,7 @@ import {
   archiveInquiry,
   createAttachmentDownloadUrl,
   markInquiryRead,
+  updateInquiryLeadStatus,
 } from "./actions";
 
 export type InquiryAttachment = {
@@ -17,6 +18,7 @@ export type InquiryAttachment = {
 export default function InquiryActionsClient({
   inquiryId,
   status,
+  leadStatus,
   recipientReadAt,
   attachments = [],
   buyerEmail,
@@ -26,6 +28,7 @@ export default function InquiryActionsClient({
 }: {
   inquiryId: string;
   status: string | null;
+  leadStatus?: "new" | "in_progress" | "answered_outside_portal" | null;
   recipientReadAt?: string | null;
   attachments?: InquiryAttachment[];
   buyerEmail?: string | null;
@@ -42,11 +45,18 @@ export default function InquiryActionsClient({
     archive: string;
     noEmail: string;
     noPhone: string;
+    leadStatusLabel: string;
+    leadStatusNew: string;
+    leadStatusInProgress: string;
+    leadStatusAnsweredOutsidePortal: string;
+    leadStatusUpdateError: string;
+    leadStatusUpdateSuccess: string;
   };
 }) {
   const [isPending, startTransition] = useTransition();
   const [downloadPendingId, setDownloadPendingId] = useState("");
   const [error, setError] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
   const [copyStatus, setCopyStatus] = useState<string>("");
 
   const isUnread = !recipientReadAt && status !== "archived";
@@ -54,6 +64,7 @@ export default function InquiryActionsClient({
 
   async function handleCopy(value: string, type: string) {
     setError("");
+    setSuccessMsg("");
     if (!navigator.clipboard) {
       setError(actionLabels.copyFailed);
       return;
@@ -73,6 +84,7 @@ export default function InquiryActionsClient({
 
   function runAction(action: (id: string) => Promise<void>) {
     setError("");
+    setSuccessMsg("");
     startTransition(async () => {
       try {
         await action(inquiryId);
@@ -81,6 +93,29 @@ export default function InquiryActionsClient({
           actionError instanceof Error
             ? actionError.message
             : "Nie udało się zmienić statusu."
+        );
+      }
+    });
+  }
+
+  function handleLeadStatusChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const newValue = event.target.value as "new" | "in_progress" | "answered_outside_portal";
+    setError("");
+    setSuccessMsg("");
+    startTransition(async () => {
+      try {
+        const result = await updateInquiryLeadStatus(inquiryId, newValue);
+        if (result?.error) {
+          setError(actionLabels[result.error as keyof typeof actionLabels]);
+        } else {
+          setSuccessMsg(actionLabels.leadStatusUpdateSuccess);
+          setTimeout(() => setSuccessMsg(""), 3000);
+        }
+      } catch (actionError) {
+        setError(
+          actionError instanceof Error
+            ? actionError.message
+            : "Nie udało się zmienić statusu obsługi."
         );
       }
     });
@@ -126,8 +161,31 @@ export default function InquiryActionsClient({
         </div>
       ) : null}
 
+      {successMsg ? (
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+          {successMsg}
+        </div>
+      ) : null}
+
       {hasActions ? (
-        <div className="flex flex-wrap gap-2 sm:gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2">
+            <label htmlFor={`status-${inquiryId}`} className="text-sm font-bold text-slate-500 whitespace-nowrap">
+              {actionLabels.leadStatusLabel}:
+            </label>
+            <select
+              id={`status-${inquiryId}`}
+              disabled={isPending}
+              value={leadStatus ?? "new"}
+              onChange={handleLeadStatusChange}
+              className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold text-slate-700 shadow-sm transition focus:border-[#1a5f3c] focus:outline-none focus:ring-1 focus:ring-[#1a5f3c] disabled:cursor-not-allowed disabled:bg-slate-50"
+            >
+              <option value="new">{actionLabels.leadStatusNew}</option>
+              <option value="in_progress">{actionLabels.leadStatusInProgress}</option>
+              <option value="answered_outside_portal">{actionLabels.leadStatusAnsweredOutsidePortal}</option>
+            </select>
+          </div>
+          <div className="flex flex-wrap gap-2 sm:gap-3">
           {isUnread ? (
             <button
               type="button"
@@ -189,6 +247,7 @@ export default function InquiryActionsClient({
             <i className="fas fa-box-archive"></i>
             {actionLabels.archive}
           </button>
+          </div>
         </div>
       ) : null}
 

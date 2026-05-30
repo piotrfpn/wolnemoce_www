@@ -1002,7 +1002,17 @@ const de: Dictionary = {
     noEmail: "Keine E-Mail-Adresse",
     noPhone: "Keine Telefonnummer",
     emptyTitle: "Sie haben noch keine Angebotsanfragen.",
-    emptyDescription: "Wenn ein Unternehmen nach Ihrem Angebot fragt, erscheint die Anfrage hier."
+    emptyDescription: "Wenn ein Unternehmen nach Ihrem Angebot fragt, erscheint die Anfrage hier.",
+    leadStatusLabel: "Lead-Status",
+    leadStatusAll: "Alle",
+    leadStatusNew: "Neuer Lead",
+    leadStatusInProgress: "In Bearbeitung",
+    leadStatusAnsweredOutsidePortal: "Außerhalb des Portals beantwortet",
+    leadStatusUpdateError: "Der Lead-Status konnte nicht aktualisiert werden.",
+    leadStatusUpdateSuccess: "Der Lead-Status wurde aktualisiert.",
+    actionMarkLeadNew: "Als neuen Lead markieren",
+    actionMarkLeadInProgress: "Als in Bearbeitung markieren",
+    actionMarkAnsweredOutsidePortal: "Als außerhalb des Portals beantwortet markieren",
   }
 };
 

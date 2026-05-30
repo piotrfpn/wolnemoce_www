@@ -986,7 +986,17 @@ const uk: Dictionary = {
     noEmail: "Немає електронної пошти",
     noPhone: "Немає номера телефону",
     emptyTitle: "У вас ще немає запитів на пропозиції.",
-    emptyDescription: "Коли компанія запитає про вашу пропозицію, запит з'явиться тут."
+    emptyDescription: "Коли компанія запитає про вашу пропозицію, запит з'явиться тут.",
+    leadStatusLabel: "Статус ліда",
+    leadStatusAll: "Усі",
+    leadStatusNew: "Новий лід",
+    leadStatusInProgress: "В обробці",
+    leadStatusAnsweredOutsidePortal: "Відповідь надано поза порталом",
+    leadStatusUpdateError: "Не вдалося оновити статус ліда.",
+    leadStatusUpdateSuccess: "Статус ліда оновлено.",
+    actionMarkLeadNew: "Позначити як новий лід",
+    actionMarkLeadInProgress: "Позначити як в обробці",
+    actionMarkAnsweredOutsidePortal: "Позначити як відповідь поза порталом",
   }
 };
 

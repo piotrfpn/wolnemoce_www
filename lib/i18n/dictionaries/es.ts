@@ -986,7 +986,17 @@ const es: Dictionary = {
     noEmail: "Sin dirección de correo electrónico",
     noPhone: "Sin número de teléfono",
     emptyTitle: "Aún no tienes consultas de ofertas.",
-    emptyDescription: "Cuando una empresa pregunte sobre tu oferta, la consulta aparecerá aquí."
+    emptyDescription: "Cuando una empresa pregunte sobre tu oferta, la consulta aparecerá aquí.",
+    leadStatusLabel: "Estado del lead",
+    leadStatusAll: "Todos",
+    leadStatusNew: "Nuevo lead",
+    leadStatusInProgress: "En curso",
+    leadStatusAnsweredOutsidePortal: "Respondido fuera del portal",
+    leadStatusUpdateError: "No se pudo actualizar el estado del lead.",
+    leadStatusUpdateSuccess: "El estado del lead se ha actualizado.",
+    actionMarkLeadNew: "Marcar como nuevo lead",
+    actionMarkLeadInProgress: "Marcar como en curso",
+    actionMarkAnsweredOutsidePortal: "Marcar como respondido fuera del portal",
   }
 };
 

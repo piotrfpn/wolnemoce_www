@@ -65,6 +65,43 @@ export async function archiveInquiry(inquiryId: string) {
   await updateInquiryStatus(inquiryId, "archived");
 }
 
+type LeadStatus = "new" | "in_progress" | "answered_outside_portal";
+
+const ALLOWED_LEAD_STATUSES: LeadStatus[] = [
+  "new",
+  "in_progress",
+  "answered_outside_portal",
+];
+
+function isLeadStatus(value: string): value is LeadStatus {
+  return ALLOWED_LEAD_STATUSES.includes(value as LeadStatus);
+}
+
+export async function updateInquiryLeadStatus(
+  inquiryId: string,
+  newStatus: string
+) {
+  if (!isLeadStatus(newStatus)) {
+    return { error: "leadStatusUpdateError" };
+  }
+
+  const { supabase, companyId } = await requireUserCompany();
+
+  const { error } = await supabase
+    .from("inquiries")
+    .update({ lead_status: newStatus })
+    .eq("id", inquiryId)
+    .eq("company_id", companyId);
+
+  if (error) {
+    return { error: "leadStatusUpdateError" };
+  }
+
+  revalidatePath("/panel");
+  revalidatePath("/panel/zapytania");
+  return { success: true };
+}
+
 export async function createAttachmentDownloadUrl(attachmentId: string) {
   const { supabase, companyId } = await requireUserCompany();
   const { data: attachment, error: attachmentError } = await supabase

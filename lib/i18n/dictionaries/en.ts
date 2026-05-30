@@ -1030,7 +1030,17 @@ const en: Dictionary = {
     noEmail: "No email address",
     noPhone: "No phone number",
     emptyTitle: "You do not have any offer inquiries yet.",
-    emptyDescription: "When a company asks about your offer, the inquiry will appear here."
+    emptyDescription: "When a company asks about your offer, the inquiry will appear here.",
+    leadStatusLabel: "Lead status",
+    leadStatusAll: "All",
+    leadStatusNew: "New lead",
+    leadStatusInProgress: "In progress",
+    leadStatusAnsweredOutsidePortal: "Answered outside the portal",
+    leadStatusUpdateError: "Could not update lead status.",
+    leadStatusUpdateSuccess: "Lead status has been updated.",
+    actionMarkLeadNew: "Mark as new lead",
+    actionMarkLeadInProgress: "Mark as in progress",
+    actionMarkAnsweredOutsidePortal: "Mark as answered outside the portal",
   }
 };
 

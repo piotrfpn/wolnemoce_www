@@ -1054,7 +1054,17 @@ const pl: Dictionary = {
     noEmail: "Brak adresu e-mail",
     noPhone: "Brak numeru telefonu",
     emptyTitle: "Nie masz jeszcze zapytań ofertowych.",
-    emptyDescription: "Gdy firma zapyta o Twoją ofertę, zgłoszenie pojawi się tutaj."
+    emptyDescription: "Gdy firma zapyta o Twoją ofertę, zgłoszenie pojawi się tutaj.",
+    leadStatusLabel: "Status obsługi",
+    leadStatusAll: "Wszystkie",
+    leadStatusNew: "Nowy lead",
+    leadStatusInProgress: "W trakcie obsługi",
+    leadStatusAnsweredOutsidePortal: "Odpowiedziano poza portalem",
+    leadStatusUpdateError: "Nie udało się zmienić statusu obsługi.",
+    leadStatusUpdateSuccess: "Status obsługi został zaktualizowany.",
+    actionMarkLeadNew: "Oznacz jako nowy lead",
+    actionMarkLeadInProgress: "Oznacz jako w trakcie obsługi",
+    actionMarkAnsweredOutsidePortal: "Oznacz jako odpowiedziano poza portalem",
   }
 };
 

@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 type CompanyInquiry = {
   id: string;
   status: string | null;
+  lead_status: "new" | "in_progress" | "answered_outside_portal" | null;
   buyer_name: string | null;
   buyer_company: string | null;
   buyer_email: string | null;
@@ -87,6 +88,18 @@ function getStatusBadgeClass(inquiry: Pick<CompanyInquiry, "recipient_read_at" |
   return "bg-slate-100 text-slate-600";
 }
 
+function getLeadStatusLabel(inquiry: Pick<CompanyInquiry, "lead_status">, t: any) {
+  if (inquiry.lead_status === "in_progress") return t.leadStatusInProgress;
+  if (inquiry.lead_status === "answered_outside_portal") return t.leadStatusAnsweredOutsidePortal;
+  return t.leadStatusNew;
+}
+
+function getLeadStatusBadgeClass(inquiry: Pick<CompanyInquiry, "lead_status">) {
+  if (inquiry.lead_status === "in_progress") return "bg-amber-100 text-amber-700";
+  if (inquiry.lead_status === "answered_outside_portal") return "bg-emerald-100 text-emerald-700";
+  return "bg-slate-100 text-slate-600";
+}
+
 function getSingleParam(
   searchParams: PanelInquiriesPageProps["searchParams"],
   key: string
@@ -95,15 +108,44 @@ function getSingleParam(
   return Array.isArray(value) ? value[0] ?? "" : value ?? "";
 }
 
-function buildInquiriesHref(params: { read?: string; sort?: string }) {
+function buildInquiriesHref(
+  currentParams: PanelInquiriesPageProps["searchParams"],
+  updates: { read?: string; sort?: string; leadStatus?: string }
+) {
   const query = new URLSearchParams();
 
-  if (params.read && params.read !== "all") {
-    query.set("read", params.read);
+  if (currentParams) {
+    for (const [key, value] of Object.entries(currentParams)) {
+      if (Array.isArray(value)) {
+        value.forEach((v) => query.append(key, v));
+      } else if (value) {
+        query.append(key, value);
+      }
+    }
   }
 
-  if (params.sort && params.sort !== "newest") {
-    query.set("sort", params.sort);
+  if (updates.read) {
+    if (updates.read === "all") {
+      query.delete("read");
+    } else {
+      query.set("read", updates.read);
+    }
+  }
+
+  if (updates.sort) {
+    if (updates.sort === "newest") {
+      query.delete("sort");
+    } else {
+      query.set("sort", updates.sort);
+    }
+  }
+
+  if (updates.leadStatus) {
+    if (updates.leadStatus === "all") {
+      query.delete("leadStatus");
+    } else {
+      query.set("leadStatus", updates.leadStatus);
+    }
   }
 
   const queryString = query.toString();
@@ -120,6 +162,13 @@ const readFilters = [
 const sortOptions = [
   { label: "sortNewest", value: "newest" },
   { label: "sortOldest", value: "oldest" },
+];
+
+const leadStatusFilters = [
+  { label: "leadStatusAll", value: "all" },
+  { label: "leadStatusNew", value: "new" },
+  { label: "leadStatusInProgress", value: "in_progress" },
+  { label: "leadStatusAnsweredOutsidePortal", value: "answered_outside_portal" },
 ];
 
 export default async function PanelInquiriesPage({
@@ -171,10 +220,14 @@ export default async function PanelInquiriesPage({
 
   const requestedRead = getSingleParam(searchParams, "read");
   const requestedSort = getSingleParam(searchParams, "sort");
+  const requestedLeadStatus = getSingleParam(searchParams, "leadStatus");
   const activeRead = readFilters.some((filter) => filter.value === requestedRead)
     ? requestedRead
     : "all";
   const activeSort = requestedSort === "oldest" ? "oldest" : "newest";
+  const activeLeadStatus = leadStatusFilters.some((filter) => filter.value === requestedLeadStatus)
+    ? requestedLeadStatus
+    : "all";
   const ascending = activeSort === "oldest";
   const unreadCountResult = await supabase
     .from("inquiries")
@@ -197,6 +250,10 @@ export default async function PanelInquiriesPage({
       .not("recipient_read_at", "is", null);
   } else if (activeRead === "archived") {
     inquiriesQuery = inquiriesQuery.eq("status", "archived");
+  }
+
+  if (activeLeadStatus !== "all") {
+    inquiriesQuery = inquiriesQuery.eq("lead_status", activeLeadStatus);
   }
 
   const { data: inquiries } = await inquiriesQuery.order("created_at", {
@@ -263,12 +320,38 @@ export default async function PanelInquiriesPage({
                   {readFilters.map((filter) => (
                     <Link
                       key={filter.value}
-                      href={buildInquiriesHref({
+                      href={buildInquiriesHref(searchParams, {
                         read: filter.value,
                         sort: activeSort,
+                        leadStatus: activeLeadStatus,
                       })}
                       className={`rounded-full px-3 py-2 text-xs font-bold no-underline transition ${
                         activeRead === filter.value
+                          ? "bg-[#1a5f3c] text-white"
+                          : "bg-slate-100 text-slate-600 hover:bg-[#1a5f3c]/10 hover:text-[#1a5f3c]"
+                      }`}
+                    >
+                      {t[filter.label as keyof typeof t]}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div className="min-w-0">
+                <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                  {t.leadStatusLabel}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {leadStatusFilters.map((filter) => (
+                    <Link
+                      key={filter.value}
+                      href={buildInquiriesHref(searchParams, {
+                        read: activeRead,
+                        sort: activeSort,
+                        leadStatus: filter.value,
+                      })}
+                      className={`rounded-full px-3 py-2 text-xs font-bold no-underline transition ${
+                        activeLeadStatus === filter.value
                           ? "bg-[#1a5f3c] text-white"
                           : "bg-slate-100 text-slate-600 hover:bg-[#1a5f3c]/10 hover:text-[#1a5f3c]"
                       }`}
@@ -287,9 +370,10 @@ export default async function PanelInquiriesPage({
                   {sortOptions.map((option) => (
                     <Link
                       key={option.value}
-                      href={buildInquiriesHref({
+                      href={buildInquiriesHref(searchParams, {
                         read: activeRead,
                         sort: option.value,
+                        leadStatus: activeLeadStatus,
                       })}
                       className={`rounded-full px-3 py-2 text-xs font-bold no-underline transition ${
                         activeSort === option.value
@@ -326,6 +410,15 @@ export default async function PanelInquiriesPage({
                         >
                           {getStatusLabel(inquiry, t)}
                         </span>
+                        {inquiry.status !== "archived" && (
+                          <span
+                            className={`rounded-full px-3 py-1 text-xs font-bold ${getLeadStatusBadgeClass(
+                              inquiry
+                            )}`}
+                          >
+                            {getLeadStatusLabel(inquiry, t)}
+                          </span>
+                        )}
                         <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
                           {formatDate(inquiry.created_at)}
                         </span>
@@ -345,6 +438,7 @@ export default async function PanelInquiriesPage({
                     <InquiryActionsClient
                       inquiryId={inquiry.id}
                       status={inquiry.status}
+                      leadStatus={inquiry.lead_status}
                       recipientReadAt={inquiry.recipient_read_at}
                       attachments={inquiry.attachments}
                       buyerEmail={inquiry.buyer_email}
@@ -361,6 +455,12 @@ export default async function PanelInquiriesPage({
                         archive: t.archive,
                         noEmail: t.noEmail,
                         noPhone: t.noPhone,
+                        leadStatusLabel: t.leadStatusLabel,
+                        leadStatusNew: t.leadStatusNew,
+                        leadStatusInProgress: t.leadStatusInProgress,
+                        leadStatusAnsweredOutsidePortal: t.leadStatusAnsweredOutsidePortal,
+                        leadStatusUpdateError: t.leadStatusUpdateError,
+                        leadStatusUpdateSuccess: t.leadStatusUpdateSuccess,
                       }}
                     />
                   </div>

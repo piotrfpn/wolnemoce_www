@@ -33,6 +33,16 @@ export type Dictionary = {
     noPhone: string;
     emptyTitle: string;
     emptyDescription: string;
+    leadStatusLabel: string;
+    leadStatusAll: string;
+    leadStatusNew: string;
+    leadStatusInProgress: string;
+    leadStatusAnsweredOutsidePortal: string;
+    leadStatusUpdateError: string;
+    leadStatusUpdateSuccess: string;
+    actionMarkLeadNew: string;
+    actionMarkLeadInProgress: string;
+    actionMarkAnsweredOutsidePortal: string;
   };
   common: {
     localeName: string;

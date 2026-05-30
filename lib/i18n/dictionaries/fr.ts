@@ -986,7 +986,17 @@ const fr: Dictionary = {
     noEmail: "Pas d'adresse e-mail",
     noPhone: "Pas de numéro de téléphone",
     emptyTitle: "Vous n'avez pas encore de demandes d'offres.",
-    emptyDescription: "Lorsqu'une entreprise s'informera sur votre offre, la demande apparaîtra ici."
+    emptyDescription: "Lorsqu'une entreprise s'informera sur votre offre, la demande apparaîtra ici.",
+    leadStatusLabel: "Statut du lead",
+    leadStatusAll: "Tous",
+    leadStatusNew: "Nouveau lead",
+    leadStatusInProgress: "En cours",
+    leadStatusAnsweredOutsidePortal: "Répondu hors du portail",
+    leadStatusUpdateError: "Impossible de mettre à jour le statut du lead.",
+    leadStatusUpdateSuccess: "Le statut du lead a été mis à jour.",
+    actionMarkLeadNew: "Marquer comme nouveau lead",
+    actionMarkLeadInProgress: "Marquer comme en cours",
+    actionMarkAnsweredOutsidePortal: "Marquer comme répondu hors du portail",
   }
 };
 
