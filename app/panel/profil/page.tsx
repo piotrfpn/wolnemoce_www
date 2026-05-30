@@ -2,9 +2,14 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import type { Database } from "@/lib/database.types";
 import { createClient } from "@/lib/supabase/server";
+import CompanyCertificatesSection from "./CompanyCertificatesSection";
 import CompanyProfileFormClient from "./CompanyProfileFormClient";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+
+type CompanyCertificate =
+  Database["public"]["Tables"]["company_certificates"]["Row"];
 
 export const metadata: Metadata = {
   title: "Profil firmy",
@@ -48,6 +53,18 @@ export default async function CompanyProfilePage() {
       }
     : null;
 
+  let certificates: CompanyCertificate[] = [];
+
+  if (company?.id) {
+    const { data: certificatesData } = await supabase
+      .from("company_certificates")
+      .select("*")
+      .eq("company_id", company.id)
+      .order("created_at", { ascending: false });
+
+    certificates = (certificatesData ?? []) as CompanyCertificate[];
+  }
+
   return (
     <>
       <Navbar />
@@ -73,6 +90,17 @@ export default async function CompanyProfilePage() {
             dict={t}
             dictCommon={tc}
           />
+
+          {company?.id ? (
+            <CompanyCertificatesSection
+              companyId={company.id}
+              initialCertificates={certificates}
+            />
+          ) : (
+            <section className="mt-8 rounded-[24px] border border-dashed border-slate-300 bg-white p-6 text-sm text-slate-500 shadow-sm md:p-8">
+              Zapisz profil firmy, aby móc dodać certyfikaty.
+            </section>
+          )}
         </section>
       </main>
       <Footer />
