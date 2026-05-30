@@ -116,6 +116,12 @@ export type Dictionary = {
     featured: string;
     active: string;
     details: string;
+    noOfferImage: string;
+    viewOffer: string;
+    askAboutOffer: string;
+    industryLabel: string;
+    serviceTypeLabel: string;
+    locationLabel: string;
   };
   offersList: {
     heroLabel: string;

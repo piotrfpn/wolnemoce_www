@@ -141,6 +141,12 @@ const en: Dictionary = {
     featured: "Featured",
     active: "Active",
     details: "Details",
+    noOfferImage: "No offer image",
+    viewOffer: "View offer",
+    askAboutOffer: "Ask about offer",
+    industryLabel: "Industry",
+    serviceTypeLabel: "Service",
+    locationLabel: "Location",
   },
   offersList: {
     heroLabel: "Active company offers",

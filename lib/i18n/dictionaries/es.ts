@@ -129,6 +129,12 @@ const es: Dictionary = {
   },
   offerCard: {
     ...en.offerCard,
+    noOfferImage: "Sin imagen de oferta",
+    viewOffer: "Ver oferta",
+    askAboutOffer: "Preguntar por oferta",
+    industryLabel: "Industria",
+    serviceTypeLabel: "Servicio",
+    locationLabel: "Ubicación",
     companyFallback: "Empresa",
     offerFallback: "Oferta WolneMoce.pl",
     capacityFallback: "capacidad disponible",

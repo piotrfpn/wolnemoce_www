@@ -83,7 +83,7 @@ export default function PublicOfferCard({
   const featured = isActiveFeatured(offer);
 
   return (
-    <article className="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-xl">
+    <article className="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-xl flex flex-col">
       {company?.is_verified ? (
         <div className="absolute right-4 top-4 z-10 flex flex-col items-end gap-2">
           {featured ? (
@@ -108,96 +108,121 @@ export default function PublicOfferCard({
         </div>
       ) : null}
 
-      <div className="relative aspect-video overflow-hidden bg-slate-100">
-        <img
-          src={imageSrc}
-          alt={imageAlt}
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full max-w-full object-cover transition duration-500 group-hover:scale-105"
-        />
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4 text-white">
-          <span className="flex items-center gap-2 text-xs font-medium">
-            <i className="fas fa-map-marker-alt"></i>
-            {location || labels.countryFallback}
-          </span>
-        </div>
+      <div className="relative aspect-video overflow-hidden bg-slate-100 flex items-center justify-center">
+        {imageSrc ? (
+          <img
+            src={imageSrc}
+            alt={imageAlt}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full max-w-full object-cover transition duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center text-slate-400">
+            <i className="fas fa-image text-4xl mb-2 opacity-50"></i>
+            <span className="text-xs font-medium opacity-80">{labels.noOfferImage}</span>
+          </div>
+        )}
+        {location ? (
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4 text-white">
+            <span className="flex items-center gap-2 text-xs font-medium">
+              <i className="fas fa-map-marker-alt"></i>
+              <span className="truncate">{location}</span>
+            </span>
+          </div>
+        ) : null}
       </div>
 
-      <div className="min-w-0 p-5">
-        <div className="mb-3 flex min-w-0 items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] text-sm font-bold text-white shadow-sm">
-            {getInitials(companyName)}
+      <div className="min-w-0 p-5 flex flex-col flex-grow">
+        {companyName && companyName !== "Firma" ? (
+          <div className="mb-3 flex min-w-0 items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] text-sm font-bold text-white shadow-sm">
+              {getInitials(companyName)}
+            </div>
+            <div className="min-w-0">
+              {company?.slug ? (
+                <Link
+                  href={getLocalizedPath(`/firmy/${company.slug}`, locale)}
+                  className="block truncate text-sm font-bold text-slate-900 transition hover:text-[#1a5f3c]"
+                  title={companyName}
+                >
+                  {companyName}
+                </Link>
+              ) : (
+                <h3 className="truncate text-sm font-bold text-slate-900" title={companyName}>
+                  {companyName}
+                </h3>
+              )}
+              <p className="truncate text-[11px] text-slate-400">
+                {company?.is_verified ? labels.verified : labels.publicProfile}
+              </p>
+            </div>
           </div>
-          <div className="min-w-0">
-            {company?.slug ? (
-              <Link
-                href={getLocalizedPath(`/firmy/${company.slug}`, locale)}
-                className="block truncate text-sm font-bold text-slate-900 transition hover:text-[#1a5f3c]"
-              >
-                {companyName}
-              </Link>
-            ) : (
-              <h3 className="truncate text-sm font-bold text-slate-900">
-                {companyName}
-              </h3>
-            )}
-            <p className="truncate text-[11px] text-slate-400">
-              {offer.branch ?? labels.industryFallback} · {company?.is_verified ? labels.verified : labels.publicProfile}
-            </p>
-          </div>
-        </div>
+        ) : null}
 
-        <h2 className="mb-2 break-words text-[17px] font-bold leading-snug text-slate-900">
+        <h2
+          className="mb-2 line-clamp-2 break-words text-[17px] font-bold leading-snug text-slate-900"
+          title={offer.title ?? ""}
+        >
           {offer.title}
         </h2>
 
-        <p className="mb-4 line-clamp-2 text-sm leading-6 text-slate-500">
-          {offer.description}
-        </p>
+        {offer.description ? (
+          <p className="mb-4 line-clamp-2 text-sm leading-6 text-slate-500">
+            {offer.description}
+          </p>
+        ) : null}
 
         <div className="mb-5 flex flex-wrap gap-2 border-b border-slate-100 pb-5">
           {offer.branch ? (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600">
-              <i className="fas fa-industry text-[#1a5f3c]"></i>
+              <i className="fas fa-industry text-[#1a5f3c] opacity-80"></i>
               {offer.branch}
             </span>
           ) : null}
           {offer.service_type ? (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600">
-              <i className="fas fa-cogs text-[#1a5f3c]"></i>
+              <i className="fas fa-cogs text-[#1a5f3c] opacity-80"></i>
               {offer.service_type}
             </span>
           ) : null}
           {offer.power_available ? (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600">
-              <i className="fas fa-chart-bar text-[#1a5f3c]"></i>
+              <i className="fas fa-chart-bar text-[#1a5f3c] opacity-80"></i>
               {offer.power_available}
             </span>
           ) : null}
           {offer.lead_time ? (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600">
-              <i className="fas fa-clock text-[#1a5f3c]"></i>
+              <i className="fas fa-clock text-[#1a5f3c] opacity-80"></i>
               {offer.lead_time}
             </span>
           ) : null}
         </div>
 
-        <div className="flex items-center justify-between gap-4">
-          <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-            <i className="fas fa-circle-check"></i>
-            {labels.active}
-          </span>
-
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mt-auto">
           {offer.slug ? (
-            <Link
-              href={getLocalizedPath(`/oferty/${offer.slug}`, locale)}
-              className="inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] transition hover:text-[#0d3d26]"
-            >
-              {labels.details}
-              <i className="fas fa-arrow-right text-xs"></i>
-            </Link>
-          ) : null}
+            <div className="flex items-center gap-2 w-full">
+              <Link
+                href={getLocalizedPath(`/oferty/${offer.slug}`, locale)}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-slate-800"
+              >
+                {labels.viewOffer}
+              </Link>
+              <Link
+                href={getLocalizedPath(`/zapytanie-ofertowe?oferta=${offer.slug}`, locale)}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+              >
+                <i className="fas fa-paper-plane text-xs opacity-75"></i>
+                {labels.askAboutOffer}
+              </Link>
+            </div>
+          ) : (
+            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700 w-fit">
+              <i className="fas fa-circle-check"></i>
+              {labels.active}
+            </span>
+          )}
         </div>
       </div>
     </article>

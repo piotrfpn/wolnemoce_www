@@ -139,6 +139,12 @@ const pl: Dictionary = {
     featured: "Wyróżniona",
     active: "Aktywna",
     details: "Szczegóły",
+    noOfferImage: "Brak zdjęcia oferty",
+    viewOffer: "Zobacz ofertę",
+    askAboutOffer: "Zapytaj o ofertę",
+    industryLabel: "Branża",
+    serviceTypeLabel: "Usługa",
+    locationLabel: "Lokalizacja",
   },
   offersList: {
     heroLabel: "Aktywne oferty z firm",

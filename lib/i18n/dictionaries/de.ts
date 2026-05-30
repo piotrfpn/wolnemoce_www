@@ -129,6 +129,12 @@ const de: Dictionary = {
   },
   offerCard: {
     ...en.offerCard,
+    noOfferImage: "Kein Angebotsbild",
+    viewOffer: "Angebot ansehen",
+    askAboutOffer: "Nach Angebot fragen",
+    industryLabel: "Branche",
+    serviceTypeLabel: "Dienstleistung",
+    locationLabel: "Standort",
     companyFallback: "Firma",
     offerFallback: "WolneMoce.pl-Angebot",
     capacityFallback: "freie Kapazitäten",

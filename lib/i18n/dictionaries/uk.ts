@@ -129,6 +129,12 @@ const uk: Dictionary = {
   },
   offerCard: {
     ...en.offerCard,
+    noOfferImage: "Немає зображення",
+    viewOffer: "Переглянути пропозицію",
+    askAboutOffer: "Запитати про пропозицію",
+    industryLabel: "Галузь",
+    serviceTypeLabel: "Послуга",
+    locationLabel: "Локація",
     companyFallback: "Компанія",
     offerFallback: "Пропозиція WolneMoce.pl",
     capacityFallback: "вільні потужності",
