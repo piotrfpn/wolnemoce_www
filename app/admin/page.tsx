@@ -67,6 +67,7 @@ export default async function AdminPage() {
     serviceRequestsResult,
     contactMessagesResult,
     freeLimitOffersResult,
+    certificatesResult,
   ] = await Promise.all([
     supabase
       .from("companies")
@@ -96,6 +97,10 @@ export default async function AdminPage() {
       .select("id, title, status, company_id, companies!inner(id, name, plan)")
       .in("status", ["active", "pending"])
       .eq("companies.plan", "free"),
+    supabase
+      .from("company_certificates")
+      .select("id", { count: "exact", head: true })
+      .eq("verification_status", "declared"),
   ]);
 
   const pendingCompanies = (companiesResult.data ?? []) as PendingCompany[];
@@ -103,6 +108,7 @@ export default async function AdminPage() {
   const pendingServiceRequests = (serviceRequestsResult.data ??
     []) as PendingServiceRequest[];
   const newContactMessagesCount = contactMessagesResult.count ?? 0;
+  const pendingCertificatesCount = certificatesResult.count ?? 0;
   const freeLimitOffers = (freeLimitOffersResult.data ?? []) as unknown as FreeLimitOffer[];
   const freeLimitCompanies = new Map<string, FreeLimitCompanySummary>();
 
@@ -180,7 +186,7 @@ export default async function AdminPage() {
             </div>
           </div>
 
-          <div className="mb-8 grid min-w-0 gap-5 md:grid-cols-4">
+          <div className="mb-8 grid min-w-0 gap-5 md:grid-cols-3 lg:grid-cols-5">
             <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
                 <i className="fas fa-building-circle-check"></i>
@@ -228,6 +234,18 @@ export default async function AdminPage() {
                 {newContactMessagesCount}
               </p>
             </div>
+
+            <Link href="/admin/certyfikaty?status=declared" className="block min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#1a5f3c] hover:shadow-md">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
+                <i className="fas fa-certificate"></i>
+              </div>
+              <p className="text-sm font-bold uppercase tracking-wide text-slate-500">
+                Certyfikaty pending
+              </p>
+              <p className="mt-2 text-3xl font-extrabold text-slate-900">
+                {pendingCertificatesCount}
+              </p>
+            </Link>
           </div>
 
           <section className="mb-8 min-w-0 rounded-[24px] border border-amber-200 bg-amber-50 p-5 shadow-sm md:p-6">
