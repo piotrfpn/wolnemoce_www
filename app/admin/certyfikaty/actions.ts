@@ -7,6 +7,7 @@ import type {
   CertificateDownloadResult,
   CertificateVerificationStatus,
 } from "./types";
+import { isRedirectError } from "next/dist/client/components/redirect";
 import type { Database } from "@/lib/database.types";
 import { revalidateCertificateViews } from "@/lib/revalidateCertificateViews";
 
@@ -68,7 +69,10 @@ export async function updateCertificateModeration(
 
   try {
     admin = await requireAdmin();
-  } catch {
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
     return { error: "Brak uprawnień administratora." };
   }
 
@@ -113,7 +117,15 @@ export async function updateCertificateModeration(
     .eq("id", certificate.company_id)
     .maybeSingle();
 
-  revalidateCertificateViews(company?.slug);
+  try {
+    revalidateCertificateViews(company?.slug);
+  } catch (error) {
+    console.error("[certificate-moderation] Revalidation failed", {
+      certificateId,
+      status,
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
 
   return { success: "Zapisano status certyfikatu." };
 }
@@ -129,7 +141,10 @@ export async function createCertificateDownloadUrl(
 
   try {
     admin = await requireAdmin();
-  } catch {
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
     return { error: "Brak uprawnień administratora." };
   }
 

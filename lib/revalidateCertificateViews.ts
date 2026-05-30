@@ -5,14 +5,15 @@ export function revalidateCertificateViews(companySlug?: string | null) {
   // Katalogi firm
   revalidatePath("/firmy");
   for (const locale of prefixedLocales) {
-    revalidatePath(`/${locale}/firmy`);
+    if (locale) revalidatePath(`/${locale}/firmy`);
   }
 
   // Publiczny profil firmy
-  if (companySlug) {
-    revalidatePath(`/firmy/${companySlug}`);
+  const safeSlug = companySlug?.trim();
+  if (safeSlug) {
+    revalidatePath(`/firmy/${safeSlug}`);
     for (const locale of prefixedLocales) {
-      revalidatePath(`/${locale}/firmy/${companySlug}`);
+      if (locale) revalidatePath(`/${locale}/firmy/${safeSlug}`);
     }
   }
 
