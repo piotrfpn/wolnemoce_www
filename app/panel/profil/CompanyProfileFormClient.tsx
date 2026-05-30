@@ -979,23 +979,23 @@ export default function CompanyProfileFormClient({
       <aside className="min-w-0 space-y-6">
         <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
           <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-            Użytkownik
+            {dict.user}
           </p>
           <h2 className="text-xl font-extrabold text-slate-900">
-            Dane konta
+            {dict.accountData}
           </h2>
           <div className="mt-5 space-y-3 text-sm text-slate-600">
             <p className="min-w-0 break-words">
-              <strong className="text-slate-900">Email:</strong>{" "}
+              <strong className="text-slate-900">{dict.emailLabel}</strong>{" "}
               {userEmail ?? "Brak emaila"}
             </p>
             <p>
-              <strong className="text-slate-900">Rola:</strong>{" "}
+              <strong className="text-slate-900">{dict.roleLabel}</strong>{" "}
               {profile?.role ?? "user"}
             </p>
             {profile?.full_name ? (
               <p>
-                <strong className="text-slate-900">Imię i nazwisko:</strong>{" "}
+                <strong className="text-slate-900">{dict.fullNameLabel}</strong>{" "}
                 {profile.full_name}
               </p>
             ) : null}
@@ -1004,7 +1004,7 @@ export default function CompanyProfileFormClient({
 
         <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
           <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-            Status firmy
+            {dict.companyStatus}
           </p>
           <div
             className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold ${
@@ -1014,17 +1014,16 @@ export default function CompanyProfileFormClient({
             }`}
           >
             <i className={isVerified ? "fas fa-circle-check" : "fas fa-clock"}></i>
-            {isVerified ? "Firma zweryfikowana" : "Oczekuje na weryfikację"}
+            {isVerified ? dict.verified : dict.unverified}
           </div>
           <p className="mt-4 text-sm leading-6 text-slate-500">
-            Weryfikacja firmy będzie wykonywana przez administratora
-            WolneMoce.pl.
+            {dict.verificationInfo}
           </p>
           <div className="mt-4 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-600">
             {companySlug ? (
               <>
                 <span className="font-bold text-slate-900">
-                  Publiczny profil firmy:
+                  {dict.publicProfileLabel}
                 </span>{" "}
                 <Link
                   href={`/firmy/${companySlug}`}
@@ -1044,7 +1043,7 @@ export default function CompanyProfileFormClient({
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline transition hover:bg-[#1a5f3c] hover:text-white"
         >
           <i className="fas fa-arrow-left"></i>
-          Wróć do panelu
+          {dictCommon.back}
         </Link>
       </aside>
 
@@ -1055,14 +1054,13 @@ export default function CompanyProfileFormClient({
         >
           <div className="mb-8">
             <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-              Profil firmy
+              {dict.title}
             </p>
             <h2 className="text-2xl font-extrabold text-slate-900">
-              Dane firmy
+              {dict.companyData}
             </h2>
             <p className="mt-2 text-sm leading-6 text-slate-500">
-              Uzupełnij dane firmy, które będą wykorzystywane przy ofertach i
-              zapytaniach.
+              {dict.companyDataDescription}
             </p>
           </div>
 
@@ -1085,7 +1083,7 @@ export default function CompanyProfileFormClient({
                 className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500"
               >
                 <i className="fas fa-id-card text-[#1a5f3c]"></i>
-                NIP
+                {dict.nipLabel}
               </label>
               <input
                 id="company-nip"
@@ -1110,12 +1108,12 @@ export default function CompanyProfileFormClient({
                   }
                 ></i>
                 {isGusLoading
-                  ? "Pobieranie danych z GUS..."
-                  : "Pobierz dane z GUS"}
+                  ? dict.gusFetching
+                  : dict.gusFetch}
               </button>
               {isGusLoading ? (
                 <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-5 text-slate-600">
-                  Pobieranie danych z GUS...
+                  {dict.gusFetching}
                 </div>
               ) : null}
               {gusError ? (
@@ -1133,7 +1131,7 @@ export default function CompanyProfileFormClient({
             <label className="block min-w-0">
               <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                 <i className="fas fa-building text-[#1a5f3c]"></i>
-                Nazwa firmy
+                {dict.companyNameLabel}
               </span>
               <input
                 value={name}
@@ -1146,7 +1144,7 @@ export default function CompanyProfileFormClient({
             <label className="block min-w-0 md:col-span-2">
               <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                 <i className="fas fa-globe text-[#1a5f3c]"></i>
-                Adres strony WWW
+                {dict.websiteLabel}
               </span>
               <input
                 value={websiteUrl}
@@ -1159,7 +1157,7 @@ export default function CompanyProfileFormClient({
             <label className="block min-w-0 md:col-span-2">
               <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                 <i className="fas fa-envelope text-[#1a5f3c]"></i>
-                E-mail do zapytań ofertowych
+                {dict.rfqEmailLabel}
               </span>
               <input
                 type="email"
@@ -1169,19 +1167,17 @@ export default function CompanyProfileFormClient({
                 className={inputClass}
               />
               <p className="mt-2 text-xs leading-5 text-slate-500">
-                Na ten adres wyślemy powiadomienia o nowych zapytaniach
-                ofertowych. Adres nie będzie publicznie wyświetlany w profilu
-                firmy.
+                {dict.rfqEmailInfo}
               </p>
             </label>
 
             <div className="min-w-0 md:col-span-2">
               <h3 className="mb-2 flex items-center gap-2 text-sm font-extrabold text-slate-900">
                 <i className="fas fa-layer-group text-[#1a5f3c]"></i>
-                Branże działalności
+                {dict.industriesLabel}
               </h3>
               <p className="mb-4 text-sm leading-6 text-slate-500">
-                Wybierz wszystkie branże, w których działa firma.
+                {dict.industriesInfo}
               </p>
               <div className="grid min-w-0 gap-3 md:grid-cols-2">
                 {sortedIndustries.map((industryName) => {
@@ -1329,7 +1325,7 @@ export default function CompanyProfileFormClient({
                 <div className="mb-5">
                   <h3 className="flex items-center gap-2 text-sm font-extrabold text-slate-900">
                     <i className="fas fa-file-contract text-[#1a5f3c]"></i>
-                    Dane rejestrowe (GUS)
+                    {dict.registrationData}
                   </h3>
                   <p className="mt-2 text-sm leading-6 text-slate-500">
                     Dane pobrane z rejestru GUS są zapisywane dopiero po
@@ -1473,7 +1469,7 @@ export default function CompanyProfileFormClient({
             disabled={isSubmitting}
             className="mt-8 btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isSubmitting ? "Zapisywanie..." : "Zapisz profil firmy"}
+            {isSubmitting ? dictCommon.saving : dict.saveChanges}
           </button>
         </form>
 

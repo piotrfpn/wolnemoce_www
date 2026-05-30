@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { getPanelLocale } from "@/lib/i18n/panelLocale";
 import Footer from "@/components/Footer";
 import PanelNavbar from "@/components/PanelNavbar";
 import type { Database } from "@/lib/database.types";
@@ -17,7 +18,8 @@ export const metadata: Metadata = {
 };
 
 export default async function CompanyProfilePage() {
-  const dictionary = getDictionary("pl");
+  const locale = getPanelLocale();
+  const dictionary = getDictionary(locale as any);
   const t = dictionary.panel.profile;
   const tc = dictionary.panel.common;
 

@@ -827,6 +827,23 @@ export type Dictionary = {
       verified: string;
       notVerified: string;
       submittedForModeration: string;
+      user: string;
+      accountData: string;
+      emailLabel: string;
+      roleLabel: string;
+      fullNameLabel: string;
+      companyStatus: string;
+      unverified: string;
+      verificationInfo: string;
+      publicProfileLabel: string;
+      companyDataDescription: string;
+      nipLabel: string;
+      companyNameLabel: string;
+      websiteLabel: string;
+      rfqEmailLabel: string;
+      rfqEmailInfo: string;
+      industriesLabel: string;
+      industriesInfo: string;
     };
     inquiries: {
       title: string;
