@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import PanelNavbar from "@/components/PanelNavbar";
 import { createClient } from "@/lib/supabase/server";
+import type { Database } from "@/lib/database.types";
 import AdminCompanyVerificationClient from "./AdminCompanyVerificationClient";
 import AdminCompanyPlanClient from "./AdminCompanyPlanClient";
 import AdminCompanyOfferLimitClient from "./AdminCompanyOfferLimitClient";
@@ -12,6 +13,26 @@ export const metadata: Metadata = {
   title: "Szczegóły firmy - Admin",
   description: "Weryfikacja firmy w panelu admina WolneMoce.pl.",
 };
+
+type PkdCodesValue = Database["public"]["Tables"]["companies"]["Row"]["pkd_codes"];
+
+type PkdCode = {
+  code: string;
+  name: string;
+};
+
+function isPkdCode(value: unknown): value is PkdCode {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const candidate = value as Record<string, unknown>;
+  return typeof candidate.code === "string" && typeof candidate.name === "string";
+}
+
+function getPkdCodes(value: PkdCodesValue) {
+  return Array.isArray(value) ? value.filter(isPkdCode) : [];
+}
 
 export default async function AdminCompanyDetailsPage({
   params,
@@ -59,6 +80,7 @@ export default async function AdminCompanyDetailsPage({
     .limit(1);
 
   const latestReview = reviews && reviews.length > 0 ? reviews[0] : null;
+  const pkdCodes = getPkdCodes(company.pkd_codes);
 
   const { data: planHistory } = await supabase
     .from("company_plan_changes")
@@ -130,11 +152,11 @@ export default async function AdminCompanyDetailsPage({
                   <strong className="text-slate-900">Główny PKD:</strong>{" "}
                   {company.primary_pkd || "-"}
                 </li>
-                {company.pkd_codes && (company.pkd_codes as any[]).length > 0 && (
+                {pkdCodes.length > 0 && (
                   <li>
                     <strong className="text-slate-900">Wszystkie kody:</strong>
                     <div className="mt-1 max-h-32 overflow-y-auto rounded-md bg-slate-50 p-2 text-xs border border-slate-200">
-                      {(company.pkd_codes as any[]).map((pkd: any) => (
+                      {pkdCodes.map((pkd) => (
                         <div key={pkd.code}>
                           {pkd.code} - {pkd.name}
                         </div>

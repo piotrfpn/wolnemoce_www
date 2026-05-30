@@ -334,6 +334,32 @@ export default async function AdminPage() {
             <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-center md:justify-between">
               <div className="min-w-0">
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
+                  <i className="fas fa-certificate"></i>
+                </div>
+                <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
+                  Certyfikaty
+                </p>
+                <h2 className="text-2xl font-extrabold text-slate-900">
+                  Certyfikaty firm
+                </h2>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+                  Przeglądaj i moderuj certyfikaty dodane przez firmy.
+                </p>
+              </div>
+              <Link
+                href="/admin/certyfikaty"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline transition hover:bg-[#1a5f3c] hover:text-white"
+              >
+                Zarządzaj certyfikatami
+                <i className="fas fa-arrow-right text-xs"></i>
+              </Link>
+            </div>
+          </section>
+
+          <section className="mb-8 min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+            <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-center md:justify-between">
+              <div className="min-w-0">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
                   <i className="fas fa-envelope-open-text"></i>
                 </div>
                 <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
