@@ -13,6 +13,7 @@ type LocaleCompaniesPageProps = {
   params: {
     locale: string;
   };
+  searchParams?: Record<string, string | string[] | undefined>;
 };
 
 export const revalidate = 3600;
@@ -44,10 +45,11 @@ export function generateMetadata({ params }: LocaleCompaniesPageProps): Metadata
 
 export default function LocalizedCompaniesPage({
   params,
+  searchParams,
 }: LocaleCompaniesPageProps) {
   if (!isSupportedLocale(params.locale) || params.locale === "pl") {
     notFound();
   }
 
-  return <CompaniesListView locale={params.locale} />;
+  return <CompaniesListView locale={params.locale} searchParams={searchParams} />;
 }

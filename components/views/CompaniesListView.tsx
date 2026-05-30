@@ -11,6 +11,30 @@ import CompanyDirectoryClient, {
 
 export const revalidate = 3600;
 
+type CompaniesListViewProps = {
+  locale?: Locale;
+  searchParams?: Record<string, string | string[] | undefined>;
+};
+
+type CertificatesFilter = "all" | "yes" | "no";
+
+function getSingleParam(
+  searchParams: CompaniesListViewProps["searchParams"],
+  key: string
+) {
+  const value = searchParams?.[key];
+
+  return Array.isArray(value) ? value[0] ?? "" : value ?? "";
+}
+
+function getCertificatesFilter(
+  searchParams: CompaniesListViewProps["searchParams"]
+): CertificatesFilter {
+  const value = getSingleParam(searchParams, "certificates");
+
+  return value === "yes" || value === "no" ? value : "all";
+}
+
 function createPublicSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -45,15 +69,44 @@ async function getVerifiedCompanies() {
     return [];
   }
 
-  return (data ?? []) as DirectoryCompany[];
+  const companies = (data ?? []) as DirectoryCompany[];
+
+  if (companies.length === 0) {
+    return [];
+  }
+
+  const { data: certificatesData, error: certificatesError } = await supabase
+    .from("company_certificates")
+    .select("company_id")
+    .eq("visibility", "public")
+    .neq("verification_status", "rejected");
+
+  if (certificatesError) {
+    console.error("Company certificates query failed", certificatesError);
+    return companies.map((company) => ({
+      ...company,
+      has_public_certificates: false,
+    }));
+  }
+
+  const certifiedCompanyIds = new Set(
+    (certificatesData ?? [])
+      .map((certificate) => certificate.company_id)
+      .filter(Boolean)
+  );
+
+  return companies.map((company) => ({
+    ...company,
+    has_public_certificates: certifiedCompanyIds.has(company.id),
+  }));
 }
 
 export default async function CompaniesListView({
   locale = defaultLocale,
-}: {
-  locale?: Locale;
-}) {
+  searchParams,
+}: CompaniesListViewProps) {
   const t = getDictionary(locale).companiesList;
+  const certificatesFilter = getCertificatesFilter(searchParams);
   const companies = await getVerifiedCompanies();
 
   return (
@@ -85,7 +138,11 @@ export default async function CompaniesListView({
           </div>
         </section>
 
-        <CompanyDirectoryClient companies={companies} locale={locale} />
+        <CompanyDirectoryClient
+          companies={companies}
+          initialCertificatesFilter={certificatesFilter}
+          locale={locale}
+        />
       </main>
       <Footer locale={locale} />
     </>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
 import { defaultLocale, type Locale } from "@/lib/i18n/config";
@@ -19,7 +20,10 @@ export type DirectoryCompany = {
   website_url: string | null;
   is_verified: boolean | null;
   created_at: string | null;
+  has_public_certificates?: boolean;
 };
+
+type CertificatesFilter = "all" | "yes" | "no";
 
 const inputClass =
   "min-w-0 max-w-full w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10";
@@ -73,11 +77,15 @@ function truncateDescription(
 
 export default function CompanyDirectoryClient({
   companies,
+  initialCertificatesFilter = "all",
   locale = defaultLocale,
 }: {
   companies: DirectoryCompany[];
+  initialCertificatesFilter?: CertificatesFilter;
   locale?: Locale;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
   const labels = getDictionary(locale).companiesList;
   const badgeLabels = getDictionary(locale).offerCard;
   const [query, setQuery] = useState("");
@@ -86,6 +94,9 @@ export default function CompanyDirectoryClient({
   const [industry, setIndustry] = useState("");
   const [serviceType, setServiceType] = useState("");
   const [sort, setSort] = useState<"az" | "newest">("az");
+  const [certificates, setCertificates] = useState<CertificatesFilter>(
+    initialCertificatesFilter
+  );
 
   const options = useMemo(
     () => ({
@@ -118,13 +129,18 @@ export default function CompanyDirectoryClient({
         const matchesIndustry = !industry || industries.includes(industry);
         const matchesService =
           !serviceType || services.includes(serviceType);
+        const matchesCertificates =
+          certificates === "all" ||
+          (certificates === "yes" && Boolean(company.has_public_certificates)) ||
+          (certificates === "no" && !company.has_public_certificates);
 
         return (
           matchesQuery &&
           matchesVoivodeship &&
           matchesCity &&
           matchesIndustry &&
-          matchesService
+          matchesService &&
+          matchesCertificates
         );
       })
       .sort((a, b) => {
@@ -137,7 +153,35 @@ export default function CompanyDirectoryClient({
 
         return (a.name ?? "").localeCompare(b.name ?? "", "pl");
       });
-  }, [companies, query, voivodeship, city, industry, serviceType, sort]);
+  }, [
+    certificates,
+    companies,
+    query,
+    voivodeship,
+    city,
+    industry,
+    serviceType,
+    sort,
+  ]);
+
+  function updateCertificatesFilter(value: CertificatesFilter) {
+    setCertificates(value);
+
+    const params = new URLSearchParams(
+      typeof window === "undefined" ? "" : window.location.search
+    );
+
+    if (value === "all") {
+      params.delete("certificates");
+    } else {
+      params.set("certificates", value);
+    }
+
+    const queryString = params.toString();
+    router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
+      scroll: false,
+    });
+  }
 
   function clearFilters() {
     setQuery("");
@@ -145,6 +189,7 @@ export default function CompanyDirectoryClient({
     setCity("");
     setIndustry("");
     setServiceType("");
+    updateCertificatesFilter("all");
     setSort("az");
   }
 
@@ -266,6 +311,25 @@ export default function CompanyDirectoryClient({
             >
               <option value="az">{labels.sortAz}</option>
               <option value="newest">{labels.sortNewest}</option>
+            </select>
+          </label>
+
+          <label className="block min-w-0">
+            <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
+              {labels.certificatesLabel}
+            </span>
+            <select
+              value={certificates}
+              onChange={(event) =>
+                updateCertificatesFilter(
+                  event.target.value as CertificatesFilter
+                )
+              }
+              className={inputClass}
+            >
+              <option value="all">{labels.certificatesAll}</option>
+              <option value="yes">{labels.certificatesYes}</option>
+              <option value="no">{labels.certificatesNo}</option>
             </select>
           </label>
         </div>

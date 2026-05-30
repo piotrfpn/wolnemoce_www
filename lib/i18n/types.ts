@@ -183,6 +183,10 @@ export type Dictionary = {
     allIndustries: string;
     serviceType: string;
     allServices: string;
+    certificatesLabel: string;
+    certificatesAll: string;
+    certificatesYes: string;
+    certificatesNo: string;
     sort: string;
     sortAz: string;
     sortNewest: string;

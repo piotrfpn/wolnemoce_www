@@ -11,6 +11,10 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
-export default function CompaniesPage() {
-  return <CompaniesListView locale="pl" />;
+type CompaniesPageProps = {
+  searchParams?: Record<string, string | string[] | undefined>;
+};
+
+export default function CompaniesPage({ searchParams }: CompaniesPageProps) {
+  return <CompaniesListView locale="pl" searchParams={searchParams} />;
 }
