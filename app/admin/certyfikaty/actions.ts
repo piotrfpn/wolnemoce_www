@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+
 import { createClient } from "@/lib/supabase/server";
 import type {
   CertificateActionResult,
@@ -8,6 +8,7 @@ import type {
   CertificateVerificationStatus,
 } from "./types";
 import type { Database } from "@/lib/database.types";
+import { revalidateCertificateViews } from "@/lib/revalidateCertificateViews";
 
 const publicBucket = "company-certificates-public";
 const privateBucket = "company-certificates-private";
@@ -112,12 +113,7 @@ export async function updateCertificateModeration(
     .eq("id", certificate.company_id)
     .maybeSingle();
 
-  revalidatePath("/admin");
-  revalidatePath("/admin/certyfikaty");
-
-  if (company?.slug) {
-    revalidatePath(`/firmy/${company.slug}`);
-  }
+  revalidateCertificateViews(company?.slug);
 
   return { success: "Zapisano status certyfikatu." };
 }
