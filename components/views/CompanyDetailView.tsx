@@ -36,6 +36,22 @@ type PublicCompany = {
   location_full_address: string | null;
 };
 
+type PublicCompanyCertificate = {
+  id: string;
+  name: string;
+  issuer: string | null;
+  certificate_number: string | null;
+  issued_at: string | null;
+  expires_at: string | null;
+  verification_status: string;
+  file_bucket: string | null;
+  file_path: string | null;
+  file_name: string | null;
+  created_at: string;
+};
+
+const publicCertificatesBucket = "company-certificates-public";
+
 function getInitials(name: string | null) {
   if (!name) {
     return "WM";
@@ -92,6 +108,67 @@ async function getCompanyActiveOffers(companyId: string, company: PublicCompany)
   }));
 }
 
+async function getPublicCompanyCertificates(companyId: string) {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("company_certificates")
+    .select(
+      "id, name, issuer, certificate_number, issued_at, expires_at, verification_status, file_bucket, file_path, file_name, created_at"
+    )
+    .eq("company_id", companyId)
+    .eq("visibility", "public")
+    .neq("verification_status", "rejected")
+    .order("created_at", { ascending: false });
+
+  return (data ?? []) as PublicCompanyCertificate[];
+}
+
+function formatCertificateDate(value: string | null, locale: Locale) {
+  if (!value) {
+    return null;
+  }
+
+  const dateLocales: Record<Locale, string> = {
+    pl: "pl-PL",
+    en: "en-US",
+    de: "de-DE",
+    uk: "uk-UA",
+    es: "es-ES",
+    fr: "fr-FR",
+  };
+
+  return new Intl.DateTimeFormat(dateLocales[locale]).format(new Date(value));
+}
+
+function getCertificateStatusLabel(
+  status: string,
+  labels: ReturnType<typeof getDictionary>["companyDetail"]
+) {
+  if (status === "admin_verified") {
+    return labels.certificateVerified;
+  }
+
+  return labels.certificateDeclared;
+}
+
+function getCertificateDownloadUrl(certificate: PublicCompanyCertificate) {
+  if (
+    certificate.file_bucket !== publicCertificatesBucket ||
+    !certificate.file_path
+  ) {
+    return null;
+  }
+
+  const supabase = createClient();
+  const { data } = supabase.storage
+    .from(publicCertificatesBucket)
+    .getPublicUrl(certificate.file_path);
+  const separator = data.publicUrl.includes("?") ? "&download=" : "?download=";
+  const fileName = certificate.file_name ?? "certyfikat";
+
+  return `${data.publicUrl}${separator}${encodeURIComponent(fileName)}`;
+}
+
 export async function generateCompanyDetailMetadata({
   slug,
   locale,
@@ -136,7 +213,10 @@ export default async function CompanyDetailView({
     notFound();
   }
 
-  const activeOffers = await getCompanyActiveOffers(company.id, company);
+  const [activeOffers, certificates] = await Promise.all([
+    getCompanyActiveOffers(company.id, company),
+    getPublicCompanyCertificates(company.id),
+  ]);
   const location = [company.location_city, company.location_voivodeship]
     .filter(Boolean)
     .join(", ");
@@ -346,6 +426,106 @@ export default async function CompanyDetailView({
                 </div>
               </div>
             </div>
+
+            {certificates.length > 0 ? (
+              <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 className="mb-3 text-2xl font-extrabold text-slate-900">
+                  {t.certificatesTitle}
+                </h2>
+                <p className="mb-5 text-sm leading-6 text-slate-500">
+                  {t.certificatesDescription}
+                </p>
+
+                <div className="space-y-4">
+                  {certificates.map((certificate) => {
+                    const issuedAt = formatCertificateDate(
+                      certificate.issued_at,
+                      locale
+                    );
+                    const expiresAt = formatCertificateDate(
+                      certificate.expires_at,
+                      locale
+                    );
+                    const downloadUrl = getCertificateDownloadUrl(certificate);
+
+                    return (
+                      <article
+                        key={certificate.id}
+                        className="rounded-2xl border border-slate-100 bg-slate-50 p-4"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
+                            <i className="fas fa-certificate"></i>
+                          </div>
+                          <div className="min-w-0">
+                            <h3 className="break-words text-sm font-extrabold text-slate-900">
+                              {certificate.name}
+                            </h3>
+                            <div className="mt-2 space-y-1 text-xs leading-5 text-slate-500">
+                              {certificate.issuer ? (
+                                <p>
+                                  <span className="font-bold text-slate-700">
+                                    {t.certificateIssuer}:
+                                  </span>{" "}
+                                  {certificate.issuer}
+                                </p>
+                              ) : null}
+                              {certificate.certificate_number ? (
+                                <p>
+                                  <span className="font-bold text-slate-700">
+                                    {t.certificateNumber}:
+                                  </span>{" "}
+                                  {certificate.certificate_number}
+                                </p>
+                              ) : null}
+                              {issuedAt ? (
+                                <p>
+                                  <span className="font-bold text-slate-700">
+                                    {t.issuedAt}:
+                                  </span>{" "}
+                                  {issuedAt}
+                                </p>
+                              ) : null}
+                              {expiresAt ? (
+                                <p>
+                                  <span className="font-bold text-slate-700">
+                                    {t.expiresAt}:
+                                  </span>{" "}
+                                  {expiresAt}
+                                </p>
+                              ) : null}
+                              {certificate.file_name ? (
+                                <p className="break-words">
+                                  <span className="font-bold text-slate-700">
+                                    {t.certificateFile}:
+                                  </span>{" "}
+                                  {certificate.file_name}
+                                </p>
+                              ) : null}
+                            </div>
+                            <div className="mt-3 flex flex-wrap gap-2">
+                              <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+                                {getCertificateStatusLabel(certificate.verification_status, t)}
+                              </span>
+                              {downloadUrl ? (
+                                <a
+                                  href={downloadUrl}
+                                  download={certificate.file_name ?? "certyfikat"}
+                                  className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white"
+                                >
+                                  <i className="fas fa-download"></i>
+                                  {t.downloadCertificate}
+                                </a>
+                              ) : null}
+                            </div>
+                          </div>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
           </aside>
 
           <div className="min-w-0 space-y-8">

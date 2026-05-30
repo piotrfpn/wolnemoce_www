@@ -458,6 +458,18 @@ const fr: Dictionary = {
     viewOffers: "Voir toutes les offres",
     askAboutOffer: "Demander cette offre",
     noActiveOffers: "Cette entreprise n’a pas encore d’offres actives.",
+    certificatesTitle: "Certificats de l’entreprise",
+    certificatesDescription:
+      "Certificats de qualité, de conformité et sectoriels déclarés par l’entreprise.",
+    certificateDeclared: "Déclaré par l’entreprise",
+    certificateVerified: "Vérifié par l’administrateur",
+    certificateNumber: "Numéro de certificat",
+    certificateIssuer: "Organisme émetteur",
+    certificateFile: "Fichier",
+    issuedAt: "Émis le",
+    expiresAt: "Valable jusqu’au",
+    downloadCertificate: "Télécharger le certificat",
+    noCertificates: "L’entreprise n’a pas encore ajouté de certificats publics.",
     publicProfile: "Profil de l’entreprise",
     notFoundTitle: "Entreprise introuvable | WolneMoce.pl",
     notFoundDescription:

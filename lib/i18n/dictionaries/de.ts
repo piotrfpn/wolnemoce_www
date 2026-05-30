@@ -465,6 +465,19 @@ const de: Dictionary = {
     viewOffers: "Alle Angebote ansehen",
     askAboutOffer: "Angebot anfragen",
     noActiveOffers: "Diese Firma hat noch keine aktiven Angebote.",
+    certificatesTitle: "Zertifikate der Firma",
+    certificatesDescription:
+      "Von der Firma erklärte Qualitäts-, Konformitäts- und Branchenzertifikate.",
+    certificateDeclared: "Von der Firma erklärt",
+    certificateVerified: "Durch Administrator verifiziert",
+    certificateNumber: "Zertifikatsnummer",
+    certificateIssuer: "Ausstellende Stelle",
+    certificateFile: "Datei",
+    issuedAt: "Ausgestellt",
+    expiresAt: "Gültig bis",
+    downloadCertificate: "Zertifikat herunterladen",
+    noCertificates:
+      "Die Firma hat noch keine öffentlichen Zertifikate hinzugefügt.",
     publicProfile: "Firmenprofil",
     notFoundTitle: "Firma nicht gefunden | WolneMoce.pl",
     notFoundDescription:

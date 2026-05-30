@@ -371,6 +371,17 @@ export type Dictionary = {
     viewOffers: string;
     askAboutOffer: string;
     noActiveOffers: string;
+    certificatesTitle: string;
+    certificatesDescription: string;
+    certificateDeclared: string;
+    certificateVerified: string;
+    certificateNumber: string;
+    certificateIssuer: string;
+    certificateFile: string;
+    issuedAt: string;
+    expiresAt: string;
+    downloadCertificate: string;
+    noCertificates: string;
     publicProfile: string;
     notFoundTitle: string;
     notFoundDescription: string;

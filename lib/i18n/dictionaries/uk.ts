@@ -458,6 +458,18 @@ const uk: Dictionary = {
     viewOffers: "Переглянути всі пропозиції",
     askAboutOffer: "Запитати про пропозицію",
     noActiveOffers: "Ця компанія ще не має активних пропозицій.",
+    certificatesTitle: "Сертифікати компанії",
+    certificatesDescription:
+      "Сертифікати якості, відповідності та галузеві сертифікати, заявлені компанією.",
+    certificateDeclared: "Заявлено компанією",
+    certificateVerified: "Перевірено адміністратором",
+    certificateNumber: "Номер сертифіката",
+    certificateIssuer: "Орган, що видав",
+    certificateFile: "Файл",
+    issuedAt: "Видано",
+    expiresAt: "Дійсний до",
+    downloadCertificate: "Завантажити сертифікат",
+    noCertificates: "Компанія ще не додала публічних сертифікатів.",
     publicProfile: "Профіль компанії",
     notFoundTitle: "Компанію не знайдено | WolneMoce.pl",
     notFoundDescription:
