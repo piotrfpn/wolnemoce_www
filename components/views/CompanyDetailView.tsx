@@ -140,15 +140,23 @@ function formatCertificateDate(value: string | null, locale: Locale) {
   return new Intl.DateTimeFormat(dateLocales[locale]).format(new Date(value));
 }
 
-function getCertificateStatusLabel(
+function getCertificateStatus(
   status: string,
   labels: ReturnType<typeof getDictionary>["companyDetail"]
 ) {
   if (status === "admin_verified") {
-    return labels.certificateVerified;
+    return {
+      label: labels.certificateVerifiedLabel,
+      description: labels.certificateVerifiedDescription,
+      isVerified: true,
+    };
   }
 
-  return labels.certificateDeclared;
+  return {
+    label: labels.certificateDeclaredLabel,
+    description: labels.certificateDeclaredDescription,
+    isVerified: false,
+  };
 }
 
 function getCertificateDownloadUrl(certificate: PublicCompanyCertificate) {
@@ -253,6 +261,8 @@ export default async function CompanyDetailView({
                   <VerifiedCompanyBadge
                     isVerified={company.is_verified}
                     className="!px-4 !py-2 !uppercase !tracking-wide"
+                    verifiedLabel={t.trustCompanyVerifiedTitle}
+                    verifiedTitle={t.trustCompanyVerifiedDescription}
                   />
                   {company.industry ? (
                     <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white">
@@ -315,17 +325,31 @@ export default async function CompanyDetailView({
               </div>
             </div>
 
+            {company.is_verified && (
+              <div className="rounded-[24px] border border-emerald-100 bg-gradient-to-br from-emerald-50 to-emerald-100/50 p-6 shadow-sm">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shadow-sm">
+                    <i className="fas fa-shield-check text-lg"></i>
+                  </div>
+                  <h2 className="text-xl font-extrabold text-emerald-900">
+                    {t.trustCompanyVerifiedTitle}
+                  </h2>
+                </div>
+                <p className="mb-3 text-sm font-medium text-emerald-800 leading-relaxed">
+                  {t.trustCompanyVerifiedDescription}
+                </p>
+                <p className="text-xs text-emerald-600/80 font-medium">
+                  {t.trustCompanyVerifiedDisclaimer}
+                </p>
+              </div>
+            )}
+
             <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
               <h2 className="mb-5 text-2xl font-extrabold text-slate-900">
                 {t.registrationData}
               </h2>
               <p className="mb-4 text-xs leading-5 text-slate-500">
                 {t.registrationNotice}
-                {company.is_verified && (
-                  <span className="block mt-2 font-medium text-[#1a5f3c]">
-                    {t.verifiedNotice}
-                  </span>
-                )}
               </p>
               <div className="space-y-3 text-sm text-slate-600">
                 {company.nip && (
@@ -386,45 +410,41 @@ export default async function CompanyDetailView({
               <h2 className="mb-5 text-2xl font-extrabold text-slate-900">
                 {t.industriesAndServices}
               </h2>
-              <div className="mb-6">
-                <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
-                  {t.industries}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {industries.length > 0 ? (
-                    industries.map((industry) => (
+              {industries.length > 0 && (
+                <div className="mb-6">
+                  <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+                    {t.industries}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {industries.map((industry) => (
                       <span
                         key={industry}
                         className="rounded-full bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700"
                       >
                         {industry}
                       </span>
-                    ))
-                  ) : (
-                    <span className="text-sm text-slate-500">{t.noData}</span>
-                  )}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div>
-                <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
-                  {t.services}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {company.service_types && company.service_types.length > 0 ? (
-                    company.service_types.map((serviceType) => (
+              {company.service_types && company.service_types.length > 0 && (
+                <div>
+                  <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+                    {t.services}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {company.service_types.map((serviceType) => (
                       <span
                         key={serviceType}
                         className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700"
                       >
                         {serviceType}
                       </span>
-                    ))
-                  ) : (
-                    <span className="text-sm text-slate-500">{t.noData}</span>
-                  )}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {certificates.length > 0 ? (
@@ -447,6 +467,7 @@ export default async function CompanyDetailView({
                       locale
                     );
                     const downloadUrl = getCertificateDownloadUrl(certificate);
+                    const status = getCertificateStatus(certificate.verification_status, t);
 
                     return (
                       <article
@@ -504,8 +525,14 @@ export default async function CompanyDetailView({
                               ) : null}
                             </div>
                             <div className="mt-3 flex flex-wrap gap-2">
-                              <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                                {getCertificateStatusLabel(certificate.verification_status, t)}
+                              <span
+                                className={`rounded-full px-3 py-1 text-xs font-bold ${status.isVerified ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-700'}`}
+                                title={status.description}
+                              >
+                                {status.isVerified && (
+                                  <i className="fas fa-check-circle mr-1.5"></i>
+                                )}
+                                {status.label}
                               </span>
                               {downloadUrl ? (
                                 <a
@@ -534,26 +561,26 @@ export default async function CompanyDetailView({
                 {t.companyDescription}
               </h2>
               <p className="whitespace-pre-line text-base leading-8 text-slate-600">
-                {company.description || t.noDescription}
+                {company.description || t.emptyCompanyDescription}
               </p>
             </section>
 
-            <section className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-              <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                <div>
-                  <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-                    {t.activeCompanyOffers}
-                  </p>
-                  <h2 className="text-2xl font-extrabold text-slate-900">
-                    {t.availableCapacity}
-                  </h2>
+            {activeOffers.length > 0 && (
+              <section className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+                <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                  <div>
+                    <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
+                      {t.activeCompanyOffers}
+                    </p>
+                    <h2 className="text-2xl font-extrabold text-slate-900">
+                      {t.availableCapacity}
+                    </h2>
+                  </div>
+                  <Link href={getLocalizedPath("/oferty", locale)} className="btn btn-outline">
+                    {t.viewOffers}
+                  </Link>
                 </div>
-                <Link href={getLocalizedPath("/oferty", locale)} className="btn btn-outline">
-                  {t.viewOffers}
-                </Link>
-              </div>
 
-              {activeOffers.length > 0 ? (
                 <div className="grid min-w-0 gap-6 xl:grid-cols-2">
                   {activeOffers.map((offer) => (
                     <div key={offer.id} className="min-w-0">
@@ -570,12 +597,8 @@ export default async function CompanyDetailView({
                     </div>
                   ))}
                 </div>
-              ) : (
-                <div className="rounded-[20px] border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-sm text-slate-500">
-                  {t.noActiveOffers}
-                </div>
-              )}
-            </section>
+              </section>
+            )}
           </div>
         </section>
       </main>

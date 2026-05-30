@@ -359,6 +359,9 @@ export type Dictionary = {
     registrationData: string;
     registrationNotice: string;
     verifiedNotice: string;
+    trustCompanyVerifiedTitle: string;
+    trustCompanyVerifiedDescription: string;
+    trustCompanyVerifiedDisclaimer: string;
     legalForm: string;
     businessStatus: string;
     primaryPkd: string;
@@ -370,6 +373,7 @@ export type Dictionary = {
     noData: string;
     companyDescription: string;
     noDescription: string;
+    emptyCompanyDescription: string;
     activeCompanyOffers: string;
     availableCapacity: string;
     viewOffers: string;
@@ -377,8 +381,10 @@ export type Dictionary = {
     noActiveOffers: string;
     certificatesTitle: string;
     certificatesDescription: string;
-    certificateDeclared: string;
-    certificateVerified: string;
+    certificateDeclaredLabel: string;
+    certificateDeclaredDescription: string;
+    certificateVerifiedLabel: string;
+    certificateVerifiedDescription: string;
     certificateNumber: string;
     certificateIssuer: string;
     certificateFile: string;
