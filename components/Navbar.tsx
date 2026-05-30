@@ -23,9 +23,6 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
   const [isOpen, setIsOpen] = useState(false);
   const { user, isLoading } = useCurrentUser();
   const showContactCta = !isLoading && !user;
-  const hideLanguageSwitcher =
-    normalizedPathname.startsWith("/panel") ||
-    normalizedPathname.startsWith("/admin");
 
   const closeMenu = () => setIsOpen(false);
   const navLinks = [
@@ -81,11 +78,9 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
         </ul>
 
         <div className="hidden items-center gap-3 lg:flex">
-          {!hideLanguageSwitcher ? (
-            <Suspense fallback={null}>
-              <LanguageSwitcher />
-            </Suspense>
-          ) : null}
+          <Suspense fallback={null}>
+            <LanguageSwitcher locale={locale} />
+          </Suspense>
           <AuthNavButton labels={authLabels} loginHref={loginHref} />
           {showContactCta ? (
             <Link
@@ -100,14 +95,19 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
           </AddOfferLinkClient>
         </div>
 
-        <button
-          type="button"
-          className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-xl text-slate-800 lg:hidden"
-          onClick={() => setIsOpen((value) => !value)}
-          aria-label={t.openMenu}
-        >
-          <i className={`fas ${isOpen ? "fa-times" : "fa-bars"}`}></i>
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <Suspense fallback={null}>
+            <LanguageSwitcher locale={locale} />
+          </Suspense>
+          <button
+            type="button"
+            className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-xl text-slate-800"
+            onClick={() => setIsOpen((value) => !value)}
+            aria-label={t.openMenu}
+          >
+            <i className={`fas ${isOpen ? "fa-times" : "fa-bars"}`}></i>
+          </button>
+        </div>
       </div>
 
       {isOpen && (
@@ -134,11 +134,6 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
             })}
 
             <div className="mt-3 grid grid-cols-1 gap-3">
-              {!hideLanguageSwitcher ? (
-                <Suspense fallback={null}>
-                  <LanguageSwitcher />
-                </Suspense>
-              ) : null}
               <AuthNavButton
                 variant="mobile"
                 onNavigate={closeMenu}

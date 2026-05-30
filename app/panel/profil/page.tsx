@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import PanelNavbar from "@/components/PanelNavbar";
 import type { Database } from "@/lib/database.types";
 import { createClient } from "@/lib/supabase/server";
 import CompanyCertificatesSection from "./CompanyCertificatesSection";
@@ -67,7 +67,7 @@ export default async function CompanyProfilePage() {
 
   return (
     <>
-      <Navbar />
+      <PanelNavbar />
       <main className="bg-slate-50 pt-[72px]">
         <section className="mx-auto max-w-[1200px] px-6 py-16">
           <div className="mb-8">

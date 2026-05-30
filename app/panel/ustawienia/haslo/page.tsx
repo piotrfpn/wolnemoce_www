@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import PanelNavbar from "@/components/PanelNavbar";
 import ChangePasswordFormClient from "./ChangePasswordFormClient";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 
@@ -17,7 +17,7 @@ export default function ChangePasswordPage() {
 
   return (
     <>
-      <Navbar />
+      <PanelNavbar />
       <main className="bg-slate-50 pt-[72px]">
         <section className="mx-auto max-w-[680px] px-6 py-16">
           <Link

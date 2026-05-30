@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
   getLocalizedHref,
   getLocaleFromPathname,
+  stripLocalePrefix,
   supportedLocales,
   type Locale,
 } from "@/lib/i18n/config";
@@ -19,12 +20,23 @@ const localeLabels: Record<Locale, string> = {
   fr: "FR",
 };
 
-export default function LanguageSwitcher() {
+type LanguageSwitcherProps = {
+  locale?: Locale;
+};
+
+export default function LanguageSwitcher({
+  locale: localeProp,
+}: LanguageSwitcherProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const currentLocale = getLocaleFromPathname(pathname);
+  const currentLocale = localeProp ?? getLocaleFromPathname(pathname);
+  const normalizedPathname = stripLocalePrefix(pathname);
+  const isUnprefixedProtectedRoute =
+    normalizedPathname.startsWith("/panel") ||
+    normalizedPathname.startsWith("/admin");
   const query = searchParams.toString();
   const currentLabel = localeLabels[currentLocale];
 
@@ -76,14 +88,22 @@ export default function LanguageSwitcher() {
         <div className="absolute right-0 top-full z-50 mt-2 w-24 overflow-hidden rounded-xl border border-slate-200 bg-white p-1 shadow-xl">
           {supportedLocales.map((locale) => {
             const isActive = locale === currentLocale;
+            const href = isUnprefixedProtectedRoute
+              ? `${normalizedPathname}${query ? `?${query}` : ""}`
+              : getLocalizedHref(pathname, locale, query);
 
             return (
               <Link
                 key={locale}
-                href={getLocalizedHref(pathname, locale, query)}
-                onClick={() => {
+                href={href}
+                onClick={(event) => {
                   document.cookie = `wm_locale=${locale}; path=/; max-age=31536000; SameSite=Lax`;
                   setIsOpen(false);
+
+                  if (isUnprefixedProtectedRoute) {
+                    event.preventDefault();
+                    router.refresh();
+                  }
                 }}
                 className={`flex items-center justify-center rounded-lg px-3 py-2 text-xs font-extrabold no-underline transition ${
                   isActive

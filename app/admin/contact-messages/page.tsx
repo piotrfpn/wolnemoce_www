@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import PanelNavbar from "@/components/PanelNavbar";
 import { createClient } from "@/lib/supabase/server";
 import ContactMessageActionsClient from "./ContactMessageActionsClient";
 
@@ -151,7 +151,7 @@ export default async function AdminContactMessagesPage({
 
   return (
     <>
-      <Navbar />
+      <PanelNavbar />
       <main className="bg-slate-50 pt-[72px]">
         <section className="mx-auto max-w-[1400px] px-6 py-16">
           <div className="mb-8 flex min-w-0 flex-col gap-5 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:flex-row md:items-end md:justify-between md:p-8">

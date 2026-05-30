@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import LogoutButton from "@/components/LogoutButton";
-import Navbar from "@/components/Navbar";
+import PanelNavbar from "@/components/PanelNavbar";
 import { createClient } from "@/lib/supabase/server";
 import { getOfferLimitDisplay } from "@/lib/planEntitlements";
 import { getDictionary } from "@/lib/i18n/getDictionary";
@@ -187,7 +187,7 @@ export default async function PanelPage() {
 
   return (
     <>
-      <Navbar />
+      <PanelNavbar />
       <main className="bg-slate-50 pt-[72px]">
         <section className="mx-auto max-w-[1200px] px-6 py-16">
           <div className="mb-8 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import PanelNavbar from "@/components/PanelNavbar";
 import { createClient } from "@/lib/supabase/server";
 import InquiryActionsClient, {
   type InquiryAttachment,
@@ -146,7 +146,7 @@ export default async function PanelInquiriesPage({
   if (!company) {
     return (
       <>
-        <Navbar />
+        <PanelNavbar />
         <main className="bg-slate-50 pt-[72px]">
           <section className="mx-auto max-w-[1200px] px-6 py-16">
             <div className="rounded-[24px] border border-slate-200 bg-white p-8 text-center shadow-sm">
@@ -228,7 +228,7 @@ export default async function PanelInquiriesPage({
 
   return (
     <>
-      <Navbar />
+      <PanelNavbar />
       <main className="bg-slate-50 pt-[72px]">
         <section className="mx-auto max-w-[1200px] px-6 py-16">
           <div className="mb-8 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">

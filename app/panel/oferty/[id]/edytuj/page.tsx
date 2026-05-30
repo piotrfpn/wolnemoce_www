@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import PanelNavbar from "@/components/PanelNavbar";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createClient } from "@/lib/supabase/server";
 import EditOfferFormClient from "./EditOfferFormClient";
@@ -67,7 +67,7 @@ export default async function EditPanelOfferPage({
 
   return (
     <>
-      <Navbar />
+      <PanelNavbar />
       <main className="bg-slate-50 pt-[72px]">
         <section className="mx-auto max-w-[960px] px-6 py-16">
           <div className="mb-8">

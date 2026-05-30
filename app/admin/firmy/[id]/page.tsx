@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import PanelNavbar from "@/components/PanelNavbar";
 import { createClient } from "@/lib/supabase/server";
 import AdminCompanyVerificationClient from "./AdminCompanyVerificationClient";
 import AdminCompanyPlanClient from "./AdminCompanyPlanClient";
@@ -77,7 +77,7 @@ export default async function AdminCompanyDetailsPage({
 
   return (
     <>
-      <Navbar />
+      <PanelNavbar />
       <main className="bg-slate-50 pt-[72px] min-h-screen">
         <section className="mx-auto max-w-[1000px] px-6 py-16">
           <Link
