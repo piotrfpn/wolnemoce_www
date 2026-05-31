@@ -192,7 +192,7 @@ export default async function PanelPage() {
   return (
     <>
       <PanelNavbar />
-      <main className="bg-slate-50 pt-[72px]">
+      <main className="bg-slate-50 pt-[128px]">
         <section className="mx-auto max-w-[1200px] px-6 py-16">
           <div className="mb-8 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <div className="flex min-w-0 flex-col gap-6 md:flex-row md:items-center md:justify-between">

@@ -139,7 +139,7 @@ export default async function PanelOffersPage() {
   return (
     <>
       <PanelNavbar />
-      <main className="bg-slate-50 pt-[72px]">
+      <main className="bg-slate-50 pt-[128px]">
         <section className="mx-auto max-w-[1200px] px-6 py-16">
           <div className="mb-8 flex min-w-0 flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div className="min-w-0">

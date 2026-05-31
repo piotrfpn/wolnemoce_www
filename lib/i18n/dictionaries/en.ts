@@ -788,6 +788,13 @@ const en: Dictionary = {
       errorGeneric: "An error occurred. Please try again later.",
       successGeneric: "Operation completed successfully.",
     },
+    nav: {
+      dashboard: "Dashboard",
+      profile: "Company profile",
+      offers: "Offers",
+      inquiries: "Inquiries",
+      settings: "Settings",
+    },
     dashboard: {
       title: "Company Panel",
       subtitle: "Welcome to your company and offers management panel.",
@@ -1129,6 +1136,14 @@ const en: Dictionary = {
     actionMarkLeadNew: "Mark as new lead",
     actionMarkLeadInProgress: "Mark as in progress",
     actionMarkAnsweredOutsidePortal: "Mark as answered outside the portal",
+    nextStep: {
+      title: "Recommended next step",
+      noInquiries: "Wait for new inquiries from clients.",
+      unreadInquiries: "You have unread inquiries. Answer them first.",
+      newInprogress: "Contact selected companies or change the status of your inquiries.",
+      allAnswered: "All inquiries have 'Answered' status. Great job!",
+      noReadInquiries: "You don't have any read inquiries.",
+    },
   }
 };
 

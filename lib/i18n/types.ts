@@ -43,6 +43,14 @@ export type Dictionary = {
     actionMarkLeadNew: string;
     actionMarkLeadInProgress: string;
     actionMarkAnsweredOutsidePortal: string;
+    nextStep: {
+      title: string;
+      noInquiries: string;
+      unreadInquiries: string;
+      newInprogress: string;
+      allAnswered: string;
+      noReadInquiries: string;
+    };
   };
   common: {
     localeName: string;
@@ -659,6 +667,13 @@ export type Dictionary = {
       emptyState: string;
       errorGeneric: string;
       successGeneric: string;
+    };
+    nav: {
+      dashboard: string;
+      profile: string;
+      offers: string;
+      inquiries: string;
+      settings: string;
     };
     dashboard: {
       title: string;

@@ -70,7 +70,7 @@ export default async function EditPanelOfferPage({
   return (
     <>
       <PanelNavbar />
-      <main className="bg-slate-50 pt-[72px]">
+      <main className="bg-slate-50 pt-[128px]">
         <section className="mx-auto max-w-[960px] px-6 py-16">
           <div className="mb-8">
             <Link

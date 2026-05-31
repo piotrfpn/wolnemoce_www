@@ -44,7 +44,7 @@ export default async function AccountSettingsPage() {
   return (
     <>
       <PanelNavbar />
-      <main className="bg-slate-50 pt-[72px]">
+      <main className="bg-slate-50 pt-[128px]">
         <section className="mx-auto max-w-[1100px] px-6 py-16">
           <div className="mb-8 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <Link

@@ -200,7 +200,7 @@ export default async function PanelInquiriesPage({
     return (
       <>
         <PanelNavbar />
-        <main className="bg-slate-50 pt-[72px]">
+        <main className="bg-slate-50 pt-[128px]">
           <section className="mx-auto max-w-[1200px] px-6 py-16">
             <div className="rounded-[24px] border border-slate-200 bg-white p-8 text-center shadow-sm">
               <h1 className="text-3xl font-extrabold text-slate-900">
@@ -287,10 +287,23 @@ export default async function PanelInquiriesPage({
   }));
   const unreadCount = unreadCountResult.count ?? 0;
 
+  let nextStepText = t.nextStep.noInquiries;
+  if (companyInquiries.length === 0 && activeRead === "all" && activeLeadStatus === "all") {
+    nextStepText = t.nextStep.noInquiries;
+  } else if (unreadCount > 0) {
+    nextStepText = t.nextStep.unreadInquiries;
+  } else if (companyInquiries.some(i => i.lead_status === 'new' || i.lead_status === 'in_progress')) {
+    nextStepText = t.nextStep.newInprogress;
+  } else if (companyInquiries.length > 0) {
+    nextStepText = t.nextStep.allAnswered;
+  } else {
+    nextStepText = t.nextStep.noReadInquiries;
+  }
+
   return (
     <>
       <PanelNavbar />
-      <main className="bg-slate-50 pt-[72px]">
+      <main className="bg-slate-50 pt-[128px]">
         <section className="mx-auto max-w-[1200px] px-6 py-16">
           <div className="mb-8 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
@@ -333,7 +346,7 @@ export default async function PanelInquiriesPage({
                           : "bg-slate-100 text-slate-600 hover:bg-[#1a5f3c]/10 hover:text-[#1a5f3c]"
                       }`}
                     >
-                      {t[filter.label as keyof typeof t]}
+                      {t[filter.label as keyof typeof t] as string}
                     </Link>
                   ))}
                 </div>
@@ -358,7 +371,7 @@ export default async function PanelInquiriesPage({
                           : "bg-slate-100 text-slate-600 hover:bg-[#1a5f3c]/10 hover:text-[#1a5f3c]"
                       }`}
                     >
-                      {t[filter.label as keyof typeof t]}
+                      {t[filter.label as keyof typeof t] as string}
                     </Link>
                   ))}
                 </div>
@@ -383,11 +396,21 @@ export default async function PanelInquiriesPage({
                           : "bg-slate-100 text-slate-600 hover:bg-[#1a5f3c]/10 hover:text-[#1a5f3c]"
                       }`}
                     >
-                      {t[option.label as keyof typeof t]}
+                      {t[option.label as keyof typeof t] as string}
                     </Link>
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div className="mb-6 rounded-[24px] border border-[#1a5f3c]/20 bg-[#1a5f3c]/5 p-5 shadow-sm flex items-start gap-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1a5f3c] text-white">
+              <i className="fas fa-lightbulb"></i>
+            </div>
+            <div>
+              <p className="mb-1 text-sm font-bold text-[#1a5f3c]">{t.nextStep.title}</p>
+              <p className="text-sm font-medium text-[#1a5f3c]/80">{nextStepText}</p>
             </div>
           </div>
 

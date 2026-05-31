@@ -743,6 +743,13 @@ const es: Dictionary = {
       errorGeneric: "Ocurrió un error. Por favor, inténtelo de nuevo más tarde.",
       successGeneric: "Operación completada con éxito.",
     },
+    nav: {
+      dashboard: "Dashboard",
+      profile: "Perfil de la empresa",
+      offers: "Ofertas",
+      inquiries: "Consultas",
+      settings: "Ajustes",
+    },
     dashboard: {
       title: "Panel de empresa",
       subtitle: "Bienvenido a su panel de gestión de empresa y ofertas.",
@@ -1027,6 +1034,14 @@ const es: Dictionary = {
     actionMarkLeadNew: "Marcar como nuevo lead",
     actionMarkLeadInProgress: "Marcar como en curso",
     actionMarkAnsweredOutsidePortal: "Marcar como respondido fuera del portal",
+    nextStep: {
+      title: "Próximo paso recomendado",
+      noInquiries: "Espera nuevas consultas de los clientes.",
+      unreadInquiries: "Tienes consultas no leídas. Responde a ellas primero.",
+      newInprogress: "Contacta a las empresas seleccionadas o cambia el estado de tus consultas.",
+      allAnswered: "Todas las consultas tienen el estado 'Respondido'. ¡Bien hecho!",
+      noReadInquiries: "No tienes consultas leídas.",
+    },
   }
 };
 

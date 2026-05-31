@@ -743,6 +743,13 @@ const fr: Dictionary = {
       errorGeneric: "Une erreur s'est produite. Veuillez réessayer plus tard.",
       successGeneric: "Opération terminée avec succès.",
     },
+    nav: {
+      dashboard: "Tableau de bord",
+      profile: "Profil de l'entreprise",
+      offers: "Offres",
+      inquiries: "Demandes",
+      settings: "Paramètres",
+    },
     dashboard: {
       title: "Panel entreprise",
       subtitle: "Bienvenue dans votre panel de gestion d'entreprise et d'offres.",
@@ -1027,6 +1034,14 @@ const fr: Dictionary = {
     actionMarkLeadNew: "Marquer comme nouveau lead",
     actionMarkLeadInProgress: "Marquer comme en cours",
     actionMarkAnsweredOutsidePortal: "Marquer comme répondu hors du portail",
+    nextStep: {
+      title: "Prochaine étape recommandée",
+      noInquiries: "Attendez de nouvelles demandes de clients.",
+      unreadInquiries: "Vous avez des demandes non lues. Répondez-y d'abord.",
+      newInprogress: "Contactez les entreprises sélectionnées ou modifiez le statut de vos demandes.",
+      allAnswered: "Toutes les demandes ont le statut 'Répondu'. Bien joué !",
+      noReadInquiries: "Vous n'avez aucune demande lue.",
+    },
   }
 };
 

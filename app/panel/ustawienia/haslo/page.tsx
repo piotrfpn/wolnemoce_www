@@ -22,7 +22,7 @@ export default function ChangePasswordPage() {
   return (
     <>
       <PanelNavbar />
-      <main className="bg-slate-50 pt-[72px]">
+      <main className="bg-slate-50 pt-[128px]">
         <section className="mx-auto max-w-[680px] px-6 py-16">
           <Link
             href="/panel/ustawienia"

@@ -759,6 +759,13 @@ const de: Dictionary = {
       errorGeneric: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
       successGeneric: "Operation erfolgreich abgeschlossen.",
     },
+    nav: {
+      dashboard: "Dashboard",
+      profile: "Firmenprofil",
+      offers: "Angebote",
+      inquiries: "Anfragen",
+      settings: "Einstellungen",
+    },
     dashboard: {
       title: "Firmenpanel",
       subtitle: "Willkommen in Ihrem Firmen- und Angebotsmanagement-Panel.",
@@ -1043,6 +1050,14 @@ const de: Dictionary = {
     actionMarkLeadNew: "Als neuen Lead markieren",
     actionMarkLeadInProgress: "Als in Bearbeitung markieren",
     actionMarkAnsweredOutsidePortal: "Als außerhalb des Portals beantwortet markieren",
+    nextStep: {
+      title: "Empfohlener nächster Schritt",
+      noInquiries: "Warten Sie auf neue Anfragen von Kunden.",
+      unreadInquiries: "Sie haben ungelesene Anfragen. Beantworten Sie diese zuerst.",
+      newInprogress: "Kontaktieren Sie ausgewählte Firmen oder ändern Sie den Status Ihrer Anfragen.",
+      allAnswered: "Alle Anfragen haben den Status 'Beantwortet'. Gut gemacht!",
+      noReadInquiries: "Sie haben keine gelesenen Anfragen.",
+    },
   }
 };
 

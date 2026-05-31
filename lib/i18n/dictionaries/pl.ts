@@ -812,6 +812,13 @@ const pl: Dictionary = {
       errorGeneric: "Wystąpił błąd. Spróbuj ponownie później.",
       successGeneric: "Operacja zakończona sukcesem.",
     },
+    nav: {
+      dashboard: "Panel",
+      profile: "Profil firmy",
+      offers: "Oferty",
+      inquiries: "Zapytania",
+      settings: "Ustawienia",
+    },
     dashboard: {
       title: "Panel firmy",
       subtitle: "Witaj w panelu zarządzania firmą i ofertami.",
@@ -1150,9 +1157,17 @@ const pl: Dictionary = {
     leadStatusAnsweredOutsidePortal: "Odpowiedziano poza portalem",
     leadStatusUpdateError: "Nie udało się zmienić statusu obsługi.",
     leadStatusUpdateSuccess: "Status obsługi został zaktualizowany.",
-    actionMarkLeadNew: "Oznacz jako nowy lead",
-    actionMarkLeadInProgress: "Oznacz jako w trakcie obsługi",
-    actionMarkAnsweredOutsidePortal: "Oznacz jako odpowiedziano poza portalem",
+    actionMarkLeadNew: "Oznacz jako Nowy",
+    actionMarkLeadInProgress: "W trakcie rozmów",
+    actionMarkAnsweredOutsidePortal: "Odpowiedziano poza portalem",
+    nextStep: {
+      title: "Rekomendowany następny krok",
+      noInquiries: "Oczekuj na nowe zapytania od klientów.",
+      unreadInquiries: "Masz nieprzeczytane zapytania. Odpowiedz na nie w pierwszej kolejności.",
+      newInprogress: "Skontaktuj się z wybranymi firmami lub zmień status zapytań.",
+      allAnswered: "Wszystkie zapytania mają status 'Odpowiedziano'. Świetna robota!",
+      noReadInquiries: "Nie masz żadnych przeczytanych zapytań.",
+    },
   }
 };
 

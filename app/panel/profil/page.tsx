@@ -72,7 +72,7 @@ export default async function CompanyProfilePage() {
   return (
     <>
       <PanelNavbar />
-      <main className="bg-slate-50 pt-[72px]">
+      <main className="bg-slate-50 pt-[128px]">
         <section className="mx-auto max-w-[1200px] px-6 py-16">
           <div className="mb-8">
             <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">

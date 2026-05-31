@@ -53,7 +53,7 @@ async function updateInquiryStatus(inquiryId: string, status: "read" | "archived
     throw new Error(`Nie udało się zmienić statusu zapytania: ${error.message}`);
   }
 
-  revalidatePath("/panel");
+  revalidatePath("/panel", "layout");
   revalidatePath("/panel/zapytania");
 }
 
@@ -97,7 +97,7 @@ export async function updateInquiryLeadStatus(
     return { error: "leadStatusUpdateError" };
   }
 
-  revalidatePath("/panel");
+  revalidatePath("/panel", "layout");
   revalidatePath("/panel/zapytania");
   return { success: true };
 }
