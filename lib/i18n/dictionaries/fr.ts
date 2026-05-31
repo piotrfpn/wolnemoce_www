@@ -439,6 +439,13 @@ const fr: Dictionary = {
     notFoundTitle: "Offre introuvable | WolneMoce.pl",
     notFoundDescription:
       "L’offre n’existe pas ou n’est pas active publiquement.",
+    rfqCta: "Envoyer une demande pour cette offre",
+    rfqCtaMicrocopy: "La demande est gratuite. Décrivez la portée, la quantité, le délai et ajoutez une pièce jointe technique si vous en avez une.",
+    rfqHelperTitle: "Comment préparer une bonne demande ?",
+    rfqHelper1: "décrivez la pièce, la technologie ou le processus,",
+    rfqHelper2: "spécifiez la quantité ou la portée des travaux,",
+    rfqHelper3: "indiquez le délai prévu,",
+    rfqHelper4: "ajoutez un dessin technique ou une spécification.",
   },
   companyDetail: {
     ...en.companyDetail,

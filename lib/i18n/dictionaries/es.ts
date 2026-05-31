@@ -439,6 +439,13 @@ const es: Dictionary = {
     notFoundTitle: "Oferta no encontrada | WolneMoce.pl",
     notFoundDescription:
       "La oferta no existe o no está activa públicamente.",
+    rfqCta: "Enviar consulta sobre esta oferta",
+    rfqCtaMicrocopy: "La consulta es gratuita. Describe el alcance, cantidad, plazo y añade un archivo adjunto técnico si lo tienes.",
+    rfqHelperTitle: "¿Cómo preparar una buena consulta?",
+    rfqHelper1: "describe la pieza, tecnología o proceso,",
+    rfqHelper2: "indica la cantidad o el alcance del trabajo,",
+    rfqHelper3: "indica el plazo esperado,",
+    rfqHelper4: "añade un dibujo técnico o especificación.",
   },
   companyDetail: {
     ...en.companyDetail,

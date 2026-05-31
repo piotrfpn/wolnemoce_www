@@ -459,6 +459,13 @@ const en: Dictionary = {
     contact: "Contact",
     notFoundTitle: "Offer not found | WolneMoce.pl",
     notFoundDescription: "The offer does not exist or is not publicly active.",
+    rfqCta: "Send inquiry about this offer",
+    rfqCtaMicrocopy: "The inquiry is free. Describe the scope, quantity, deadline, and add a technical attachment if you have one.",
+    rfqHelperTitle: "How to prepare a good inquiry?",
+    rfqHelper1: "describe the part, technology or process,",
+    rfqHelper2: "specify the quantity or scope of work,",
+    rfqHelper3: "indicate the expected deadline,",
+    rfqHelper4: "add a technical drawing or specification.",
   },
   companyDetail: {
     backToCompanies: "Back to companies",

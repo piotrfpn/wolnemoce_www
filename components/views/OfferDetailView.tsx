@@ -196,7 +196,7 @@ export default async function OfferDetailView({
     <>
       <Navbar locale={locale} />
 
-      <main className="bg-white">
+      <main className="bg-white pb-24 lg:pb-0">
         <section className="relative overflow-hidden bg-gradient-to-br from-[#0d3d26] via-[#1a5f3c] to-[#2d8a5e] px-6 pb-16 pt-36 text-white md:pb-20">
           <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(circle_at_20%_50%,white_2px,transparent_2px),radial-gradient(circle_at_80%_20%,white_1px,transparent_1px),radial-gradient(circle_at_40%_80%,white_1.5px,transparent_1.5px)] [background-size:60px_60px,40px_40px,80px_80px]" />
 
@@ -247,6 +247,19 @@ export default async function OfferDetailView({
                   <i className="fas fa-industry text-[#fbbf24]"></i>
                   {offer.branch ?? t.industry}
                 </span>
+              </div>
+
+              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <a
+                  href="#rfq-form"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#fbbf24] px-6 py-3.5 text-sm font-extrabold text-[#1a5f3c] shadow-lg transition-transform hover:scale-105"
+                >
+                  <i className="fas fa-paper-plane"></i>
+                  {t.rfqCta}
+                </a>
+                <p className="max-w-sm text-xs leading-5 text-white/80">
+                  {t.rfqCtaMicrocopy}
+                </p>
               </div>
             </div>
 
@@ -402,15 +415,65 @@ export default async function OfferDetailView({
             </section>
           </div>
 
-          <aside className="min-w-0">
-            <div className="sticky top-24 rounded-[24px] border border-slate-200 bg-white p-6 shadow-xl">
-              <RfqInlineFormClient
-                offerId={offer.id}
-                offerSlug={offer.slug}
-                offerTitle={offer.title}
-                companyName={companyName}
-                initialBuyerData={initialBuyerData}
-              />
+          <aside className="min-w-0" id="rfq-form">
+            <div className="sticky top-24 space-y-6">
+
+              <div className="rounded-[24px] border border-emerald-100 bg-emerald-50 p-5">
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-600 shadow-sm">
+                    <i className="fas fa-shield-check text-lg"></i>
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-emerald-900">Zaufany kontakt</h3>
+                    <p className="text-xs font-medium text-emerald-700">Weryfikujemy rejestry firm</p>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <VerifiedCompanyBadge
+                    isVerified={company?.is_verified}
+                    className="!w-full justify-center !py-2"
+                  />
+                  <div className="flex items-center justify-center gap-2 rounded-xl bg-white/60 px-4 py-2 text-xs font-bold text-emerald-800">
+                    <i className="fas fa-map-marker-alt"></i>
+                    {location || t.countryFallback}
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-xl">
+                <RfqInlineFormClient
+                  offerId={offer.id}
+                  offerSlug={offer.slug}
+                  offerTitle={offer.title}
+                  companyName={companyName}
+                  initialBuyerData={initialBuyerData}
+                />
+              </div>
+
+              <div className="rounded-[24px] border border-blue-100 bg-blue-50/50 p-5">
+                <h3 className="mb-3 flex items-center gap-2 text-sm font-extrabold text-blue-900">
+                  <i className="fas fa-lightbulb text-blue-500"></i>
+                  {t.rfqHelperTitle}
+                </h3>
+                <ul className="flex flex-col gap-2 text-xs font-medium text-blue-800">
+                  <li className="flex gap-2">
+                    <i className="fas fa-check mt-0.5 text-blue-400"></i>
+                    <span>{t.rfqHelper1}</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <i className="fas fa-check mt-0.5 text-blue-400"></i>
+                    <span>{t.rfqHelper2}</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <i className="fas fa-check mt-0.5 text-blue-400"></i>
+                    <span>{t.rfqHelper3}</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <i className="fas fa-check mt-0.5 text-blue-400"></i>
+                    <span>{t.rfqHelper4}</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </aside>
         </section>
@@ -467,6 +530,24 @@ export default async function OfferDetailView({
           </div>
         </section>
       </main>
+
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white p-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] shadow-[0_-8px_16px_-4px_rgba(0,0,0,0.05)] lg:hidden">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4">
+          <div className="hidden flex-col sm:flex">
+            <span className="text-xs font-bold uppercase text-slate-500">Zapytanie bezpłatne</span>
+            <span className="truncate max-w-[200px] text-sm font-semibold text-slate-900">
+              {companyName}
+            </span>
+          </div>
+          <a
+            href="#rfq-form"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1a5f3c] px-6 py-3.5 text-sm font-extrabold text-white shadow-lg transition hover:bg-[#144b2f] sm:w-auto"
+          >
+            <i className="fas fa-paper-plane"></i>
+            {t.rfqCta}
+          </a>
+        </div>
+      </div>
 
       <Footer locale={locale} />
     </>

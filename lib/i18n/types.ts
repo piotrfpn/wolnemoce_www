@@ -408,6 +408,13 @@ export type Dictionary = {
     contact: string;
     notFoundTitle: string;
     notFoundDescription: string;
+    rfqCta: string;
+    rfqCtaMicrocopy: string;
+    rfqHelperTitle: string;
+    rfqHelper1: string;
+    rfqHelper2: string;
+    rfqHelper3: string;
+    rfqHelper4: string;
   };
   companyDetail: {
     backToCompanies: string;
