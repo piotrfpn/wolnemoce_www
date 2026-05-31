@@ -1098,6 +1098,15 @@ const pl: Dictionary = {
       confirmPassword: "Potwierdź nowe hasło",
       savePassword: "Zapisz hasło",
       passwordChanged: "Hasło zostało pomyślnie zmienione.",
+      accountDeletionTitle: "Usunięcie konta i danych firmy",
+      accountDeletionStatus: "Na zgłoszenie",
+      accountDeletionDescription:
+        "Z uwagi na charakter platformy B2B oraz konieczność zachowania historii zapytań ofertowych (RFQ) dla Twoich kontrahentów, proces usuwania konta wymaga ręcznej weryfikacji.",
+      accountDeletionContactInstruction:
+        "Aby trwale usunąć konto, zanonimizować dane osobowe i wycofać publiczne oferty, skontaktuj się z nami z adresu przypisanego do konta",
+      accountDeletionTimeframe: "Czas realizacji zgłoszenia wynosi do 14 dni.",
+      accountDeletionCta: "Napisz do obsługi",
+      accountDeletionMailSubject: "Usunięcie konta WolneMoce.pl",
     },
   },
   panelInquiries: {

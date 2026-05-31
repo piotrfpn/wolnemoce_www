@@ -988,6 +988,15 @@ const de: Dictionary = {
       confirmPassword: "Neues Passwort bestätigen",
       savePassword: "Passwort speichern",
       passwordChanged: "Passwort erfolgreich geändert.",
+      accountDeletionTitle: "Löschung des Kontos und der Firmendaten",
+      accountDeletionStatus: "Manuelle Prüfung",
+      accountDeletionDescription:
+        "Da WolneMoce.pl eine B2B-Plattform ist und die RFQ-Historie für Ihre Geschäftspartner relevant sein kann, erfordert die Kontolöschung eine manuelle Prüfung.",
+      accountDeletionContactInstruction:
+        "Um Ihr Konto dauerhaft zu löschen, personenbezogene Daten zu anonymisieren und öffentliche Angebote zurückzuziehen, kontaktieren Sie uns von der E-Mail-Adresse, die Ihrem Konto zugeordnet ist",
+      accountDeletionTimeframe: "Anfragen werden innerhalb von bis zu 14 Tagen bearbeitet.",
+      accountDeletionCta: "Support kontaktieren",
+      accountDeletionMailSubject: "Kontolöschung WolneMoce.pl",
     },
   },
   panelInquiries: {

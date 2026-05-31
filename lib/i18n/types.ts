@@ -930,6 +930,13 @@ export type Dictionary = {
       confirmPassword: string;
       savePassword: string;
       passwordChanged: string;
+      accountDeletionTitle: string;
+      accountDeletionStatus: string;
+      accountDeletionDescription: string;
+      accountDeletionContactInstruction: string;
+      accountDeletionTimeframe: string;
+      accountDeletionCta: string;
+      accountDeletionMailSubject: string;
     };
   };
 };

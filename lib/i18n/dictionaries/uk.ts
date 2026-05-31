@@ -972,6 +972,15 @@ const uk: Dictionary = {
       confirmPassword: "Підтвердьте новий пароль",
       savePassword: "Зберегти пароль",
       passwordChanged: "Пароль успішно змінено.",
+      accountDeletionTitle: "Видалення облікового запису та даних компанії",
+      accountDeletionStatus: "За зверненням",
+      accountDeletionDescription:
+        "Оскільки WolneMoce.pl є B2B-платформою, а історія запитів пропозицій може бути важливою для ваших бізнес-партнерів, видалення облікового запису потребує ручної перевірки.",
+      accountDeletionContactInstruction:
+        "Щоб остаточно видалити обліковий запис, анонімізувати персональні дані та відкликати публічні пропозиції, зв'яжіться з нами з електронної адреси, прив'язаної до вашого облікового запису",
+      accountDeletionTimeframe: "Звернення обробляються протягом до 14 днів.",
+      accountDeletionCta: "Зв'язатися з підтримкою",
+      accountDeletionMailSubject: "Видалення облікового запису WolneMoce.pl",
     },
   },
   panelInquiries: {

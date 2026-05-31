@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import LogoutButton from "@/components/LogoutButton";
 import PanelNavbar from "@/components/PanelNavbar";
+import { contactInfo } from "@/lib/mockData";
 import { createClient } from "@/lib/supabase/server";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getPanelLocale } from "@/lib/i18n/panelLocale";
@@ -36,6 +37,9 @@ export default async function AccountSettingsPage() {
   const t = dictionary.panel.settings;
   const tc = dictionary.panel.common;
   const tProfile = dictionary.panel.profile;
+  const accountDeletionMailto = `mailto:${contactInfo.email}?subject=${encodeURIComponent(
+    t.accountDeletionMailSubject,
+  )}`;
 
   return (
     <>
@@ -205,22 +209,37 @@ export default async function AccountSettingsPage() {
               </p>
             </section>
 
-            <section className="min-w-0 rounded-[24px] border border-slate-200 bg-slate-100/70 p-6 opacity-75 shadow-sm md:p-8">
+            <section className="min-w-0 rounded-[24px] border border-amber-200 bg-white p-6 shadow-sm md:p-8">
               <div className="mb-4 flex items-center justify-between gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-slate-500">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
                   <i className="fas fa-user-xmark"></i>
                 </div>
-                <span className="rounded-full bg-white px-3 py-1 text-xs font-bold uppercase tracking-wide text-slate-500">
-                  Wkrótce
+                <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-700">
+                  {t.accountDeletionStatus}
                 </span>
               </div>
-              <h2 className="text-xl font-extrabold text-slate-700">
-                Usunięcie konta
+              <h2 className="text-xl font-extrabold text-slate-900">
+                {t.accountDeletionTitle}
               </h2>
               <p className="mt-3 text-sm leading-6 text-slate-500">
-                Usuwanie konta zostanie dodane po dopracowaniu zasad obsługi
-                firm, ofert, zapytań RFQ i załączników.
+                {t.accountDeletionDescription}
               </p>
+              <p className="mt-3 text-sm leading-6 text-slate-500">
+                {t.accountDeletionContactInstruction}{" "}
+                <a
+                  href={accountDeletionMailto}
+                  className="font-bold text-[#1a5f3c] no-underline hover:underline"
+                >
+                  {contactInfo.email}
+                </a>
+                .
+              </p>
+              <p className="mt-3 rounded-2xl bg-amber-50 p-4 text-sm font-semibold leading-6 text-amber-900">
+                {t.accountDeletionTimeframe}
+              </p>
+              <a href={accountDeletionMailto} className="btn btn-outline mt-6">
+                {t.accountDeletionCta}
+              </a>
             </section>
           </div>
         </section>

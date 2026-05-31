@@ -972,6 +972,15 @@ const es: Dictionary = {
       confirmPassword: "Confirmar nueva contraseña",
       savePassword: "Guardar contraseña",
       passwordChanged: "La contraseña ha sido cambiada con éxito.",
+      accountDeletionTitle: "Eliminación de la cuenta y de los datos de la empresa",
+      accountDeletionStatus: "Solicitud manual",
+      accountDeletionDescription:
+        "Como WolneMoce.pl es una plataforma B2B y el historial de solicitudes de oferta puede ser importante para sus socios comerciales, la eliminación de la cuenta requiere una verificación manual.",
+      accountDeletionContactInstruction:
+        "Para eliminar permanentemente su cuenta, anonimizar los datos personales y retirar las ofertas públicas, póngase en contacto con nosotros desde la dirección de correo asignada a su cuenta",
+      accountDeletionTimeframe: "Las solicitudes se gestionan en un plazo de hasta 14 días.",
+      accountDeletionCta: "Contactar con soporte",
+      accountDeletionMailSubject: "Eliminación de cuenta WolneMoce.pl",
     },
   },
   panelInquiries: {

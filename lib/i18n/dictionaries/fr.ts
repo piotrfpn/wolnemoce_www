@@ -972,6 +972,15 @@ const fr: Dictionary = {
       confirmPassword: "Confirmer le nouveau mot de passe",
       savePassword: "Enregistrer le mot de passe",
       passwordChanged: "Le mot de passe a été modifié avec succès.",
+      accountDeletionTitle: "Suppression du compte et des données de l'entreprise",
+      accountDeletionStatus: "Demande manuelle",
+      accountDeletionDescription:
+        "WolneMoce.pl étant une plateforme B2B, l'historique des demandes RFQ peut être important pour vos partenaires commerciaux. La suppression du compte nécessite donc une vérification manuelle.",
+      accountDeletionContactInstruction:
+        "Pour supprimer définitivement votre compte, anonymiser les données personnelles et retirer les offres publiques, contactez-nous depuis l'adresse e-mail associée à votre compte",
+      accountDeletionTimeframe: "Les demandes sont traitées dans un délai maximal de 14 jours.",
+      accountDeletionCta: "Contacter le support",
+      accountDeletionMailSubject: "Suppression de compte WolneMoce.pl",
     },
   },
   panelInquiries: {
