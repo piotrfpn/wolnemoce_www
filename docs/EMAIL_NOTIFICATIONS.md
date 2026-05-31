@@ -1,8 +1,8 @@
 # Powiadomienia e-mail RFQ
 
-Powiadomienia o nowych zapytaniach ofertowych RFQ są planowane przez Resend REST API, bez SDK i bez dodatkowych zależności npm.
+Powiadomienia o nowych zapytaniach ofertowych RFQ korzystają z Resend REST API, bez SDK i bez dodatkowych zależności npm.
 
-Wysyłka produkcyjna nie jest jeszcze podłączona do `submitInquiry()`. Obecne helpery w `lib/email/*` są fundamentem pod kolejny sprint.
+Runtime jest wpięty do `submitInquiry()` jako best-effort i pozostaje domyślnie w safe mode. Błąd resolvera, konfiguracji albo Resend nie blokuje zapisu RFQ.
 
 ## Wymagane zmienne środowiskowe
 
@@ -12,6 +12,7 @@ Dodaj lokalnie do `.env.local`:
 RESEND_API_KEY=
 RESEND_FROM_EMAIL=WolneMoce.pl <powiadomienia@wolnemoce.pl>
 APP_BASE_URL=https://wolnemoce.pl
+SUPABASE_SERVICE_ROLE_KEY=
 RFQ_EMAIL_NOTIFICATIONS_ENABLED=false
 RFQ_EMAIL_LOG_ONLY=true
 RFQ_EMAIL_TEST_RECIPIENT=
@@ -22,7 +23,7 @@ Te same zmienne dodaj na Vercel:
 
 `Project Settings -> Environment Variables`
 
-Nie commituj prawdziwego `RESEND_API_KEY`.
+Nie commituj prawdziwego `RESEND_API_KEY` ani `SUPABASE_SERVICE_ROLE_KEY`.
 
 ## Źródło adresu odbiorcy
 
@@ -37,9 +38,11 @@ Adres nie znajduje się już w `public.companies.contact_email`. Ta kolumna zost
 ## Zasady bezpieczeństwa resolvera odbiorcy
 
 - `company_contact_settings.contact_email` nie może być publicznie odczytywany przez klienta.
-- Resolver odbiorcy musi działać wyłącznie server-side.
+- Resolver odbiorcy działa w `lib/email/resolveRfqRecipientEmail.ts` wyłącznie server-side.
+- Resolver używa `inquiry_id`, a nie danych przekazanych z browsera jako źródła odbiorcy.
+- Server-only admin client znajduje się w `lib/supabase/admin.ts` i używa `SUPABASE_SERVICE_ROLE_KEY` tylko po stronie serwera.
 - Prywatny e-mail odbiorcy nie może wracać do browsera ani client-visible response.
-- Resolver powinien działać po realnym utworzeniu RFQ, najlepiej na podstawie `inquiry_id`.
+- Resolver działa po realnym utworzeniu RFQ, na podstawie `inquiry_id`.
 - Brak adresu odbiorcy nie blokuje zapisu RFQ.
 - Błąd konfiguracji lub API Resend nie cofa zapytania i nie usuwa inquiry.
 

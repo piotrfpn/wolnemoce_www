@@ -1,6 +1,12 @@
 "use server";
 
-// Email imports removed for Sprint 7D.1
+import { resolveRfqRecipientEmail } from "@/lib/email/resolveRfqRecipientEmail";
+import { buildCompanyRfqEmail } from "@/lib/email/rfqEmails";
+import {
+  getAppBaseUrl,
+  isRfqEmailNotificationEnabled,
+  sendEmail,
+} from "@/lib/email/sendEmail";
 import { createClient } from "@/lib/supabase/server";
 import {
   getRfqAttachmentExtension,
@@ -165,7 +171,52 @@ function getOfferCompany(offer: ActiveOffer) {
     : offer.companies;
 }
 
-// Email notifications are disabled in this sprint
+async function notifyCompanyAboutInquiry(params: {
+  inquiryId: string;
+  offer: ActiveOffer;
+  savedAttachmentCount: number;
+  hasUploadError: boolean;
+}) {
+  try {
+    if (!isRfqEmailNotificationEnabled()) {
+      return;
+    }
+
+    const recipientEmail = await resolveRfqRecipientEmail(params.inquiryId);
+
+    if (!recipientEmail) {
+      return;
+    }
+
+    const company = getOfferCompany(params.offer);
+    const email = buildCompanyRfqEmail({
+      appBaseUrl: getAppBaseUrl(),
+      companyName: company?.name ?? null,
+      offerTitle: params.offer.title,
+      branch: params.offer.branch,
+      serviceType: params.offer.service_type,
+      savedAttachmentCount: params.savedAttachmentCount,
+      hasAttachmentUploadError: params.hasUploadError,
+    });
+    const emailResult = await sendEmail({
+      to: recipientEmail,
+      ...email,
+      idempotencyKey: `rfq:${params.inquiryId}:company-notification`,
+    });
+
+    if (!emailResult.ok && "error" in emailResult) {
+      console.error("RFQ company email failed", {
+        inquiryId: params.inquiryId,
+        error: emailResult.error,
+      });
+    }
+  } catch (error) {
+    console.error("RFQ company email failed", {
+      inquiryId: params.inquiryId,
+      error: error instanceof Error ? error.message : "Unknown email error",
+    });
+  }
+}
 
 export async function submitInquiry(
   formData: FormData
@@ -241,7 +292,12 @@ export async function submitInquiry(
     savedAttachmentCount = attachmentResult.savedAttachmentCount;
   }
 
-  // Email sending completely disabled for Sprint 7D.1
+  await notifyCompanyAboutInquiry({
+    inquiryId,
+    offer: activeOffer,
+    savedAttachmentCount,
+    hasUploadError,
+  });
 
   if (hasUploadError) {
     return {

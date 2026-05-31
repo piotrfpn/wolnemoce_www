@@ -6,9 +6,16 @@ type SendEmailParams = {
   idempotencyKey?: string;
 };
 
+type SkippedReason =
+  | "missing_config"
+  | "invalid_recipient"
+  | "disabled"
+  | "log_only"
+  | "domain_not_allowed";
+
 export type SendEmailResult =
   | { ok: true }
-  | { ok: false; skipped: true; reason: "missing_config" | "invalid_recipient" }
+  | { ok: false; skipped: true; reason: SkippedReason }
   | { ok: false; error: string };
 
 export function getAppBaseUrl() {
@@ -19,6 +26,34 @@ export function isValidEmailAddress(value: string | null | undefined) {
   return Boolean(value && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()));
 }
 
+export function isRfqEmailNotificationEnabled() {
+  return process.env.RFQ_EMAIL_NOTIFICATIONS_ENABLED === "true";
+}
+
+function getResolvedRecipient(to: string) {
+  const testRecipient = process.env.RFQ_EMAIL_TEST_RECIPIENT?.trim();
+
+  return testRecipient || to;
+}
+
+function isAllowedRecipientDomain(to: string) {
+  const allowedDomain = process.env.RFQ_EMAIL_ALLOWED_RECIPIENT_DOMAIN
+    ?.trim()
+    .replace(/^@/, "")
+    .toLowerCase();
+
+  if (!allowedDomain) {
+    return true;
+  }
+
+  const recipientDomain = to.trim().toLowerCase().split("@").pop();
+
+  return (
+    recipientDomain === allowedDomain ||
+    Boolean(recipientDomain?.endsWith(`.${allowedDomain}`))
+  );
+}
+
 export async function sendEmail({
   to,
   subject,
@@ -26,15 +61,29 @@ export async function sendEmail({
   text,
   idempotencyKey,
 }: SendEmailParams): Promise<SendEmailResult> {
+  if (!isRfqEmailNotificationEnabled()) {
+    return { ok: false, skipped: true, reason: "disabled" };
+  }
+
+  const resolvedRecipient = getResolvedRecipient(to);
+
+  if (!isValidEmailAddress(resolvedRecipient)) {
+    return { ok: false, skipped: true, reason: "invalid_recipient" };
+  }
+
+  if (!isAllowedRecipientDomain(resolvedRecipient)) {
+    return { ok: false, skipped: true, reason: "domain_not_allowed" };
+  }
+
+  if (process.env.RFQ_EMAIL_LOG_ONLY === "true") {
+    return { ok: false, skipped: true, reason: "log_only" };
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM_EMAIL;
 
   if (!apiKey || !from) {
     return { ok: false, skipped: true, reason: "missing_config" };
-  }
-
-  if (!isValidEmailAddress(to)) {
-    return { ok: false, skipped: true, reason: "invalid_recipient" };
   }
 
   const headers: Record<string, string> = {
@@ -52,7 +101,7 @@ export async function sendEmail({
       headers,
       body: JSON.stringify({
         from,
-        to,
+        to: resolvedRecipient,
         subject,
         html,
         text,

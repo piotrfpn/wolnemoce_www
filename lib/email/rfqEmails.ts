@@ -2,11 +2,8 @@ type CompanyRfqEmailParams = {
   appBaseUrl: string;
   companyName: string | null;
   offerTitle: string | null;
-  buyerName: string;
-  buyerCompany: string;
-  buyerEmail: string;
-  buyerPhone: string;
-  message: string;
+  branch: string | null;
+  serviceType: string | null;
   savedAttachmentCount: number;
   hasAttachmentUploadError: boolean;
 };
@@ -25,40 +22,31 @@ function escapeHtml(value: string | null | undefined) {
     .replace(/'/g, "&#039;");
 }
 
-function truncate(value: string, maxLength = 420) {
-  const normalized = value.replace(/\s+/g, " ").trim();
-
-  if (normalized.length <= maxLength) {
-    return normalized;
-  }
-
-  return `${normalized.slice(0, maxLength - 1).trimEnd()}...`;
-}
-
 function paragraph(value: string) {
   return `<p style="margin:0 0 14px;line-height:1.6">${value}</p>`;
 }
 
 function getAttachmentText(count: number, hasUploadError: boolean) {
   if (count > 0) {
-    return `Do zapytania dodano załączniki: ${count}.`;
+    return `Do zapytania dodano załączniki: tak (${count}).`;
   }
 
   if (hasUploadError) {
-    return "Szczegóły i ewentualne załączniki sprawdzisz w panelu zapytań.";
+    return "Część załączników mogła nie zostać zapisana. Szczegóły sprawdzisz w panelu zapytań.";
   }
 
   return "Do zapytania nie dodano załączników.";
+}
+
+function getOfferMeta(params: CompanyRfqEmailParams) {
+  return [params.branch, params.serviceType].filter(Boolean).join(" / ");
 }
 
 export function buildCompanyRfqEmail(params: CompanyRfqEmailParams) {
   const panelUrl = `${params.appBaseUrl}/panel/zapytania`;
   const offerTitle = params.offerTitle || "Oferta WolneMoce.pl";
   const recipientCompany = params.companyName || "Twoja firma";
-  const buyerLabel = [params.buyerCompany, params.buyerName]
-    .filter(Boolean)
-    .join(" / ");
-  const messagePreview = truncate(params.message);
+  const offerMeta = getOfferMeta(params);
   const attachmentText = getAttachmentText(
     params.savedAttachmentCount,
     params.hasAttachmentUploadError
@@ -69,12 +57,9 @@ export function buildCompanyRfqEmail(params: CompanyRfqEmailParams) {
       <div style="max-width:680px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:18px;padding:24px">
         <h1 style="margin:0 0 16px;font-size:24px;line-height:1.25;color:#0f172a">Nowe zapytanie ofertowe w WolneMoce.pl</h1>
         ${paragraph(`${escapeHtml(recipientCompany)} otrzymała nowe zapytanie do oferty: <strong>${escapeHtml(offerTitle)}</strong>.`)}
-        ${paragraph(`<strong>Firma / osoba pytająca:</strong> ${escapeHtml(buyerLabel || "Brak danych")}`)}
-        ${paragraph(`<strong>E-mail:</strong> ${escapeHtml(params.buyerEmail)}`)}
-        ${params.buyerPhone ? paragraph(`<strong>Telefon:</strong> ${escapeHtml(params.buyerPhone)}`) : ""}
-        ${paragraph(`<strong>Fragment wiadomości:</strong><br>${escapeHtml(messagePreview)}`)}
+        ${offerMeta ? paragraph(`<strong>Branża / usługa:</strong> ${escapeHtml(offerMeta)}`) : ""}
         ${paragraph(escapeHtml(attachmentText))}
-        ${paragraph(`Załączniki techniczne są dostępne po zalogowaniu w panelu zapytań. Nie przesyłamy prywatnych plików jako załączników do wiadomości e-mail.`)}
+        ${paragraph("Dane kontaktowe kupującego, treść zapytania i ewentualne pliki są dostępne tylko po zalogowaniu w panelu zapytań. Nie przesyłamy prywatnych danych ani załączników w wiadomości e-mail.")}
         <p style="margin:22px 0">
           <a href="${escapeHtml(panelUrl)}" style="display:inline-block;background:#1a5f3c;color:#ffffff;text-decoration:none;font-weight:700;border-radius:12px;padding:12px 18px">Otwórz panel zapytań</a>
         </p>
@@ -89,14 +74,10 @@ export function buildCompanyRfqEmail(params: CompanyRfqEmailParams) {
     "Nowe zapytanie ofertowe w WolneMoce.pl",
     "",
     `${recipientCompany} otrzymała nowe zapytanie do oferty: ${offerTitle}.`,
-    `Firma / osoba pytająca: ${buyerLabel || "Brak danych"}`,
-    `E-mail: ${params.buyerEmail}`,
-    params.buyerPhone ? `Telefon: ${params.buyerPhone}` : "",
-    "",
-    `Fragment wiadomości: ${messagePreview}`,
+    offerMeta ? `Branża / usługa: ${offerMeta}` : "",
     "",
     attachmentText,
-    "Załączniki techniczne są dostępne po zalogowaniu w panelu zapytań. Nie przesyłamy prywatnych plików jako załączników do wiadomości e-mail.",
+    "Dane kontaktowe kupującego, treść zapytania i ewentualne pliki są dostępne tylko po zalogowaniu w panelu zapytań. Nie przesyłamy prywatnych danych ani załączników w wiadomości e-mail.",
     "",
     `Panel zapytań: ${panelUrl}`,
     "",
