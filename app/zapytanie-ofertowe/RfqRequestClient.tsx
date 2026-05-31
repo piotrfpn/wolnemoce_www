@@ -350,84 +350,124 @@ export default function RfqRequestClient({
                 </div>
               ) : null}
 
-              <div className="grid min-w-0 gap-5 md:grid-cols-2">
-                <StaticFormField
-                  label="Imię i nazwisko"
-                  name="buyer_name"
-                  icon="fas fa-user"
-                  value={formValues.buyer_name}
-                  onChange={handleFieldChange}
-                />
-                <StaticFormField
-                  label="Firma"
-                  name="buyer_company"
-                  icon="fas fa-building"
-                  value={formValues.buyer_company}
-                  onChange={handleFieldChange}
-                />
-                <StaticFormField
-                  label="Email"
-                  name="buyer_email"
-                  type="email"
-                  icon="fas fa-envelope"
-                  value={formValues.buyer_email}
-                  onChange={handleFieldChange}
-                />
-                <StaticFormField
-                  label="Telefon"
-                  name="buyer_phone"
-                  type="tel"
-                  icon="fas fa-phone"
-                  value={formValues.buyer_phone}
-                  onChange={handleFieldChange}
-                />
+              <div className="mb-6">
+                <h3 className="mb-5 text-xl font-extrabold text-slate-900">
+                  1. Dane kontaktowe
+                </h3>
+                <div className="grid min-w-0 gap-5 md:grid-cols-2">
+                  <StaticFormField
+                    label="Imię i nazwisko"
+                    name="buyer_name"
+                    icon="fas fa-user"
+                    value={formValues.buyer_name}
+                    onChange={handleFieldChange}
+                    required
+                  />
+                  <StaticFormField
+                    label="Firma"
+                    name="buyer_company"
+                    icon="fas fa-building"
+                    value={formValues.buyer_company}
+                    onChange={handleFieldChange}
+                    required
+                  />
+                  <StaticFormField
+                    label="Email"
+                    name="buyer_email"
+                    type="email"
+                    icon="fas fa-envelope"
+                    placeholder="jan.kowalski@firma.pl"
+                    value={formValues.buyer_email}
+                    onChange={handleFieldChange}
+                    required
+                  />
+                  <StaticFormField
+                    label="Telefon"
+                    name="buyer_phone"
+                    type="tel"
+                    icon="fas fa-phone"
+                    placeholder="np. 500 123 456"
+                    value={formValues.buyer_phone}
+                    onChange={handleFieldChange}
+                    required
+                  />
+                </div>
               </div>
 
               <div className="mt-10 border-t border-slate-200 pt-8">
                 <h3 className="mb-5 text-xl font-extrabold text-slate-900">
-                  Szczegóły zapytania
+                  2. Szczegóły zapytania
                 </h3>
                 <div className="grid min-w-0 gap-5 md:grid-cols-2">
-                  <StaticFormField
-                    label="Ilość / zakres zamówienia"
-                    name="quantity_scope"
-                    icon="fas fa-boxes-stacked"
-                    value={formValues.quantity_scope}
-                    onChange={handleFieldChange}
-                  />
-                  <StaticFormField
-                    label="Termin realizacji"
-                    name="expected_deadline"
-                    icon="fas fa-clock"
-                    value={formValues.expected_deadline}
-                    onChange={handleFieldChange}
-                  />
-                  <StaticFormField
-                    label="Budżet orientacyjny"
-                    name="budget"
-                    icon="fas fa-wallet"
-                    value={formValues.budget}
-                    onChange={handleFieldChange}
-                  />
                   <div className="md:col-span-2">
                     <StaticFormField
                       label="Wiadomość / opis zapotrzebowania"
                       name="message"
                       textarea
                       rows={6}
-                      placeholder="Opisz produkt, materiał, ilości, wymagania jakościowe i oczekiwany termin."
+                      placeholder="Przykład: Szukamy wykonawcy 200 szt. detalu CNC z aluminium (stop 7075), termin do końca miesiąca. Rysunek techniczny przesyłam w załączniku."
                       icon="fas fa-message"
                       value={formValues.message}
                       onChange={handleFieldChange}
+                      required
                     />
+                    <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-4">
+                      <h4 className="flex items-center gap-2 text-sm font-bold text-blue-900">
+                        <i className="fas fa-lightbulb text-blue-500"></i>
+                        Co warto dopisać w zapytaniu?
+                      </h4>
+                      <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-blue-800">
+                        <li>materiał / technologia,</li>
+                        <li>oczekiwana ilość lub zakres prac,</li>
+                        <li>wymagania jakościowe (np. tolerancje),</li>
+                        <li>informacje o załącznikach (np. rysunek techniczny).</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div className="mt-10 border-t border-slate-200 pt-8">
-                <h3 className="text-xl font-extrabold text-slate-900">Załączniki</h3>
+                <h3 className="mb-5 text-xl font-extrabold text-slate-900">
+                  3. Termin / ilość / budżet
+                </h3>
+                <div className="grid min-w-0 gap-5 md:grid-cols-2">
+                  <StaticFormField
+                    label="Ilość / zakres zamówienia"
+                    name="quantity_scope"
+                    icon="fas fa-boxes-stacked"
+                    placeholder="np. 200 sztuk, 500h"
+                    value={formValues.quantity_scope}
+                    onChange={handleFieldChange}
+                    optional
+                  />
+                  <StaticFormField
+                    label="Termin realizacji"
+                    name="expected_deadline"
+                    icon="fas fa-clock"
+                    placeholder="np. do końca miesiąca"
+                    value={formValues.expected_deadline}
+                    onChange={handleFieldChange}
+                    optional
+                  />
+                  <StaticFormField
+                    label="Budżet orientacyjny"
+                    name="budget"
+                    icon="fas fa-wallet"
+                    placeholder="np. 5000 PLN, do negocjacji"
+                    value={formValues.budget}
+                    onChange={handleFieldChange}
+                    optional
+                  />
+                </div>
+              </div>
+
+              <div className="mt-10 border-t border-slate-200 pt-8">
+                <h3 className="text-xl font-extrabold text-slate-900">
+                  4. Załączniki techniczne <span className="ml-1 text-sm font-normal lowercase text-slate-400">(opcjonalnie)</span>
+                </h3>
                 <p className="mt-2 text-sm leading-6 text-slate-500">
-                  Dodaj rysunek, specyfikację, zdjęcie detalu lub plik z wymaganiami.
+                  Załącz rysunek techniczny, specyfikację lub zdjęcie detalu, jeśli pomoże to firmie szybciej przygotować odpowiedź.
                 </p>
                 <label className="mt-5 block min-w-0">
                   <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
@@ -491,20 +531,25 @@ export default function RfqRequestClient({
                 ) : null}
               </div>
 
-              <button
-                type="submit"
-                disabled={isPending}
-                className="mt-8 w-full btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {isPending ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin"></i>
-                    Wysyłanie zapytania i załączników...
-                  </>
-                ) : (
-                  "Wyślij zapytanie"
-                )}
-              </button>
+              <div className="mt-10 border-t border-slate-200 pt-8">
+                <h3 className="mb-5 text-xl font-extrabold text-slate-900">
+                  5. Podsumowanie i wysyłka
+                </h3>
+                <button
+                  type="submit"
+                  disabled={isPending}
+                  className="w-full btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isPending ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin"></i>
+                      Wysyłanie zapytania i załączników...
+                    </>
+                  ) : (
+                    "Wyślij zapytanie"
+                  )}
+                </button>
+              </div>
             </form>
           )
         ) : (
