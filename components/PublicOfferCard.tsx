@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getOfferImageByIndustry, getPublicOfferImageUrl } from "@/lib/offerImages";
+import { getPublicOfferImageUrl } from "@/lib/offerImages";
 import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
@@ -62,9 +62,11 @@ function isActiveFeatured(offer: PublicOffer) {
 export default function PublicOfferCard({
   offer,
   locale = defaultLocale,
+  variant = "standard",
 }: {
   offer: PublicOffer;
   locale?: Locale;
+  variant?: "standard" | "catalog";
 }) {
   const labels = getDictionary(locale).offerCard;
   const company = offer.companies;
@@ -75,15 +77,23 @@ export default function PublicOfferCard({
   const mainImage = [...(offer.offer_images ?? [])].sort(
     (a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)
   )[0];
-  const imageSrc =
-    getPublicOfferImageUrl(mainImage?.path) ?? getOfferImageByIndustry(offer.branch);
+  const imageSrc = getPublicOfferImageUrl(mainImage?.path);
   const imageAlt =
     mainImage?.alt ||
     `${offer.title ?? labels.offerFallback} - ${offer.branch ?? labels.capacityFallback}`;
   const featured = isActiveFeatured(offer);
+  const isCatalog = variant === "catalog";
+  const offerHref = offer.slug ? getLocalizedPath(`/oferty/${offer.slug}`, locale) : "";
+  const rfqHref = offer.slug
+    ? getLocalizedPath(`/zapytanie-ofertowe?oferta=${offer.slug}`, locale)
+    : "";
 
   return (
-    <article className="group relative min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-xl flex flex-col">
+    <article
+      className={`group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl ${
+        isCatalog ? "min-h-[520px]" : ""
+      }`}
+    >
       {company?.is_verified ? (
         <div className="absolute right-4 top-4 z-10 flex flex-col items-end gap-2">
           {featured ? (
@@ -118,9 +128,18 @@ export default function PublicOfferCard({
             className="h-full w-full max-w-full object-cover transition duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex flex-col items-center justify-center text-slate-400">
-            <i className="fas fa-image text-4xl mb-2 opacity-50"></i>
-            <span className="text-xs font-medium opacity-80">{labels.noOfferImage}</span>
+          <div className="flex h-full w-full flex-col items-center justify-center bg-[radial-gradient(circle_at_top_left,rgba(26,95,60,0.14),transparent_34%),linear-gradient(135deg,#f8fafc,#e2e8f0)] px-6 text-center text-slate-500">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#1a5f3c] shadow-sm">
+              <i className="fas fa-industry text-xl"></i>
+            </div>
+            <span className="text-xs font-bold uppercase tracking-wide text-slate-500">
+              {labels.noOfferImage}
+            </span>
+            {offer.branch ? (
+              <span className="mt-2 line-clamp-1 text-sm font-semibold text-slate-700">
+                {offer.branch}
+              </span>
+            ) : null}
           </div>
         )}
         {location ? (
@@ -161,19 +180,31 @@ export default function PublicOfferCard({
         ) : null}
 
         <h2
-          className="mb-2 line-clamp-2 break-words text-[17px] font-bold leading-snug text-slate-900"
+          className={`mb-2 line-clamp-2 break-words font-bold leading-snug text-slate-900 ${
+            isCatalog ? "text-[19px]" : "text-[17px]"
+          }`}
           title={offer.title ?? ""}
         >
-          {offer.title}
+          {offer.title || labels.offerFallback}
         </h2>
 
         {offer.description ? (
           <p className="mb-4 line-clamp-2 text-sm leading-6 text-slate-500">
             {offer.description}
           </p>
+        ) : isCatalog ? (
+          <p className="mb-4 line-clamp-2 text-sm leading-6 text-slate-500">
+            {labels.capacityFallback}
+          </p>
         ) : null}
 
         <div className="mb-5 flex flex-wrap gap-2 border-b border-slate-100 pb-5">
+          {isCatalog && location ? (
+            <span className="inline-flex min-w-0 items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
+              <i className="fas fa-map-marker-alt opacity-80"></i>
+              <span className="truncate">{location}</span>
+            </span>
+          ) : null}
           {offer.branch ? (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600">
               <i className="fas fa-industry text-[#1a5f3c] opacity-80"></i>
@@ -200,18 +231,40 @@ export default function PublicOfferCard({
           ) : null}
         </div>
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mt-auto">
+        {isCatalog ? (
+          <div className="mb-4 grid gap-2 rounded-2xl bg-slate-50 p-3 text-xs text-slate-600 sm:grid-cols-2">
+            <span className="flex min-w-0 items-center gap-2">
+              <i className="fas fa-building text-[#1a5f3c]"></i>
+              <span className="truncate">{companyName}</span>
+            </span>
+            <span className="flex min-w-0 items-center gap-2">
+              <i className="fas fa-shield-alt text-[#1a5f3c]"></i>
+              <span className="truncate">
+                {company?.is_verified ? labels.verifiedCompanyLabel : labels.publicProfileLabel}
+              </span>
+            </span>
+          </div>
+        ) : null}
+
+        <div className="mt-auto flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
           {offer.slug ? (
-            <div className="flex items-center gap-2 w-full">
+            <div className={`flex w-full gap-2 ${isCatalog ? "flex-col sm:flex-row" : "items-center"}`}>
               <Link
-                href={getLocalizedPath(`/oferty/${offer.slug}`, locale)}
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-slate-800"
+                href={offerHref}
+                className={`inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-4 text-sm font-bold text-white transition ${
+                  isCatalog
+                    ? "bg-[#1a5f3c] py-3.5 shadow-sm hover:bg-[#144b30]"
+                    : "bg-slate-900 py-2.5 hover:bg-slate-800"
+                }`}
               >
                 {labels.viewOffer}
+                <i className="fas fa-arrow-right text-xs opacity-80"></i>
               </Link>
               <Link
-                href={getLocalizedPath(`/zapytanie-ofertowe?oferta=${offer.slug}`, locale)}
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+                href={rfqHref}
+                className={`inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 ${
+                  isCatalog ? "py-3.5" : "py-2.5"
+                }`}
               >
                 <i className="fas fa-paper-plane text-xs opacity-75"></i>
                 {labels.askAboutOffer}

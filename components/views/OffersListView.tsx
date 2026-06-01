@@ -390,7 +390,12 @@ export default async function OffersListView({
             {publicOffers.length > 0 ? (
               <div className="grid min-w-0 gap-6 xl:grid-cols-2">
                 {publicOffers.map((offer) => (
-                  <PublicOfferCard key={offer.id} offer={offer} locale={locale} />
+                  <PublicOfferCard
+                    key={offer.id}
+                    offer={offer}
+                    locale={locale}
+                    variant="catalog"
+                  />
                 ))}
               </div>
             ) : (
