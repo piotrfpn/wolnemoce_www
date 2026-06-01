@@ -1,7 +1,9 @@
 import type { MetadataRoute } from "next";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import { getSiteUrl } from "@/lib/seo";
 
-const baseUrl = "https://wolnemoce.pl";
+const baseUrl = getSiteUrl();
+const dynamicRouteLimit = 1000;
 
 function createSitemapSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -25,7 +27,8 @@ async function getActiveOfferRoutes() {
     .from("offers")
     .select("slug")
     .eq("status", "active")
-    .not("slug", "is", null);
+    .not("slug", "is", null)
+    .limit(dynamicRouteLimit);
 
   if (error) {
     return [];
@@ -49,7 +52,7 @@ async function getPublicCompanyRoutes() {
     .select("slug")
     .eq("is_verified", true)
     .not("slug", "is", null)
-    .limit(500);
+    .limit(dynamicRouteLimit);
 
   const slugs = new Set<string>();
 
@@ -77,7 +80,8 @@ async function getPublishedBlogRoutes() {
     .from("blog_posts")
     .select("slug")
     .eq("status", "published")
-    .not("slug", "is", null);
+    .not("slug", "is", null)
+    .limit(dynamicRouteLimit);
 
   if (error) {
     return [];

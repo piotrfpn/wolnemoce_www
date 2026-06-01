@@ -6,6 +6,10 @@ import ResetPasswordClient from "./ResetPasswordClient";
 export const metadata: Metadata = {
   title: "Reset hasła",
   description: "Wyślij link resetujący hasło do konta WolneMoce.pl.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function ResetPasswordPage() {

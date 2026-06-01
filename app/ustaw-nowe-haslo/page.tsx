@@ -6,6 +6,10 @@ import UpdatePasswordClient from "./UpdatePasswordClient";
 export const metadata: Metadata = {
   title: "Ustaw nowe hasło",
   description: "Ustaw nowe hasło do konta WolneMoce.pl.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function UpdatePasswordPage() {

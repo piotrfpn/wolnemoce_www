@@ -7,6 +7,7 @@ import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard"
 import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
 import { getLocalizedHref, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { getAbsoluteUrl, truncateSeoDescription } from "@/lib/seo";
 import { createClient } from "@/lib/supabase/server";
 
 type CompanyDetailViewProps = {
@@ -63,14 +64,6 @@ function getInitials(name: string | null) {
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase())
     .join("");
-}
-
-function truncateDescription(description: string, maxLength = 155) {
-  if (description.length <= maxLength) {
-    return description;
-  }
-
-  return `${description.slice(0, maxLength - 1).trimEnd()}...`;
 }
 
 async function getCompanyBySlug(slug: string) {
@@ -197,15 +190,42 @@ export async function generateCompanyDetailMetadata({
   const location = [company.location_city, company.location_voivodeship]
     .filter(Boolean)
     .join(", ");
+  const industries =
+    company.industries && company.industries.length > 0
+      ? company.industries.join(", ")
+      : company.industry;
   const description =
     company.description ||
-    `${company.industry ?? t.companyFallback}${location ? ` - ${location}` : ""}`;
+    [industries, location, t.publicProfile].filter(Boolean).join(" - ");
+  const title = `${company.name} | ${t.publicProfile} | WolneMoce.pl`;
+  const seoDescription = truncateSeoDescription(description);
 
   return {
-    title: `${company.name} | ${t.publicProfile} | WolneMoce.pl`,
-    description: truncateDescription(description),
+    title,
+    description: seoDescription,
     alternates: {
       canonical: `/firmy/${slug}`,
+    },
+    openGraph: {
+      title,
+      description: seoDescription,
+      url: `/firmy/${slug}`,
+      siteName: "WolneMoce.pl",
+      type: "profile",
+      images: [
+        {
+          url: getAbsoluteUrl("/images/offers/automation.jpg"),
+          width: 1200,
+          height: 630,
+          alt: `${company.name} - profil firmy w WolneMoce.pl`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: seoDescription,
+      images: [getAbsoluteUrl("/images/offers/automation.jpg")],
     },
   };
 }

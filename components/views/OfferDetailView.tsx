@@ -11,6 +11,7 @@ import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getOfferImageByIndustry, getPublicOfferImageUrl } from "@/lib/offerImages";
 import { getInitialRfqBuyerData } from "@/lib/rfqBuyerData";
+import { getAbsoluteUrl, truncateSeoDescription } from "@/lib/seo";
 import { createClient } from "@/lib/supabase/server";
 
 type OfferDetailViewProps = {
@@ -37,15 +38,6 @@ function getInitials(name: string | null) {
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase())
     .join("");
-}
-
-function truncateDescription(description: string, maxLength = 155) {
-  if (description.length <= maxLength) {
-    return description;
-  }
-
-  const trimmed = description.slice(0, maxLength - 1).trimEnd();
-  return `${trimmed}...`;
 }
 
 async function getPublicOfferBySlug(slug: string) {
@@ -146,9 +138,30 @@ export async function generateOfferDetailMetadata({
 
   return {
     title: `${offer.title} | ${companyName} | WolneMoce.pl`,
-    description: truncateDescription(descriptionSource),
+    description: truncateSeoDescription(descriptionSource),
     alternates: {
       canonical: `/oferty/${slug}`,
+    },
+    openGraph: {
+      title: `${offer.title} | ${companyName}`,
+      description: truncateSeoDescription(descriptionSource),
+      url: `/oferty/${slug}`,
+      siteName: "WolneMoce.pl",
+      type: "article",
+      images: [
+        {
+          url: getAbsoluteUrl(getOfferImageByIndustry(offer.branch)),
+          width: 1200,
+          height: 630,
+          alt: offer.title ?? t.offerFallback,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${offer.title} | ${companyName}`,
+      description: truncateSeoDescription(descriptionSource),
+      images: [getAbsoluteUrl(getOfferImageByIndustry(offer.branch))],
     },
   };
 }

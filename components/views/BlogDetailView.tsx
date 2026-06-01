@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { getAbsoluteUrl, truncateSeoDescription } from "@/lib/seo";
 import { createClient } from "@/lib/supabase/server";
 
 type BlogDetailViewProps = {
@@ -52,15 +53,6 @@ function formatDate(value: string | null, locale: Locale) {
     month: "short",
     year: "numeric",
   }).format(new Date(value));
-}
-
-function truncateDescription(description: string, maxLength = 160) {
-  if (description.length <= maxLength) {
-    return description;
-  }
-
-  const trimmed = description.slice(0, maxLength - 1).trimEnd();
-  return `${trimmed}...`;
 }
 
 async function getPublishedPost(slug: string) {
@@ -177,13 +169,38 @@ export async function generateBlogDetailMetadata({
     };
   }
 
+  const title = post.meta_title || `${post.title} | Blog WolneMoce.pl`;
+  const description = truncateSeoDescription(
+    post.meta_description || post.excerpt || post.content
+  );
+  const imageUrl = getAbsoluteUrl(getBlogImageUrl(post.featured_image_path));
+
   return {
-    title: post.meta_title || `${post.title} | Blog WolneMoce.pl`,
-    description: truncateDescription(
-      post.meta_description || post.excerpt || post.content
-    ),
+    title,
+    description,
     alternates: {
       canonical: `/blog/${slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/blog/${slug}`,
+      siteName: "WolneMoce.pl",
+      type: "article",
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.featured_image_alt || post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
     },
   };
 }

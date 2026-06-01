@@ -5,6 +5,17 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: [
+        "/admin",
+        "/admin/",
+        "/admin/*",
+        "/panel",
+        "/panel/",
+        "/panel/*",
+        "/auth/callback",
+        "/reset-hasla",
+        "/ustaw-nowe-haslo",
+      ],
     },
     sitemap: "https://wolnemoce.pl/sitemap.xml",
   };
