@@ -278,6 +278,7 @@ export default async function AdminPage() {
               {[
                 { title: "Przejdź do firm", icon: "fa-building", href: "/admin/firmy" },
                 { title: "Przejdź do ofert", icon: "fa-list-check", href: "/admin/oferty" },
+                { title: "Monitoring RFQ", icon: "fa-inbox", href: "/admin/rfq" },
                 { title: "Przejdź do certyfikatów", icon: "fa-certificate", href: "/admin/certyfikaty" },
                 { title: "Przejdź do wiadomości", icon: "fa-envelope", href: "/admin/contact-messages" },
                 { title: "Przejdź do bloga", icon: "fa-newspaper", href: "/admin/blog" },
