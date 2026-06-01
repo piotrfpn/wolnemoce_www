@@ -378,34 +378,34 @@ const pl: Dictionary = {
     faqTitle: "Najczęstsze pytania",
     faqs: [
       {
-        question: "Czy formularze wysyłają dane?",
+        question: "Czy dodanie oferty jest bezpłatne?",
         answer:
-          "Tak. Formularz kontaktowy zapisuje wiadomość w systemie i przekazuje ją do obsługi.",
+          "Tak. W planie FREE firma może dodać jedną ofertę oczekującą lub aktywną. To dobry sposób, aby sprawdzić zainteresowanie rynku przed przejściem na wyższy plan.",
       },
       {
-        question: "Czy oferty są filtrowane dynamicznie?",
+        question: "Jak firma otrzymuje zapytania od kupujących?",
         answer:
-          "Tak. Publiczny listing ofert korzysta z parametrów w adresie URL, aby zachować wybrane filtry.",
+          "Zapytania trafiają do panelu firmy w zakładce „Zapytania”. Na etapie soft-launchu zalecamy regularne sprawdzanie panelu, ponieważ powiadomienia e-mail mogą działać w trybie testowym lub być uruchamiane etapami.",
       },
       {
-        question: "Jak działa weryfikacja firm?",
+        question: "Czy WolneMoce.pl obsługuje płatności online?",
         answer:
-          "Firma może zostać oznaczona jako zweryfikowana po podstawowej kontroli danych przez administratora.",
+          "Nie w tym etapie. Cennik pokazuje model planów, ale płatności online są w przygotowaniu. Plany PRO i ENTERPRISE mogą być uruchamiane indywidualnie po kontakcie z administracją.",
       },
       {
-        question: "Czy można dodać ofertę za darmo?",
+        question: "Czym różni się plan FREE od PRO?",
         answer:
-          "Tak. W planie FREE firma może mieć jedną ofertę oczekującą lub aktywną.",
-      },
-      {
-        question: "Czy WolneMoce.pl obsługuje płatności?",
-        answer:
-          "Nie w tym etapie. Cennik pokazuje model planów bez integracji płatności.",
+          "Plan FREE pozwala rozpocząć publikację od jednej oferty. Plan PRO jest przeznaczony dla firm, które chcą pokazać więcej ofert, zwiększyć widoczność i korzystać z priorytetowej obsługi moderacyjnej.",
       },
       {
         question: "Czy usługi Credos i LogiMarket są częścią planu PRO?",
         answer:
-          "Nie. To opcjonalne usługi partnerskie, ustalane osobno co do zakresu i ceny.",
+          "Nie. To opcjonalne usługi partnerskie, wyceniane indywidualnie w zależności od zakresu. Można zapytać o nie przez formularz kontaktowy.",
+      },
+      {
+        question: "Jak działa weryfikacja firm?",
+        answer:
+          "Administrator może oznaczyć firmę jako zweryfikowaną po podstawowej kontroli danych publicznych i profilu firmy. Status weryfikacji ma zwiększać zaufanie do ofert widocznych w portalu.",
       },
     ],
     form: {

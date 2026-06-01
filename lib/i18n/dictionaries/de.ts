@@ -351,34 +351,34 @@ const de: Dictionary = {
     faqTitle: "Häufige Fragen",
     faqs: [
       {
-        question: "Sendet das Kontaktformular Daten?",
+        question: "Ist das Hinzufügen eines Angebots kostenlos?",
         answer:
-          "Ja. Das Kontaktformular speichert die Nachricht im System und leitet sie an den Support weiter.",
+          "Ja. Im FREE-Plan kann ein Unternehmen ein ausstehendes oder aktives Angebot hinzufügen. Es ist ein guter Weg, um das Marktinteresse zu prüfen, bevor Sie auf einen höheren Plan umsteigen.",
       },
       {
-        question: "Werden Angebote dynamisch gefiltert?",
+        question: "Wie erhält ein Unternehmen Anfragen von Käufern?",
         answer:
-          "Ja. Der öffentliche Angebotskatalog nutzt URL-Parameter, um ausgewählte Filter zu erhalten.",
+          "Anfragen gehen in das Unternehmens-Panel unter 'Anfragen'. Während der Soft-Launch-Phase empfehlen wir, das Panel regelmäßig zu überprüfen, da E-Mail-Benachrichtigungen im Testmodus laufen oder schrittweise eingeführt werden können.",
       },
       {
-        question: "Wie funktioniert die Firmenverifizierung?",
+        question: "Unterstützt WolneMoce.pl Online-Zahlungen?",
         answer:
-          "Eine Firma kann nach einer Basisprüfung der Daten durch die Administration als verifiziert markiert werden.",
+          "In dieser Phase nicht. Die Preisgestaltung zeigt das Planmodell, aber Online-Zahlungen sind in Vorbereitung. PRO- und ENTERPRISE-Pläne können nach Kontaktaufnahme mit der Verwaltung individuell aktiviert werden.",
       },
       {
-        question: "Kann ich kostenlos ein Angebot hinzufügen?",
+        question: "Was ist der Unterschied zwischen dem FREE- und dem PRO-Plan?",
         answer:
-          "Ja. Im FREE-Plan kann eine Firma ein wartendes oder aktives Angebot haben.",
+          "Mit dem FREE-Plan können Sie mit der Veröffentlichung eines Angebots beginnen. Der PRO-Plan richtet sich an Unternehmen, die mehr Angebote zeigen, die Sichtbarkeit erhöhen und bevorzugten Moderations-Support nutzen möchten.",
       },
       {
-        question: "Verarbeitet WolneMoce.pl Zahlungen?",
+        question: "Sind die Dienste von Credos und LogiMarket Teil des PRO-Plans?",
         answer:
-          "Nicht in dieser Phase. Die Preisseite zeigt das Planmodell ohne Zahlungsintegration.",
+          "Nein. Dies sind optionale Partnerdienste, die je nach Umfang individuell bepreist werden. Sie können diese über das Kontaktformular anfragen.",
       },
       {
-        question: "Sind Credos- und LogiMarket-Leistungen Teil von PRO?",
+        question: "Wie funktioniert die Unternehmensverifizierung?",
         answer:
-          "Nein. Es sind optionale Partnerleistungen, deren Umfang und Preis separat vereinbart werden.",
+          "Der Administrator kann ein Unternehmen nach einer grundlegenden Überprüfung der öffentlichen Daten und des Unternehmensprofils als verifiziert markieren. Der Verifizierungsstatus soll das Vertrauen in die auf dem Portal sichtbaren Angebote stärken.",
       },
     ],
     form: {

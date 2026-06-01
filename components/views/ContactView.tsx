@@ -74,7 +74,6 @@ export default async function ContactView({
             {[
               ["fas fa-envelope", t.labels.email, contactInfo.email],
               ["fas fa-phone", t.labels.phone, contactInfo.phone],
-              ["fas fa-location-dot", t.labels.location, contactInfo.city],
               ["fas fa-clock", t.labels.hours, contactInfo.hours],
             ].map(([icon, label, value]) => (
               <div key={label} className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">

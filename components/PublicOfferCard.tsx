@@ -94,24 +94,7 @@ export default function PublicOfferCard({
         isCatalog ? "min-h-[520px]" : ""
       }`}
     >
-      {company?.is_verified ? (
-        <div className="absolute right-4 top-4 z-10 flex flex-col items-end gap-2">
-          {featured ? (
-            <span className="flex items-center gap-1 rounded-full bg-[#fbbf24] px-3 py-1.5 text-[11px] font-bold text-slate-900 shadow-sm">
-              <i className="fas fa-star"></i>
-              {labels.featured}
-            </span>
-          ) : null}
-          <VerifiedCompanyBadge
-            isVerified={company.is_verified}
-            className="!bg-white/95 !text-[11px] !py-1 backdrop-blur"
-            verifiedLabel={labels.verifiedCompanyLabel}
-            unverifiedLabel={labels.publicProfileLabel}
-            verifiedTitle={labels.verifiedTitle}
-            unverifiedTitle={labels.publicProfileTitle}
-          />
-        </div>
-      ) : featured ? (
+      {featured ? (
         <div className="absolute right-4 top-4 z-10 flex items-center gap-1 rounded-full bg-[#fbbf24] px-3 py-1.5 text-[11px] font-bold text-slate-900 shadow-sm">
           <i className="fas fa-star"></i>
           {labels.featured}
@@ -172,9 +155,22 @@ export default function PublicOfferCard({
                   {companyName}
                 </h3>
               )}
-              <p className="truncate text-[11px] text-slate-400">
-                {company?.is_verified ? labels.verified : labels.publicProfile}
-              </p>
+              {company?.is_verified ? (
+                <div className="mt-1">
+                  <VerifiedCompanyBadge
+                    isVerified={company.is_verified}
+                    className="!px-2 !py-0.5 !text-[10px] w-fit"
+                    verifiedLabel={labels.verifiedCompanyLabel}
+                    unverifiedLabel={labels.publicProfileLabel}
+                    verifiedTitle={labels.verifiedTitle}
+                    unverifiedTitle={labels.publicProfileTitle}
+                  />
+                </div>
+              ) : (
+                <p className="truncate text-[11px] text-slate-400 mt-0.5">
+                  {labels.publicProfile}
+                </p>
+              )}
             </div>
           </div>
         ) : null}
@@ -251,10 +247,8 @@ export default function PublicOfferCard({
             <div className={`flex w-full gap-2 ${isCatalog ? "flex-col sm:flex-row" : "items-center"}`}>
               <Link
                 href={offerHref}
-                className={`inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-4 text-sm font-bold text-white transition ${
-                  isCatalog
-                    ? "bg-[#1a5f3c] py-3.5 shadow-sm hover:bg-[#144b30]"
-                    : "bg-slate-900 py-2.5 hover:bg-slate-800"
+                className={`inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-4 text-sm font-bold text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 bg-emerald-700 hover:bg-emerald-800 ${
+                  isCatalog ? "py-3.5 shadow-sm" : "py-2.5"
                 }`}
               >
                 {labels.viewOffer}

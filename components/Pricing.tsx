@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 
@@ -60,16 +61,27 @@ export default function Pricing({ locale = defaultLocale }: { locale?: Locale })
       <div className="pricing-addons fade-in visible">
         <h4>{t.addOnsTitle}</h4>
 
-        <div className="addons-grid">
-          {t.addOns.map((addOn) => (
-            <div key={addOn.name} className="addon-card">
-              <h5>{addOn.name}</h5>
-              <p>{addOn.description}</p>
-              <div className="price">
-                {addOn.price} <span>{addOn.suffix}</span>
-              </div>
-            </div>
-          ))}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4 items-stretch">
+          {t.addOns.map((addOn, index) => {
+            let href = "/kontakt";
+            if (index === 2) href = "/kontakt?temat=credos";
+            if (index === 3) href = "/kontakt?temat=logimarket";
+
+            return (
+              <Link
+                key={addOn.name}
+                href={getLocalizedPath(href, locale)}
+                className="group flex flex-col h-full min-h-full no-underline text-inherit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 hover:border-emerald-500 hover:shadow-md transition-all rounded-[var(--radius-lg,16px)] border border-slate-200 bg-white p-5 sm:p-7 text-left"
+              >
+                <h5 className="mb-3 text-base font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">{addOn.name}</h5>
+                <p className="flex-1 text-sm text-slate-500 leading-relaxed mb-6">{addOn.description}</p>
+                <div className="mt-auto flex items-baseline gap-1.5 whitespace-nowrap">
+                  <span className="text-2xl font-extrabold text-emerald-700">{addOn.price}</span>
+                  <span className="text-sm font-medium text-slate-500">{addOn.suffix}</span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

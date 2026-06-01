@@ -345,34 +345,34 @@ const fr: Dictionary = {
     faqTitle: "Questions fréquentes",
     faqs: [
       {
-        question: "Le formulaire de contact envoie-t-il des données ?",
+        question: "L'ajout d'une offre est-il gratuit ?",
         answer:
-          "Oui. Le formulaire enregistre le message dans le système et le transmet au support.",
+          "Oui. Dans le forfait FREE, une entreprise peut ajouter une offre en attente ou active. C'est un bon moyen de vérifier l'intérêt du marché avant de passer à un forfait supérieur.",
       },
       {
-        question: "Les offres sont-elles filtrées dynamiquement ?",
+        question: "Comment une entreprise reçoit-elle les demandes des acheteurs ?",
         answer:
-          "Oui. La liste publique utilise les paramètres d’URL pour conserver les filtres sélectionnés.",
+          "Les demandes vont dans le panel de l'entreprise, sous l'onglet 'Demandes'. Pendant la phase de prélancement, nous recommandons de vérifier le panel régulièrement, car les notifications par e-mail peuvent fonctionner en mode test ou être déployées par étapes.",
+      },
+      {
+        question: "WolneMoce.pl gère-t-il les paiements en ligne ?",
+        answer:
+          "Pas à ce stade. La tarification présente le modèle de forfaits, mais les paiements en ligne sont en préparation. Les forfaits PRO et ENTERPRISE peuvent être activés individuellement après avoir contacté l'administration.",
+      },
+      {
+        question: "Quelle est la différence entre les forfaits FREE et PRO ?",
+        answer:
+          "Le forfait FREE vous permet de commencer à publier avec une seule offre. Le forfait PRO est destiné aux entreprises qui souhaitent afficher plus d'offres, augmenter leur visibilité et bénéficier d'un support de modération prioritaire.",
+      },
+      {
+        question: "Les services Credos et LogiMarket font-ils partie du forfait PRO ?",
+        answer:
+          "Non. Ce sont des services partenaires optionnels dont le prix est fixé individuellement selon l'étendue. Vous pouvez vous renseigner à leur sujet via le formulaire de contact.",
       },
       {
         question: "Comment fonctionne la vérification des entreprises ?",
         answer:
-          "Une entreprise peut être marquée comme vérifiée après un contrôle de base par l’administrateur.",
-      },
-      {
-        question: "Puis-je ajouter une offre gratuitement ?",
-        answer:
-          "Oui. Dans le plan FREE, une entreprise peut avoir une offre en attente ou active.",
-      },
-      {
-        question: "WolneMoce.pl gère-t-il les paiements ?",
-        answer:
-          "Pas à cette étape. La page tarifs présente le modèle de plans sans intégration de paiement.",
-      },
-      {
-        question: "Les services Credos et LogiMarket font-ils partie du PRO ?",
-        answer:
-          "Non. Ce sont des services partenaires optionnels, convenus séparément en périmètre et prix.",
+          "L'administrateur peut marquer une entreprise comme vérifiée après une vérification basique des données publiques et du profil de l'entreprise. Le statut de vérification vise à accroître la confiance dans les offres visibles sur le portail.",
       },
     ],
     form: {

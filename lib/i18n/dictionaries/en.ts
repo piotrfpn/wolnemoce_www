@@ -365,34 +365,34 @@ const en: Dictionary = {
     faqTitle: "Frequently asked questions",
     faqs: [
       {
-        question: "Does the contact form send data?",
+        question: "Is adding an offer free?",
         answer:
-          "Yes. The contact form saves the message in the system and passes it to support.",
+          "Yes. In the FREE plan, a company can add one pending or active offer. It's a good way to check market interest before upgrading.",
       },
       {
-        question: "Are offers filtered dynamically?",
+        question: "How does a company receive inquiries from buyers?",
         answer:
-          "Yes. The public offer listing uses URL parameters to preserve selected filters.",
+          "Inquiries go to the company panel in the 'Inquiries' tab. During the soft-launch phase, we recommend checking the panel regularly, as email notifications may run in test mode or be rolled out in stages.",
+      },
+      {
+        question: "Does WolneMoce.pl handle online payments?",
+        answer:
+          "Not at this stage. The pricing shows the plan model, but online payments are in preparation. PRO and ENTERPRISE plans can be activated individually after contacting administration.",
+      },
+      {
+        question: "What is the difference between FREE and PRO plans?",
+        answer:
+          "The FREE plan allows you to start publishing with one offer. The PRO plan is for companies that want to show more offers, increase visibility, and use priority moderation support.",
+      },
+      {
+        question: "Are Credos and LogiMarket services part of the PRO plan?",
+        answer:
+          "No. These are optional partner services priced individually depending on the scope. You can ask about them via the contact form.",
       },
       {
         question: "How does company verification work?",
         answer:
-          "A company may be marked as verified after a basic data check by the administrator.",
-      },
-      {
-        question: "Can I add an offer for free?",
-        answer:
-          "Yes. In the FREE plan, a company may have one pending or active offer.",
-      },
-      {
-        question: "Does WolneMoce.pl handle payments?",
-        answer:
-          "Not at this stage. Pricing presents the plan model without payment integration.",
-      },
-      {
-        question: "Are Credos and LogiMarket services part of PRO?",
-        answer:
-          "No. They are optional partner services agreed separately in scope and price.",
+          "The administrator can mark a company as verified after a basic check of public data and the company profile. The verification status is meant to increase trust in the offers visible on the portal.",
       },
     ],
     form: {

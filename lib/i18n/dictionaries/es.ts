@@ -345,34 +345,34 @@ const es: Dictionary = {
     faqTitle: "Preguntas frecuentes",
     faqs: [
       {
-        question: "¿El formulario de contacto envía datos?",
+        question: "¿Es gratis añadir una oferta?",
         answer:
-          "Sí. El formulario guarda el mensaje en el sistema y lo pasa a soporte.",
+          "Sí. En el plan FREE, una empresa puede añadir una oferta pendiente o activa. Es una buena manera de comprobar el interés del mercado antes de pasar a un plan superior.",
       },
       {
-        question: "¿Las ofertas se filtran dinámicamente?",
+        question: "¿Cómo recibe una empresa las consultas de los compradores?",
         answer:
-          "Sí. El listado público usa parámetros de URL para conservar los filtros seleccionados.",
+          "Las consultas van al panel de la empresa en la pestaña 'Consultas'. Durante la fase de lanzamiento inicial, recomendamos revisar el panel regularmente, ya que las notificaciones por correo electrónico pueden funcionar en modo de prueba o implementarse por etapas.",
+      },
+      {
+        question: "¿WolneMoce.pl acepta pagos en línea?",
+        answer:
+          "No en esta etapa. Los precios muestran el modelo de planes, pero los pagos en línea están en preparación. Los planes PRO y ENTERPRISE se pueden activar individualmente tras contactar con la administración.",
+      },
+      {
+        question: "¿Cuál es la diferencia entre los planes FREE y PRO?",
+        answer:
+          "El plan FREE le permite comenzar a publicar con una oferta. El plan PRO es para empresas que desean mostrar más ofertas, aumentar la visibilidad y utilizar el soporte de moderación prioritario.",
+      },
+      {
+        question: "¿Los servicios de Credos y LogiMarket forman parte del plan PRO?",
+        answer:
+          "No. Son servicios asociados opcionales con un precio individual dependiendo del alcance. Puede preguntar sobre ellos a través del formulario de contacto.",
       },
       {
         question: "¿Cómo funciona la verificación de empresas?",
         answer:
-          "Una empresa puede marcarse como verificada tras una revisión básica de datos por el administrador.",
-      },
-      {
-        question: "¿Puedo añadir una oferta gratis?",
-        answer:
-          "Sí. En el plan FREE, una empresa puede tener una oferta pendiente o activa.",
-      },
-      {
-        question: "¿WolneMoce.pl gestiona pagos?",
-        answer:
-          "No en esta etapa. La página de precios muestra el modelo de planes sin integración de pagos.",
-      },
-      {
-        question: "¿Credos y LogiMarket forman parte del plan PRO?",
-        answer:
-          "No. Son servicios partner opcionales, acordados por separado en alcance y precio.",
+          "El administrador puede marcar a una empresa como verificada después de una revisión básica de los datos públicos y el perfil de la empresa. El estado de verificación tiene como objetivo aumentar la confianza en las ofertas visibles en el portal.",
       },
     ],
     form: {
