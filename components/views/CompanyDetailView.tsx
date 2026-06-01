@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
 import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
-import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
+import { getLocalizedHref, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createClient } from "@/lib/supabase/server";
 
@@ -234,6 +234,12 @@ export default async function CompanyDetailView({
       : company.industry
         ? [company.industry]
         : [];
+  const serviceTypes = company.service_types ?? [];
+  const companyOffersHref = getLocalizedHref(
+    "/oferty",
+    locale,
+    company.name ? `q=${encodeURIComponent(company.name)}` : ""
+  );
 
   return (
     <>
@@ -251,10 +257,11 @@ export default async function CompanyDetailView({
               {t.backToCompanies}
             </Link>
 
-            <div className="grid min-w-0 gap-8 lg:grid-cols-[auto_1fr] lg:items-center">
-              <div className="flex h-24 w-24 items-center justify-center rounded-[24px] bg-white text-3xl font-black text-[#1a5f3c] shadow-2xl">
-                {getInitials(company.name)}
-              </div>
+            <div className="grid min-w-0 gap-8 xl:grid-cols-[1fr_380px] xl:items-end">
+              <div className="grid min-w-0 gap-8 lg:grid-cols-[auto_1fr] lg:items-center">
+                <div className="flex h-24 w-24 items-center justify-center rounded-[24px] bg-white text-3xl font-black text-[#1a5f3c] shadow-2xl">
+                  {getInitials(company.name)}
+                </div>
 
               <div className="min-w-0">
                 <div className="mb-4 flex flex-wrap gap-3">
@@ -273,7 +280,7 @@ export default async function CompanyDetailView({
                 </div>
 
                 <h1 className="break-words text-3xl font-black leading-tight tracking-[-1px] md:text-5xl">
-                  {company.name}
+                  {company.name || t.companyFallback}
                 </h1>
                 <p className="mt-5 flex flex-wrap gap-4 text-sm font-semibold text-white/85">
                   {location ? (
@@ -287,6 +294,72 @@ export default async function CompanyDetailView({
                     {activeOffers.length} {t.activeOffers}
                   </span>
                 </p>
+                {(industries.length > 0 || serviceTypes.length > 0) ? (
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {industries.slice(0, 3).map((industry) => (
+                      <span
+                        key={industry}
+                        className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-bold text-white"
+                      >
+                        <i className="fas fa-industry text-[#fbbf24]"></i>
+                        {industry}
+                      </span>
+                    ))}
+                    {serviceTypes.slice(0, 3).map((serviceType) => (
+                      <span
+                        key={serviceType}
+                        className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-bold text-white"
+                      >
+                        <i className="fas fa-cogs text-[#fbbf24]"></i>
+                        {serviceType}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+                </div>
+              </div>
+
+              <div className="rounded-[24px] border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur">
+                <div className="mb-5 grid grid-cols-3 gap-3 text-center">
+                  <div className="rounded-2xl bg-white/10 p-3">
+                    <div className="text-2xl font-black">{activeOffers.length}</div>
+                    <div className="mt-1 text-[11px] font-semibold text-white/70">
+                      {t.activeOffers}
+                    </div>
+                  </div>
+                  <div className="rounded-2xl bg-white/10 p-3">
+                    <div className="text-2xl font-black">{industries.length}</div>
+                    <div className="mt-1 text-[11px] font-semibold text-white/70">
+                      {t.industries}
+                    </div>
+                  </div>
+                  <div className="rounded-2xl bg-white/10 p-3">
+                    <div className="text-2xl font-black">{certificates.length}</div>
+                    <div className="mt-1 text-[11px] font-semibold text-white/70">
+                      {t.certificatesTitle}
+                    </div>
+                  </div>
+                </div>
+
+                <p className="mb-5 text-sm leading-6 text-white/80">
+                  {t.verifiedNotice}
+                </p>
+                <div className="flex flex-col gap-3">
+                  <a
+                    href="#company-offers"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-emerald-50"
+                  >
+                    {t.viewOffers}
+                    <i className="fas fa-arrow-down text-xs"></i>
+                  </a>
+                  <Link
+                    href={companyOffersHref}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/10"
+                  >
+                    {t.activeCompanyOffers}
+                    <i className="fas fa-arrow-right text-xs"></i>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -329,7 +402,7 @@ export default async function CompanyDetailView({
               <div className="rounded-[24px] border border-emerald-100 bg-gradient-to-br from-emerald-50 to-emerald-100/50 p-6 shadow-sm">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 shadow-sm">
-                    <i className="fas fa-shield-check text-lg"></i>
+                    <i className="fas fa-check-circle text-lg"></i>
                   </div>
                   <h2 className="text-xl font-extrabold text-emerald-900">
                     {t.trustCompanyVerifiedTitle}
@@ -406,46 +479,48 @@ export default async function CompanyDetailView({
               </div>
             </div>
 
-            <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
-              <h2 className="mb-5 text-2xl font-extrabold text-slate-900">
-                {t.industriesAndServices}
-              </h2>
-              {industries.length > 0 && (
-                <div className="mb-6">
-                  <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
-                    {t.industries}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {industries.map((industry) => (
-                      <span
-                        key={industry}
-                        className="rounded-full bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700"
-                      >
-                        {industry}
-                      </span>
-                    ))}
+            {industries.length > 0 || serviceTypes.length > 0 ? (
+              <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 className="mb-5 text-2xl font-extrabold text-slate-900">
+                  {t.industriesAndServices}
+                </h2>
+                {industries.length > 0 && (
+                  <div className="mb-6">
+                    <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+                      {t.industries}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {industries.map((industry) => (
+                        <span
+                          key={industry}
+                          className="rounded-full bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-700"
+                        >
+                          {industry}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {company.service_types && company.service_types.length > 0 && (
-                <div>
-                  <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
-                    {t.services}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {company.service_types.map((serviceType) => (
-                      <span
-                        key={serviceType}
-                        className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700"
-                      >
-                        {serviceType}
-                      </span>
-                    ))}
+                {serviceTypes.length > 0 && (
+                  <div>
+                    <p className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+                      {t.services}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {serviceTypes.map((serviceType) => (
+                        <span
+                          key={serviceType}
+                          className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700"
+                        >
+                          {serviceType}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            ) : null}
 
             {certificates.length > 0 ? (
               <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
@@ -565,8 +640,10 @@ export default async function CompanyDetailView({
               </p>
             </section>
 
-            {activeOffers.length > 0 && (
-              <section className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <section
+                id="company-offers"
+                className="scroll-mt-24 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8"
+              >
                 <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                   <div>
                     <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
@@ -576,29 +653,37 @@ export default async function CompanyDetailView({
                       {t.availableCapacity}
                     </h2>
                   </div>
-                  <Link href={getLocalizedPath("/oferty", locale)} className="btn btn-outline">
+                  <Link href={companyOffersHref} className="btn btn-outline">
                     {t.viewOffers}
                   </Link>
                 </div>
 
+                {activeOffers.length > 0 ? (
                 <div className="grid min-w-0 gap-6 xl:grid-cols-2">
                   {activeOffers.map((offer) => (
                     <div key={offer.id} className="min-w-0">
-                      <PublicOfferCard offer={offer} locale={locale} />
-                      {offer.slug ? (
-                        <Link
-                          href={`/zapytanie-ofertowe?oferta=${offer.slug}`}
-                          className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white"
-                        >
-                          {t.askAboutOffer}
-                          <i className="fas fa-arrow-right text-xs"></i>
-                        </Link>
-                      ) : null}
+                      <PublicOfferCard
+                        offer={offer}
+                        locale={locale}
+                        variant="catalog"
+                      />
                     </div>
                   ))}
                 </div>
+                ) : (
+                  <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
+                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#1a5f3c] shadow-sm">
+                      <i className="fas fa-circle-info"></i>
+                    </div>
+                    <h3 className="text-lg font-extrabold text-slate-900">
+                      {t.noActiveOffers}
+                    </h3>
+                    <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-500">
+                      {t.noDescription}
+                    </p>
+                  </div>
+                )}
               </section>
-            )}
           </div>
         </section>
       </main>
