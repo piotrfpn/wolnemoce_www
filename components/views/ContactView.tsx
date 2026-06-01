@@ -81,7 +81,17 @@ export default async function ContactView({
                 <h2 className="text-sm font-bold uppercase tracking-wide text-slate-500">
                   {label}
                 </h2>
-                <p className="mt-1 text-lg font-extrabold text-slate-900">{value}</p>
+                {icon === "fas fa-phone" ? (
+                  <a href={`tel:${value.replace(/\\s+/g, '')}`} className="mt-1 block text-lg font-extrabold text-slate-900 hover:text-emerald-700 transition-colors">
+                    {value}
+                  </a>
+                ) : icon === "fas fa-envelope" ? (
+                  <a href={`mailto:${value}`} className="mt-1 block text-lg font-extrabold text-slate-900 hover:text-emerald-700 transition-colors">
+                    {value}
+                  </a>
+                ) : (
+                  <p className="mt-1 text-lg font-extrabold text-slate-900">{value}</p>
+                )}
               </div>
             ))}
           </div>

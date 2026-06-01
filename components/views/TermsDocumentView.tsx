@@ -51,6 +51,15 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
             <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-7 text-amber-900">
               {t.betaNotice}
             </div>
+            {locale !== "pl" && (
+              <div className="mb-6 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm leading-7 text-amber-900">
+                {locale === "en" && "The legally binding version of the Terms and Conditions, Privacy Policy and Cookie Policy is the Polish language version. Translations into other languages are provided for information purposes only."}
+                {locale === "de" && "Die rechtlich verbindliche Fassung der Allgemeinen Geschäftsbedingungen, der Datenschutzerklärung und der Cookie-Richtlinie ist die polnische Sprachfassung. Übersetzungen in andere Sprachen dienen ausschließlich Informationszwecken."}
+                {locale === "uk" && "Юридично обов’язковою версією Регламенту, Політики конфіденційності та Політики cookies є версія польською мовою. Переклади іншими мовами надаються виключно з інформаційною метою."}
+                {locale === "es" && "La versión legalmente vinculante de los Términos y Condiciones, la Política de Privacidad y la Política de Cookies es la versión en lengua polaca. Las traducciones a otros idiomas se proporcionan únicamente con fines informativos."}
+                {locale === "fr" && "La version juridiquement contraignante des Conditions générales, de la Politique de confidentialité et de la Politique relative aux cookies est la version en langue polonaise. Les traductions dans d’autres langues sont fournies uniquement à titre informatif."}
+              </div>
+            )}
 
             <div className="space-y-10">
               <Section number={1} title="Definicje">
@@ -68,12 +77,12 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
 
               <Section number={2} title="Dane Operatora">
                 <ul className="list-disc space-y-2 pl-5">
-                  <li>Pełne dane firmy: [Wpisz_Pelne_Dane_Firmy]</li>
-                  <li>NIP: [Wpisz_NIP]</li>
-                  <li>REGON: [Wpisz_REGON]</li>
-                  <li>Adres: [Wpisz_Adres]</li>
-                  <li>Email kontaktowy: [Wpisz_Email_Kontaktowy]</li>
-                  <li>Email reklamacje: [Wpisz_Email_Reklamacje]</li>
+                  <li>Pełne dane firmy: PFConsulting Piotr Fiszer</li>
+                  <li>NIP: 7792017326</li>
+                  <li>Adres: ul. Promienista 114, 60-142 Poznań, Polska</li>
+                  <li>Email kontaktowy: kontakt@wolnemoce.pl</li>
+                  <li>Email reklamacje: kontakt@wolnemoce.pl</li>
+                  <li>Telefon: +48 604 904 150</li>
                 </ul>
               </Section>
 
@@ -109,12 +118,17 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={5} title="Rejestracja konta">
+              <Section number={5} title="Rejestracja i usunięcie konta">
                 <p>
                   Rejestracja wymaga podania danych umożliwiających utworzenie
                   konta oraz akceptacji Regulaminu. Użytkownik odpowiada za
                   prawdziwość danych podanych przy rejestracji i za uprawnienie do
                   działania w imieniu wskazanej firmy.
+                </p>
+                <p>
+                  Ze względu na wczesny etap działania portalu, usunięcie konta jest
+                  obecnie realizowane ręcznie przez administratora na zgłoszenie mailowe
+                  użytkownika.
                 </p>
               </Section>
 
@@ -243,12 +257,18 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </ul>
               </Section>
 
-              <Section number={12} title="Zapytania ofertowe RFQ">
+              <Section number={12} title="Zapytania ofertowe RFQ i powiadomienia e-mail">
                 <p>
                   RFQ umożliwia osobie zainteresowanej wysłanie zapytania do
                   firmy posiadającej aktywną ofertę. Dane zapytania trafiają do
                   panelu firmy. Serwis nie gwarantuje odpowiedzi, zawarcia umowy,
                   warunków handlowych ani realizacji zlecenia.
+                </p>
+                <p>
+                  Powiadomienia e-mail o nowym zapytaniu RFQ mogą być uruchamiane
+                  etapami lub testowo. Wiążącym miejscem odbioru i obsługi zapytań
+                  pozostaje panel użytkownika w Serwisie, a brak lub opóźnienie
+                  powiadomienia e-mail nie oznacza, że zapytanie nie wpłynęło.
                 </p>
               </Section>
 
@@ -484,7 +504,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
               <Section number={29} title="Reklamacje">
                 <p>
                   Reklamacje dotyczące działania Serwisu można kierować na adres
-                  [Wpisz_Email_Reklamacje]. Reklamacja powinna zawierać opis
+                  kontakt@wolnemoce.pl. Reklamacja powinna zawierać opis
                   problemu, dane zgłaszającego, identyfikację konta lub treści oraz
                   oczekiwany sposób rozpatrzenia.
                 </p>

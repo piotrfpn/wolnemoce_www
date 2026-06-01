@@ -51,20 +51,29 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
             <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-7 text-amber-900">
               {t.betaNotice}
             </div>
+            {locale !== "pl" && (
+              <div className="mb-6 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm leading-7 text-amber-900">
+                {locale === "en" && "The legally binding version of the Terms and Conditions, Privacy Policy and Cookie Policy is the Polish language version. Translations into other languages are provided for information purposes only."}
+                {locale === "de" && "Die rechtlich verbindliche Fassung der Allgemeinen Geschäftsbedingungen, der Datenschutzerklärung und der Cookie-Richtlinie ist die polnische Sprachfassung. Übersetzungen in andere Sprachen dienen ausschließlich Informationszwecken."}
+                {locale === "uk" && "Юридично обов’язковою версією Регламенту, Політики конфіденційності та Політики cookies є версія польською мовою. Переклади іншими мовами надаються виключно з інформаційною метою."}
+                {locale === "es" && "La versión legalmente vinculante de los Términos y Condiciones, la Política de Privacidad y la Política de Cookies es la versión en lengua polaca. Las traducciones a otros idiomas se proporcionan únicamente con fines informativos."}
+                {locale === "fr" && "La version juridiquement contraignante des Conditions générales, de la Politique de confidentialité et de la Politique relative aux cookies est la version en langue polonaise. Les traductions dans d’autres langues sont fournies uniquement à titre informatif."}
+              </div>
+            )}
 
             <div className="space-y-10">
               <Section number={1} title="Administrator danych">
                 <p>
                   Administratorem danych osobowych przetwarzanych w Serwisie jest
-                  Operator WolneMoce.pl: [Wpisz_Pelne_Dane_Firmy],
-                  [Wpisz_Adres], NIP: [Wpisz_NIP], REGON: [Wpisz_REGON].
+                  Operator WolneMoce.pl: PFConsulting Piotr Fiszer,
+                  ul. Promienista 114, 60-142 Poznań, Polska, NIP: 7792017326.
                 </p>
               </Section>
 
               <Section number={2} title="Kontakt w sprawach RODO">
                 <p>
                   W sprawach dotyczących ochrony danych osobowych można
-                  kontaktować się pod adresem: [Wpisz_Email_RODO].
+                  kontaktować się pod adresem e-mail: kontakt@wolnemoce.pl lub telefonem: +48 604 904 150.
                 </p>
               </Section>
 
@@ -107,7 +116,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 <ul className="list-disc space-y-2 pl-5">
                   <li>świadczenie usług elektronicznych i obsługa konta,</li>
                   <li>obsługa profilu firmy, ofert, branż i rodzajów usług,</li>
-                  <li>obsługa zapytań RFQ, załączników i czasowych signed URLs,</li>
+                  <li>obsługa zapytań RFQ, załączników i czasowych signed URLs oraz monitorowanie zapytań przez administratora w celu zapewnienia bezpieczeństwa, przeciwdziałania nadużyciom i prawidłowej obsługi portalu,</li>
                   <li>obsługa płatności, faktur, księgowości i obowiązków podatkowych,</li>
                   <li>bezpieczeństwo IT, zapobieganie nadużyciom i ochrona Serwisu,</li>
                   <li>dochodzenie, ustalenie i obrona roszczeń,</li>

@@ -639,7 +639,7 @@ export const faqs = [
 
 export const contactInfo = {
   email: "kontakt@wolnemoce.pl",
-  phone: "+48 500 000 000",
-  city: "Warszawa",
+  phone: "+48 604 904 150",
+  city: "Poznań",
   hours: "Pon.-pt. 9:00-17:00",
 };
