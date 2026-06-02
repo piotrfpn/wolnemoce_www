@@ -1129,6 +1129,11 @@ const pl: Dictionary = {
       saveAccountDetails: "Zapisz dane konta",
       accountDetailsSaved: "Dane konta zostały zapisane.",
       accountDetailsError: "Nie udało się zapisać danych konta. Spróbuj ponownie.",
+      contactEmailLabel: "E-mail kontaktowy",
+      contactEmailDescription: "Opcjonalny adres do kontaktu operacyjnego z Tobą jako użytkownikiem konta. Nie jest to adres logowania.",
+      contactEmailPlaceholder: "np. imie.nazwisko@firma.pl",
+      contactEmailInvalid: "Niepoprawny format adresu e-mail kontaktowego.",
+
 
     },
   },

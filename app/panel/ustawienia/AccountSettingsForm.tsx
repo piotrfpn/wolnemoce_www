@@ -6,6 +6,7 @@ import { updateAccountDetails } from "./actions";
 type AccountSettingsFormProps = {
   initialFullName: string;
   initialPhone: string;
+  initialContactEmail: string;
   email: string;
   t: {
     accountDetailsTitle: string;
@@ -17,12 +18,17 @@ type AccountSettingsFormProps = {
     accountDetailsSaved: string;
     accountDetailsError: string;
     email: string;
+    contactEmailLabel: string;
+    contactEmailDescription: string;
+    contactEmailPlaceholder: string;
+    contactEmailInvalid: string;
   };
 };
 
 export default function AccountSettingsForm({
   initialFullName,
   initialPhone,
+  initialContactEmail,
   email,
   t,
 }: AccountSettingsFormProps) {
@@ -63,6 +69,38 @@ export default function AccountSettingsForm({
       <form action={handleSubmit} className="space-y-4">
         <div>
           <label className="mb-1 block text-sm font-bold text-slate-700">
+            {t.email}
+          </label>
+          <input
+            type="email"
+            defaultValue={email}
+            readOnly
+            className="w-full rounded-xl border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-500 opacity-70 cursor-not-allowed"
+          />
+          <p className="mt-2 text-xs text-slate-500">
+            {t.emailReadonlyDisclaimer}
+          </p>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-bold text-slate-700">
+            {t.contactEmailLabel}
+          </label>
+          <input
+            type="email"
+            name="contactEmail"
+            defaultValue={initialContactEmail}
+            maxLength={160}
+            placeholder={t.contactEmailPlaceholder}
+            className="w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-[#1a5f3c] focus:ring-[#1a5f3c]"
+          />
+          <p className="mt-2 text-xs text-slate-500">
+            {t.contactEmailDescription}
+          </p>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-bold text-slate-700">
             {t.fullNameLabel}
           </label>
           <input
@@ -85,21 +123,6 @@ export default function AccountSettingsForm({
             maxLength={30}
             className="w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-sm focus:border-[#1a5f3c] focus:ring-[#1a5f3c]"
           />
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-bold text-slate-700">
-            {t.email}
-          </label>
-          <input
-            type="email"
-            defaultValue={email}
-            readOnly
-            className="w-full rounded-xl border-slate-200 bg-slate-100 px-4 py-3 text-sm text-slate-500 opacity-70 cursor-not-allowed"
-          />
-          <p className="mt-2 text-xs text-slate-500">
-            {t.emailReadonlyDisclaimer}
-          </p>
         </div>
 
         {message && (

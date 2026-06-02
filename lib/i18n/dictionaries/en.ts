@@ -1105,6 +1105,11 @@ const en: Dictionary = {
       saveAccountDetails: "Save account details",
       accountDetailsSaved: "Account details saved successfully.",
       accountDetailsError: "Failed to save account details. Please try again.",
+      contactEmailLabel: "Contact Email",
+      contactEmailDescription: "Optional operational contact address for you as an account user. This is not the login address.",
+      contactEmailPlaceholder: "e.g., name.surname@company.com",
+      contactEmailInvalid: "Invalid format for contact email address.",
+
 
     },
   },

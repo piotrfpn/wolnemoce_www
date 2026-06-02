@@ -1003,6 +1003,11 @@ const fr: Dictionary = {
       saveAccountDetails: "Enregistrer les détails du compte",
       accountDetailsSaved: "Détails du compte enregistrés avec succès.",
       accountDetailsError: "Échec de l'enregistrement des détails du compte. Veuillez réessayer.",
+      contactEmailLabel: "E-mail de contact",
+      contactEmailDescription: "Adresse de contact opérationnel facultative pour vous en tant qu'utilisateur du compte. Ce n'est pas l'adresse de connexion.",
+      contactEmailPlaceholder: "ex. prenom.nom@entreprise.fr",
+      contactEmailInvalid: "Format non valide pour l'adresse e-mail de contact.",
+
 
     },
   },

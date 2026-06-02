@@ -967,6 +967,10 @@ export type Dictionary = {
       saveAccountDetails: string;
       accountDetailsSaved: string;
       accountDetailsError: string;
+      contactEmailLabel: string;
+      contactEmailDescription: string;
+      contactEmailPlaceholder: string;
+      contactEmailInvalid: string;
     };
   };
 };

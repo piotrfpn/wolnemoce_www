@@ -29,7 +29,7 @@ export default async function AccountSettingsPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role, full_name, phone")
+    .select("role, full_name, phone, contact_email")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -70,6 +70,7 @@ export default async function AccountSettingsPage() {
             <AccountSettingsForm
               initialFullName={profile?.full_name ?? ""}
               initialPhone={profile?.phone ?? ""}
+              initialContactEmail={profile?.contact_email ?? ""}
               email={user.email ?? ""}
               t={t}
             />

@@ -1019,6 +1019,11 @@ const de: Dictionary = {
       saveAccountDetails: "Kontodetails speichern",
       accountDetailsSaved: "Kontodetails erfolgreich gespeichert.",
       accountDetailsError: "Kontodetails konnten nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+      contactEmailLabel: "Kontakt-E-Mail",
+      contactEmailDescription: "Optionale betriebliche Kontaktadresse für Sie als Kontobenutzer. Dies ist nicht die Anmeldeadresse.",
+      contactEmailPlaceholder: "z.B. vorname.nachname@firma.de",
+      contactEmailInvalid: "Ungültiges Format für die Kontakt-E-Mail-Adresse.",
+
 
     },
   },

@@ -1003,6 +1003,11 @@ const es: Dictionary = {
       saveAccountDetails: "Guardar detalles de la cuenta",
       accountDetailsSaved: "Detalles de la cuenta guardados con éxito.",
       accountDetailsError: "No se pudieron guardar los detalles de la cuenta. Inténtalo de nuevo.",
+      contactEmailLabel: "Correo electrónico de contacto",
+      contactEmailDescription: "Dirección de contacto operativo opcional para usted como usuario de la cuenta. Esta no es la dirección de inicio de sesión.",
+      contactEmailPlaceholder: "ej. nombre.apellido@empresa.es",
+      contactEmailInvalid: "Formato no válido para la dirección de correo electrónico de contacto.",
+
 
     },
   },

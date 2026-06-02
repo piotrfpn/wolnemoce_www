@@ -1003,6 +1003,11 @@ const uk: Dictionary = {
       saveAccountDetails: "Зберегти дані облікового запису",
       accountDetailsSaved: "Дані облікового запису успішно збережено.",
       accountDetailsError: "Не вдалося зберегти дані облікового запису. Спробуйте ще раз.",
+      contactEmailLabel: "Контактна електронна пошта",
+      contactEmailDescription: "Додаткова оперативна контактна адреса для вас як користувача облікового запису. Це не адреса для входу.",
+      contactEmailPlaceholder: "наприклад, imya.prizvyshche@kompaniya.ua",
+      contactEmailInvalid: "Недійсний формат контактної адреси електронної пошти.",
+
 
     },
   },
