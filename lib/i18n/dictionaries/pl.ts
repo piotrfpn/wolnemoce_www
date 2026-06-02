@@ -655,7 +655,7 @@ const pl: Dictionary = {
           "Wyższa widoczność w wynikach",
           "Możliwość zgłoszenia firmy do weryfikacji",
           "Priorytetowa moderacja",
-          "Podbicia ofert — planowane",
+          "Dostęp do wyróżniania ofert",
           "Dostęp do opcjonalnych usług partnerskich",
         ],
         cta: "Zapytaj o PRO",
@@ -1194,3 +1194,4 @@ const pl: Dictionary = {
 };
 
 export default pl;
+

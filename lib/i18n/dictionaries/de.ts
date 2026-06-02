@@ -634,7 +634,7 @@ const de: Dictionary = {
           "Höhere Sichtbarkeit in Ergebnissen",
           "Möglichkeit zur Verifizierungsanfrage",
           "Priorisierte Moderation",
-          "Angebots-Boosts - geplant",
+          "Zugang zur Hervorhebung von Angeboten",
           "Zugang zu optionalen Partnerleistungen",
         ],
         cta: "PRO anfragen",

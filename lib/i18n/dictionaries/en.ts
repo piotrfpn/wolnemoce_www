@@ -641,7 +641,7 @@ const en: Dictionary = {
           "Higher visibility in results",
           "Option to submit the company for verification",
           "Priority moderation",
-          "Offer boosts - planned",
+          "Access to offer highlighting",
           "Access to optional partner services",
         ],
         cta: "Start",

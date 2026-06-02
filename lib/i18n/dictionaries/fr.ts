@@ -624,7 +624,7 @@ const fr: Dictionary = {
           "Meilleure visibilité dans les résultats",
           "Possibilité de demander la vérification",
           "Modération prioritaire",
-          "Boosts d’offres - prévus",
+          "Accès à la mise en avant des offres",
           "Accès aux services partenaires optionnels",
         ],
         cta: "Demander PRO",

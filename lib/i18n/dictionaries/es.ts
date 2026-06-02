@@ -624,7 +624,7 @@ const es: Dictionary = {
           "Mayor visibilidad en resultados",
           "Posibilidad de solicitar verificación",
           "Moderación prioritaria",
-          "Impulsos de ofertas - previsto",
+          "Acceso a destacar ofertas",
           "Acceso a servicios partners opcionales",
         ],
         cta: "Consulta sobre PRO",
