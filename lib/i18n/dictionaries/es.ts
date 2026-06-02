@@ -337,6 +337,14 @@ const es: Dictionary = {
         description:
           "El mensaje llegará a la administración de WolneMoce.pl. Usa este contacto para cuenta, perfil de empresa, ofertas, RFQ o soporte del panel.",
       },
+      "wyroznienie-oferty": {
+        label: "Oferta destacada",
+        subject: "Oferta destacada — 49 PLN / 7 días",
+        description:
+          "El destaque de ofertas se activa manualmente tras contactar con la administración. El servicio aumenta la visibilidad en áreas seleccionadas por 7 días, pero no garantiza volumen de consultas ni transacciones. En su mensaje puede indicar la oferta, período de destaque y consultar por variantes de 14 / 21 / 30 días.",
+        icon: "fas fa-star",
+        source: "contact:wyroznienie-oferty",
+      },
     },
     buyerBoxTitle: "Para empresas que buscan contratista",
     buyerBoxDescription: "Ayudamos a ordenar la consulta y encontrar empresas con capacidad disponible en un sector concreto.",

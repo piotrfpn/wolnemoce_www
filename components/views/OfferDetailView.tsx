@@ -228,6 +228,12 @@ export default async function OfferDetailView({
                   <i className="fas fa-circle-check"></i>
                   {t.activeOffer}
                 </span>
+                {Boolean(offer.is_featured && offer.featured_until && new Date(offer.featured_until).getTime() > Date.now()) && (
+                  <span className="inline-flex items-center gap-2 rounded-full bg-[#fbbf24] px-4 py-2 text-xs font-bold uppercase tracking-wide text-slate-900 shadow-sm">
+                    <i className="fas fa-star"></i>
+                    {getDictionary(locale).offerCard.featured}
+                  </span>
+                )}
                 <VerifiedCompanyBadge
                   isVerified={company?.is_verified}
                   className="bg-white/15 !text-white !px-4 !py-2 uppercase tracking-wide border border-transparent hover:border-white/20 transition-colors"

@@ -336,6 +336,13 @@ export type Dictionary = {
         icon: string;
         source: string;
       };
+      "wyroznienie-oferty": {
+        label: string;
+        subject: string;
+        description: string;
+        icon: string;
+        source: string;
+      };
     };
     buyerBoxTitle: string;
     buyerBoxDescription: string;

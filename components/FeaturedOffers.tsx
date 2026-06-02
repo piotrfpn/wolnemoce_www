@@ -6,52 +6,52 @@ import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createClient } from "@/lib/supabase/server";
 
 function isActiveFeatured(offer: PublicOffer) {
-  if (!offer.is_featured) {
-    return false;
-  }
-
-  return !offer.featured_until || new Date(offer.featured_until).getTime() > Date.now();
+  return Boolean(
+    offer.is_featured &&
+    offer.featured_until &&
+    new Date(offer.featured_until).getTime() > Date.now()
+  );
 }
 
 async function getHomepageOffers() {
   const supabase = createClient();
-  const { data, error } = await supabase
+  const now = new Date().toISOString();
+
+  // Try to fetch featured offers first
+  const { data: featuredData, error: featuredError } = await supabase
+    .from("offers")
+    .select(
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, is_featured, featured_until, featured_priority, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
+    )
+    .eq("status", "active")
+    .eq("is_featured", true)
+    .not("featured_until", "is", null)
+    .gt("featured_until", now)
+    .order("featured_priority", { ascending: false, nullsFirst: false })
+    .order("created_at", { ascending: false })
+    .limit(3);
+
+  if (!featuredError && featuredData && featuredData.length > 0) {
+    return { offers: featuredData as unknown as PublicOffer[], mode: "featured" as const };
+  }
+
+  // Fallback to latest offers
+  const { data: latestData, error: latestError } = await supabase
     .from("offers")
     .select(
       "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, is_featured, featured_until, featured_priority, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
     )
     .eq("status", "active")
     .order("created_at", { ascending: false })
-    .limit(50);
+    .limit(3);
 
-  if (error) {
-    console.error("Homepage offers query failed", error);
+  if (latestError) {
+    console.error("Homepage offers query failed", latestError);
     return { offers: [], mode: "empty" as const };
   }
 
-  const activeOffers = (data ?? []) as unknown as PublicOffer[];
-  const featuredOffers = activeOffers
-    .filter(isActiveFeatured)
-    .sort((first, second) => {
-      const priorityDiff =
-        (second.featured_priority ?? 0) - (first.featured_priority ?? 0);
-
-      if (priorityDiff !== 0) {
-        return priorityDiff;
-      }
-
-      return (
-        new Date(second.created_at ?? 0).getTime() -
-        new Date(first.created_at ?? 0).getTime()
-      );
-    });
-
-  if (featuredOffers.length > 0) {
-    return { offers: featuredOffers.slice(0, 3), mode: "featured" as const };
-  }
-
-  if (activeOffers.length > 0) {
-    return { offers: activeOffers.slice(0, 3), mode: "latest" as const };
+  if (latestData && latestData.length > 0) {
+    return { offers: latestData as unknown as PublicOffer[], mode: "latest" as const };
   }
 
   return { offers: [], mode: "empty" as const };

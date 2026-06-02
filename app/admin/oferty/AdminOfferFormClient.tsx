@@ -90,6 +90,16 @@ export default function AdminOfferFormClient({
           type="checkbox"
           name="is_featured"
           defaultChecked={Boolean(offer.is_featured)}
+          onChange={(e) => {
+            if (e.target.checked) {
+              const dateInput = document.querySelector<HTMLInputElement>('input[name="featured_until"]');
+              if (dateInput && !dateInput.value) {
+                const date = new Date();
+                date.setDate(date.getDate() + 7);
+                dateInput.value = date.toISOString().slice(0, 16);
+              }
+            }
+          }}
           className="mt-1 h-4 w-4 shrink-0 rounded border-slate-300 accent-[#1a5f3c]"
         />
         <span className="min-w-0">
@@ -97,7 +107,7 @@ export default function AdminOfferFormClient({
             Wyróżnij ofertę ręcznie
           </span>
           <span className="mt-1 block text-xs leading-5 text-slate-500">
-            Oferta będzie traktowana jako wyróżniona, jeśli nie minęła data ważności.
+            Oferta będzie traktowana jako wyróżniona wyłącznie do podanej daty ważności.
           </span>
         </span>
       </label>
@@ -114,7 +124,7 @@ export default function AdminOfferFormClient({
             className="h-12 min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
           />
           <p className="mt-2 text-xs leading-5 text-slate-500">
-            Zostaw puste, jeśli wyróżnienie ma nie mieć daty końca.
+            Pole wymagane, jeśli oferta jest oznaczona jako wyróżniona.
           </p>
         </label>
 

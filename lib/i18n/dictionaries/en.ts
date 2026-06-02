@@ -354,6 +354,14 @@ const en: Dictionary = {
         icon: "fas fa-user-shield",
         source: "admin_contact",
       },
+      "wyroznienie-oferty": {
+        label: "Featured offer",
+        subject: "Featured offer — 49 PLN / 7 days",
+        description:
+          "Offer featuring is activated manually after contacting WolneMoce.pl administration. The service increases offer visibility in selected areas of the portal for 7 days, but does not guarantee inquiry volume or transactions. In your message you can indicate the offer, preferred featuring period and ask about 14 / 21 / 30 days variants.",
+        icon: "fas fa-star",
+        source: "contact:wyroznienie-oferty",
+      },
     },
     buyerBoxTitle: "For companies looking for a contractor",
     buyerBoxDescription:

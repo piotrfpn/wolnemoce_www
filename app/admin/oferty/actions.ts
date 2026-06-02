@@ -87,6 +87,10 @@ export async function updateAdminOffer(
     return { error: "Podaj poprawną datę ważności wyróżnienia albo zostaw pole puste." };
   }
 
+  if (isFeatured && !featuredUntil) {
+    return { error: "Podaj datę końca wyróżnienia oferty." };
+  }
+
   if (!Number.isInteger(featuredPriority) || featuredPriority < 0) {
     return { error: "Priorytet wyróżnienia musi być liczbą nieujemną." };
   }

@@ -64,6 +64,7 @@ export default function Pricing({ locale = defaultLocale }: { locale?: Locale })
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4 items-stretch">
           {t.addOns.map((addOn, index) => {
             let href = "/kontakt";
+            if (index === 0) href = "/kontakt?temat=wyroznienie-oferty";
             if (index === 2) href = "/kontakt?temat=credos";
             if (index === 3) href = "/kontakt?temat=logimarket";
 

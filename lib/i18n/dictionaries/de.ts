@@ -343,6 +343,14 @@ const de: Dictionary = {
         description:
           "Die Nachricht geht an die Administration von WolneMoce.pl. Nutzen Sie diesen Kontakt für Konto, Firmenprofil, Angebote, RFQ-Anfragen oder Panel-Support.",
       },
+      "wyroznienie-oferty": {
+        label: "Hervorgehobenes Angebot",
+        subject: "Hervorgehobenes Angebot — 49 PLN / 7 Tage",
+        description:
+          "Die Hervorhebung von Angeboten wird nach Kontaktaufnahme mit der Administration manuell aktiviert. Der Service erhöht die Sichtbarkeit in ausgewählten Bereichen des Portals für 7 Tage, garantiert jedoch keine Anfragen oder Transaktionen. In der Nachricht können Sie das Angebot, den bevorzugten Zeitraum und Fragen zu 14 / 21 / 30 Tagen angeben.",
+        icon: "fas fa-star",
+        source: "contact:wyroznienie-oferty",
+      },
     },
     buyerBoxTitle: "Für Firmen, die Auftragnehmer suchen",
     buyerBoxDescription: "Wir helfen, Anfragen zu ordnen und Firmen mit freien Kapazitäten in der passenden Branche zu finden.",

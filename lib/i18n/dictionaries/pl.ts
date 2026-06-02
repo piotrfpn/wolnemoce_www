@@ -367,6 +367,14 @@ const pl: Dictionary = {
         icon: "fas fa-user-shield",
         source: "admin_contact",
       },
+      "wyroznienie-oferty": {
+        label: "Wyróżnienie oferty",
+        subject: "Wyróżnienie oferty — 49 zł / 7 dni",
+        description:
+          "Wyróżnienie oferty jest aktywowane manualnie po kontakcie z obsługą WolneMoce.pl. Usługa zwiększa widoczność oferty w wybranych miejscach portalu przez 7 dni, ale nie gwarantuje liczby zapytań ani zawarcia transakcji. W wiadomości możesz wskazać ofertę, preferowany okres wyróżnienia oraz zapytać o wariant 14 / 21 / 30 dni.",
+        icon: "fas fa-star",
+        source: "contact:wyroznienie-oferty",
+      },
     },
     buyerBoxTitle: "Dla firm szukających wykonawcy",
     buyerBoxDescription:

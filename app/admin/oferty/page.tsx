@@ -62,12 +62,9 @@ function formatDate(value: string | null) {
 }
 
 function isActiveFeatured(offer: AdminOfferListItem) {
-  if (!offer.is_featured) {
-    return false;
-  }
-
-  return (
-    !offer.featured_until ||
+  return Boolean(
+    offer.is_featured &&
+    offer.featured_until &&
     new Date(offer.featured_until).getTime() > Date.now()
   );
 }
@@ -162,15 +159,13 @@ export default async function AdminOffersPage({
   }
 
   if (featuredFilter === "featured") {
-    // Simplified server filter, fully verified by isActiveFeatured on client/render
     query = query
       .eq("is_featured", true)
-      .or(
-        `featured_until.is.null,featured_until.gte.${new Date().toISOString()}`,
-      );
+      .not("featured_until", "is", null)
+      .gt("featured_until", new Date().toISOString());
   } else if (featuredFilter === "not_featured") {
     query = query.or(
-      `is_featured.is.null,is_featured.eq.false,and(is_featured.eq.true,featured_until.lt.${new Date().toISOString()})`,
+      `is_featured.is.null,is_featured.eq.false,and(is_featured.eq.true,featured_until.lt.${new Date().toISOString()}),and(is_featured.eq.true,featured_until.is.null)`,
     );
   }
 
@@ -309,6 +304,16 @@ export default async function AdminOffersPage({
                               <span className="rounded-full bg-[#fbbf24]/20 px-3 py-1 text-xs font-bold text-[#8a5a00]">
                                 Wyróżniona
                               </span>
+                            ) : offer.is_featured ? (
+                              offer.featured_until ? (
+                                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">
+                                  Wygasłe
+                                </span>
+                              ) : (
+                                <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-700">
+                                  Błąd: brak daty
+                                </span>
+                              )
                             ) : null}
                             {company?.is_verified ? (
                               <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">

@@ -29,8 +29,9 @@ export default async function ContactView({
   const partnerTopic =
     topicParam === "credos" ||
     topicParam === "logimarket" ||
-    topicParam === "administracja"
-      ? t.partnerTopics[topicParam]
+    topicParam === "administracja" ||
+    topicParam === "wyroznienie-oferty"
+      ? t.partnerTopics[topicParam as keyof typeof t.partnerTopics]
       : null;
   const supabase = createClient();
   const {

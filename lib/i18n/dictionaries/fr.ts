@@ -337,6 +337,14 @@ const fr: Dictionary = {
         description:
           "Le message sera transmis à l’administration de WolneMoce.pl. Utilisez ce contact pour compte, profil d’entreprise, offres, demandes RFQ ou support du panel.",
       },
+      "wyroznienie-oferty": {
+        label: "Offre mise en avant",
+        subject: "Offre mise en avant — 49 PLN / 7 jours",
+        description:
+          "La mise en avant de l'offre est activée manuellement après contact avec l'administration. Le service augmente la visibilité dans des zones sélectionnées pendant 7 jours, mais ne garantit pas de demandes ou transactions. Dans votre message, vous pouvez indiquer l'offre, la période souhaitée et demander les variantes de 14 / 21 / 30 jours.",
+        icon: "fas fa-star",
+        source: "contact:wyroznienie-oferty",
+      },
     },
     buyerBoxTitle: "Pour les entreprises cherchant un prestataire",
     buyerBoxDescription: "Nous aidons à structurer la demande et à trouver des entreprises avec capacités disponibles dans un secteur donné.",

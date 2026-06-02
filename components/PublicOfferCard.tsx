@@ -52,11 +52,11 @@ function getInitials(name: string | null) {
 }
 
 function isActiveFeatured(offer: PublicOffer) {
-  if (!offer.is_featured) {
-    return false;
-  }
-
-  return !offer.featured_until || new Date(offer.featured_until).getTime() > Date.now();
+  return Boolean(
+    offer.is_featured &&
+    offer.featured_until &&
+    new Date(offer.featured_until).getTime() > Date.now()
+  );
 }
 
 export default function PublicOfferCard({

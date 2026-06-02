@@ -210,16 +210,20 @@ async function getPublicOffers(
     const now = Date.now();
 
     return [...offers].sort((first, second) => {
-      const firstFeatured =
+      const firstFeatured = Boolean(
         first.is_featured &&
-        (!first.featured_until || new Date(first.featured_until).getTime() > now)
-          ? 1
-          : 0;
-      const secondFeatured =
+        first.featured_until &&
+        new Date(first.featured_until).getTime() > now
+      )
+        ? 1
+        : 0;
+      const secondFeatured = Boolean(
         second.is_featured &&
-        (!second.featured_until || new Date(second.featured_until).getTime() > now)
-          ? 1
-          : 0;
+        second.featured_until &&
+        new Date(second.featured_until).getTime() > now
+      )
+        ? 1
+        : 0;
 
       if (firstFeatured !== secondFeatured) {
         return secondFeatured - firstFeatured;
