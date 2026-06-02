@@ -559,6 +559,7 @@ export type Dictionary = {
       ctaHref: string;
       isFeatured?: boolean;
       disabled?: boolean;
+      activationNote?: string;
     }>;
     addOnsTitle: string;
     addOns: Array<{
@@ -566,6 +567,7 @@ export type Dictionary = {
       description: string;
       price: string;
       suffix: string;
+      cta: string;
     }>;
   };
   expert: {

@@ -75,9 +75,13 @@ export default function Pricing({ locale = defaultLocale }: { locale?: Locale })
               >
                 <h5 className="mb-3 text-base font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">{addOn.name}</h5>
                 <p className="flex-1 text-sm text-slate-500 leading-relaxed mb-6">{addOn.description}</p>
-                <div className="mt-auto flex items-baseline gap-1.5 whitespace-nowrap">
+                <div className="mt-auto flex items-baseline gap-1.5 whitespace-nowrap mb-4">
                   <span className="text-2xl font-extrabold text-emerald-700">{addOn.price}</span>
                   <span className="text-sm font-medium text-slate-500">{addOn.suffix}</span>
+                </div>
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-sm font-semibold text-emerald-600 group-hover:text-emerald-700 transition-colors">{addOn.cta}</span>
+                  <i className="fas fa-arrow-right text-emerald-600 text-sm opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"></i>
                 </div>
               </Link>
             );
@@ -87,3 +91,4 @@ export default function Pricing({ locale = defaultLocale }: { locale?: Locale })
     </section>
   );
 }
+

@@ -668,10 +668,10 @@ const en: Dictionary = {
     ],
     addOnsTitle: "Additional options",
     addOns: [
-      { name: "Offer highlight", description: "Increased offer visibility on the list for 7 days.", price: "PLN 49", suffix: "/ 7 days" },
-      { name: "Industry promotion", description: "Company promotion in a selected offer category.", price: "PLN 199", suffix: "/ mo." },
-      { name: "Credos accounting and legal consultation", description: "Paid partner support in accounting, legal and formal areas.", price: "Quote", suffix: "custom" },
-      { name: "LogiMarket process consulting", description: "Paid partner consulting for processes, RFQ and supply chain.", price: "Quote", suffix: "custom" },
+      { name: "Offer highlight", description: "Increased offer visibility on the list for 7 days.", price: "PLN 49", suffix: "/ 7 days", cta: "Ask about featuring" },
+      { name: "Industry promotion", description: "Company promotion in a selected offer category.", price: "PLN 199", suffix: "/ mo.", cta: "Ask about industry ads" },
+      { name: "Credos accounting and legal consultation", description: "Paid partner support in accounting, legal and formal areas.", price: "Quote", suffix: "custom", cta: "Ask for pricing" },
+      { name: "LogiMarket process consulting", description: "Paid partner consulting for processes, RFQ and supply chain.", price: "Quote", suffix: "custom", cta: "Ask for pricing" },
     ],
   },
   expert: {

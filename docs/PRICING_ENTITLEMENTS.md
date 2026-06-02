@@ -88,7 +88,7 @@ Przygotowano architekturę bazodanową do twardego egzekwowania planów:
 - Wprowadzono trigger `enforce_plan_offer_limits`, który działa tylko na tabeli `offers` i zabezpiecza limity przy insert/update do statusu `active/pending`.
 - Nie ma jeszcze automatycznego downgrade'u ofert przy zmianie planu firmy, co zapobiega niezamierzonej utracie danych.
 - `lib/planEntitlements.ts` pozostaje helperem UI.
-- Płatności (Stripe) nie są jeszcze podłączone.
+- Płatności (Stripe) nie są jeszcze podłączone. Na etapie soft-launchu plany płatne (PRO, ENTERPRISE) oraz opcje dodatkowe są uruchamiane indywidualnie po kontakcie z administracją i opłaceniu faktury/proformy przelewem.
 - Mechanizm automatycznego downgrade'u PRO -> FREE pozostaje na inny sprint.
 
 ---
