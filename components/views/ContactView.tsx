@@ -82,7 +82,7 @@ export default async function ContactView({
                   {label}
                 </h2>
                 {icon === "fas fa-phone" ? (
-                  <a href={`tel:${value.replace(/\\s+/g, '')}`} className="mt-1 block text-lg font-extrabold text-slate-900 hover:text-emerald-700 transition-colors">
+                  <a href={`tel:${value.replace(/\s+/g, "")}`} className="mt-1 block text-lg font-extrabold text-slate-900 hover:text-emerald-700 transition-colors">
                     {value}
                   </a>
                 ) : icon === "fas fa-envelope" ? (
