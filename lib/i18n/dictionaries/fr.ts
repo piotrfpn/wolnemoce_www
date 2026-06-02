@@ -995,6 +995,15 @@ const fr: Dictionary = {
       accountDeletionTimeframe: "Les demandes sont traitées dans un délai maximal de 14 jours.",
       accountDeletionCta: "Contacter le support",
       accountDeletionMailSubject: "Suppression de compte WolneMoce.pl",
+      accountDetailsTitle: "Détails du compte",
+      accountDetailsDescription: "Gérez les détails de base de la personne qui utilise le compte. Ces données ne constituent pas votre profil d'entreprise public.",
+      fullNameLabel: "Nom complet",
+      phoneLabel: "Téléphone de contact",
+      emailReadonlyDisclaimer: "La modification de votre adresse e-mail de connexion sera traitée séparément.",
+      saveAccountDetails: "Enregistrer les détails du compte",
+      accountDetailsSaved: "Détails du compte enregistrés avec succès.",
+      accountDetailsError: "Échec de l'enregistrement des détails du compte. Veuillez réessayer.",
+
     },
   },
   panelInquiries: {

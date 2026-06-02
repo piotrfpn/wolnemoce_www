@@ -8,6 +8,7 @@ import { contactInfo } from "@/lib/mockData";
 import { createClient } from "@/lib/supabase/server";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getPanelLocale } from "@/lib/i18n/panelLocale";
+import AccountSettingsForm from "./AccountSettingsForm";
 
 export const metadata: Metadata = {
   title: "Ustawienia konta",
@@ -28,7 +29,7 @@ export default async function AccountSettingsPage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role, full_name")
+    .select("role, full_name, phone")
     .eq("id", user.id)
     .maybeSingle();
 
@@ -66,50 +67,12 @@ export default async function AccountSettingsPage() {
           </div>
 
           <div className="grid min-w-0 gap-6 lg:grid-cols-[1fr_0.9fr]">
-            <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-              <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
-                  <i className="fas fa-user"></i>
-                </div>
-                <div>
-                  <p className="text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-                    Dane konta
-                  </p>
-                  <h2 className="text-2xl font-extrabold text-slate-900">
-                    Informacje użytkownika
-                  </h2>
-                </div>
-              </div>
-
-              <dl className="grid min-w-0 gap-4">
-                <div className="min-w-0 rounded-2xl bg-slate-50 p-4">
-                  <dt className="mb-1 text-xs font-bold uppercase tracking-wide text-slate-500">
-                    {t.email}
-                  </dt>
-                  <dd className="break-words text-sm font-bold text-slate-900">
-                    {user.email ?? "Brak e-maila"}
-                  </dd>
-                </div>
-
-                <div className="min-w-0 rounded-2xl bg-slate-50 p-4">
-                  <dt className="mb-1 text-xs font-bold uppercase tracking-wide text-slate-500">
-                    {dictionary.panel.dashboard.role}
-                  </dt>
-                  <dd className="text-sm font-bold text-slate-900">
-                    {profile?.role ?? "user"}
-                  </dd>
-                </div>
-
-                <div className="min-w-0 rounded-2xl bg-slate-50 p-4">
-                  <dt className="mb-1 text-xs font-bold uppercase tracking-wide text-slate-500">
-                    Imię i nazwisko
-                  </dt>
-                  <dd className="break-words text-sm font-bold text-slate-900">
-                    {profile?.full_name || "Nie podano"}
-                  </dd>
-                </div>
-              </dl>
-            </section>
+            <AccountSettingsForm
+              initialFullName={profile?.full_name ?? ""}
+              initialPhone={profile?.phone ?? ""}
+              email={user.email ?? ""}
+              t={t}
+            />
 
             <div className="min-w-0 space-y-6">
               <section className="min-w-0 rounded-[24px] border border-emerald-100 bg-white p-6 shadow-sm md:p-8">

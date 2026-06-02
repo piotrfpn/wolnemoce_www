@@ -995,6 +995,15 @@ const uk: Dictionary = {
       accountDeletionTimeframe: "Звернення обробляються протягом до 14 днів.",
       accountDeletionCta: "Зв'язатися з підтримкою",
       accountDeletionMailSubject: "Видалення облікового запису WolneMoce.pl",
+      accountDetailsTitle: "Дані облікового запису",
+      accountDetailsDescription: "Керуйте основними даними особи, яка використовує обліковий запис. Ці дані не є вашим загальнодоступним профілем компанії.",
+      fullNameLabel: "Повне ім'я",
+      phoneLabel: "Контактний телефон",
+      emailReadonlyDisclaimer: "Зміна вашої адреси електронної пошти для входу оброблятиметься окремо.",
+      saveAccountDetails: "Зберегти дані облікового запису",
+      accountDetailsSaved: "Дані облікового запису успішно збережено.",
+      accountDetailsError: "Не вдалося зберегти дані облікового запису. Спробуйте ще раз.",
+
     },
   },
   panelInquiries: {

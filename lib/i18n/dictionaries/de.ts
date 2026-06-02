@@ -1011,6 +1011,15 @@ const de: Dictionary = {
       accountDeletionTimeframe: "Anfragen werden innerhalb von bis zu 14 Tagen bearbeitet.",
       accountDeletionCta: "Support kontaktieren",
       accountDeletionMailSubject: "Kontolöschung WolneMoce.pl",
+      accountDetailsTitle: "Kontodetails",
+      accountDetailsDescription: "Verwalten Sie die grundlegenden Details der Person, die das Konto nutzt. Diese Daten sind nicht Ihr öffentliches Firmenprofil.",
+      fullNameLabel: "Vollständiger Name",
+      phoneLabel: "Kontakttelefon",
+      emailReadonlyDisclaimer: "Die Änderung Ihrer Anmelde-E-Mail-Adresse wird separat behandelt.",
+      saveAccountDetails: "Kontodetails speichern",
+      accountDetailsSaved: "Kontodetails erfolgreich gespeichert.",
+      accountDetailsError: "Kontodetails konnten nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+
     },
   },
   panelInquiries: {

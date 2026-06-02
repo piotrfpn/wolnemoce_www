@@ -959,6 +959,14 @@ export type Dictionary = {
       accountDeletionTimeframe: string;
       accountDeletionCta: string;
       accountDeletionMailSubject: string;
+      accountDetailsTitle: string;
+      accountDetailsDescription: string;
+      fullNameLabel: string;
+      phoneLabel: string;
+      emailReadonlyDisclaimer: string;
+      saveAccountDetails: string;
+      accountDetailsSaved: string;
+      accountDetailsError: string;
     };
   };
 };

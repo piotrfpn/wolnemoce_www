@@ -1121,6 +1121,15 @@ const pl: Dictionary = {
       accountDeletionTimeframe: "Czas realizacji zgłoszenia wynosi do 14 dni.",
       accountDeletionCta: "Napisz do obsługi",
       accountDeletionMailSubject: "Usunięcie konta WolneMoce.pl",
+      accountDetailsTitle: "Dane konta",
+      accountDetailsDescription: "Zarządzaj podstawowymi danymi osoby korzystającej z konta. Te dane nie są publicznym profilem firmy.",
+      fullNameLabel: "Imię i nazwisko",
+      phoneLabel: "Telefon kontaktowy",
+      emailReadonlyDisclaimer: "Zmiana adresu e-mail logowania będzie obsługiwana osobno.",
+      saveAccountDetails: "Zapisz dane konta",
+      accountDetailsSaved: "Dane konta zostały zapisane.",
+      accountDetailsError: "Nie udało się zapisać danych konta. Spróbuj ponownie.",
+
     },
   },
   panelInquiries: {

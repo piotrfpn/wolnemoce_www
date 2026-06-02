@@ -1097,6 +1097,15 @@ const en: Dictionary = {
       accountDeletionTimeframe: "Requests are handled within up to 14 days.",
       accountDeletionCta: "Contact support",
       accountDeletionMailSubject: "WolneMoce.pl account deletion",
+      accountDetailsTitle: "Account Details",
+      accountDetailsDescription: "Manage the basic details of the person using the account. This data is not your public company profile.",
+      fullNameLabel: "Full Name",
+      phoneLabel: "Contact Phone",
+      emailReadonlyDisclaimer: "Changing your login email address will be handled separately.",
+      saveAccountDetails: "Save account details",
+      accountDetailsSaved: "Account details saved successfully.",
+      accountDetailsError: "Failed to save account details. Please try again.",
+
     },
   },
   panelInquiries: {

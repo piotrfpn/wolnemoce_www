@@ -995,6 +995,15 @@ const es: Dictionary = {
       accountDeletionTimeframe: "Las solicitudes se gestionan en un plazo de hasta 14 días.",
       accountDeletionCta: "Contactar con soporte",
       accountDeletionMailSubject: "Eliminación de cuenta WolneMoce.pl",
+      accountDetailsTitle: "Detalles de la cuenta",
+      accountDetailsDescription: "Administre los detalles básicos de la persona que usa la cuenta. Estos datos no son su perfil de empresa público.",
+      fullNameLabel: "Nombre completo",
+      phoneLabel: "Teléfono de contacto",
+      emailReadonlyDisclaimer: "El cambio de su dirección de correo electrónico de inicio de sesión se manejará por separado.",
+      saveAccountDetails: "Guardar detalles de la cuenta",
+      accountDetailsSaved: "Detalles de la cuenta guardados con éxito.",
+      accountDetailsError: "No se pudieron guardar los detalles de la cuenta. Inténtalo de nuevo.",
+
     },
   },
   panelInquiries: {
