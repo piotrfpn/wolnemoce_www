@@ -70,7 +70,11 @@ function formatDate(value: string | null) {
   }).format(new Date(value));
 }
 
-export default async function PanelOffersPage() {
+export default async function PanelOffersPage({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
   const locale = getPanelLocale();
   const dictionary = getDictionary(locale);
   const t = dictionary.panel.offers;
@@ -141,6 +145,17 @@ export default async function PanelOffersPage() {
       <PanelNavbar />
       <main className="bg-slate-50 pt-[128px]">
         <section className="mx-auto max-w-[1200px] px-6 py-16">
+          {searchParams?.draft_saved === "1" ? (
+            <div className="mb-8 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+              Oferta została zapisana jako szkic. Nie została wysłana do moderacji.
+            </div>
+          ) : null}
+          {searchParams?.pending_saved === "1" ? (
+            <div className="mb-8 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+              Oferta została wysłana do moderacji.
+            </div>
+          ) : null}
+
           <div className="mb-8 flex min-w-0 flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div className="min-w-0">
               <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">

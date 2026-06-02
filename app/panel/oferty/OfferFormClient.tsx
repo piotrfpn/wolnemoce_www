@@ -138,6 +138,7 @@ export default function OfferFormClient({
   const [saveMode, setSaveMode] = useState<"draft" | "pending">(
     currentStatus === "pending" ? "pending" : "draft"
   );
+  const [submitAction, setSubmitAction] = useState<"draft" | "pending" | "unchanged" | null>(null);
   const [existingImages, setExistingImages] = useState<OfferImageData[]>(
     [...offerImages].sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
   );
@@ -361,8 +362,7 @@ export default function OfferFormClient({
     router.refresh();
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleProcessSubmit(targetMode: "draft" | "pending" | "unchanged") {
     setError("");
     setPartialSuccess("");
 
@@ -388,6 +388,7 @@ export default function OfferFormClient({
     }
 
     setIsSubmitting(true);
+    setSubmitAction(targetMode);
     const supabase = createClient();
     const basePayload = {
       title: title.trim(),
@@ -410,7 +411,7 @@ export default function OfferFormClient({
           ...basePayload,
           company_id: company.id,
           slug: slugify(title),
-          status: saveMode,
+          status: targetMode === "pending" ? "pending" : "draft",
         })
         .select("id")
         .single();
@@ -424,6 +425,7 @@ export default function OfferFormClient({
           setError(dict.validation.saveError);
         }
         setIsSubmitting(false);
+        setSubmitAction(null);
         return;
       }
 
@@ -433,7 +435,7 @@ export default function OfferFormClient({
         .from("offers")
         .update({
           ...basePayload,
-          ...(currentStatus === "draft" ? { status: saveMode } : {}),
+          ...(currentStatus === "draft" && targetMode !== "unchanged" ? { status: targetMode } : {}),
         })
         .eq("id", offer?.id ?? "")
         .select("status")
@@ -490,18 +492,28 @@ export default function OfferFormClient({
       if (finalOffer?.status === "pending") {
         setPartialSuccess(dict.partialSuccess.activeResubmitted);
         setIsSubmitting(false);
+        setSubmitAction(null);
         router.refresh();
         return;
       }
     }
 
-    router.push("/panel/oferty");
+    if (targetMode === "draft") {
+      router.push("/panel/oferty?draft_saved=1");
+    } else if (targetMode === "pending") {
+      router.push("/panel/oferty?pending_saved=1");
+    } else {
+      router.push("/panel/oferty");
+    }
     router.refresh();
   }
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleProcessSubmit(canChooseStatus ? "pending" : "unchanged");
+      }}
       className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8"
     >
       <div className="mb-8">
@@ -843,53 +855,7 @@ export default function OfferFormClient({
           )}
         </section>
 
-        {canChooseStatus ? (
-          <fieldset className="min-w-0 md:col-span-2">
-            <legend className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-              <i className="fas fa-floppy-disk text-[#1a5f3c]"></i>
-              {dict.saveMode.legend}
-            </legend>
-            <div className="grid min-w-0 gap-3 sm:grid-cols-2">
-              {[
-                {
-                  value: "draft" as const,
-                  title: dict.saveMode.draftTitle,
-                  description: dict.saveMode.draftDescription,
-                },
-                {
-                  value: "pending" as const,
-                  title: dict.saveMode.pendingTitle,
-                  description: dict.saveMode.pendingDescription,
-                },
-              ].map((item) => (
-                <label
-                  key={item.value}
-                  className={`min-w-0 cursor-pointer rounded-xl border p-4 transition ${
-                    saveMode === item.value
-                      ? "border-[#1a5f3c] bg-[#f4fbf7]"
-                      : "border-slate-200 bg-white hover:border-[#1a5f3c]/40"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="saveMode"
-                    value={item.value}
-                    checked={saveMode === item.value}
-                    onChange={() => setSaveMode(item.value)}
-                    className="sr-only"
-                    disabled={!canSaveOffer}
-                  />
-                  <span className="block font-bold text-slate-900">
-                    {item.title}
-                  </span>
-                  <span className="mt-1 block text-sm leading-6 text-slate-500">
-                    {item.description}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-        ) : (
+        {canChooseStatus ? null : (
           <div className="min-w-0 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
             {dict.saveMode.statusUnchangedPrefix}{" "}
             <strong>{dict.statusLabels[currentStatus]}</strong>.
@@ -898,17 +864,46 @@ export default function OfferFormClient({
       </div>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <button
-          type="submit"
-          disabled={!canSaveOffer}
-          className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isSubmitting ? dict.submit.saving : dict.submit.save}
-        </button>
+        {canChooseStatus ? (
+          <>
+            <button
+              type="button"
+              onClick={() => handleProcessSubmit("pending")}
+              disabled={!canSaveOffer}
+              className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {submitAction === "pending" ? dict.submit.saving : dict.saveMode.pendingTitle}
+            </button>
+            <button
+              type="button"
+              onClick={() => handleProcessSubmit("draft")}
+              disabled={!canSaveOffer}
+              className="btn btn-outline disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {submitAction === "draft" ? dict.submit.saving : dict.saveMode.draftTitle}
+            </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            onClick={() => handleProcessSubmit("unchanged")}
+            disabled={!canSaveOffer}
+            className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {submitAction === "unchanged" ? dict.submit.saving : dict.submit.save}
+          </button>
+        )}
         <Link href="/panel/oferty" className="btn btn-outline">
           {dictCommon.cancel}
         </Link>
       </div>
+
+      {canChooseStatus ? (
+        <p className="mt-4 text-xs text-slate-500">
+          Oferta wysłana do moderacji nie będzie widoczna publicznie, dopóki nie zatwierdzi jej administrator.
+          Szkic zostanie zapisany tylko w panelu i nie trafi do moderacji.
+        </p>
+      ) : null}
     </form>
   );
 }
