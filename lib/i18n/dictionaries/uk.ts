@@ -762,6 +762,7 @@ const uk: Dictionary = {
       dashboard: "Панель керування",
       profile: "Профіль компанії",
       offers: "Пропозиції",
+      projects: "Проєкти",
       inquiries: "Запити",
       settings: "Налаштування",
     },

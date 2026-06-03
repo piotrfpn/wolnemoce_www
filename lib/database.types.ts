@@ -705,6 +705,143 @@ export type Database = {
           },
         ]
       }
+      company_project_images: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          display_order: number
+          id: string
+          project_id: string
+          storage_path: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          display_order?: number
+          id?: string
+          project_id: string
+          storage_path: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          display_order?: number
+          id?: string
+          project_id?: string
+          storage_path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_project_images_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_project_images_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_project_images_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "company_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_projects: {
+        Row: {
+          admin_notes: string | null
+          archived_at: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string
+          id: string
+          industry: string[]
+          moderated_at: string | null
+          moderated_by: string | null
+          nda_confirmation: boolean
+          published_at: string | null
+          rejected_at: string | null
+          slug: string
+          status: string
+          technology: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          archived_at?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          id?: string
+          industry?: string[]
+          moderated_at?: string | null
+          moderated_by?: string | null
+          nda_confirmation?: boolean
+          published_at?: string | null
+          rejected_at?: string | null
+          slug: string
+          status?: string
+          technology?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          archived_at?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          id?: string
+          industry?: string[]
+          moderated_at?: string | null
+          moderated_by?: string | null
+          nda_confirmation?: boolean
+          published_at?: string | null
+          rejected_at?: string | null
+          slug?: string
+          status?: string
+          technology?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_projects_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_projects_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_projects_moderated_by_fkey"
+            columns: ["moderated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       company_contact_settings: {
         Row: {
           company_id: string

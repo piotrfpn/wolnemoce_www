@@ -779,6 +779,7 @@ const de: Dictionary = {
       dashboard: "Dashboard",
       profile: "Firmenprofil",
       offers: "Angebote",
+      projects: "Projekte",
       inquiries: "Anfragen",
       settings: "Einstellungen",
     },

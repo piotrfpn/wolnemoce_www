@@ -685,12 +685,13 @@ export type Dictionary = {
       successGeneric: string;
     };
     nav: {
-      dashboard: string;
-      profile: string;
-      offers: string;
-      inquiries: string;
-      settings: string;
-    };
+    dashboard: string;
+    profile: string;
+    offers: string;
+    projects: string;
+    inquiries: string;
+    settings: string;
+  };
     dashboard: {
       title: string;
       subtitle: string;

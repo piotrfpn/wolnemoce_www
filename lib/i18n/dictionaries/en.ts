@@ -807,6 +807,7 @@ const en: Dictionary = {
       dashboard: "Dashboard",
       profile: "Company profile",
       offers: "Offers",
+      projects: "Projects",
       inquiries: "Inquiries",
       settings: "Settings",
     },

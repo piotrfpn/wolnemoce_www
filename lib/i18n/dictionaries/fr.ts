@@ -763,6 +763,7 @@ const fr: Dictionary = {
       dashboard: "Tableau de bord",
       profile: "Profil de l'entreprise",
       offers: "Offres",
+      projects: "Réalisations",
       inquiries: "Demandes",
       settings: "Paramètres",
     },

@@ -832,6 +832,7 @@ const pl: Dictionary = {
       dashboard: "Panel",
       profile: "Profil firmy",
       offers: "Oferty",
+      projects: "Realizacje",
       inquiries: "Zapytania",
       settings: "Ustawienia",
     },

@@ -11,6 +11,7 @@ type PanelNavLinksProps = {
     panel: string;
     profile: string;
     offers: string;
+    projects: string;
     inquiries: string;
     settings: string;
   };
@@ -27,6 +28,7 @@ export default function PanelNavLinks({
     { href: "/panel", label: labels.panel, exact: true, icon: "fas fa-gauge-high" },
     { href: "/panel/profil", label: labels.profile, exact: false, icon: "fas fa-building" },
     { href: "/panel/oferty", label: labels.offers, exact: false, icon: "fas fa-list-check" },
+    { href: "/panel/realizacje", label: labels.projects, exact: false, icon: "fas fa-briefcase" },
     { href: "/panel/zapytania", label: labels.inquiries, exact: false, icon: "fas fa-inbox", showBadge: true },
     { href: "/panel/ustawienia", label: labels.settings, exact: false, icon: "fas fa-gear" },
   ];
