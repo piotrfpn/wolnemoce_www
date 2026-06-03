@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import LogoutButton from "@/components/LogoutButton";
 import PanelNavbar from "@/components/PanelNavbar";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import PendingCompaniesClient, {
   type PendingCompany,
@@ -61,6 +62,7 @@ export default async function AdminPage() {
     redirect("/panel");
   }
 
+  const adminClient = createAdminClient();
   const [
     companiesResult,
     offersResult,
@@ -68,6 +70,7 @@ export default async function AdminPage() {
     contactMessagesResult,
     freeLimitOffersResult,
     certificatesResult,
+    companyProjectsResult,
   ] = await Promise.all([
     supabase
       .from("companies")
@@ -79,13 +82,13 @@ export default async function AdminPage() {
     supabase
       .from("offers")
       .select(
-        "*, companies!inner(name, location_voivodeship, location_city, is_verified)"
+        "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, created_at, companies!inner(name, location_voivodeship, location_city, is_verified)"
       )
       .eq("status", "pending")
       .order("created_at", { ascending: false }),
     supabase
       .from("service_requests")
-      .select("*, companies(name)")
+      .select("id, industry, proposed_service, reason, status, created_at, companies(name)")
       .eq("status", "pending")
       .order("created_at", { ascending: false }),
     supabase
@@ -101,14 +104,19 @@ export default async function AdminPage() {
       .from("company_certificates")
       .select("id", { count: "exact", head: true })
       .eq("verification_status", "declared"),
+    adminClient
+      .from("company_projects")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending"),
   ]);
 
   const pendingCompanies = (companiesResult.data ?? []) as PendingCompany[];
-  const pendingOffers = (offersResult.data ?? []) as PendingOffer[];
+  const pendingOffers = (offersResult.data ?? []) as unknown as PendingOffer[];
   const pendingServiceRequests = (serviceRequestsResult.data ??
-    []) as PendingServiceRequest[];
+    []) as unknown as PendingServiceRequest[];
   const newContactMessagesCount = contactMessagesResult.count ?? 0;
   const pendingCertificatesCount = certificatesResult.count ?? 0;
+  const pendingCompanyProjectsCount = companyProjectsResult.count ?? 0;
   const freeLimitOffers = (freeLimitOffersResult.data ?? []) as unknown as FreeLimitOffer[];
   const freeLimitCompanies = new Map<string, FreeLimitCompanySummary>();
 
@@ -191,7 +199,7 @@ export default async function AdminPage() {
               <h2 className="text-2xl font-extrabold text-slate-900">Do obsługi</h2>
               <p className="mt-2 text-sm text-slate-500">Sprawy wymagające decyzji administratora.</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {[
                 {
                   title: "Firmy do weryfikacji",
@@ -213,6 +221,13 @@ export default async function AdminPage() {
                   icon: "fa-certificate",
                   href: "/admin/certyfikaty?status=declared",
                   alert: pendingCertificatesCount > 0,
+                },
+                {
+                  title: "Realizacje do moderacji",
+                  count: pendingCompanyProjectsCount,
+                  icon: "fa-briefcase",
+                  href: "/admin/realizacje?status=pending",
+                  alert: pendingCompanyProjectsCount > 0,
                 },
                 {
                   title: "Zgłoszenia usług pending",
@@ -278,6 +293,7 @@ export default async function AdminPage() {
               {[
                 { title: "Przejdź do firm", icon: "fa-building", href: "/admin/firmy" },
                 { title: "Przejdź do ofert", icon: "fa-list-check", href: "/admin/oferty" },
+                { title: "Przejdź do realizacji", icon: "fa-briefcase", href: "/admin/realizacje" },
                 { title: "Monitoring RFQ", icon: "fa-inbox", href: "/admin/rfq" },
                 { title: "Przejdź do certyfikatów", icon: "fa-certificate", href: "/admin/certyfikaty" },
                 { title: "Przejdź do wiadomości", icon: "fa-envelope", href: "/admin/contact-messages" },
