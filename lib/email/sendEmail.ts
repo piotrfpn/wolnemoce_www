@@ -19,7 +19,7 @@ export type SendEmailResult =
   | { ok: false; error: string };
 
 export function getAppBaseUrl() {
-  return (process.env.APP_BASE_URL || "https://wolnemoce.pl").replace(/\/+$/, "");
+  return (process.env.APP_BASE_URL || "https://www.wolnemoce.com").replace(/\/+$/, "");
 }
 
 export function isValidEmailAddress(value: string | null | undefined) {

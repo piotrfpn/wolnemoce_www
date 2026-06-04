@@ -1,4 +1,4 @@
-const siteUrl = "https://wolnemoce.pl";
+const siteUrl = "https://www.wolnemoce.com";
 
 export function getSiteUrl() {
   return siteUrl;

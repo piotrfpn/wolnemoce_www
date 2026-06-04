@@ -10,8 +10,8 @@ Dodaj lokalnie do `.env.local`:
 
 ```env
 RESEND_API_KEY=
-RESEND_FROM_EMAIL=WolneMoce.pl <powiadomienia@wolnemoce.pl>
-APP_BASE_URL=https://wolnemoce.pl
+RESEND_FROM_EMAIL=WolneMoce <powiadomienia@wolnemoce.com>
+APP_BASE_URL=https://www.wolnemoce.com
 SUPABASE_SERVICE_ROLE_KEY=
 RFQ_EMAIL_NOTIFICATIONS_ENABLED=false
 RFQ_EMAIL_LOG_ONLY=true
@@ -24,6 +24,8 @@ Te same zmienne dodaj na Vercel:
 `Project Settings -> Environment Variables`
 
 Nie commituj prawdziwego `RESEND_API_KEY` ani `SUPABASE_SERVICE_ROLE_KEY`.
+
+Wysyłka z adresu w domenie `@wolnemoce.com` wymaga wcześniejszej weryfikacji domeny w Resend oraz poprawnej konfiguracji SPF, DKIM i DMARC.
 
 ## Źródło adresu odbiorcy
 
