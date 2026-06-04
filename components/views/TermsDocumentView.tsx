@@ -257,7 +257,16 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </ul>
               </Section>
 
-              <Section number={12} title="Zapytania ofertowe RFQ i powiadomienia e-mail">
+              <Section number={12} title={t.terms.companyProjects.title}>
+                <p>{t.terms.companyProjects.intro}</p>
+                <ul className="list-disc space-y-2 pl-5">
+                  {t.terms.companyProjects.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </Section>
+
+              <Section number={13} title="Zapytania ofertowe RFQ i powiadomienia e-mail">
                 <p>
                   RFQ umożliwia osobie zainteresowanej wysłanie zapytania do
                   firmy posiadającej aktywną ofertę. Dane zapytania trafiają do
@@ -272,7 +281,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={13} title="Załączniki RFQ i prywatne pliki">
+              <Section number={14} title="Załączniki RFQ i prywatne pliki">
                 <p>
                   Użytkownik wysyłający RFQ może dołączyć pliki, takie jak
                   rysunki, zdjęcia, specyfikacje lub dokumenty techniczne.
@@ -283,7 +292,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={14} title="Signed URLs">
+              <Section number={15} title="Signed URLs">
                 <p>
                   Dostęp do prywatnych załączników może być realizowany przez
                   czasowe signed URLs. Taki link ma ograniczony czas ważności i
@@ -293,7 +302,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={15} title="Prezentacje firmowe PDF/PPT/PPTX w prywatnym Storage">
+              <Section number={16} title="Prezentacje firmowe PDF/PPT/PPTX w prywatnym Storage">
                 <p>
                   Firma może dodać prezentację firmową w formacie PDF, PPT albo
                   PPTX. Pliki prezentacji są przechowywane w prywatnym Storage,
@@ -303,7 +312,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={16} title="Panel administratora i moderacja">
+              <Section number={17} title="Panel administratora i moderacja">
                 <p>
                   Administrator może moderować oferty, firmy oraz zgłoszenia usług.
                   Moderacja może obejmować zatwierdzanie, odrzucanie, ukrywanie
@@ -319,7 +328,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={17} title="WolneMoce.pl nie jest stroną umowy produkcyjnej">
+              <Section number={18} title="WolneMoce.pl nie jest stroną umowy produkcyjnej">
                 <p>
                   WolneMoce.pl jest dostawcą infrastruktury teleinformatycznej i
                   platformą kojarzącą firmy B2B. Serwis nie jest stroną umowy
@@ -340,7 +349,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={18} title="Plany, wyróżnienia i dodatki płatne">
+              <Section number={19} title="Plany, wyróżnienia i dodatki płatne">
                 <p>
                   Serwis może udostępniać plany FREE, PRO i ENTERPRISE. Szczegółowy
                   zakres planów, limity, funkcje i ceny są prezentowane w cenniku
@@ -361,7 +370,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={19} title="Usługi partnerskie">
+              <Section number={20} title="Usługi partnerskie">
                 <p>
                   WolneMoce.pl może prezentować płatne usługi partnerów
                   usługowych. Credos może świadczyć wsparcie księgowo-prawne, a
@@ -382,7 +391,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={20} title="Zasady treści ofert i zakaz obchodzenia platformy">
+              <Section number={21} title="Zasady treści ofert i zakaz obchodzenia platformy">
                 <p>
                   Użytkownik nie może publikować w treści oferty, zdjęciach,
                   grafikach, nazwach plików, materiałach ani innych elementach
@@ -409,7 +418,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={21} title="Zdjęcia, grafiki i materiały ofertowe">
+              <Section number={22} title="Zdjęcia, grafiki i materiały ofertowe">
                 <p>
                   Zdjęcia i materiały graficzne dodawane do ofert powinny
                   przedstawiać maszyny, park maszynowy, hale, stanowiska,
@@ -425,7 +434,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={22} title="Zgłaszanie naruszeń / notice and takedown / notice and action">
+              <Section number={23} title="Zgłaszanie naruszeń / notice and takedown / notice and action">
                 <p>
                   Użytkownik lub osoba trzecia może zgłosić treści bezprawne,
                   naruszające prawa osób trzecich, poufność, prawa autorskie,
@@ -440,7 +449,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={23} title="Płatności, subskrypcje i Stripe">
+              <Section number={24} title="Płatności, subskrypcje i Stripe">
                 <p>
                   Docelowy model Serwisu może obejmować odpłatne plany B2B SaaS
                   lub abonament miesięczny. Subskrypcja może odnawiać się
@@ -450,7 +459,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={24} title="Anulowanie subskrypcji i brak proporcjonalnych zwrotów">
+              <Section number={25} title="Anulowanie subskrypcji i brak proporcjonalnych zwrotów">
                 <p>
                   Użytkownik może anulować subskrypcję w dowolnym momencie, ze
                   skutkiem na koniec opłaconego okresu rozliczeniowego. Użytkownik
@@ -461,7 +470,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={25} title="Zawieszenie konta przy braku płatności lub naruszeniu regulaminu">
+              <Section number={26} title="Zawieszenie konta przy braku płatności lub naruszeniu regulaminu">
                 <p>
                   Operator może zawiesić lub ograniczyć dostęp do płatnych funkcji
                   w przypadku braku płatności, błędu płatności, cofnięcia płatności
@@ -471,7 +480,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={26} title="Odpowiedzialność użytkowników">
+              <Section number={27} title="Odpowiedzialność użytkowników">
                 <p>
                   Użytkownicy odpowiadają za treści ofert, dane profili, treść RFQ,
                   załączniki, legalność dokumentacji technicznej oraz działania
@@ -481,7 +490,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={27} title="Wyłączenia odpowiedzialności Operatora">
+              <Section number={28} title="Wyłączenia odpowiedzialności Operatora">
                 <p>
                   Operator nie gwarantuje zawarcia umowy, jakości usług,
                   wypłacalności firm, terminowości, dostępności mocy, kompletności
@@ -492,7 +501,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={28} title="Dostępność techniczna i przerwy serwisowe">
+              <Section number={29} title="Dostępność techniczna i przerwy serwisowe">
                 <p>
                   Operator dokłada starań, aby Serwis działał stabilnie, ale nie
                   gwarantuje nieprzerwanej dostępności. Możliwe są przerwy
@@ -501,7 +510,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={29} title="Reklamacje">
+              <Section number={30} title="Reklamacje">
                 <p>
                   Reklamacje dotyczące działania Serwisu można kierować na adres
                   kontakt@wolnemoce.pl. Reklamacja powinna zawierać opis
@@ -510,7 +519,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={30} title="Zmiany regulaminu">
+              <Section number={31} title="Zmiany regulaminu">
                 <p>
                   Operator może zmienić Regulamin w szczególności w razie rozwoju
                   Serwisu, wdrożenia płatności, zmian prawnych, zmian technicznych
@@ -518,7 +527,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={31} title="Prawo właściwe i sąd właściwy">
+              <Section number={32} title="Prawo właściwe i sąd właściwy">
                 <p>
                   Regulamin podlega prawu polskiemu. Spory będą rozstrzygane przez
                   sąd właściwy zgodnie z bezwzględnie obowiązującymi przepisami
@@ -526,7 +535,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={32} title="Postanowienia końcowe">
+              <Section number={33} title="Postanowienia końcowe">
                 <p>
                   W sprawach nieuregulowanych Regulaminem stosuje się przepisy
                   prawa powszechnie obowiązującego. Jeżeli którekolwiek

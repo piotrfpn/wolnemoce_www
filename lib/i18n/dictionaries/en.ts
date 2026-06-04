@@ -509,6 +509,15 @@ const en: Dictionary = {
     viewOffers: "View all offers",
     askAboutOffer: "Ask about this offer",
     noActiveOffers: "This company does not have active offers yet.",
+    projectsTitle: "Examples of work",
+    projectsDescription:
+      "Selected examples of work shown by the contractor. These are contractor declarations moderated by WolneMoce.pl before publication.",
+    projectDeclarationLabel: "Contractor declaration",
+    projectDeclarationDescription:
+      "The company declares that it completed this work. WolneMoce.pl moderates the content before publication, but does not confirm it as a formal client endorsement.",
+    projectTechnologyLabel: "Technology / service",
+    projectIndustryLabel: "Industry / use case",
+    projectNoImages: "Work example without images",
     certificatesTitle: "Company certificates",
     certificatesDescription:
       "Quality, compliance and industry certificates declared by the company.",
@@ -589,11 +598,32 @@ const en: Dictionary = {
       title: "Terms of Service",
       description:
         "Rules for using WolneMoce.pl, company accounts, offers, RFQ and partner services.",
+      companyProjects: {
+        title: "Examples of work",
+        intro:
+          "Examples of work are contractor declarations published on the company profile after moderation.",
+        items: [
+          "The operator may moderate, reject, archive, hide or remove examples of work.",
+          "Publication does not mean a formal client endorsement or a guarantee of contractor quality, delivery time or the truthfulness of the work example.",
+          "The company adding an example declares that it has the rights to publish the description and images.",
+          "Materials covered by NDA, trade secrets, technical documentation, client logos, client data, part numbers or personal data must not be published without the required consent or legal basis.",
+        ],
+      },
     },
     privacy: {
       title: "Privacy Policy",
       description:
         "Information about personal data processing in WolneMoce.pl.",
+      companyProjects: {
+        title: "Work descriptions and images",
+        intro:
+          "A user or company may add work descriptions and images which, after moderation, may become publicly visible on the company profile.",
+        items: [
+          "Work images are stored in Supabase Storage.",
+          "The company or user should not add personal data or third-party data without the required legal basis.",
+          "Published content should be limited to information the company is allowed to disclose publicly.",
+        ],
+      },
     },
     cookies: {
       title: "Cookie Policy",

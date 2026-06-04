@@ -223,7 +223,16 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={15} title="Kontakt w sprawie usług partnerskich">
+              <Section number={15} title={t.privacy.companyProjects.title}>
+                <p>{t.privacy.companyProjects.intro}</p>
+                <ul className="list-disc space-y-2 pl-5">
+                  {t.privacy.companyProjects.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </Section>
+
+              <Section number={16} title="Kontakt w sprawie usług partnerskich">
                 <p>
                   Dane podane w formularzu kontaktowym mogą być wykorzystywane do
                   obsługi zapytania użytkownika. Jeżeli zapytanie dotyczy usługi
@@ -239,7 +248,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={16} title="Zmiany polityki prywatności">
+              <Section number={17} title="Zmiany polityki prywatności">
                 <p>
                   Polityka prywatności może być aktualizowana w związku z rozwojem
                   Serwisu, zmianą dostawców, wdrożeniem płatności, zmianami prawa

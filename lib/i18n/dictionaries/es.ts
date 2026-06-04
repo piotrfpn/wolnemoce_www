@@ -572,11 +572,13 @@ const es: Dictionary = {
       title: "Términos del servicio",
       description:
         "Reglas de uso de WolneMoce.pl, cuentas de empresa, ofertas, RFQ y servicios de partners.",
+      companyProjects: en.legal.terms.companyProjects,
     },
     privacy: {
       title: "Política de privacidad",
       description:
         "Información sobre el tratamiento de datos personales en WolneMoce.pl.",
+      companyProjects: en.legal.privacy.companyProjects,
     },
     cookies: {
       title: "Política de cookies",

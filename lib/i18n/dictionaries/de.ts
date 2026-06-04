@@ -582,11 +582,13 @@ const de: Dictionary = {
       title: "Nutzungsbedingungen",
       description:
         "Regeln für die Nutzung von WolneMoce.pl, Firmenkonten, Angeboten, RFQ und Partnerdiensten.",
+      companyProjects: en.legal.terms.companyProjects,
     },
     privacy: {
       title: "Datenschutzerklärung",
       description:
         "Informationen zur Verarbeitung personenbezogener Daten bei WolneMoce.pl.",
+      companyProjects: en.legal.privacy.companyProjects,
     },
     cookies: {
       title: "Cookie-Richtlinie",

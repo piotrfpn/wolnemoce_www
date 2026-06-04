@@ -455,6 +455,13 @@ export type Dictionary = {
     viewOffers: string;
     askAboutOffer: string;
     noActiveOffers: string;
+    projectsTitle: string;
+    projectsDescription: string;
+    projectDeclarationLabel: string;
+    projectDeclarationDescription: string;
+    projectTechnologyLabel: string;
+    projectIndustryLabel: string;
+    projectNoImages: string;
     certificatesTitle: string;
     certificatesDescription: string;
     certificateDeclaredLabel: string;
@@ -529,10 +536,20 @@ export type Dictionary = {
     terms: {
       title: string;
       description: string;
+      companyProjects: {
+        title: string;
+        intro: string;
+        items: string[];
+      };
     };
     privacy: {
       title: string;
       description: string;
+      companyProjects: {
+        title: string;
+        intro: string;
+        items: string[];
+      };
     };
     cookies: {
       title: string;

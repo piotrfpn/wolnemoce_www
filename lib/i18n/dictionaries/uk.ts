@@ -572,11 +572,13 @@ const uk: Dictionary = {
       title: "Умови сервісу",
       description:
         "Правила користування WolneMoce.pl, акаунтами компаній, пропозиціями, RFQ та партнерськими послугами.",
+      companyProjects: en.legal.terms.companyProjects,
     },
     privacy: {
       title: "Політика конфіденційності",
       description:
         "Інформація про обробку персональних даних у WolneMoce.pl.",
+      companyProjects: en.legal.privacy.companyProjects,
     },
     cookies: {
       title: "Політика cookies",

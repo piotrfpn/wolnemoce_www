@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
 import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
+import { getCompanyProjectImagePublicUrl } from "@/lib/companyProjectImageUploads";
 import { getLocalizedHref, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getAbsoluteUrl, truncateSeoDescription } from "@/lib/seo";
@@ -49,6 +50,32 @@ type PublicCompanyCertificate = {
   file_path: string | null;
   file_name: string | null;
   created_at: string;
+};
+
+type PublicCompanyProjectImage = {
+  id: string;
+  project_id: string;
+  company_id: string;
+  storage_path: string;
+  display_order: number;
+  created_at: string;
+};
+
+type PublicCompanyProject = {
+  id: string;
+  company_id: string;
+  title: string;
+  slug: string;
+  technology: string[];
+  industry: string[];
+  description: string;
+  nda_confirmation: boolean;
+  status: string;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+  archived_at: string | null;
+  images: PublicCompanyProjectImage[];
 };
 
 const publicCertificatesBucket = "company-certificates-public";
@@ -114,6 +141,45 @@ async function getPublicCompanyCertificates(companyId: string) {
     .order("created_at", { ascending: false });
 
   return (data ?? []) as PublicCompanyCertificate[];
+}
+
+async function getCompanyPublishedProjects(companyId: string) {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("company_projects")
+    .select(
+      "id, company_id, title, slug, technology, industry, description, nda_confirmation, status, published_at, created_at, updated_at, archived_at"
+    )
+    .eq("company_id", companyId)
+    .eq("status", "published")
+    .order("published_at", { ascending: false, nullsFirst: false })
+    .order("created_at", { ascending: false })
+    .limit(6);
+  const projects = (data ?? []) as Omit<PublicCompanyProject, "images">[];
+  const projectIds = projects.map((project) => project.id);
+
+  if (projectIds.length === 0) {
+    return [];
+  }
+
+  const { data: imageData } = await supabase
+    .from("company_project_images")
+    .select("id, project_id, company_id, storage_path, display_order, created_at")
+    .in("project_id", projectIds)
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: true });
+  const imagesByProjectId = new Map<string, PublicCompanyProjectImage[]>();
+
+  for (const image of (imageData ?? []) as PublicCompanyProjectImage[]) {
+    const current = imagesByProjectId.get(image.project_id) ?? [];
+    current.push(image);
+    imagesByProjectId.set(image.project_id, current);
+  }
+
+  return projects.map((project) => ({
+    ...project,
+    images: (imagesByProjectId.get(project.id) ?? []).slice(0, 3),
+  }));
 }
 
 function formatCertificateDate(value: string | null, locale: Locale) {
@@ -241,9 +307,10 @@ export default async function CompanyDetailView({
     notFound();
   }
 
-  const [activeOffers, certificates] = await Promise.all([
+  const [activeOffers, certificates, projects] = await Promise.all([
     getCompanyActiveOffers(company.id, company),
     getPublicCompanyCertificates(company.id),
+    getCompanyPublishedProjects(company.id),
   ]);
   const location = [company.location_city, company.location_voivodeship]
     .filter(Boolean)
@@ -659,6 +726,129 @@ export default async function CompanyDetailView({
                 {company.description || t.emptyCompanyDescription}
               </p>
             </section>
+
+            {projects.length > 0 ? (
+              <section
+                id="realizacje"
+                className="scroll-mt-24 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8"
+              >
+                <div className="mb-6">
+                  <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
+                    {t.projectsTitle}
+                  </p>
+                  <p className="max-w-3xl text-sm leading-6 text-slate-500">
+                    {t.projectsDescription}
+                  </p>
+                </div>
+
+                <div className="grid min-w-0 items-stretch gap-6 xl:grid-cols-2">
+                  {projects.map((project) => (
+                    <article
+                      key={project.id}
+                      className="flex h-full min-w-0 flex-col rounded-[20px] border border-slate-200 bg-slate-50 p-5"
+                    >
+                      {project.images.length > 0 ? (
+                        <div className="mb-5 grid min-w-0 gap-3">
+                          <div className="overflow-hidden rounded-2xl bg-white">
+                            <div className="aspect-video">
+                              <img
+                                src={getCompanyProjectImagePublicUrl(
+                                  project.images[0].storage_path
+                                )}
+                                alt={project.title}
+                                loading="lazy"
+                                decoding="async"
+                                className="h-full w-full object-cover"
+                              />
+                            </div>
+                          </div>
+                          {project.images.length > 1 ? (
+                            <div className="grid min-w-0 gap-3 sm:grid-cols-2">
+                              {project.images.slice(1, 3).map((image) => (
+                                <div
+                                  key={image.id}
+                                  className="overflow-hidden rounded-xl bg-white"
+                                >
+                                  <div className="aspect-video">
+                                    <img
+                                      src={getCompanyProjectImagePublicUrl(
+                                        image.storage_path
+                                      )}
+                                      alt={project.title}
+                                      loading="lazy"
+                                      decoding="async"
+                                      className="h-full w-full object-cover"
+                                    />
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
+                      ) : (
+                        <div className="mb-5 flex aspect-video items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white text-sm font-bold text-slate-400">
+                          {t.projectNoImages}
+                        </div>
+                      )}
+
+                      <div className="mb-4 flex flex-wrap gap-2">
+                        <span
+                          className="rounded-full bg-[#1a5f3c]/10 px-3 py-1 text-xs font-bold text-[#1a5f3c]"
+                          title={t.projectDeclarationDescription}
+                        >
+                          {t.projectDeclarationLabel}
+                        </span>
+                      </div>
+
+                      <h3 className="break-words text-lg font-extrabold text-slate-900">
+                        {project.title}
+                      </h3>
+                      <p className="mt-3 line-clamp-4 text-sm leading-6 text-slate-600">
+                        {project.description}
+                      </p>
+
+                      <div className="mt-auto pt-5">
+                        {project.technology.length > 0 ? (
+                          <div className="mb-4">
+                            <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                              {t.projectTechnologyLabel}
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {project.technology.slice(0, 5).map((technology) => (
+                                <span
+                                  key={technology}
+                                  className="rounded-full bg-white px-3 py-1.5 text-xs font-bold text-slate-700"
+                                >
+                                  {technology}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        ) : null}
+
+                        {project.industry.length > 0 ? (
+                          <div>
+                            <p className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                              {t.projectIndustryLabel}
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {project.industry.slice(0, 5).map((industry) => (
+                                <span
+                                  key={industry}
+                                  className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700"
+                                >
+                                  {industry}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        ) : null}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ) : null}
 
               <section
                 id="company-offers"

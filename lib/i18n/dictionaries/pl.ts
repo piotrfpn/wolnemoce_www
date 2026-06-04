@@ -523,6 +523,15 @@ const pl: Dictionary = {
     viewOffers: "Zobacz wszystkie oferty",
     askAboutOffer: "Zapytaj o ofertę",
     noActiveOffers: "Ta firma nie ma jeszcze aktywnych ofert.",
+    projectsTitle: "Przykłady realizacji",
+    projectsDescription:
+      "Wybrane przykłady prac pokazane przez wykonawcę. To deklaracje wykonawcy moderowane przed publikacją przez WolneMoce.pl.",
+    projectDeclarationLabel: "Deklaracja wykonawcy",
+    projectDeclarationDescription:
+      "Firma deklaruje wykonanie tej realizacji. WolneMoce.pl moderuje treść przed publikacją, ale nie potwierdza jej jako formalnego poświadczenia klienta.",
+    projectTechnologyLabel: "Technologia / usługa",
+    projectIndustryLabel: "Branża / zastosowanie",
+    projectNoImages: "Realizacja bez zdjęć",
     certificatesTitle: "Certyfikaty firmy",
     certificatesDescription:
       "Certyfikaty jakości, zgodności i branżowe deklarowane przez firmę.",
@@ -603,11 +612,32 @@ const pl: Dictionary = {
       title: "Regulamin Serwisu",
       description:
         "Zasady korzystania z portalu WolneMoce.pl, kont firmowych, ofert, RFQ i usług partnerskich.",
+      companyProjects: {
+        title: "Przykłady realizacji",
+        intro:
+          "Przykłady realizacji są deklaracjami wykonawcy publikowanymi w profilu firmy po moderacji.",
+        items: [
+          "Operator może moderować, odrzucać, archiwizować, ukrywać lub usuwać przykłady realizacji.",
+          "Publikacja realizacji nie oznacza formalnego poświadczenia klienta ani gwarancji jakości wykonawcy, terminu lub prawdziwości realizacji.",
+          "Firma dodająca realizację oświadcza, że ma prawa do publikacji opisu i zdjęć.",
+          "Nie wolno publikować materiałów objętych NDA, tajemnicą przedsiębiorstwa, dokumentacji technicznej, logo klienta, danych klienta, numerów części ani danych osobowych bez wymaganej zgody lub podstawy prawnej.",
+        ],
+      },
     },
     privacy: {
       title: "Polityka prywatności",
       description:
         "Informacje o przetwarzaniu danych osobowych w portalu WolneMoce.pl.",
+      companyProjects: {
+        title: "Opisy i zdjęcia realizacji",
+        intro:
+          "Użytkownik lub firma może dodać opis i zdjęcia realizacji, które po moderacji mogą być publicznie widoczne na profilu firmy.",
+        items: [
+          "Zdjęcia realizacji są przechowywane w Supabase Storage.",
+          "Firma lub użytkownik nie powinien dodawać danych osobowych ani danych osób trzecich bez wymaganej podstawy prawnej.",
+          "Zakres publikowanych treści powinien być ograniczony do informacji, które firma ma prawo ujawnić publicznie.",
+        ],
+      },
     },
     cookies: {
       title: "Polityka Cookies",
