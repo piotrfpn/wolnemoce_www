@@ -40,6 +40,13 @@ export default async function PanelPage() {
       cta: t.goToOffers,
     },
     {
+      title: "Przykłady realizacji",
+      description: "Zarządzaj przykładami wykonanych projektów swojej firmy.",
+      icon: "fas fa-briefcase",
+      href: "/panel/realizacje",
+      cta: "Przejdź do realizacji",
+    },
+    {
       title: dictionary.panel.inquiries.title,
       description: dictionary.panel.inquiries.subtitle,
       icon: "fas fa-inbox",
@@ -355,7 +362,7 @@ export default async function PanelPage() {
             </Link>
           </div>
 
-          <div className="grid min-w-0 gap-5 md:grid-cols-3">
+          <div className="grid min-w-0 items-stretch gap-5 md:grid-cols-2 xl:grid-cols-3">
             {visiblePanelItems.map((item) => {
               const isInquiriesCard = item.href === "/panel/zapytania";
               const inquiryBadge =
@@ -387,7 +394,7 @@ export default async function PanelPage() {
                     {item.description}
                   </p>
                   {item.href ? (
-                    <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c]">
+                    <span className="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-bold text-[#1a5f3c]">
                       {item.cta}
                       <i className="fas fa-arrow-right text-xs"></i>
                     </span>
@@ -399,14 +406,14 @@ export default async function PanelPage() {
                 <Link
                   key={item.title}
                   href={item.href}
-                  className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-[#1a5f3c] hover:shadow-md"
+                  className="flex h-full min-w-0 flex-col rounded-[20px] border border-slate-200 bg-white p-6 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-[#1a5f3c] hover:shadow-md"
                 >
                   {card}
                 </Link>
               ) : (
                 <div
                   key={item.title}
-                  className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm"
+                  className="flex h-full min-w-0 flex-col rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm"
                 >
                   {card}
                 </div>
