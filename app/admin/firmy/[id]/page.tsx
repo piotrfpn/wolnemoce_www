@@ -11,7 +11,7 @@ import AdminCompanyOfferLimitClient from "./AdminCompanyOfferLimitClient";
 
 export const metadata: Metadata = {
   title: "Szczegóły firmy - Admin",
-  description: "Weryfikacja firmy w panelu admina WolneMoce.pl.",
+  description: "Weryfikacja firmy w panelu admina WolneMoce.",
 };
 
 type PkdCodesValue = Database["public"]["Tables"]["companies"]["Row"]["pkd_codes"];

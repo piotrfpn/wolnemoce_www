@@ -44,7 +44,7 @@ const fr: Dictionary = {
       "Recevez les nouvelles offres et les articles d’experts par email.",
     emailPlaceholder: "Votre email",
     newsletterSubmit: "S’abonner",
-    rights: "© 2026 WolneMoce.pl. Tous droits réservés.",
+    rights: "© 2026 WolneMoce. Tous droits réservés.",
     partnerPage: "Site partenaire",
   },
   hero: {
@@ -136,7 +136,7 @@ const fr: Dictionary = {
     serviceTypeLabel: "Service",
     locationLabel: "Emplacement",
     companyFallback: "Entreprise",
-    offerFallback: "Offre WolneMoce.pl",
+    offerFallback: "Offre WolneMoce",
     capacityFallback: "capacités disponibles",
     countryFallback: "Pologne",
     industryFallback: "Secteur",
@@ -254,7 +254,7 @@ const fr: Dictionary = {
     addOffer: "Ajouter une offre",
     sectionLabel: "Deux côtés du marché",
     sectionTitle: "Un processus adapté au rôle de l’entreprise",
-    sectionDescription: "WolneMoce.pl organise la communication entre le donneur d’ordre et l’entreprise capable d’accepter du travail supplémentaire.",
+    sectionDescription: "WolneMoce organise la communication entre le donneur d’ordre et l’entreprise capable d’accepter du travail supplémentaire.",
     buyerTitle: "Entreprise cherchant un sous-traitant",
     supplierTitle: "Entreprise avec capacités disponibles",
     buyerSteps: ["Décrire le besoin de production", "Parcourir les offres pertinentes", "Contacter l’entreprise choisie", "Définir le périmètre et lancer la coopération"],
@@ -271,7 +271,7 @@ const fr: Dictionary = {
   addOfferPage: {
     seoTitle: "Ajouter une offre",
     seoDescription:
-      "Ajoutez une offre de capacités de production disponibles après avoir créé un compte entreprise sur WolneMoce.pl.",
+      "Ajoutez une offre de capacités de production disponibles après avoir créé un compte entreprise sur WolneMoce.",
     heroLabel: "Ajouter une offre",
     title: "Ajouter une offre",
     subtitle:
@@ -321,7 +321,7 @@ const fr: Dictionary = {
         label: "Partenaire de service",
         subject: "Support comptable et juridique Credos",
         description:
-          "La demande concerne un support partenaire payant de Credos en comptabilité, droit et formalités B2B. Le service n’est pas automatiquement inclus dans les plans WolneMoce.pl et nécessite un accord séparé sur le périmètre et le prix.",
+          "La demande concerne un support partenaire payant de Credos en comptabilité, droit et formalités B2B. Le service n’est pas automatiquement inclus dans les plans WolneMoce et nécessite un accord séparé sur le périmètre et le prix.",
       },
       logimarket: {
         ...en.contactPage.partnerTopics.logimarket,
@@ -335,7 +335,7 @@ const fr: Dictionary = {
         label: "Contact administrateur",
         subject: "Contact administrateur",
         description:
-          "Le message sera transmis à l’administration de WolneMoce.pl. Utilisez ce contact pour compte, profil d’entreprise, offres, demandes RFQ ou support du panel.",
+          "Le message sera transmis à l’administration de WolneMoce. Utilisez ce contact pour compte, profil d’entreprise, offres, demandes RFQ ou support du panel.",
       },
       "wyroznienie-oferty": {
         label: "Offre mise en avant",
@@ -364,7 +364,7 @@ const fr: Dictionary = {
           "Les demandes vont dans le panel de l'entreprise, sous l'onglet 'Demandes'. Pendant la phase de prélancement, nous recommandons de vérifier le panel régulièrement, car les notifications par e-mail peuvent fonctionner en mode test ou être déployées par étapes.",
       },
       {
-        question: "WolneMoce.pl gère-t-il les paiements en ligne ?",
+        question: "WolneMoce gère-t-il les paiements en ligne ?",
         answer:
           "Pas à ce stade. La tarification présente le modèle de forfaits, mais les paiements en ligne sont en préparation. Les forfaits PRO et ENTERPRISE peuvent être activés individuellement après avoir contacté l'administration.",
       },
@@ -426,7 +426,7 @@ const fr: Dictionary = {
     minimumOrder: "Commande minimale",
     leadTime: "Délai de réalisation",
     toBeAgreed: "À convenir",
-    imageAltFallback: "Offre WolneMoce.pl",
+    imageAltFallback: "Offre WolneMoce",
     galleryImageAltFallback: "Photo de l’offre",
     parametersTitle: "Paramètres de l’offre",
     parametersDescription: "Informations clés pour une première qualification.",
@@ -434,7 +434,7 @@ const fr: Dictionary = {
     certificatesTitle: "Certificats et vérification",
     aboutCompany: "À propos de l’entreprise",
     companyDescriptionFallback:
-      "L’entreprise présente ses capacités disponibles et traite les demandes B2B via WolneMoce.pl.",
+      "L’entreprise présente ses capacités disponibles et traite les demandes B2B via WolneMoce.",
     companyWebsite: "Site web de l’entreprise",
     similarLabel: "Offres similaires",
     similarTitle: "Voir d’autres capacités disponibles",
@@ -445,7 +445,7 @@ const fr: Dictionary = {
       "Ajoutez une offre dans le panneau entreprise et envoyez-la pour approbation.",
     addOffer: "Ajouter une offre",
     contact: "Contact",
-    notFoundTitle: "Offre introuvable | WolneMoce.pl",
+    notFoundTitle: "Offre introuvable | WolneMoce",
     notFoundDescription:
       "L’offre n’existe pas ou n’est pas active publiquement.",
     rfqCta: "Envoyer une demande pour cette offre",
@@ -507,9 +507,9 @@ const fr: Dictionary = {
     downloadCertificate: "Télécharger le certificat",
     noCertificates: "L’entreprise n’a pas encore ajouté de certificats publics.",
     publicProfile: "Profil de l’entreprise",
-    notFoundTitle: "Entreprise introuvable | WolneMoce.pl",
+    notFoundTitle: "Entreprise introuvable | WolneMoce",
     notFoundDescription:
-      "Le profil d’entreprise est introuvable sur WolneMoce.pl.",
+      "Le profil d’entreprise est introuvable sur WolneMoce.",
   },
   blogDetail: {
     ...en.blogDetail,
@@ -522,13 +522,13 @@ const fr: Dictionary = {
     relatedArticles: "Articles similaires",
     readNext: "Lire la suite",
     relatedDescription:
-      "Sélection d’articles du blog WolneMoce.pl pour les entreprises qui planifient une coopération de production.",
+      "Sélection d’articles du blog WolneMoce pour les entreprises qui planifient une coopération de production.",
     ctaTitle: "Passez de l’analyse à l’action",
     ctaDescription:
       "Consultez les offres actuelles de capacités disponibles ou ajoutez l’offre de votre entreprise.",
     browseOffers: "Voir les offres",
     addOffer: "Ajouter une offre",
-    notFoundTitle: "Article introuvable | Blog WolneMoce.pl",
+    notFoundTitle: "Article introuvable | Blog WolneMoce",
     notFoundDescription: "L’article de blog publié est introuvable.",
   },
   auth: {
@@ -573,19 +573,19 @@ const fr: Dictionary = {
     terms: {
       title: "Conditions d'utilisation",
       description:
-        "Règles d'utilisation de WolneMoce.pl, des comptes entreprise, des offres, RFQ et services partenaires.",
+        "Règles d'utilisation de WolneMoce, des comptes entreprise, des offres, RFQ et services partenaires.",
       companyProjects: en.legal.terms.companyProjects,
     },
     privacy: {
       title: "Politique de confidentialité",
       description:
-        "Informations sur le traitement des données personnelles dans WolneMoce.pl.",
+        "Informations sur le traitement des données personnelles dans WolneMoce.",
       companyProjects: en.legal.privacy.companyProjects,
     },
     cookies: {
       title: "Politique de cookies",
       description:
-        "Informations sur les cookies et technologies similaires utilisés par WolneMoce.pl.",
+        "Informations sur les cookies et technologies similaires utilisés par WolneMoce.",
     },
   },
   howItWorks: {
@@ -672,7 +672,7 @@ const fr: Dictionary = {
   },
   expert: {
     label: "Point de vue expert",
-    title: "Pourquoi utiliser WolneMoce.pl ?",
+    title: "Pourquoi utiliser WolneMoce ?",
     description:
       "Avec une expérience en production et supply chain, nous voyons l'intérêt d'utiliser les capacités disponibles de façon plus transparente.",
     features: [
@@ -691,7 +691,7 @@ const fr: Dictionary = {
   partners: {
     ...en.partners,
     label: "Partenaires",
-    title: "Partenaires de services WolneMoce.pl",
+    title: "Partenaires de services WolneMoce",
     paidBadge: "Service payant / devis personnalisé",
     website: "Site partenaire",
     items: pl.partners.items.map((item) => ({
@@ -709,7 +709,7 @@ const fr: Dictionary = {
     description:
       "Découvrez comment les entreprises utilisent le portail pour organiser leur coopération de production.",
     items: [
-      { text: "WolneMoce.pl nous a aidés à trouver un fabricant pour une série urgente de pièces. Le processus était clair et professionnel.", author: "Andrzej Kowalski", role: "Directeur des opérations, TechParts Sp. z o.o.", initials: "AK" },
+      { text: "WolneMoce nous a aidés à trouver un fabricant pour une série urgente de pièces. Le processus était clair et professionnel.", author: "Andrzej Kowalski", role: "Directeur des opérations, TechParts Sp. z o.o.", initials: "AK" },
       { text: "Nos capacités disponibles sont plus faciles à présenter aux bons clients B2B.", author: "Marta Nowak", role: "Propriétaire, PlastForm S.A.", initials: "MN", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
       { text: "La vérification des entreprises et les profils clairs nous aident à évaluer plus vite les partenaires de production.", author: "Piotr Wiśniewski", role: "Responsable achats, ElektroMax Sp. z o.o.", initials: "PW", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
     ],
@@ -733,12 +733,12 @@ const fr: Dictionary = {
     home: {
       title: "Portail de capacités de production disponibles",
       description:
-        "WolneMoce.pl relie les entreprises cherchant des sous-traitants aux entreprises disposant de capacités de production, stockage, logistique et techniques disponibles.",
+        "WolneMoce relie les entreprises cherchant des sous-traitants aux entreprises disposant de capacités de production, stockage, logistique et techniques disponibles.",
     },
     pricing: {
       title: "Tarifs",
       description:
-        "Tarifs statiques WolneMoce.pl : FREE, PRO, ENTERPRISE et options supplémentaires.",
+        "Tarifs statiques WolneMoce : FREE, PRO, ENTERPRISE et options supplémentaires.",
     },
   },
   panel: {
@@ -818,9 +818,9 @@ const fr: Dictionary = {
     offerForm: {
       metadata: {
         newTitle: "Ajouter une offre",
-        newDescription: "Ajoutez une offre d'entreprise dans le panel WolneMoce.pl.",
+        newDescription: "Ajoutez une offre d'entreprise dans le panel WolneMoce.",
         editTitle: "Modifier l'offre",
-        editDescription: "Modifiez une offre d'entreprise dans le panel WolneMoce.pl.",
+        editDescription: "Modifiez une offre d'entreprise dans le panel WolneMoce.",
       },
       backToOffers: "Retour aux offres",
       eyebrowNew: "Nouvelle offre",
@@ -965,7 +965,7 @@ const fr: Dictionary = {
       fullNameLabel: "Nom complet :",
       companyStatus: "Statut de l'entreprise",
       unverified: "Entreprise non vérifiée",
-      verificationInfo: "La vérification de l'entreprise est effectuée par l'administrateur de WolneMoce.pl.",
+      verificationInfo: "La vérification de l'entreprise est effectuée par l'administrateur de WolneMoce.",
       publicProfileLabel: "Profil public de l'entreprise :",
       companyDataDescription: "Complétez les détails de l'entreprise utilisés dans les offres et les demandes.",
       nipLabel: "Numéro de TVA",
@@ -1003,12 +1003,12 @@ const fr: Dictionary = {
       accountDeletionTitle: "Suppression du compte et des données de l'entreprise",
       accountDeletionStatus: "Demande manuelle",
       accountDeletionDescription:
-        "WolneMoce.pl étant une plateforme B2B, l'historique des demandes RFQ peut être important pour vos partenaires commerciaux. La suppression du compte nécessite donc une vérification manuelle.",
+        "WolneMoce étant une plateforme B2B, l'historique des demandes RFQ peut être important pour vos partenaires commerciaux. La suppression du compte nécessite donc une vérification manuelle.",
       accountDeletionContactInstruction:
         "Pour supprimer définitivement votre compte, anonymiser les données personnelles et retirer les offres publiques, contactez-nous depuis l'adresse e-mail associée à votre compte",
       accountDeletionTimeframe: "Les demandes sont traitées dans un délai maximal de 14 jours.",
       accountDeletionCta: "Contacter le support",
-      accountDeletionMailSubject: "Suppression de compte WolneMoce.pl",
+      accountDeletionMailSubject: "Suppression de compte WolneMoce",
       accountDetailsTitle: "Détails du compte",
       accountDetailsDescription: "Gérez les détails de base de la personne qui utilise le compte. Ces données ne constituent pas votre profil d'entreprise public.",
       fullNameLabel: "Nom complet",

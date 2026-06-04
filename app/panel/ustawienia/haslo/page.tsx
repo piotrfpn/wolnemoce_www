@@ -8,7 +8,7 @@ import { getPanelLocale } from "@/lib/i18n/panelLocale";
 
 export const metadata: Metadata = {
   title: "Zmień hasło",
-  description: "Zmień hasło zalogowanego użytkownika WolneMoce.pl.",
+  description: "Zmień hasło zalogowanego użytkownika WolneMoce.",
 };
 
 export const dynamic = "force-dynamic";

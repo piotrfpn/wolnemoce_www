@@ -188,7 +188,7 @@ export default function RfqInlineFormClient({
         </h2>
         <p className="mt-3 text-sm leading-6 text-slate-600">
           Dziękujemy. Zapytanie zostało zapisane i przekazane firmie w panelu
-          WolneMoce.pl.
+          WolneMoce.
         </p>
         {partialSuccess ? (
           <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
@@ -211,7 +211,7 @@ export default function RfqInlineFormClient({
         </h2>
         <p className="mt-2 text-sm leading-6 text-slate-500">
           Zapytanie zostanie zapisane i przekazane do firmy w panelu
-          WolneMoce.pl.
+          WolneMoce.
         </p>
       </div>
 

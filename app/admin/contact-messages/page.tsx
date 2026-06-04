@@ -8,7 +8,7 @@ import ContactMessageActionsClient from "./ContactMessageActionsClient";
 
 export const metadata: Metadata = {
   title: "Wiadomości kontaktowe | Panel administratora",
-  description: "Administracyjna skrzynka wiadomości kontaktowych WolneMoce.pl.",
+  description: "Administracyjna skrzynka wiadomości kontaktowych WolneMoce.",
 };
 
 type ContactMessage = {

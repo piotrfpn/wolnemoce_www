@@ -12,7 +12,7 @@ import AccountSettingsForm from "./AccountSettingsForm";
 
 export const metadata: Metadata = {
   title: "Ustawienia konta",
-  description: "Ustawienia konta użytkownika WolneMoce.pl.",
+  description: "Ustawienia konta użytkownika WolneMoce.",
 };
 
 export const dynamic = "force-dynamic";

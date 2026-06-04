@@ -8,7 +8,7 @@ import ProjectFormClient from "../../ProjectFormClient";
 
 export const metadata: Metadata = {
   title: "Edytuj przykład realizacji",
-  description: "Edytuj przykład realizacji firmy w panelu WolneMoce.pl.",
+  description: "Edytuj przykład realizacji firmy w panelu WolneMoce.",
 };
 
 export const dynamic = "force-dynamic";

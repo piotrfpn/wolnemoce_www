@@ -44,7 +44,7 @@ const en: Dictionary = {
       "Receive new offers and expert articles directly by email.",
     emailPlaceholder: "Your email",
     newsletterSubmit: "Subscribe to newsletter",
-    rights: "© 2026 WolneMoce.pl. All rights reserved.",
+    rights: "© 2026 WolneMoce. All rights reserved.",
     partnerPage: "Partner website",
   },
   hero: {
@@ -127,7 +127,7 @@ const en: Dictionary = {
   },
   offerCard: {
     companyFallback: "Company",
-    offerFallback: "WolneMoce.pl offer",
+    offerFallback: "WolneMoce offer",
     capacityFallback: "available capacity",
     countryFallback: "Poland",
     industryFallback: "Industry",
@@ -252,7 +252,7 @@ const en: Dictionary = {
     sectionLabel: "Two sides of the market",
     sectionTitle: "A process matched to the company role",
     sectionDescription:
-      "WolneMoce.pl organizes communication between the buyer and the company that can accept additional work.",
+      "WolneMoce organizes communication between the buyer and the company that can accept additional work.",
     buyerTitle: "Company looking for a subcontractor",
     supplierTitle: "Company with available capacity",
     buyerSteps: [
@@ -280,7 +280,7 @@ const en: Dictionary = {
   addOfferPage: {
     seoTitle: "Add offer",
     seoDescription:
-      "Add an available production capacity offer after creating a company account on WolneMoce.pl.",
+      "Add an available production capacity offer after creating a company account on WolneMoce.",
     heroLabel: "Add offer",
     title: "Add offer",
     subtitle:
@@ -334,7 +334,7 @@ const en: Dictionary = {
         label: "Service partner",
         subject: "Credos accounting and legal support",
         description:
-          "This inquiry concerns paid Credos partner support in accounting, legal and formal B2B cooperation areas. The service is not automatically included in WolneMoce.pl plans and requires separate scope and price agreement.",
+          "This inquiry concerns paid Credos partner support in accounting, legal and formal B2B cooperation areas. The service is not automatically included in WolneMoce plans and requires separate scope and price agreement.",
         icon: "fas fa-scale-balanced",
         source: "contact:credos",
       },
@@ -342,7 +342,7 @@ const en: Dictionary = {
         label: "Service partner",
         subject: "LogiMarket process and supply-chain consulting",
         description:
-          "This inquiry concerns paid LogiMarket partner consulting for processes, production outsourcing, RFQ, make-or-buy and supply chain. The service is not automatically included in WolneMoce.pl plans and requires separate scope and price agreement.",
+          "This inquiry concerns paid LogiMarket partner consulting for processes, production outsourcing, RFQ, make-or-buy and supply chain. The service is not automatically included in WolneMoce plans and requires separate scope and price agreement.",
         icon: "fas fa-route",
         source: "contact:logimarket",
       },
@@ -350,7 +350,7 @@ const en: Dictionary = {
         label: "Administrator contact",
         subject: "Administrator contact",
         description:
-          "The message will go to WolneMoce.pl administration. Use this contact for account, company profile, offers, RFQ inquiries or panel support topics.",
+          "The message will go to WolneMoce administration. Use this contact for account, company profile, offers, RFQ inquiries or panel support topics.",
         icon: "fas fa-user-shield",
         source: "admin_contact",
       },
@@ -358,7 +358,7 @@ const en: Dictionary = {
         label: "Featured offer",
         subject: "Featured offer — 49 PLN / 7 days",
         description:
-          "Offer featuring is activated manually after contacting WolneMoce.pl administration. The service increases offer visibility in selected areas of the portal for 7 days, but does not guarantee inquiry volume or transactions. In your message you can indicate the offer, preferred featuring period and ask about 14 / 21 / 30 days variants.",
+          "Offer featuring is activated manually after contacting WolneMoce administration. The service increases offer visibility in selected areas of the portal for 7 days, but does not guarantee inquiry volume or transactions. In your message you can indicate the offer, preferred featuring period and ask about 14 / 21 / 30 days variants.",
         icon: "fas fa-star",
         source: "contact:wyroznienie-oferty",
       },
@@ -366,7 +366,7 @@ const en: Dictionary = {
         label: "Violation report",
         subject: "Violation report",
         description:
-          "The report will be sent to WolneMoce.pl administration. Briefly describe what the violation concerns and avoid adding sensitive data unless it is needed to handle the case.",
+          "The report will be sent to WolneMoce administration. Briefly describe what the violation concerns and avoid adding sensitive data unless it is needed to handle the case.",
         icon: "fas fa-flag",
         source: "contact:company_project_abuse",
       },
@@ -393,7 +393,7 @@ const en: Dictionary = {
           "Inquiries go to the company panel in the 'Inquiries' tab. During the soft-launch phase, we recommend checking the panel regularly, as email notifications may run in test mode or be rolled out in stages.",
       },
       {
-        question: "Does WolneMoce.pl handle online payments?",
+        question: "Does WolneMoce handle online payments?",
         answer:
           "Not at this stage. The pricing shows the plan model, but online payments are in preparation. PRO and ENTERPRISE plans can be activated individually after contacting administration.",
       },
@@ -457,7 +457,7 @@ const en: Dictionary = {
     minimumOrder: "Minimum order",
     leadTime: "Lead time",
     toBeAgreed: "To be agreed",
-    imageAltFallback: "WolneMoce.pl offer",
+    imageAltFallback: "WolneMoce offer",
     galleryImageAltFallback: "Offer photo",
     parametersTitle: "Offer parameters",
     parametersDescription: "Key information for initial qualification.",
@@ -465,7 +465,7 @@ const en: Dictionary = {
     certificatesTitle: "Certificates and verification",
     aboutCompany: "About the company",
     companyDescriptionFallback:
-      "The company presents available capacity and handles B2B inquiries through WolneMoce.pl.",
+      "The company presents available capacity and handles B2B inquiries through WolneMoce.",
     companyWebsite: "Company website",
     similarLabel: "Similar offers",
     similarTitle: "See other available capacity",
@@ -475,7 +475,7 @@ const en: Dictionary = {
     ctaDescription: "Add an offer in the company panel and submit it for approval.",
     addOffer: "Add offer",
     contact: "Contact",
-    notFoundTitle: "Offer not found | WolneMoce.pl",
+    notFoundTitle: "Offer not found | WolneMoce",
     notFoundDescription: "The offer does not exist or is not publicly active.",
     rfqCta: "Send inquiry about this offer",
     rfqCtaMicrocopy: "The inquiry is free. Describe the scope, quantity, deadline, and add a technical attachment if you have one.",
@@ -521,10 +521,10 @@ const en: Dictionary = {
     noActiveOffers: "This company does not have active offers yet.",
     projectsTitle: "Examples of work",
     projectsDescription:
-      "Selected examples of work shown by the contractor. These are contractor declarations moderated by WolneMoce.pl before publication.",
+      "Selected examples of work shown by the contractor. These are contractor declarations moderated by WolneMoce before publication.",
     projectDeclarationLabel: "Contractor declaration",
     projectDeclarationDescription:
-      "The company declares that it completed this work. WolneMoce.pl moderates the content before publication, but does not confirm it as a formal client endorsement.",
+      "The company declares that it completed this work. WolneMoce moderates the content before publication, but does not confirm it as a formal client endorsement.",
     projectReportViolation: "Report a violation",
     projectOpenImage: "Open image",
     projectTechnologyLabel: "Technology / service",
@@ -545,8 +545,8 @@ const en: Dictionary = {
     downloadCertificate: "Download certificate",
     noCertificates: "The company has not added public certificates yet.",
     publicProfile: "Company profile",
-    notFoundTitle: "Company not found | WolneMoce.pl",
-    notFoundDescription: "The company profile was not found on WolneMoce.pl.",
+    notFoundTitle: "Company not found | WolneMoce",
+    notFoundDescription: "The company profile was not found on WolneMoce.",
   },
   blogDetail: {
     backToBlog: "Back to blog",
@@ -558,13 +558,13 @@ const en: Dictionary = {
     relatedArticles: "Related articles",
     readNext: "Read next",
     relatedDescription:
-      "Selected WolneMoce.pl blog materials for companies planning production cooperation.",
+      "Selected WolneMoce blog materials for companies planning production cooperation.",
     ctaTitle: "Turn insight into action",
     ctaDescription:
       "Browse current available-capacity offers or add your company's own offer.",
     browseOffers: "Browse offers",
     addOffer: "Add offer",
-    notFoundTitle: "Article not found | WolneMoce.pl blog",
+    notFoundTitle: "Article not found | WolneMoce blog",
     notFoundDescription: "The published blog article was not found.",
   },
   auth: {
@@ -609,7 +609,7 @@ const en: Dictionary = {
     terms: {
       title: "Terms of Service",
       description:
-        "Rules for using WolneMoce.pl, company accounts, offers, RFQ and partner services.",
+        "Rules for using WolneMoce, company accounts, offers, RFQ and partner services.",
       companyProjects: {
         title: "Examples of work",
         intro:
@@ -625,7 +625,7 @@ const en: Dictionary = {
     privacy: {
       title: "Privacy Policy",
       description:
-        "Information about personal data processing in WolneMoce.pl.",
+        "Information about personal data processing in WolneMoce.",
       companyProjects: {
         title: "Work descriptions and images",
         intro:
@@ -640,7 +640,7 @@ const en: Dictionary = {
     cookies: {
       title: "Cookie Policy",
       description:
-        "Information about cookies and similar technologies used by WolneMoce.pl.",
+        "Information about cookies and similar technologies used by WolneMoce.",
     },
   },
   howItWorks: {
@@ -726,7 +726,7 @@ const en: Dictionary = {
   },
   expert: {
     label: "Expert view",
-    title: "Why use WolneMoce.pl?",
+    title: "Why use WolneMoce?",
     description:
       "With long experience in production and supply chains, we see value in using available capacity more transparently.",
     features: [
@@ -744,7 +744,7 @@ const en: Dictionary = {
   },
   partners: {
     label: "Partners",
-    title: "WolneMoce.pl service partners",
+    title: "WolneMoce service partners",
     description:
       "Together with partners, we support companies in legal, accounting, process and supply-chain topics.",
     paidBadge: "Paid service / custom quote",
@@ -768,7 +768,7 @@ const en: Dictionary = {
     description:
       "See how companies use the portal to organize production cooperation.",
     items: [
-      { text: "WolneMoce.pl helped us find a manufacturer for an urgent batch of parts. The process was clear and professional.", author: "Andrzej Kowalski", role: "Operations Director, TechParts Sp. z o.o.", initials: "AK" },
+      { text: "WolneMoce helped us find a manufacturer for an urgent batch of parts. The process was clear and professional.", author: "Andrzej Kowalski", role: "Operations Director, TechParts Sp. z o.o.", initials: "AK" },
       { text: "Our available capacity is easier to show to the right B2B customers.", author: "Marta Nowak", role: "Owner, PlastForm S.A.", initials: "MN", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
       { text: "Company verification and clear profiles help us assess production partners faster.", author: "Piotr Wiśniewski", role: "Purchasing Manager, ElektroMax Sp. z o.o.", initials: "PW", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
     ],
@@ -791,7 +791,7 @@ const en: Dictionary = {
     home: {
       title: "Available production capacity portal",
       description:
-        "WolneMoce.pl connects companies looking for subcontractors with companies that have available production, warehouse, logistics and technical capacity.",
+        "WolneMoce connects companies looking for subcontractors with companies that have available production, warehouse, logistics and technical capacity.",
     },
     offers: {
       title: "Available production capacity offers",
@@ -799,23 +799,23 @@ const en: Dictionary = {
         "Browse active offers of available production, warehouse, logistics and technical capacity in Poland.",
     },
     companies: {
-      title: "Company directory | WolneMoce.pl",
+      title: "Company directory | WolneMoce",
       description:
         "Browse verified companies offering available production, logistics and technical capacity.",
     },
     howItWorks: {
       title: "How it works",
       description:
-        "See how WolneMoce.pl connects companies looking for contractors with companies that have available capacity.",
+        "See how WolneMoce connects companies looking for contractors with companies that have available capacity.",
     },
     pricing: {
       title: "Pricing",
       description:
-        "Static WolneMoce.pl pricing: FREE, PRO, ENTERPRISE and promotional add-ons.",
+        "Static WolneMoce pricing: FREE, PRO, ENTERPRISE and promotional add-ons.",
     },
     contact: {
       title: "Contact",
-      description: "WolneMoce.pl contact page with a contact form and FAQ.",
+      description: "WolneMoce contact page with a contact form and FAQ.",
     },
     blog: {
       title: "Blog",
@@ -900,9 +900,9 @@ const en: Dictionary = {
     offerForm: {
       metadata: {
         newTitle: "Add offer",
-        newDescription: "Add a company offer in the WolneMoce.pl panel.",
+        newDescription: "Add a company offer in the WolneMoce panel.",
         editTitle: "Edit offer",
-        editDescription: "Edit a company offer in the WolneMoce.pl panel.",
+        editDescription: "Edit a company offer in the WolneMoce panel.",
       },
       backToOffers: "Back to offers",
       eyebrowNew: "New offer",
@@ -1045,7 +1045,7 @@ const en: Dictionary = {
       fullNameLabel: "Full name:",
       companyStatus: "Company status",
       unverified: "Unverified company",
-      verificationInfo: "Company verification is performed by the WolneMoce.pl administrator.",
+      verificationInfo: "Company verification is performed by the WolneMoce administrator.",
       publicProfileLabel: "Public company profile:",
       companyDataDescription: "Complete the company details used in offers and inquiries.",
       nipLabel: "Tax ID",
@@ -1142,12 +1142,12 @@ const en: Dictionary = {
       accountDeletionTitle: "Account and company data deletion",
       accountDeletionStatus: "Manual request",
       accountDeletionDescription:
-        "Because WolneMoce.pl is a B2B platform and RFQ history may be important for your business partners, account deletion requires manual verification.",
+        "Because WolneMoce is a B2B platform and RFQ history may be important for your business partners, account deletion requires manual verification.",
       accountDeletionContactInstruction:
         "To permanently delete your account, anonymize personal data and withdraw public offers, contact us from the email address assigned to your account",
       accountDeletionTimeframe: "Requests are handled within up to 14 days.",
       accountDeletionCta: "Contact support",
-      accountDeletionMailSubject: "WolneMoce.pl account deletion",
+      accountDeletionMailSubject: "WolneMoce account deletion",
       accountDetailsTitle: "Account Details",
       accountDetailsDescription: "Manage the basic details of the person using the account. This data is not your public company profile.",
       fullNameLabel: "Full Name",

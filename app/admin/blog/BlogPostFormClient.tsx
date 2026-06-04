@@ -156,7 +156,7 @@ export default function BlogPostFormClient({
           </span>
           <input
             name="author_name"
-            defaultValue={post?.author_name ?? "WolneMoce.pl"}
+            defaultValue={post?.author_name ?? "WolneMoce"}
             className="w-full min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
           />
         </label>

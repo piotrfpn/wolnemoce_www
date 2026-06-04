@@ -17,7 +17,7 @@ export default function Footer({ locale = defaultLocale }: { locale?: Locale }) 
                 <i className="fas fa-industry"></i>
               </div>
               <div className="text-[22px] font-extrabold tracking-[-0.5px] text-white">
-                Wolne<span className="text-[#2d8a5e]">Moce</span>.pl
+                Wolne<span className="text-[#2d8a5e]">Moce</span>
               </div>
             </Link>
 

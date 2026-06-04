@@ -169,7 +169,7 @@ export async function generateBlogDetailMetadata({
     };
   }
 
-  const title = post.meta_title || `${post.title} | Blog WolneMoce.pl`;
+  const title = post.meta_title || `${post.title} | Blog WolneMoce`;
   const description = truncateSeoDescription(
     post.meta_description || post.excerpt || post.content
   );
@@ -185,7 +185,7 @@ export async function generateBlogDetailMetadata({
       title,
       description,
       url: `/blog/${slug}`,
-      siteName: "WolneMoce.pl",
+      siteName: "WolneMoce",
       type: "article",
       images: [
         {
@@ -256,7 +256,7 @@ export default async function BlogDetailView({
               </span>
               <span className="inline-flex items-center gap-2">
                 <i className="fas fa-user text-[#fbbf24]"></i>
-                {post.author_name ?? "WolneMoce.pl"}
+                {post.author_name ?? "WolneMoce"}
               </span>
             </div>
 

@@ -59,7 +59,7 @@ export default function UpdatePasswordClient() {
           Ustaw nowe hasło
         </h1>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          Wprowadź nowe hasło dla konta WolneMoce.pl.
+          Wprowadź nowe hasło dla konta WolneMoce.
         </p>
       </div>
 

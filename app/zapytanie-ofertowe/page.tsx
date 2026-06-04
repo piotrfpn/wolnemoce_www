@@ -8,7 +8,7 @@ import RfqRequestClient, { type RfqOffer } from "./RfqRequestClient";
 export const metadata: Metadata = {
   title: "Zapytanie ofertowe",
   description:
-    "Wyślij zapytanie ofertowe RFQ do aktywnej oferty w portalu WolneMoce.pl.",
+    "Wyślij zapytanie ofertowe RFQ do aktywnej oferty w portalu WolneMoce.",
 };
 
 type RfqRequestPageProps = {

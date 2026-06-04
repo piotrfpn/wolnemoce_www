@@ -9,7 +9,7 @@ import AdminOffersFiltersClient from "./AdminOffersFiltersClient";
 
 export const metadata: Metadata = {
   title: "Oferty | Panel administratora",
-  description: "Administracyjne zarządzanie ofertami w WolneMoce.pl.",
+  description: "Administracyjne zarządzanie ofertami w WolneMoce.",
 };
 
 type AdminOfferListItem = {

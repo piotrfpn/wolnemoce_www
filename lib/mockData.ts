@@ -444,7 +444,7 @@ export const blogArticles: BlogArticle[] = [
     slug: "jak-efektywnie-outsourcingowac-produkcje-2026",
     category: "Poradnik",
     date: "15 kwi 2026",
-    author: "Zespół WolneMoce.pl",
+    author: "Zespół WolneMoce",
     readTime: "8 min",
     excerpt:
       "Najważniejsze kryteria wyboru podwykonawcy, od zapytania ofertowego po kontrolę jakości.",
@@ -463,7 +463,7 @@ export const blogArticles: BlogArticle[] = [
         <li>realny termin uruchomienia współpracy.</li>
       </ul>
       <h3>Wnioski dla firm B2B</h3>
-      <p>Dobrze przygotowane zapytanie skraca rozmowy handlowe i zmniejsza ryzyko opóźnień. WolneMoce.pl ma docelowo pomagać zebrać te informacje w jednym miejscu.</p>
+      <p>Dobrze przygotowane zapytanie skraca rozmowy handlowe i zmniejsza ryzyko opóźnień. WolneMoce ma docelowo pomagać zebrać te informacje w jednym miejscu.</p>
     `,
   },
   {
@@ -472,7 +472,7 @@ export const blogArticles: BlogArticle[] = [
     slug: "zwiekszenie-produkcji-bez-inwestycji-w-maszyny",
     category: "Case Study",
     date: "10 kwi 2026",
-    author: "Zespół WolneMoce.pl",
+    author: "Zespół WolneMoce",
     readTime: "12 min",
     excerpt:
       "Jak firma B2B zrealizowała rekordowy kontrakt dzięki wolnym mocom u partnera.",
@@ -500,7 +500,7 @@ export const blogArticles: BlogArticle[] = [
     slug: "trendy-w-polskim-przemysle-produkcyjnym",
     category: "Trendy",
     date: "5 kwi 2026",
-    author: "Zespół WolneMoce.pl",
+    author: "Zespół WolneMoce",
     readTime: "6 min",
     excerpt:
       "Automatyzacja, krótsze serie, odporne łańcuchy dostaw i większa specjalizacja zakładów.",
@@ -520,7 +520,7 @@ export const blogArticles: BlogArticle[] = [
       <h2>Dlaczego to ważne?</h2>
       <p>Firmy, które potrafią szybko znaleźć sprawdzonego partnera, mogą lepiej obsługiwać zmienny popyt i unikać kosztownych przestojów.</p>
       <h3>Rola marketplace B2B</h3>
-      <p>Statyczny MVP WolneMoce.pl pokazuje kierunek: uporządkowane oferty, parametry współpracy i łatwiejszy kontakt między firmami.</p>
+      <p>Statyczny MVP WolneMoce pokazuje kierunek: uporządkowane oferty, parametry współpracy i łatwiejszy kontakt między firmami.</p>
     `,
   },
 ];
@@ -626,7 +626,7 @@ export const faqs = [
       "Tak. W planie FREE firma może mieć jedną ofertę oczekującą lub aktywną. Kolejne oferty wymagają wyższego planu lub kontaktu z administracją.",
   },
   {
-    question: "Czy WolneMoce.pl obsługuje płatności?",
+    question: "Czy WolneMoce obsługuje płatności?",
     answer:
       "Nie w tym sprincie. Cennik jest statyczną prezentacją modelu biznesowego.",
   },

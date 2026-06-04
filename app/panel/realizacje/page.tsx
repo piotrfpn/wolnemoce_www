@@ -8,7 +8,7 @@ import ProjectActionsClient from "./ProjectActionsClient";
 
 export const metadata: Metadata = {
   title: "Przykłady realizacji",
-  description: "Zarządzaj przykładami realizacji swojej firmy w panelu WolneMoce.pl.",
+  description: "Zarządzaj przykładami realizacji swojej firmy w panelu WolneMoce.",
 };
 
 export const dynamic = "force-dynamic";

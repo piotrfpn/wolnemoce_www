@@ -50,7 +50,7 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
             <i className="fas fa-industry"></i>
           </div>
           <div className="text-[22px] font-extrabold tracking-[-0.5px] text-slate-800">
-            Wolne<span className="text-[#1a5f3c]">Moce</span>.pl
+            Wolne<span className="text-[#1a5f3c]">Moce</span>
           </div>
         </Link>
 

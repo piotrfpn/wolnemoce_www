@@ -277,7 +277,7 @@ export async function generateCompanyDetailMetadata({
   const description =
     company.description ||
     [industries, location, t.publicProfile].filter(Boolean).join(" - ");
-  const title = `${company.name} | ${t.publicProfile} | WolneMoce.pl`;
+  const title = `${company.name} | ${t.publicProfile} | WolneMoce`;
   const seoDescription = truncateSeoDescription(description);
 
   return {
@@ -290,14 +290,14 @@ export async function generateCompanyDetailMetadata({
       title,
       description: seoDescription,
       url: `/firmy/${slug}`,
-      siteName: "WolneMoce.pl",
+      siteName: "WolneMoce",
       type: "profile",
       images: [
         {
           url: getAbsoluteUrl("/images/offers/automation.jpg"),
           width: 1200,
           height: 630,
-          alt: `${company.name} - profil firmy w WolneMoce.pl`,
+          alt: `${company.name} - profil firmy w WolneMoce`,
         },
       ],
     },

@@ -471,7 +471,7 @@ export default function ProjectFormClient({
           {mode === "new" ? "Dodaj przykład realizacji" : "Edytuj przykład realizacji"}
         </h1>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          To deklaracja wykonawcy. WolneMoce.pl moderuje treść przed publikacją,
+          To deklaracja wykonawcy. WolneMoce moderuje treść przed publikacją,
           ale nie potwierdza jej jako formalnego poświadczenia klienta.
         </p>
       </div>

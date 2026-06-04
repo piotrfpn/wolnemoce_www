@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Monitoring RFQ | Panel administratora",
-  description: "Podstawowy monitoring zapytań ofertowych RFQ w panelu administratora WolneMoce.pl.",
+  description: "Podstawowy monitoring zapytań ofertowych RFQ w panelu administratora WolneMoce.",
 };
 
 export const dynamic = "force-dynamic";

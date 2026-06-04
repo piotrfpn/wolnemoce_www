@@ -39,7 +39,7 @@ type FreeLimitCompanySummary = {
 
 export const metadata: Metadata = {
   title: "Panel administratora",
-  description: "Panel administratora WolneMoce.pl.",
+  description: "Panel administratora WolneMoce.",
 };
 
 export default async function AdminPage() {
@@ -186,7 +186,7 @@ export default async function AdminPage() {
                   Panel administratora
                 </h1>
                 <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-500">
-                  Moderuj oferty i zgłoszenia usług w WolneMoce.pl. Zalogowano
+                  Moderuj oferty i zgłoszenia usług w WolneMoce. Zalogowano
                   jako admin: {user.email}
                 </p>
               </div>

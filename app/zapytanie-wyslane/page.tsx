@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 export const metadata: Metadata = {
   title: "Zapytanie wysłane",
   description:
-    "Ekran sukcesu formularza zapytania ofertowego WolneMoce.pl.",
+    "Ekran sukcesu formularza zapytania ofertowego WolneMoce.",
 };
 
 export default function RfqSentPage() {
@@ -25,7 +25,7 @@ export default function RfqSentPage() {
               Dziękujemy. Zapytanie zostało wysłane do firmy.
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/85">
-              Firma zobaczy je w panelu WolneMoce.pl.
+              Firma zobaczy je w panelu WolneMoce.
             </p>
           </div>
         </section>
@@ -37,7 +37,7 @@ export default function RfqSentPage() {
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-500">
               Wróć do listy ofert, dodaj własną ofertę wolnych mocy albo
-              skontaktuj się z zespołem WolneMoce.pl.
+              skontaktuj się z zespołem WolneMoce.
             </p>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:justify-center">

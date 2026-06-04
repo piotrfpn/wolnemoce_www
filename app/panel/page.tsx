@@ -11,7 +11,7 @@ import { getPanelLocale } from "@/lib/i18n/panelLocale";
 
 export const metadata: Metadata = {
   title: "Panel firmy",
-  description: "Panel użytkownika WolneMoce.pl.",
+  description: "Panel użytkownika WolneMoce.",
 };
 
 

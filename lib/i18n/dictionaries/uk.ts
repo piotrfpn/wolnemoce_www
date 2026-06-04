@@ -44,7 +44,7 @@ const uk: Dictionary = {
       "Отримуйте нові пропозиції та експертні статті електронною поштою.",
     emailPlaceholder: "Ваш email",
     newsletterSubmit: "Підписатися",
-    rights: "© 2026 WolneMoce.pl. Усі права захищено.",
+    rights: "© 2026 WolneMoce. Усі права захищено.",
     partnerPage: "Сайт партнера",
   },
   hero: {
@@ -136,7 +136,7 @@ const uk: Dictionary = {
     serviceTypeLabel: "Послуга",
     locationLabel: "Локація",
     companyFallback: "Компанія",
-    offerFallback: "Пропозиція WolneMoce.pl",
+    offerFallback: "Пропозиція WolneMoce",
     capacityFallback: "вільні потужності",
     countryFallback: "Польща",
     industryFallback: "Галузь",
@@ -254,7 +254,7 @@ const uk: Dictionary = {
     addOffer: "Додати пропозицію",
     sectionLabel: "Дві сторони ринку",
     sectionTitle: "Процес, адаптований до ролі компанії",
-    sectionDescription: "WolneMoce.pl упорядковує комунікацію між замовником і компанією, яка може прийняти додаткову роботу.",
+    sectionDescription: "WolneMoce упорядковує комунікацію між замовником і компанією, яка може прийняти додаткову роботу.",
     buyerTitle: "Компанія шукає підрядника",
     supplierTitle: "Компанія має вільні потужності",
     buyerSteps: ["Опишіть виробничу потребу", "Перегляньте відповідні пропозиції", "Зв’яжіться з вибраною компанією", "Узгодьте обсяг і почніть співпрацю"],
@@ -271,7 +271,7 @@ const uk: Dictionary = {
   addOfferPage: {
     seoTitle: "Додати пропозицію",
     seoDescription:
-      "Додайте пропозицію вільних виробничих потужностей після створення облікового запису компанії на WolneMoce.pl.",
+      "Додайте пропозицію вільних виробничих потужностей після створення облікового запису компанії на WolneMoce.",
     heroLabel: "Додати пропозицію",
     title: "Додати пропозицію",
     subtitle:
@@ -321,7 +321,7 @@ const uk: Dictionary = {
         label: "Сервісний партнер",
         subject: "Бухгалтерсько-правова підтримка Credos",
         description:
-          "Запит стосується платної партнерської підтримки Credos у бухгалтерських, юридичних і формальних питаннях B2B-співпраці. Послуга не входить автоматично до планів WolneMoce.pl і потребує окремого узгодження обсягу та ціни.",
+          "Запит стосується платної партнерської підтримки Credos у бухгалтерських, юридичних і формальних питаннях B2B-співпраці. Послуга не входить автоматично до планів WolneMoce і потребує окремого узгодження обсягу та ціни.",
       },
       logimarket: {
         ...en.contactPage.partnerTopics.logimarket,
@@ -335,7 +335,7 @@ const uk: Dictionary = {
         label: "Контакт з адміністратором",
         subject: "Контакт з адміністратором",
         description:
-          "Повідомлення потрапить до адміністрації WolneMoce.pl. Використовуйте цей контакт для питань акаунта, профілю компанії, пропозицій, RFQ або підтримки панелі.",
+          "Повідомлення потрапить до адміністрації WolneMoce. Використовуйте цей контакт для питань акаунта, профілю компанії, пропозицій, RFQ або підтримки панелі.",
       },
       "wyroznienie-oferty": {
         label: "Виділена пропозиція",
@@ -364,7 +364,7 @@ const uk: Dictionary = {
           "Запити надходять у панель компанії на вкладці 'Запити'. Під час етапу soft-launch ми рекомендуємо регулярно перевіряти панель, оскільки сповіщення електронною поштою можуть працювати в тестовому режимі або розгортатися поетапно.",
       },
       {
-        question: "Чи підтримує WolneMoce.pl онлайн-платежі?",
+        question: "Чи підтримує WolneMoce онлайн-платежі?",
         answer:
           "Не на цьому етапі. Ціни показують модель планів, але онлайн-платежі знаходяться в стадії підготовки. Плани PRO та ENTERPRISE можна активувати індивідуально після звернення до адміністрації.",
       },
@@ -426,7 +426,7 @@ const uk: Dictionary = {
     minimumOrder: "Мінімальне замовлення",
     leadTime: "Термін виконання",
     toBeAgreed: "За домовленістю",
-    imageAltFallback: "Пропозиція WolneMoce.pl",
+    imageAltFallback: "Пропозиція WolneMoce",
     galleryImageAltFallback: "Фото пропозиції",
     parametersTitle: "Параметри пропозиції",
     parametersDescription: "Ключова інформація для первинної оцінки.",
@@ -434,7 +434,7 @@ const uk: Dictionary = {
     certificatesTitle: "Сертифікати та перевірка",
     aboutCompany: "Про компанію",
     companyDescriptionFallback:
-      "Компанія представляє вільні потужності та обробляє B2B-запити через WolneMoce.pl.",
+      "Компанія представляє вільні потужності та обробляє B2B-запити через WolneMoce.",
     companyWebsite: "Сайт компанії",
     similarLabel: "Схожі пропозиції",
     similarTitle: "Перегляньте інші потужності",
@@ -445,7 +445,7 @@ const uk: Dictionary = {
       "Додайте пропозицію в панелі компанії та надішліть її на затвердження.",
     addOffer: "Додати пропозицію",
     contact: "Контакт",
-    notFoundTitle: "Пропозицію не знайдено | WolneMoce.pl",
+    notFoundTitle: "Пропозицію не знайдено | WolneMoce",
     notFoundDescription:
       "Пропозиція не існує або не є публічно активною.",
     rfqCta: "Надіслати запит щодо цієї пропозиції",
@@ -507,9 +507,9 @@ const uk: Dictionary = {
     downloadCertificate: "Завантажити сертифікат",
     noCertificates: "Компанія ще не додала публічних сертифікатів.",
     publicProfile: "Профіль компанії",
-    notFoundTitle: "Компанію не знайдено | WolneMoce.pl",
+    notFoundTitle: "Компанію не знайдено | WolneMoce",
     notFoundDescription:
-      "Профіль компанії не знайдено на WolneMoce.pl.",
+      "Профіль компанії не знайдено на WolneMoce.",
   },
   blogDetail: {
     ...en.blogDetail,
@@ -522,13 +522,13 @@ const uk: Dictionary = {
     relatedArticles: "Схожі статті",
     readNext: "Читати далі",
     relatedDescription:
-      "Вибрані матеріали блогу WolneMoce.pl для компаній, які планують виробничу співпрацю.",
+      "Вибрані матеріали блогу WolneMoce для компаній, які планують виробничу співпрацю.",
     ctaTitle: "Перейдіть від знань до дії",
     ctaDescription:
       "Перегляньте актуальні пропозиції вільних потужностей або додайте власну пропозицію компанії.",
     browseOffers: "Переглянути пропозиції",
     addOffer: "Додати пропозицію",
-    notFoundTitle: "Статтю не знайдено | Блог WolneMoce.pl",
+    notFoundTitle: "Статтю не знайдено | Блог WolneMoce",
     notFoundDescription: "Опубліковану статтю блогу не знайдено.",
   },
   auth: {
@@ -573,19 +573,19 @@ const uk: Dictionary = {
     terms: {
       title: "Умови сервісу",
       description:
-        "Правила користування WolneMoce.pl, акаунтами компаній, пропозиціями, RFQ та партнерськими послугами.",
+        "Правила користування WolneMoce, акаунтами компаній, пропозиціями, RFQ та партнерськими послугами.",
       companyProjects: en.legal.terms.companyProjects,
     },
     privacy: {
       title: "Політика конфіденційності",
       description:
-        "Інформація про обробку персональних даних у WolneMoce.pl.",
+        "Інформація про обробку персональних даних у WolneMoce.",
       companyProjects: en.legal.privacy.companyProjects,
     },
     cookies: {
       title: "Політика cookies",
       description:
-        "Інформація про cookies та подібні технології, що використовуються WolneMoce.pl.",
+        "Інформація про cookies та подібні технології, що використовуються WolneMoce.",
     },
   },
   howItWorks: {
@@ -671,7 +671,7 @@ const uk: Dictionary = {
   },
   expert: {
     label: "Погляд експерта",
-    title: "Чому варто використовувати WolneMoce.pl?",
+    title: "Чому варто використовувати WolneMoce?",
     description:
       "З досвідом у виробництві та ланцюгах постачання ми бачимо цінність у прозорішому використанні доступних потужностей.",
     features: [
@@ -690,7 +690,7 @@ const uk: Dictionary = {
   partners: {
     ...en.partners,
     label: "Партнери",
-    title: "Сервісні партнери WolneMoce.pl",
+    title: "Сервісні партнери WolneMoce",
     paidBadge: "Платна послуга / індивідуальна оцінка",
     website: "Сайт партнера",
     items: pl.partners.items.map((item) => ({
@@ -708,7 +708,7 @@ const uk: Dictionary = {
     description:
       "Подивіться, як компанії використовують портал для організації виробничої співпраці.",
     items: [
-      { text: "WolneMoce.pl допоміг нам знайти виробника для термінової серії деталей. Процес був зрозумілим і професійним.", author: "Andrzej Kowalski", role: "Операційний директор, TechParts Sp. z o.o.", initials: "AK" },
+      { text: "WolneMoce допоміг нам знайти виробника для термінової серії деталей. Процес був зрозумілим і професійним.", author: "Andrzej Kowalski", role: "Операційний директор, TechParts Sp. z o.o.", initials: "AK" },
       { text: "Нам легше показувати свої доступні потужності відповідним B2B-клієнтам.", author: "Marta Nowak", role: "Власниця, PlastForm S.A.", initials: "MN", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
       { text: "Перевірка компаній і зрозумілі профілі допомагають нам швидше оцінювати виробничих партнерів.", author: "Piotr Wiśniewski", role: "Керівник закупівель, ElektroMax Sp. z o.o.", initials: "PW", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
     ],
@@ -732,12 +732,12 @@ const uk: Dictionary = {
     home: {
       title: "Портал вільних виробничих потужностей",
       description:
-        "WolneMoce.pl поєднує компанії, що шукають підрядників, із компаніями з вільними виробничими, складськими, логістичними та технічними потужностями.",
+        "WolneMoce поєднує компанії, що шукають підрядників, із компаніями з вільними виробничими, складськими, логістичними та технічними потужностями.",
     },
     pricing: {
       title: "Ціни",
       description:
-        "Статична сторінка цін WolneMoce.pl: FREE, PRO, ENTERPRISE і додаткові опції.",
+        "Статична сторінка цін WolneMoce: FREE, PRO, ENTERPRISE і додаткові опції.",
     },
   },
   panel: {
@@ -817,9 +817,9 @@ const uk: Dictionary = {
     offerForm: {
       metadata: {
         newTitle: "Додати пропозицію",
-        newDescription: "Додайте пропозицію компанії в панелі WolneMoce.pl.",
+        newDescription: "Додайте пропозицію компанії в панелі WolneMoce.",
         editTitle: "Редагувати пропозицію",
-        editDescription: "Редагуйте пропозицію компанії в панелі WolneMoce.pl.",
+        editDescription: "Редагуйте пропозицію компанії в панелі WolneMoce.",
       },
       backToOffers: "Повернутися до пропозицій",
       eyebrowNew: "Нова пропозиція",
@@ -964,7 +964,7 @@ const uk: Dictionary = {
       fullNameLabel: "Ім'я та прізвище:",
       companyStatus: "Статус компанії",
       unverified: "Неперевірена компанія",
-      verificationInfo: "Перевірка компанії здійснюється адміністратором WolneMoce.pl.",
+      verificationInfo: "Перевірка компанії здійснюється адміністратором WolneMoce.",
       publicProfileLabel: "Публічний профіль компанії:",
       companyDataDescription: "Заповніть дані компанії, які будуть використовуватися в пропозиціях та запитах.",
       nipLabel: "Податковий номер (NIP)",
@@ -1002,12 +1002,12 @@ const uk: Dictionary = {
       accountDeletionTitle: "Видалення облікового запису та даних компанії",
       accountDeletionStatus: "За зверненням",
       accountDeletionDescription:
-        "Оскільки WolneMoce.pl є B2B-платформою, а історія запитів пропозицій може бути важливою для ваших бізнес-партнерів, видалення облікового запису потребує ручної перевірки.",
+        "Оскільки WolneMoce є B2B-платформою, а історія запитів пропозицій може бути важливою для ваших бізнес-партнерів, видалення облікового запису потребує ручної перевірки.",
       accountDeletionContactInstruction:
         "Щоб остаточно видалити обліковий запис, анонімізувати персональні дані та відкликати публічні пропозиції, зв'яжіться з нами з електронної адреси, прив'язаної до вашого облікового запису",
       accountDeletionTimeframe: "Звернення обробляються протягом до 14 днів.",
       accountDeletionCta: "Зв'язатися з підтримкою",
-      accountDeletionMailSubject: "Видалення облікового запису WolneMoce.pl",
+      accountDeletionMailSubject: "Видалення облікового запису WolneMoce",
       accountDetailsTitle: "Дані облікового запису",
       accountDetailsDescription: "Керуйте основними даними особи, яка використовує обліковий запис. Ці дані не є вашим загальнодоступним профілем компанії.",
       fullNameLabel: "Повне ім'я",

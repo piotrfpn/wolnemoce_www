@@ -14,7 +14,7 @@ type CompanyCertificate =
 
 export const metadata: Metadata = {
   title: "Profil firmy",
-  description: "Uzupełnij profil firmy w panelu WolneMoce.pl.",
+  description: "Uzupełnij profil firmy w panelu WolneMoce.",
 };
 
 export const dynamic = "force-dynamic";

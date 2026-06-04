@@ -44,7 +44,7 @@ const de: Dictionary = {
       "Erhalten Sie neue Angebote und Fachartikel direkt per E-Mail.",
     emailPlaceholder: "Ihre E-Mail",
     newsletterSubmit: "Newsletter abonnieren",
-    rights: "© 2026 WolneMoce.pl. Alle Rechte vorbehalten.",
+    rights: "© 2026 WolneMoce. Alle Rechte vorbehalten.",
     partnerPage: "Partnerseite",
   },
   hero: {
@@ -136,7 +136,7 @@ const de: Dictionary = {
     serviceTypeLabel: "Dienstleistung",
     locationLabel: "Standort",
     companyFallback: "Firma",
-    offerFallback: "WolneMoce.pl-Angebot",
+    offerFallback: "WolneMoce-Angebot",
     capacityFallback: "freie Kapazitäten",
     countryFallback: "Polen",
     industryFallback: "Branche",
@@ -258,7 +258,7 @@ const de: Dictionary = {
     sectionLabel: "Zwei Marktseiten",
     sectionTitle: "Ein Prozess passend zur Firmenrolle",
     sectionDescription:
-      "WolneMoce.pl ordnet die Kommunikation zwischen Auftraggeber und Firma, die zusätzliche Arbeit übernehmen kann.",
+      "WolneMoce ordnet die Kommunikation zwischen Auftraggeber und Firma, die zusätzliche Arbeit übernehmen kann.",
     buyerTitle: "Firma sucht Subunternehmer",
     supplierTitle: "Firma mit freien Kapazitäten",
     buyerSteps: ["Produktionsbedarf beschreiben", "Passende Angebote ansehen", "Ausgewählte Firma kontaktieren", "Umfang abstimmen und Zusammenarbeit starten"],
@@ -276,7 +276,7 @@ const de: Dictionary = {
   addOfferPage: {
     seoTitle: "Angebot hinzufügen",
     seoDescription:
-      "Fügen Sie nach Erstellung eines Firmenkontos bei WolneMoce.pl ein Angebot für freie Produktionskapazitäten hinzu.",
+      "Fügen Sie nach Erstellung eines Firmenkontos bei WolneMoce ein Angebot für freie Produktionskapazitäten hinzu.",
     heroLabel: "Angebot hinzufügen",
     title: "Angebot hinzufügen",
     subtitle:
@@ -327,21 +327,21 @@ const de: Dictionary = {
         label: "Servicepartner",
         subject: "Credos Buchhaltungs- und Rechtsunterstützung",
         description:
-          "Diese Anfrage betrifft bezahlte Partnerunterstützung von Credos in Buchhaltung, Recht und formaler B2B-Abwicklung. Die Leistung ist nicht automatisch in WolneMoce.pl-Plänen enthalten und erfordert separate Abstimmung von Umfang und Preis.",
+          "Diese Anfrage betrifft bezahlte Partnerunterstützung von Credos in Buchhaltung, Recht und formaler B2B-Abwicklung. Die Leistung ist nicht automatisch in WolneMoce-Plänen enthalten und erfordert separate Abstimmung von Umfang und Preis.",
       },
       logimarket: {
         ...en.contactPage.partnerTopics.logimarket,
         label: "Servicepartner",
         subject: "LogiMarket Prozess- und Lieferkettenberatung",
         description:
-          "Diese Anfrage betrifft bezahlte LogiMarket-Beratung für Prozesse, Produktionsoutsourcing, RFQ, Make-or-Buy und Lieferkette. Die Leistung ist nicht automatisch in WolneMoce.pl-Plänen enthalten und erfordert separate Abstimmung.",
+          "Diese Anfrage betrifft bezahlte LogiMarket-Beratung für Prozesse, Produktionsoutsourcing, RFQ, Make-or-Buy und Lieferkette. Die Leistung ist nicht automatisch in WolneMoce-Plänen enthalten und erfordert separate Abstimmung.",
       },
       administracja: {
         ...en.contactPage.partnerTopics.administracja,
         label: "Kontakt zur Administration",
         subject: "Kontakt zur Administration",
         description:
-          "Die Nachricht geht an die Administration von WolneMoce.pl. Nutzen Sie diesen Kontakt für Konto, Firmenprofil, Angebote, RFQ-Anfragen oder Panel-Support.",
+          "Die Nachricht geht an die Administration von WolneMoce. Nutzen Sie diesen Kontakt für Konto, Firmenprofil, Angebote, RFQ-Anfragen oder Panel-Support.",
       },
       "wyroznienie-oferty": {
         label: "Hervorgehobenes Angebot",
@@ -370,7 +370,7 @@ const de: Dictionary = {
           "Anfragen gehen in das Unternehmens-Panel unter 'Anfragen'. Während der Soft-Launch-Phase empfehlen wir, das Panel regelmäßig zu überprüfen, da E-Mail-Benachrichtigungen im Testmodus laufen oder schrittweise eingeführt werden können.",
       },
       {
-        question: "Unterstützt WolneMoce.pl Online-Zahlungen?",
+        question: "Unterstützt WolneMoce Online-Zahlungen?",
         answer:
           "In dieser Phase nicht. Die Preisgestaltung zeigt das Planmodell, aber Online-Zahlungen sind in Vorbereitung. PRO- und ENTERPRISE-Pläne können nach Kontaktaufnahme mit der Verwaltung individuell aktiviert werden.",
       },
@@ -433,7 +433,7 @@ const de: Dictionary = {
     minimumOrder: "Mindestbestellung",
     leadTime: "Lieferzeit",
     toBeAgreed: "Nach Vereinbarung",
-    imageAltFallback: "Angebot auf WolneMoce.pl",
+    imageAltFallback: "Angebot auf WolneMoce",
     galleryImageAltFallback: "Angebotsfoto",
     parametersTitle: "Angebotsparameter",
     parametersDescription: "Wichtige Informationen für die erste Qualifizierung.",
@@ -441,7 +441,7 @@ const de: Dictionary = {
     certificatesTitle: "Zertifikate und Verifizierung",
     aboutCompany: "Über die Firma",
     companyDescriptionFallback:
-      "Die Firma präsentiert freie Kapazitäten und bearbeitet B2B-Anfragen über WolneMoce.pl.",
+      "Die Firma präsentiert freie Kapazitäten und bearbeitet B2B-Anfragen über WolneMoce.",
     companyWebsite: "Website der Firma",
     similarLabel: "Ähnliche Angebote",
     similarTitle: "Weitere Kapazitäten ansehen",
@@ -452,7 +452,7 @@ const de: Dictionary = {
       "Fügen Sie ein Angebot im Firmenbereich hinzu und senden Sie es zur Freigabe.",
     addOffer: "Angebot hinzufügen",
     contact: "Kontakt",
-    notFoundTitle: "Angebot nicht gefunden | WolneMoce.pl",
+    notFoundTitle: "Angebot nicht gefunden | WolneMoce",
     notFoundDescription:
       "Das Angebot existiert nicht oder ist nicht öffentlich aktiv.",
     rfqCta: "Senden Sie eine Anfrage zu diesem Angebot",
@@ -515,9 +515,9 @@ const de: Dictionary = {
     noCertificates:
       "Die Firma hat noch keine öffentlichen Zertifikate hinzugefügt.",
     publicProfile: "Firmenprofil",
-    notFoundTitle: "Firma nicht gefunden | WolneMoce.pl",
+    notFoundTitle: "Firma nicht gefunden | WolneMoce",
     notFoundDescription:
-      "Das Firmenprofil wurde auf WolneMoce.pl nicht gefunden.",
+      "Das Firmenprofil wurde auf WolneMoce nicht gefunden.",
   },
   blogDetail: {
     ...en.blogDetail,
@@ -530,13 +530,13 @@ const de: Dictionary = {
     relatedArticles: "Ähnliche Artikel",
     readNext: "Weiterlesen",
     relatedDescription:
-      "Ausgewählte Inhalte aus dem WolneMoce.pl-Blog für Firmen, die Produktionskooperationen planen.",
+      "Ausgewählte Inhalte aus dem WolneMoce-Blog für Firmen, die Produktionskooperationen planen.",
     ctaTitle: "Von Wissen zu konkretem Handeln",
     ctaDescription:
       "Sehen Sie aktuelle Angebote freier Kapazitäten an oder fügen Sie ein eigenes Firmenangebot hinzu.",
     browseOffers: "Angebote ansehen",
     addOffer: "Angebot hinzufügen",
-    notFoundTitle: "Artikel nicht gefunden | Blog WolneMoce.pl",
+    notFoundTitle: "Artikel nicht gefunden | Blog WolneMoce",
     notFoundDescription:
       "Der veröffentlichte Blogartikel wurde nicht gefunden.",
   },
@@ -583,19 +583,19 @@ const de: Dictionary = {
     terms: {
       title: "Nutzungsbedingungen",
       description:
-        "Regeln für die Nutzung von WolneMoce.pl, Firmenkonten, Angeboten, RFQ und Partnerdiensten.",
+        "Regeln für die Nutzung von WolneMoce, Firmenkonten, Angeboten, RFQ und Partnerdiensten.",
       companyProjects: en.legal.terms.companyProjects,
     },
     privacy: {
       title: "Datenschutzerklärung",
       description:
-        "Informationen zur Verarbeitung personenbezogener Daten bei WolneMoce.pl.",
+        "Informationen zur Verarbeitung personenbezogener Daten bei WolneMoce.",
       companyProjects: en.legal.privacy.companyProjects,
     },
     cookies: {
       title: "Cookie-Richtlinie",
       description:
-        "Informationen zu Cookies und ähnlichen Technologien bei WolneMoce.pl.",
+        "Informationen zu Cookies und ähnlichen Technologien bei WolneMoce.",
     },
   },
   howItWorks: {
@@ -682,7 +682,7 @@ const de: Dictionary = {
   },
   expert: {
     label: "Expertenblick",
-    title: "Warum WolneMoce.pl nutzen?",
+    title: "Warum WolneMoce nutzen?",
     description:
       "Mit Erfahrung in Produktion und Lieferketten sehen wir den Wert darin, freie Kapazitäten transparenter zu nutzen.",
     features: [
@@ -701,7 +701,7 @@ const de: Dictionary = {
   partners: {
     ...en.partners,
     label: "Partner",
-    title: "Servicepartner von WolneMoce.pl",
+    title: "Servicepartner von WolneMoce",
     description:
       "Gemeinsam mit Partnern unterstützen wir Firmen in Rechts-, Buchhaltungs-, Prozess- und Lieferkettenthemen.",
     paidBadge: "Bezahlte Leistung / individuelle Kalkulation",
@@ -725,7 +725,7 @@ const de: Dictionary = {
     description:
       "Sehen Sie, wie Unternehmen das Portal nutzen, um Produktionskooperationen zu organisieren.",
     items: [
-      { text: "WolneMoce.pl half uns, einen Hersteller für eine dringende Teile-Serie zu finden. Der Prozess war klar und professionell.", author: "Andrzej Kowalski", role: "Operations Director, TechParts Sp. z o.o.", initials: "AK" },
+      { text: "WolneMoce half uns, einen Hersteller für eine dringende Teile-Serie zu finden. Der Prozess war klar und professionell.", author: "Andrzej Kowalski", role: "Operations Director, TechParts Sp. z o.o.", initials: "AK" },
       { text: "Unsere freien Kapazitäten können wir den passenden B2B-Kunden leichter zeigen.", author: "Marta Nowak", role: "Inhaberin, PlastForm S.A.", initials: "MN", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
       { text: "Firmenverifizierung und klare Profile helfen uns, Produktionspartner schneller zu bewerten.", author: "Piotr Wiśniewski", role: "Einkaufsleiter, ElektroMax Sp. z o.o.", initials: "PW", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
     ],
@@ -749,12 +749,12 @@ const de: Dictionary = {
     home: {
       title: "Portal für freie Produktionskapazitäten",
       description:
-        "WolneMoce.pl verbindet Firmen, die Subunternehmer suchen, mit Firmen mit freien Produktions-, Lager-, Logistik- und technischen Kapazitäten.",
+        "WolneMoce verbindet Firmen, die Subunternehmer suchen, mit Firmen mit freien Produktions-, Lager-, Logistik- und technischen Kapazitäten.",
     },
     pricing: {
       title: "Preise",
       description:
-        "Statische Preisübersicht von WolneMoce.pl: FREE, PRO, ENTERPRISE und zusätzliche Optionen.",
+        "Statische Preisübersicht von WolneMoce: FREE, PRO, ENTERPRISE und zusätzliche Optionen.",
     },
   },
   panel: {
@@ -834,9 +834,9 @@ const de: Dictionary = {
     offerForm: {
       metadata: {
         newTitle: "Angebot hinzufügen",
-        newDescription: "Fügen Sie ein Firmenangebot im Panel von WolneMoce.pl hinzu.",
+        newDescription: "Fügen Sie ein Firmenangebot im Panel von WolneMoce hinzu.",
         editTitle: "Angebot bearbeiten",
-        editDescription: "Bearbeiten Sie ein Firmenangebot im Panel von WolneMoce.pl.",
+        editDescription: "Bearbeiten Sie ein Firmenangebot im Panel von WolneMoce.",
       },
       backToOffers: "Zurück zu den Angeboten",
       eyebrowNew: "Neues Angebot",
@@ -981,7 +981,7 @@ const de: Dictionary = {
       fullNameLabel: "Vor- und Nachname:",
       companyStatus: "Firmenstatus",
       unverified: "Ungeprüftes Unternehmen",
-      verificationInfo: "Die Überprüfung des Unternehmens wird durch den Administrator von WolneMoce.pl durchgeführt.",
+      verificationInfo: "Die Überprüfung des Unternehmens wird durch den Administrator von WolneMoce durchgeführt.",
       publicProfileLabel: "Öffentliches Firmenprofil:",
       companyDataDescription: "Vervollständigen Sie die Firmendaten, die bei Angeboten und Anfragen verwendet werden.",
       nipLabel: "Steuernummer (NIP)",
@@ -1019,12 +1019,12 @@ const de: Dictionary = {
       accountDeletionTitle: "Löschung des Kontos und der Firmendaten",
       accountDeletionStatus: "Manuelle Prüfung",
       accountDeletionDescription:
-        "Da WolneMoce.pl eine B2B-Plattform ist und die RFQ-Historie für Ihre Geschäftspartner relevant sein kann, erfordert die Kontolöschung eine manuelle Prüfung.",
+        "Da WolneMoce eine B2B-Plattform ist und die RFQ-Historie für Ihre Geschäftspartner relevant sein kann, erfordert die Kontolöschung eine manuelle Prüfung.",
       accountDeletionContactInstruction:
         "Um Ihr Konto dauerhaft zu löschen, personenbezogene Daten zu anonymisieren und öffentliche Angebote zurückzuziehen, kontaktieren Sie uns von der E-Mail-Adresse, die Ihrem Konto zugeordnet ist",
       accountDeletionTimeframe: "Anfragen werden innerhalb von bis zu 14 Tagen bearbeitet.",
       accountDeletionCta: "Support kontaktieren",
-      accountDeletionMailSubject: "Kontolöschung WolneMoce.pl",
+      accountDeletionMailSubject: "Kontolöschung WolneMoce",
       accountDetailsTitle: "Kontodetails",
       accountDetailsDescription: "Verwalten Sie die grundlegenden Details der Person, die das Konto nutzt. Diese Daten sind nicht Ihr öffentliches Firmenprofil.",
       fullNameLabel: "Vollständiger Name",

@@ -8,7 +8,7 @@ import BlogPostActionsClient from "./BlogPostActionsClient";
 
 export const metadata: Metadata = {
   title: "Blog | Panel administratora",
-  description: "Zarządzanie wpisami blogowymi WolneMoce.pl.",
+  description: "Zarządzanie wpisami blogowymi WolneMoce.",
 };
 
 type AdminBlogPost = {

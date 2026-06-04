@@ -137,7 +137,7 @@ export async function generateOfferDetailMetadata({
     `${offer.branch ?? t.offerFallback} - ${offer.service_type ?? t.capacityFallback}`;
 
   return {
-    title: `${offer.title} | ${companyName} | WolneMoce.pl`,
+    title: `${offer.title} | ${companyName} | WolneMoce`,
     description: truncateSeoDescription(descriptionSource),
     alternates: {
       canonical: `/oferty/${slug}`,
@@ -146,7 +146,7 @@ export async function generateOfferDetailMetadata({
       title: `${offer.title} | ${companyName}`,
       description: truncateSeoDescription(descriptionSource),
       url: `/oferty/${slug}`,
-      siteName: "WolneMoce.pl",
+      siteName: "WolneMoce",
       type: "article",
       images: [
         {

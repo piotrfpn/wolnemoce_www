@@ -17,7 +17,7 @@ import type {
 
 export const metadata: Metadata = {
   title: "Certyfikaty firm | Panel administratora",
-  description: "Moderacja certyfikatów firm w panelu administratora WolneMoce.pl.",
+  description: "Moderacja certyfikatów firm w panelu administratora WolneMoce.",
 };
 
 type AdminCertificatesPageProps = {

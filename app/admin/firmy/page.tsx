@@ -8,7 +8,7 @@ import AdminCompaniesFiltersClient from "./AdminCompaniesFiltersClient";
 
 export const metadata: Metadata = {
   title: "Zarządzanie firmami",
-  description: "Lista wszystkich firm w panelu admina WolneMoce.pl.",
+  description: "Lista wszystkich firm w panelu admina WolneMoce.",
 };
 
 export default async function AdminCompaniesPage({

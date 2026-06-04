@@ -196,7 +196,7 @@ function getPostPayload(formData: FormData): { error: string } | { payload: Blog
       content,
       category: getValue(formData, "category") || null,
       status,
-      author_name: getValue(formData, "author_name") || "WolneMoce.pl",
+      author_name: getValue(formData, "author_name") || "WolneMoce",
       featured_image_alt: getValue(formData, "featured_image_alt") || null,
       tags: parseTags(getValue(formData, "tags")),
       meta_title: getValue(formData, "meta_title") || null,

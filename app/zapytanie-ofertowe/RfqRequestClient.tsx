@@ -204,7 +204,7 @@ export default function RfqRequestClient({
         </h2>
         <p className="mt-3 text-sm leading-7 text-slate-600">
           Dziękujemy. Zapytanie zostało zapisane i przekazane firmie w panelu
-          WolneMoce.pl. Odpowiedź zależy od firmy obsługującej ofertę.
+          WolneMoce. Odpowiedź zależy od firmy obsługującej ofertę.
         </p>
         {partialSuccess ? (
           <p className="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
@@ -234,7 +234,7 @@ export default function RfqRequestClient({
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-white/85">
             Zapytanie zostanie zapisane i przekazane do firmy w panelu
-            WolneMoce.pl.
+            WolneMoce.
           </p>
         </div>
       </section>
@@ -334,7 +334,7 @@ export default function RfqRequestClient({
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-slate-500">
                   Zapytanie zostanie zapisane i przekazane do firmy w panelu
-                  WolneMoce.pl.
+                  WolneMoce.
                 </p>
               </div>
 

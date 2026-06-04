@@ -11,7 +11,7 @@ import { getPanelLocale } from "@/lib/i18n/panelLocale";
 
 export const metadata: Metadata = {
   title: "Moje oferty",
-  description: "Zarządzaj ofertami swojej firmy w panelu WolneMoce.pl.",
+  description: "Zarządzaj ofertami swojej firmy w panelu WolneMoce.",
 };
 
 type OfferStatus = "draft" | "pending" | "active" | "rejected" | "archived";

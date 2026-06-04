@@ -42,7 +42,7 @@ const pl: Dictionary = {
       "Otrzymuj najnowsze oferty i artykuły eksperckie prosto na email.",
     emailPlaceholder: "Twój email",
     newsletterSubmit: "Zapisz do newslettera",
-    rights: "© 2026 WolneMoce.pl. Wszelkie prawa zastrzeżone.",
+    rights: "© 2026 WolneMoce. Wszelkie prawa zastrzeżone.",
     partnerPage: "Strona partnera",
   },
   hero: {
@@ -125,7 +125,7 @@ const pl: Dictionary = {
   },
   offerCard: {
     companyFallback: "Firma",
-    offerFallback: "Oferta WolneMoce.pl",
+    offerFallback: "Oferta WolneMoce",
     capacityFallback: "wolne moce",
     countryFallback: "Polska",
     industryFallback: "Branża",
@@ -252,7 +252,7 @@ const pl: Dictionary = {
     sectionLabel: "Dwie strony rynku",
     sectionTitle: "Proces dopasowany do roli firmy",
     sectionDescription:
-      "WolneMoce.pl porządkuje komunikację między zleceniodawcą a firmą, która może szybko przyjąć dodatkową pracę.",
+      "WolneMoce porządkuje komunikację między zleceniodawcą a firmą, która może szybko przyjąć dodatkową pracę.",
     buyerTitle: "Firma szukająca podwykonawcy",
     supplierTitle: "Firma posiadająca wolne moce",
     buyerSteps: [
@@ -293,7 +293,7 @@ const pl: Dictionary = {
   addOfferPage: {
     seoTitle: "Dodaj ofertę",
     seoDescription:
-      "Dodaj ofertę wolnych mocy produkcyjnych po utworzeniu konta firmy w WolneMoce.pl.",
+      "Dodaj ofertę wolnych mocy produkcyjnych po utworzeniu konta firmy w WolneMoce.",
     heroLabel: "Dodaj ofertę",
     title: "Dodaj ofertę",
     subtitle:
@@ -347,7 +347,7 @@ const pl: Dictionary = {
         label: "Partner usługowy",
         subject: "Wsparcie księgowo-prawne Credos",
         description:
-          "Pytanie dotyczy płatnego wsparcia partnerskiego Credos w zakresie księgowości, prawa i formalnej obsługi współpracy B2B. Usługa nie jest automatycznie zawarta w planach WolneMoce.pl i wymaga osobnego ustalenia zakresu oraz ceny.",
+          "Pytanie dotyczy płatnego wsparcia partnerskiego Credos w zakresie księgowości, prawa i formalnej obsługi współpracy B2B. Usługa nie jest automatycznie zawarta w planach WolneMoce i wymaga osobnego ustalenia zakresu oraz ceny.",
         icon: "fas fa-scale-balanced",
         source: "contact:credos",
       },
@@ -355,7 +355,7 @@ const pl: Dictionary = {
         label: "Partner usługowy",
         subject: "Doradztwo procesowe i łańcuch dostaw LogiMarket",
         description:
-          "Pytanie dotyczy płatnego doradztwa partnerskiego LogiMarket w zakresie procesów, outsourcingu produkcji, RFQ, make-or-buy oraz łańcucha dostaw. Usługa nie jest automatycznie zawarta w planach WolneMoce.pl i wymaga osobnego ustalenia zakresu oraz ceny.",
+          "Pytanie dotyczy płatnego doradztwa partnerskiego LogiMarket w zakresie procesów, outsourcingu produkcji, RFQ, make-or-buy oraz łańcucha dostaw. Usługa nie jest automatycznie zawarta w planach WolneMoce i wymaga osobnego ustalenia zakresu oraz ceny.",
         icon: "fas fa-route",
         source: "contact:logimarket",
       },
@@ -363,7 +363,7 @@ const pl: Dictionary = {
         label: "Kontakt z administratorem",
         subject: "Kontakt z administratorem",
         description:
-          "Wiadomość trafi do administracji WolneMoce.pl. Użyj tego kontaktu w sprawach konta, profilu firmy, ofert, zapytań RFQ albo obsługi panelu.",
+          "Wiadomość trafi do administracji WolneMoce. Użyj tego kontaktu w sprawach konta, profilu firmy, ofert, zapytań RFQ albo obsługi panelu.",
         icon: "fas fa-user-shield",
         source: "admin_contact",
       },
@@ -371,7 +371,7 @@ const pl: Dictionary = {
         label: "Wyróżnienie oferty",
         subject: "Wyróżnienie oferty — 49 zł / 7 dni",
         description:
-          "Wyróżnienie oferty jest aktywowane manualnie po kontakcie z obsługą WolneMoce.pl. Usługa zwiększa widoczność oferty w wybranych miejscach portalu przez 7 dni, ale nie gwarantuje liczby zapytań ani zawarcia transakcji. W wiadomości możesz wskazać ofertę, preferowany okres wyróżnienia oraz zapytać o wariant 14 / 21 / 30 dni.",
+          "Wyróżnienie oferty jest aktywowane manualnie po kontakcie z obsługą WolneMoce. Usługa zwiększa widoczność oferty w wybranych miejscach portalu przez 7 dni, ale nie gwarantuje liczby zapytań ani zawarcia transakcji. W wiadomości możesz wskazać ofertę, preferowany okres wyróżnienia oraz zapytać o wariant 14 / 21 / 30 dni.",
         icon: "fas fa-star",
         source: "contact:wyroznienie-oferty",
       },
@@ -379,7 +379,7 @@ const pl: Dictionary = {
         label: "Zgłoszenie naruszenia",
         subject: "Zgłoszenie naruszenia",
         description:
-          "Zgłoszenie trafi do administracji WolneMoce.pl. Opisz krótko, czego dotyczy naruszenie i nie dodawaj danych wrażliwych, jeśli nie są potrzebne do obsługi sprawy.",
+          "Zgłoszenie trafi do administracji WolneMoce. Opisz krótko, czego dotyczy naruszenie i nie dodawaj danych wrażliwych, jeśli nie są potrzebne do obsługi sprawy.",
         icon: "fas fa-flag",
         source: "contact:company_project_abuse",
       },
@@ -406,7 +406,7 @@ const pl: Dictionary = {
           "Zapytania trafiają do panelu firmy w zakładce „Zapytania”. Na etapie soft-launchu zalecamy regularne sprawdzanie panelu, ponieważ powiadomienia e-mail mogą działać w trybie testowym lub być uruchamiane etapami.",
       },
       {
-        question: "Czy WolneMoce.pl obsługuje płatności online?",
+        question: "Czy WolneMoce obsługuje płatności online?",
         answer:
           "Nie w tym etapie. Cennik pokazuje model planów, ale płatności online są w przygotowaniu. Plany PRO i ENTERPRISE mogą być uruchamiane indywidualnie po kontakcie z administracją.",
       },
@@ -471,7 +471,7 @@ const pl: Dictionary = {
     minimumOrder: "Minimalne zamówienie",
     leadTime: "Termin realizacji",
     toBeAgreed: "Do ustalenia",
-    imageAltFallback: "Oferta WolneMoce.pl",
+    imageAltFallback: "Oferta WolneMoce",
     galleryImageAltFallback: "Zdjęcie oferty",
     parametersTitle: "Parametry oferty",
     parametersDescription: "Najważniejsze informacje do wstępnej kwalifikacji.",
@@ -479,7 +479,7 @@ const pl: Dictionary = {
     certificatesTitle: "Certyfikaty i weryfikacja",
     aboutCompany: "O firmie",
     companyDescriptionFallback:
-      "Firma prezentuje dostępne moce i obsługuje zapytania B2B przez WolneMoce.pl.",
+      "Firma prezentuje dostępne moce i obsługuje zapytania B2B przez WolneMoce.",
     companyWebsite: "Strona WWW firmy",
     similarLabel: "Podobne oferty",
     similarTitle: "Sprawdź też inne moce",
@@ -489,7 +489,7 @@ const pl: Dictionary = {
     ctaDescription: "Dodaj ofertę w panelu firmy i wyślij ją do zatwierdzenia.",
     addOffer: "Dodaj ofertę",
     contact: "Kontakt",
-    notFoundTitle: "Nie znaleziono oferty | WolneMoce.pl",
+    notFoundTitle: "Nie znaleziono oferty | WolneMoce",
     notFoundDescription: "Oferta nie istnieje albo nie jest aktywna publicznie.",
     rfqCta: "Wyślij zapytanie o tę ofertę",
     rfqCtaMicrocopy: "Zapytanie jest bezpłatne. Opisz zakres, ilość, termin i dodaj załącznik techniczny, jeśli go posiadasz.",
@@ -535,10 +535,10 @@ const pl: Dictionary = {
     noActiveOffers: "Ta firma nie ma jeszcze aktywnych ofert.",
     projectsTitle: "Przykłady realizacji",
     projectsDescription:
-      "Wybrane przykłady prac pokazane przez wykonawcę. To deklaracje wykonawcy moderowane przed publikacją przez WolneMoce.pl.",
+      "Wybrane przykłady prac pokazane przez wykonawcę. To deklaracje wykonawcy moderowane przed publikacją przez WolneMoce.",
     projectDeclarationLabel: "Deklaracja wykonawcy",
     projectDeclarationDescription:
-      "Firma deklaruje wykonanie tej realizacji. WolneMoce.pl moderuje treść przed publikacją, ale nie potwierdza jej jako formalnego poświadczenia klienta.",
+      "Firma deklaruje wykonanie tej realizacji. WolneMoce moderuje treść przed publikacją, ale nie potwierdza jej jako formalnego poświadczenia klienta.",
     projectReportViolation: "Zgłoś naruszenie",
     projectOpenImage: "Otwórz zdjęcie",
     projectTechnologyLabel: "Technologia / usługa",
@@ -559,8 +559,8 @@ const pl: Dictionary = {
     downloadCertificate: "Pobierz certyfikat",
     noCertificates: "Firma nie dodała jeszcze publicznych certyfikatów.",
     publicProfile: "Profil firmy",
-    notFoundTitle: "Nie znaleziono firmy | WolneMoce.pl",
-    notFoundDescription: "Nie znaleziono profilu firmy w serwisie WolneMoce.pl.",
+    notFoundTitle: "Nie znaleziono firmy | WolneMoce",
+    notFoundDescription: "Nie znaleziono profilu firmy w serwisie WolneMoce.",
   },
   blogDetail: {
     backToBlog: "Wróć do bloga",
@@ -572,13 +572,13 @@ const pl: Dictionary = {
     relatedArticles: "Podobne artykuły",
     readNext: "Czytaj dalej",
     relatedDescription:
-      "Wybrane materiały z bloga WolneMoce.pl dla firm planujących współpracę produkcyjną.",
+      "Wybrane materiały z bloga WolneMoce dla firm planujących współpracę produkcyjną.",
     ctaTitle: "Przejdź od wiedzy do działania",
     ctaDescription:
       "Sprawdź aktualne oferty wolnych mocy albo dodaj własną ofertę swojej firmy.",
     browseOffers: "Przeglądaj oferty",
     addOffer: "Dodaj ofertę",
-    notFoundTitle: "Artykuł nie znaleziony | Blog WolneMoce.pl",
+    notFoundTitle: "Artykuł nie znaleziony | Blog WolneMoce",
     notFoundDescription: "Nie znaleziono opublikowanego artykułu blogowego.",
   },
   auth: {
@@ -623,7 +623,7 @@ const pl: Dictionary = {
     terms: {
       title: "Regulamin Serwisu",
       description:
-        "Zasady korzystania z portalu WolneMoce.pl, kont firmowych, ofert, RFQ i usług partnerskich.",
+        "Zasady korzystania z portalu WolneMoce, kont firmowych, ofert, RFQ i usług partnerskich.",
       companyProjects: {
         title: "Przykłady realizacji",
         intro:
@@ -639,7 +639,7 @@ const pl: Dictionary = {
     privacy: {
       title: "Polityka prywatności",
       description:
-        "Informacje o przetwarzaniu danych osobowych w portalu WolneMoce.pl.",
+        "Informacje o przetwarzaniu danych osobowych w portalu WolneMoce.",
       companyProjects: {
         title: "Opisy i zdjęcia realizacji",
         intro:
@@ -654,7 +654,7 @@ const pl: Dictionary = {
     cookies: {
       title: "Polityka Cookies",
       description:
-        "Informacje o plikach cookies i podobnych technologiach wykorzystywanych w WolneMoce.pl.",
+        "Informacje o plikach cookies i podobnych technologiach wykorzystywanych w WolneMoce.",
     },
   },
   howItWorks: {
@@ -741,7 +741,7 @@ const pl: Dictionary = {
   },
   expert: {
     label: "Z perspektywy eksperta",
-    title: "Dlaczego warto korzystać z WolneMoce.pl?",
+    title: "Dlaczego warto korzystać z WolneMoce?",
     description:
       "Jako eksperci z 20-letnim doświadczeniem w branży produkcyjnej widzimy potencjał w lepszym wykorzystaniu mocy produkcyjnych w polskim przemyśle.",
     features: [
@@ -759,9 +759,9 @@ const pl: Dictionary = {
   },
   partners: {
     label: "Partnerzy",
-    title: "Partnerzy usługowi WolneMoce.pl",
+    title: "Partnerzy usługowi WolneMoce",
     description:
-      "WolneMoce.pl to nie tylko katalog ofert. Wspólnie z partnerami wspieramy firmy także w obszarach prawnych, księgowych, procesowych i łańcucha dostaw.",
+      "WolneMoce to nie tylko katalog ofert. Wspólnie z partnerami wspieramy firmy także w obszarach prawnych, księgowych, procesowych i łańcucha dostaw.",
     paidBadge: "Usługa płatna / wycena indywidualna",
     website: "Strona partnera",
     items: [
@@ -793,7 +793,7 @@ const pl: Dictionary = {
     description:
       "Sprawdź opinie firm, które już korzystają z naszego portalu i realizują zlecenia produkcyjne.",
     items: [
-      { text: "Dzięki WolneMoce.pl znaleźliśmy producenta, który wykonał dla nas pilną serię detali. Proces był szybki, transparentny i profesjonalny.", author: "Andrzej Kowalski", role: "Dyrektor Operacyjny, TechParts Sp. z o.o.", initials: "AK" },
+      { text: "Dzięki WolneMoce znaleźliśmy producenta, który wykonał dla nas pilną serię detali. Proces był szybki, transparentny i profesjonalny.", author: "Andrzej Kowalski", role: "Dyrektor Operacyjny, TechParts Sp. z o.o.", initials: "AK" },
       { text: "Nasze wolne moce produkcyjne przestały marnować się w kalendarzu. Łatwiej pokazujemy dostępność właściwym firmom.", author: "Marta Nowak", role: "Właściciel, PlastForm S.A.", initials: "MN", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
       { text: "Weryfikacja firm i przejrzysty profil pomagają nam szybciej ocenić potencjalnych partnerów produkcyjnych.", author: "Piotr Wiśniewski", role: "Kierownik Zakupów, ElektroMax Sp. z o.o.", initials: "PW", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
     ],
@@ -808,7 +808,7 @@ const pl: Dictionary = {
   cta: {
     title: "Gotowy na optymalizację produkcji?",
     description:
-      "Dołącz do firm, które już korzystają z WolneMoce.pl. Znajdź wolne moce lub dodaj swoją ofertę już dziś.",
+      "Dołącz do firm, które już korzystają z WolneMoce. Znajdź wolne moce lub dodaj swoją ofertę już dziś.",
     addOffer: "Dodaj ofertę za darmo",
     browseOffers: "Przeglądaj oferty",
   },
@@ -816,7 +816,7 @@ const pl: Dictionary = {
     home: {
       title: "Portal wolnych mocy produkcyjnych",
       description:
-        "WolneMoce.pl łączy firmy szukające podwykonawców z firmami posiadającymi wolne moce produkcyjne, magazynowe, logistyczne i techniczne.",
+        "WolneMoce łączy firmy szukające podwykonawców z firmami posiadającymi wolne moce produkcyjne, magazynowe, logistyczne i techniczne.",
     },
     offers: {
       title: "Oferty wolnych mocy produkcyjnych",
@@ -824,24 +824,24 @@ const pl: Dictionary = {
         "Przeglądaj aktywne oferty wolnych mocy produkcyjnych, magazynowych, logistycznych i technicznych w Polsce.",
     },
     companies: {
-      title: "Katalog firm | WolneMoce.pl",
+      title: "Katalog firm | WolneMoce",
       description:
         "Przeglądaj zweryfikowane firmy oferujące wolne moce produkcyjne, logistyczne i techniczne.",
     },
     howItWorks: {
       title: "Jak to działa",
       description:
-        "Zobacz, jak WolneMoce.pl łączy firmy szukające podwykonawców z firmami posiadającymi wolne moce.",
+        "Zobacz, jak WolneMoce łączy firmy szukające podwykonawców z firmami posiadającymi wolne moce.",
     },
     pricing: {
       title: "Cennik",
       description:
-        "Statyczny cennik WolneMoce.pl: FREE, PRO, ENTERPRISE oraz dodatki promocyjne.",
+        "Statyczny cennik WolneMoce: FREE, PRO, ENTERPRISE oraz dodatki promocyjne.",
     },
     contact: {
       title: "Kontakt",
       description:
-        "Podstrona kontaktowa WolneMoce.pl z formularzem kontaktowym i FAQ.",
+        "Podstrona kontaktowa WolneMoce z formularzem kontaktowym i FAQ.",
     },
     blog: {
       title: "Blog",
@@ -925,9 +925,9 @@ const pl: Dictionary = {
     offerForm: {
       metadata: {
         newTitle: "Dodaj ofertę",
-        newDescription: "Dodaj ofertę firmy w panelu WolneMoce.pl.",
+        newDescription: "Dodaj ofertę firmy w panelu WolneMoce.",
         editTitle: "Edytuj ofertę",
-        editDescription: "Edytuj ofertę firmy w panelu WolneMoce.pl.",
+        editDescription: "Edytuj ofertę firmy w panelu WolneMoce.",
       },
       backToOffers: "Wróć do ofert",
       eyebrowNew: "Nowa oferta",
@@ -1070,7 +1070,7 @@ const pl: Dictionary = {
       fullNameLabel: "Imię i nazwisko:",
       companyStatus: "Status firmy",
       unverified: "Firma niezweryfikowana",
-      verificationInfo: "Weryfikacja firmy będzie wykonywana przez administratora WolneMoce.pl.",
+      verificationInfo: "Weryfikacja firmy będzie wykonywana przez administratora WolneMoce.",
       publicProfileLabel: "Publiczny profil firmy:",
       companyDataDescription: "Uzupełnij dane firmy, które będą wykorzystywane przy ofertach i zapytaniach.",
       nipLabel: "NIP",
@@ -1172,7 +1172,7 @@ const pl: Dictionary = {
         "Aby trwale usunąć konto, zanonimizować dane osobowe i wycofać publiczne oferty, skontaktuj się z nami z adresu przypisanego do konta",
       accountDeletionTimeframe: "Czas realizacji zgłoszenia wynosi do 14 dni.",
       accountDeletionCta: "Napisz do obsługi",
-      accountDeletionMailSubject: "Usunięcie konta WolneMoce.pl",
+      accountDeletionMailSubject: "Usunięcie konta WolneMoce",
       accountDetailsTitle: "Dane konta",
       accountDetailsDescription: "Zarządzaj podstawowymi danymi osoby korzystającej z konta. Te dane nie są publicznym profilem firmy.",
       fullNameLabel: "Imię i nazwisko",

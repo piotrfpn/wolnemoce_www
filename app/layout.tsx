@@ -12,17 +12,17 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
-    default: "WolneMoce.pl - Portal wolnych mocy produkcyjnych",
-    template: "%s | WolneMoce.pl",
+    default: "WolneMoce - Portal wolnych mocy produkcyjnych",
+    template: "%s | WolneMoce",
   },
   description:
     "Marketplace B2B łączący firmy szukające podwykonawców z firmami posiadającymi wolne moce produkcyjne, magazynowe, logistyczne i techniczne.",
   openGraph: {
-    title: "WolneMoce.pl - Portal wolnych mocy produkcyjnych",
+    title: "WolneMoce - Portal wolnych mocy produkcyjnych",
     description:
       "Znajdź podwykonawcę albo pokaż wolne moce produkcyjne swojej firmy.",
     url: getSiteUrl(),
-    siteName: "WolneMoce.pl",
+    siteName: "WolneMoce",
     locale: "pl_PL",
     type: "website",
     images: [
@@ -30,13 +30,13 @@ export const metadata: Metadata = {
         url: getAbsoluteUrl("/images/offers/automation.jpg"),
         width: 1200,
         height: 630,
-        alt: "WolneMoce.pl - marketplace B2B wolnych mocy produkcyjnych",
+        alt: "WolneMoce - marketplace B2B wolnych mocy produkcyjnych",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "WolneMoce.pl - Portal wolnych mocy produkcyjnych",
+    title: "WolneMoce - Portal wolnych mocy produkcyjnych",
     description:
       "Marketplace B2B dla firm szukających podwykonawców i wolnych mocy produkcyjnych.",
     images: [getAbsoluteUrl("/images/offers/automation.jpg")],
