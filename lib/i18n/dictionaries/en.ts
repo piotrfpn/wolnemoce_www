@@ -526,6 +526,7 @@ const en: Dictionary = {
     projectDeclarationDescription:
       "The company declares that it completed this work. WolneMoce.pl moderates the content before publication, but does not confirm it as a formal client endorsement.",
     projectReportViolation: "Report a violation",
+    projectOpenImage: "Open image",
     projectTechnologyLabel: "Technology / service",
     projectIndustryLabel: "Industry / use case",
     projectNoImages: "Work example without images",

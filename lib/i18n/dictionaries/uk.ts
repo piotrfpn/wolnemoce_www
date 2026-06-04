@@ -491,6 +491,7 @@ const uk: Dictionary = {
     viewOffers: "Переглянути всі пропозиції",
     askAboutOffer: "Запитати про пропозицію",
     noActiveOffers: "Ця компанія ще не має активних пропозицій.",
+    projectOpenImage: en.companyDetail.projectOpenImage,
     certificatesTitle: "Сертифікати компанії",
     certificatesDescription:
       "Сертифікати якості, відповідності та галузеві сертифікати, заявлені компанією.",

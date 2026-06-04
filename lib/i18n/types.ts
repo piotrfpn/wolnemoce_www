@@ -468,6 +468,7 @@ export type Dictionary = {
     projectDeclarationLabel: string;
     projectDeclarationDescription: string;
     projectReportViolation: string;
+    projectOpenImage: string;
     projectTechnologyLabel: string;
     projectIndustryLabel: string;
     projectNoImages: string;

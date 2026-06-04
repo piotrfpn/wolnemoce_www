@@ -776,6 +776,17 @@ export default async function CompanyDetailView({
                                 className="h-full w-full object-cover"
                               />
                             </div>
+                            <a
+                              href={getCompanyProjectImagePublicUrl(
+                                project.images[0].storage_path
+                              )}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-500 no-underline transition hover:text-[#1a5f3c]"
+                            >
+                              <i className="fas fa-up-right-from-square text-[10px]"></i>
+                              {t.projectOpenImage}
+                            </a>
                           </div>
                           {project.images.length > 1 ? (
                             <div className="grid min-w-0 gap-3 sm:grid-cols-2">
@@ -795,6 +806,17 @@ export default async function CompanyDetailView({
                                       className="h-full w-full object-cover"
                                     />
                                   </div>
+                                  <a
+                                    href={getCompanyProjectImagePublicUrl(
+                                      image.storage_path
+                                    )}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-500 no-underline transition hover:text-[#1a5f3c]"
+                                  >
+                                    <i className="fas fa-up-right-from-square text-[10px]"></i>
+                                    {t.projectOpenImage}
+                                  </a>
                                 </div>
                               ))}
                             </div>

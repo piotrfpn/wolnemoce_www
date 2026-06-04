@@ -540,6 +540,7 @@ const pl: Dictionary = {
     projectDeclarationDescription:
       "Firma deklaruje wykonanie tej realizacji. WolneMoce.pl moderuje treść przed publikacją, ale nie potwierdza jej jako formalnego poświadczenia klienta.",
     projectReportViolation: "Zgłoś naruszenie",
+    projectOpenImage: "Otwórz zdjęcie",
     projectTechnologyLabel: "Technologia / usługa",
     projectIndustryLabel: "Branża / zastosowanie",
     projectNoImages: "Realizacja bez zdjęć",

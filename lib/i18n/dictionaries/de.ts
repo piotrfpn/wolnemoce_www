@@ -498,6 +498,7 @@ const de: Dictionary = {
     viewOffers: "Alle Angebote ansehen",
     askAboutOffer: "Angebot anfragen",
     noActiveOffers: "Diese Firma hat noch keine aktiven Angebote.",
+    projectOpenImage: en.companyDetail.projectOpenImage,
     certificatesTitle: "Zertifikate der Firma",
     certificatesDescription:
       "Von der Firma erklärte Qualitäts-, Konformitäts- und Branchenzertifikate.",
