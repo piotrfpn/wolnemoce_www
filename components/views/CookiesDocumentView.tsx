@@ -66,7 +66,7 @@ export default function CookiesDocumentView({ locale = defaultLocale }: LegalPag
                 <p>
                   Operatorem i administratorem Serwisu jest: PFConsulting Piotr Fiszer,
                   ul. Promienista 114, 60-142 Poznań, Polska, NIP: 7792017326.
-                  Kontakt w sprawach cookies i ochrony prywatności: kontakt@wolnemoce.pl, tel: +48 604 904 150.
+                  Kontakt w sprawach cookies i ochrony prywatności: piotr.fiszer@pfconsulting.pl, tel: +48 604 904 150.
                 </p>
               </Section>
               <Section number={1} title="Czym są cookies">
