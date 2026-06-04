@@ -246,7 +246,7 @@ const pl: Dictionary = {
     heroTitle:
       "Jedno miejsce dla firm szukających wykonawców i firm z wolnymi mocami",
     heroDescription:
-      "Statyczny proces MVP pokazuje, jak docelowo portal będzie skracał drogę od potrzeby produkcyjnej do sprawdzonego partnera B2B.",
+      "Portal pomaga skracać drogę od potrzeby produkcyjnej do sprawdzonego partnera B2B.",
     browseOffers: "Przeglądaj oferty",
     addOffer: "Dodaj ofertę",
     sectionLabel: "Dwie strony rynku",
@@ -287,7 +287,7 @@ const pl: Dictionary = {
     ],
     safetyTitle: "Bezpieczeństwo i weryfikacja",
     safetyDescription:
-      "Wersja MVP pokazuje docelową ścieżkę: dane firmy, certyfikaty, zakres możliwości i jasny kontakt. Pełna automatyzacja weryfikacji nie jest częścią tego sprintu.",
+      "Profil firmy porządkuje dane, certyfikaty, zakres możliwości i jasny kontakt. Weryfikacja administracyjna wspiera bezpieczeństwo współpracy.",
     safetyTags: ["KRS / CEIDG", "Certyfikaty", "Profil firmy", "Historia współpracy"],
   },
   addOfferPage: {
@@ -618,8 +618,6 @@ const pl: Dictionary = {
   legal: {
     label: "Dokument prawny",
     notice: "Dokument prawny jest obecnie dostępny w języku polskim.",
-    betaNotice:
-      "Wersja MVP / beta. Dokument powinien zostać zweryfikowany przez profesjonalnego prawnika przed pełnym publicznym uruchomieniem komercyjnym.",
     terms: {
       title: "Regulamin Serwisu",
       description:
@@ -670,7 +668,7 @@ const pl: Dictionary = {
     ],
   },
   pricing: {
-    pageLabel: "Cennik MVP",
+    pageLabel: "Cennik",
     pageTitle: "Proste plany dla firm produkcyjnych",
     pageDescription:
       "Cennik jest statyczną prezentacją modelu. Przyciski prowadzą do formularza dodania oferty lub kontaktu, bez płatności i bez integracji Stripe.",
@@ -1004,7 +1002,7 @@ const pl: Dictionary = {
       saveMode: {
         legend: "Tryb zapisu",
         draftTitle: "Szkic",
-        draftDescription: "Zapisz ofertę roboczo bez wysyłania do moderacji.",
+        draftDescription: "Zapisz ofertę jako szkic bez wysyłania do moderacji.",
         pendingTitle: "Wyślij do moderacji",
         pendingDescription: "Przekaż ofertę do akceptacji administratora.",
         statusUnchangedPrefix: "Status po zapisie pozostanie bez zmian:",

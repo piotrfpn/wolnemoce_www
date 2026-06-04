@@ -542,7 +542,6 @@ export type Dictionary = {
   legal: {
     label: string;
     notice: string;
-    betaNotice: string;
     terms: {
       title: string;
       description: string;

@@ -249,7 +249,7 @@ const es: Dictionary = {
     ...en.howItWorksPage,
     heroLabel: "Proceso de cooperación",
     heroTitle: "Un lugar para empresas que buscan contratistas y empresas con capacidad disponible",
-    heroDescription: "El proceso MVP muestra cómo el portal puede acortar el camino desde la necesidad productiva hasta un partner B2B verificado.",
+    heroDescription: "El portal ayuda a acortar el camino desde la necesidad productiva hasta un partner B2B verificado.",
     browseOffers: "Ver ofertas",
     addOffer: "Añadir oferta",
     sectionLabel: "Dos lados del mercado",
@@ -265,7 +265,7 @@ const es: Dictionary = {
       { icon: "fas fa-handshake", title: "Contacto B2B", description: "El portal facilita iniciar conversaciones entre empresas." },
     ],
     safetyTitle: "Seguridad y verificación",
-    safetyDescription: "El MVP muestra el camino objetivo: datos de empresa, certificados, alcance de capacidades y contacto claro. La automatización completa de verificación no forma parte de este sprint.",
+    safetyDescription: "Los perfiles de empresa organizan datos, certificados, alcance de capacidades y contacto claro. Las comprobaciones administrativas ayudan a una cooperación más segura.",
     safetyTags: ["KRS / CEIDG", "Certificados", "Perfil de empresa", "Historial de cooperación"],
   },
   addOfferPage: {
@@ -568,8 +568,6 @@ const es: Dictionary = {
   legal: {
     label: "Documento legal",
     notice: "Este documento legal está disponible actualmente en polaco.",
-    betaNotice:
-      "Versión MVP / beta. Este documento debe ser revisado por un abogado profesional antes del lanzamiento comercial completo.",
     terms: {
       title: "Términos del servicio",
       description:
@@ -601,7 +599,7 @@ const es: Dictionary = {
     ],
   },
   pricing: {
-    pageLabel: "Precios MVP",
+    pageLabel: "Precios",
     pageTitle: "Planes simples para empresas productivas",
     pageDescription:
       "Los precios son una presentación estática del modelo. Los botones llevan al formulario de oferta o contacto, sin pagos ni Stripe.",

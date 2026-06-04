@@ -48,9 +48,6 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
             <div className="mb-4 rounded-2xl border border-[#1a5f3c]/20 bg-[#1a5f3c]/5 p-5 text-sm leading-7 text-[#1a5f3c]">
               {t.notice}
             </div>
-            <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-7 text-amber-900">
-              {t.betaNotice}
-            </div>
             {locale !== "pl" && (
               <div className="mb-6 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm leading-7 text-amber-900">
                 {locale === "en" && "The legally binding version of the Terms and Conditions, Privacy Policy and Cookie Policy is the Polish language version. Translations into other languages are provided for information purposes only."}
@@ -64,7 +61,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
             <div className="space-y-10">
               <Section number={1} title="Definicje">
                 <p>
-                  <strong>Serwis</strong> oznacza portal internetowy WolneMoce.pl,
+                  <strong>Serwis</strong> oznacza portal internetowy WolneMoce,
                   umożliwiający prezentowanie i wyszukiwanie wolnych mocy B2B.
                   <strong> Operator</strong> oznacza podmiot prowadzący Serwis.
                   <strong> Użytkownik</strong> oznacza przedsiębiorcę albo osobę
@@ -97,7 +94,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                   własnym imieniu.
                 </p>
                 <p>
-                  WolneMoce.pl nie gwarantuje pozyskania zapytania, zlecenia,
+                  WolneMoce nie gwarantuje pozyskania zapytania, zlecenia,
                   zawarcia umowy ani osiągnięcia określonego wyniku
                   sprzedażowego. Widoczność w Serwisie, aktywny profil, aktywna
                   oferta, wyróżnienie albo korzystanie z płatnego planu nie
@@ -179,7 +176,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                     z daną firmą.
                   </li>
                   <li>
-                    WolneMoce.pl nie gwarantuje, że firma oznaczona jako
+                    WolneMoce nie gwarantuje, że firma oznaczona jako
                     zweryfikowana wykona usługę prawidłowo, terminowo, bez wad,
                     w określonej cenie, ani że posiada określone zasoby,
                     certyfikaty, doświadczenie lub sytuację finansową, chyba że
@@ -248,7 +245,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
 
               <Section number={11} title="Statusy ofert">
                 <ul className="list-disc space-y-2 pl-5">
-                  <li><strong>draft</strong> - wersja robocza widoczna dla właściciela firmy.</li>
+                  <li><strong>draft</strong> - szkic widoczny dla właściciela firmy.</li>
                   <li><strong>pending</strong> - oferta oczekuje na weryfikację lub publikację.</li>
                   <li><strong>active</strong> - oferta publiczna i widoczna w Serwisie.</li>
                   <li><strong>rejected</strong> - oferta odrzucona przez administratora.</li>
@@ -328,9 +325,9 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={18} title="WolneMoce.pl nie jest stroną umowy produkcyjnej">
+              <Section number={18} title="WolneMoce nie jest stroną umowy produkcyjnej">
                 <p>
-                  WolneMoce.pl jest dostawcą infrastruktury teleinformatycznej i
+                  WolneMoce jest dostawcą infrastruktury teleinformatycznej i
                   platformą kojarzącą firmy B2B. Serwis nie jest stroną umowy
                   zawieranej między zleceniodawcą i wykonawcą albo podwykonawcą.
                 </p>
@@ -372,7 +369,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
 
               <Section number={20} title="Usługi partnerskie">
                 <p>
-                  WolneMoce.pl może prezentować płatne usługi partnerów
+                  WolneMoce może prezentować płatne usługi partnerów
                   usługowych. Credos może świadczyć wsparcie księgowo-prawne, a
                   LogiMarket może świadczyć doradztwo procesowe i doradztwo w
                   zakresie łańcucha dostaw.
@@ -384,7 +381,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                   bezpośrednio z właściwym partnerem.
                 </p>
                 <p>
-                  WolneMoce.pl może przekazać dane kontaktowe partnerowi wyłącznie
+                  WolneMoce może przekazać dane kontaktowe partnerowi wyłącznie
                   w związku z zapytaniem użytkownika dotyczącym danej usługi
                   partnerskiej albo za zgodą użytkownika, w zakresie potrzebnym do
                   obsługi zapytania.

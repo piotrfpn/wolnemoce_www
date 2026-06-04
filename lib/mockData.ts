@@ -520,7 +520,7 @@ export const blogArticles: BlogArticle[] = [
       <h2>Dlaczego to ważne?</h2>
       <p>Firmy, które potrafią szybko znaleźć sprawdzonego partnera, mogą lepiej obsługiwać zmienny popyt i unikać kosztownych przestojów.</p>
       <h3>Rola marketplace B2B</h3>
-      <p>Statyczny MVP WolneMoce pokazuje kierunek: uporządkowane oferty, parametry współpracy i łatwiejszy kontakt między firmami.</p>
+      <p>WolneMoce porządkuje oferty, parametry współpracy i kontakt między firmami.</p>
     `,
   },
 ];
@@ -608,7 +608,7 @@ export const faqs = [
   {
     question: "Czy formularze wysyłają dane?",
     answer:
-      "Nie. W tej wersji MVP formularze są statyczne i służą wyłącznie do pokazania docelowego procesu.",
+      "Formularze kontaktowe służą do przekazania zapytania i rozpoczęcia rozmowy z zespołem WolneMoce.",
   },
   {
     question: "Czy oferty są filtrowane dynamicznie?",

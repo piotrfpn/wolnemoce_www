@@ -249,7 +249,7 @@ const fr: Dictionary = {
     ...en.howItWorksPage,
     heroLabel: "Processus de coopération",
     heroTitle: "Un lieu pour les entreprises cherchant des prestataires et celles avec des capacités disponibles",
-    heroDescription: "Le processus MVP montre comment le portail peut raccourcir le chemin entre besoin de production et partenaire B2B vérifié.",
+    heroDescription: "Le portail aide à raccourcir le chemin entre besoin de production et partenaire B2B vérifié.",
     browseOffers: "Voir les offres",
     addOffer: "Ajouter une offre",
     sectionLabel: "Deux côtés du marché",
@@ -265,7 +265,7 @@ const fr: Dictionary = {
       { icon: "fas fa-handshake", title: "Contact B2B", description: "Le portail facilite le démarrage des échanges entre entreprises." },
     ],
     safetyTitle: "Sécurité et vérification",
-    safetyDescription: "Le MVP montre le parcours cible : données d’entreprise, certificats, périmètre des capacités et contact clair. L’automatisation complète de la vérification n’est pas dans ce sprint.",
+    safetyDescription: "Les profils d’entreprise structurent les données, certificats, capacités et contacts. Les contrôles administratifs soutiennent une coopération plus sûre.",
     safetyTags: ["KRS / CEIDG", "Certificats", "Profil d’entreprise", "Historique de coopération"],
   },
   addOfferPage: {
@@ -568,8 +568,6 @@ const fr: Dictionary = {
   legal: {
     label: "Document juridique",
     notice: "Ce document juridique est actuellement disponible en polonais.",
-    betaNotice:
-      "Version MVP / beta. Ce document doit être vérifié par un juriste professionnel avant le lancement commercial complet.",
     terms: {
       title: "Conditions d'utilisation",
       description:
@@ -601,7 +599,7 @@ const fr: Dictionary = {
     ],
   },
   pricing: {
-    pageLabel: "Tarifs MVP",
+    pageLabel: "Tarifs",
     pageTitle: "Des plans simples pour les entreprises industrielles",
     pageDescription:
       "La tarification est une présentation statique du modèle. Les boutons mènent au formulaire d’offre ou au contact, sans paiement ni Stripe.",

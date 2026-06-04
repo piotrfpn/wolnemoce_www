@@ -48,9 +48,6 @@ export default function CookiesDocumentView({ locale = defaultLocale }: LegalPag
             <div className="mb-4 rounded-2xl border border-[#1a5f3c]/20 bg-[#1a5f3c]/5 p-5 text-sm leading-7 text-[#1a5f3c]">
               {t.notice}
             </div>
-            <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-7 text-amber-900">
-              {t.betaNotice}
-            </div>
             {locale !== "pl" && (
               <div className="mb-6 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm leading-7 text-amber-900">
                 {locale === "en" && "The legally binding version of the Terms and Conditions, Privacy Policy and Cookie Policy is the Polish language version. Translations into other languages are provided for information purposes only."}
@@ -119,10 +116,8 @@ export default function CookiesDocumentView({ locale = defaultLocale }: LegalPag
               <Section number={6} title="Analityka">
                 <p>
                   Portal może wykorzystywać narzędzia analityczne po uzyskaniu
-                  wymaganej zgody, jeżeli zostaną wdrożone. Na etapie MVP narzędzia
-                  takie jak Google Analytics lub podobne rozwiązania nie muszą być
-                  aktywne. Cookies analityczne, jeżeli zostaną uruchomione, będą
-                  traktowane jako opcjonalne.
+                  wymaganej zgody, jeżeli zostaną wdrożone. Cookies analityczne,
+                  jeżeli zostaną uruchomione, będą traktowane jako opcjonalne.
                 </p>
               </Section>
 

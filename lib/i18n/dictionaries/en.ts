@@ -246,7 +246,7 @@ const en: Dictionary = {
     heroTitle:
       "One place for companies looking for contractors and companies with available capacity",
     heroDescription:
-      "The MVP process shows how the portal can shorten the path from production need to a checked B2B partner.",
+      "The portal helps shorten the path from production need to a checked B2B partner.",
     browseOffers: "Browse offers",
     addOffer: "Add offer",
     sectionLabel: "Two sides of the market",
@@ -274,7 +274,7 @@ const en: Dictionary = {
     ],
     safetyTitle: "Safety and verification",
     safetyDescription:
-      "The MVP shows the target path: company data, certificates, capability scope and clear contact. Full verification automation is not part of this sprint.",
+      "Company profiles organize company data, certificates, capability scope and clear contact. Administrative checks support safer cooperation.",
     safetyTags: ["KRS / CEIDG", "Certificates", "Company profile", "Cooperation history"],
   },
   addOfferPage: {
@@ -604,8 +604,6 @@ const en: Dictionary = {
   legal: {
     label: "Legal document",
     notice: "This legal document is currently available in Polish.",
-    betaNotice:
-      "MVP / beta version. This document should be reviewed by a professional lawyer before full commercial public launch.",
     terms: {
       title: "Terms of Service",
       description:
@@ -656,7 +654,7 @@ const en: Dictionary = {
     ],
   },
   pricing: {
-    pageLabel: "MVP pricing",
+    pageLabel: "Pricing",
     pageTitle: "Simple plans for production companies",
     pageDescription:
       "Pricing is a static presentation of the model. Buttons lead to the add-offer form or contact page, with no payments and no Stripe integration.",

@@ -48,9 +48,6 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
             <div className="mb-4 rounded-2xl border border-[#1a5f3c]/20 bg-[#1a5f3c]/5 p-5 text-sm leading-7 text-[#1a5f3c]">
               {t.notice}
             </div>
-            <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-7 text-amber-900">
-              {t.betaNotice}
-            </div>
             {locale !== "pl" && (
               <div className="mb-6 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm leading-7 text-amber-900">
                 {locale === "en" && "The legally binding version of the Terms and Conditions, Privacy Policy and Cookie Policy is the Polish language version. Translations into other languages are provided for information purposes only."}
@@ -65,7 +62,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
               <Section number={1} title="Administrator danych">
                 <p>
                   Administratorem danych osobowych przetwarzanych w Serwisie jest
-                  Operator WolneMoce.pl: PFConsulting Piotr Fiszer,
+                  Operator WolneMoce: PFConsulting Piotr Fiszer,
                   ul. Promienista 114, 60-142 Poznań, Polska, NIP: 7792017326.
                 </p>
               </Section>
@@ -242,9 +239,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
                 <p>
                   Zakres przekazania danych powinien być ograniczony do informacji
-                  niezbędnych do obsługi konkretnego zapytania. Ta sekcja ma
-                  charakter roboczy i wymaga finalnej weryfikacji prawnej przed
-                  produkcyjnym wykorzystaniem.
+                  niezbędnych do obsługi konkretnego zapytania.
                 </p>
               </Section>
 

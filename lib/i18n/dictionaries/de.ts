@@ -252,7 +252,7 @@ const de: Dictionary = {
     heroLabel: "Kooperationsprozess",
     heroTitle: "Ein Ort für Firmen, die Auftragnehmer suchen, und Firmen mit freien Kapazitäten",
     heroDescription:
-      "Der MVP-Prozess zeigt, wie das Portal den Weg vom Produktionsbedarf zum geprüften B2B-Partner verkürzen kann.",
+      "Das Portal hilft, den Weg vom Produktionsbedarf zum geprüften B2B-Partner zu verkürzen.",
     browseOffers: "Angebote ansehen",
     addOffer: "Angebot hinzufügen",
     sectionLabel: "Zwei Marktseiten",
@@ -270,7 +270,7 @@ const de: Dictionary = {
     ],
     safetyTitle: "Sicherheit und Verifizierung",
     safetyDescription:
-      "Der MVP zeigt den Zielpfad: Firmendaten, Zertifikate, Leistungsumfang und klarer Kontakt. Vollautomatische Verifizierung ist nicht Teil dieses Sprints.",
+      "Firmenprofile bündeln Firmendaten, Zertifikate, Leistungsumfang und klare Kontaktdaten. Administrative Prüfungen unterstützen sichere Zusammenarbeit.",
     safetyTags: ["KRS / CEIDG", "Zertifikate", "Firmenprofil", "Kooperationshistorie"],
   },
   addOfferPage: {
@@ -578,8 +578,6 @@ const de: Dictionary = {
   legal: {
     label: "Rechtsdokument",
     notice: "Dieses Rechtsdokument ist derzeit auf Polnisch verfügbar.",
-    betaNotice:
-      "MVP-/Beta-Version. Dieses Dokument sollte vor dem vollständigen kommerziellen Start von einem professionellen Juristen geprüft werden.",
     terms: {
       title: "Nutzungsbedingungen",
       description:
@@ -611,7 +609,7 @@ const de: Dictionary = {
     ],
   },
   pricing: {
-    pageLabel: "MVP-Preise",
+    pageLabel: "Preise",
     pageTitle: "Einfache Pläne für Produktionsfirmen",
     pageDescription:
       "Die Preisseite ist eine statische Darstellung des Modells. Schaltflächen führen zum Angebotsformular oder Kontakt, ohne Zahlungen und ohne Stripe.",
