@@ -94,11 +94,14 @@ export default function ContactFormClient({
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
     setError("");
     setSuccess("");
     setIsSubmitting(true);
 
-    const result = await submitContactMessage(new FormData(event.currentTarget));
+    const result = await submitContactMessage(formData);
 
     if (result.error) {
       setError(result.error);
@@ -107,6 +110,7 @@ export default function ContactFormClient({
     }
 
     setSuccess(result.success ?? labels.success);
+    form.reset();
     setName(initialName);
     setCompanyName(initialCompanyName);
     setEmail(initialEmail);
@@ -122,6 +126,14 @@ export default function ContactFormClient({
       className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8"
     >
       <input type="hidden" name="source" value={source} />
+      <input
+        type="text"
+        name="company_registration_note"
+        tabIndex={-1}
+        aria-hidden="true"
+        autoComplete="off"
+        className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden"
+      />
 
       <div className="mb-6">
         <h2 className="text-2xl font-extrabold text-slate-900">
