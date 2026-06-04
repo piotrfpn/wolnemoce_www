@@ -472,7 +472,7 @@ export default function ProjectFormClient({
         </h1>
         <p className="mt-2 text-sm leading-6 text-slate-500">
           To deklaracja wykonawcy. WolneMoce.pl moderuje treść przed publikacją,
-          ale nie potwierdza jej jako formalnej referencji klienta.
+          ale nie potwierdza jej jako formalnego poświadczenia klienta.
         </p>
       </div>
 

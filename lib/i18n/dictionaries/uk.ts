@@ -345,6 +345,7 @@ const uk: Dictionary = {
         icon: "fas fa-star",
         source: "contact:wyroznienie-oferty",
       },
+      naruszenie: en.contactPage.partnerTopics.naruszenie,
     },
     buyerBoxTitle: "Для компаній, що шукають виконавця",
     buyerBoxDescription: "Допомагаємо впорядкувати запит і знайти компанії з доступними потужностями у конкретній галузі.",

@@ -375,7 +375,17 @@ const pl: Dictionary = {
         icon: "fas fa-star",
         source: "contact:wyroznienie-oferty",
       },
+      naruszenie: {
+        label: "Zgłoszenie naruszenia",
+        subject: "Zgłoszenie naruszenia",
+        description:
+          "Zgłoszenie trafi do administracji WolneMoce.pl. Opisz krótko, czego dotyczy naruszenie i nie dodawaj danych wrażliwych, jeśli nie są potrzebne do obsługi sprawy.",
+        icon: "fas fa-flag",
+        source: "contact:company_project_abuse",
+      },
     },
+    companyProjectAbuseInitialMessage:
+      "Zgłoszenie dotyczy przykładu realizacji o ID: {id}, firma: {slug}.",
     buyerBoxTitle: "Dla firm szukających wykonawcy",
     buyerBoxDescription:
       "Pomagamy uporządkować zapytanie i znaleźć firmy z dostępnymi mocami w konkretnej branży.",
@@ -529,6 +539,7 @@ const pl: Dictionary = {
     projectDeclarationLabel: "Deklaracja wykonawcy",
     projectDeclarationDescription:
       "Firma deklaruje wykonanie tej realizacji. WolneMoce.pl moderuje treść przed publikacją, ale nie potwierdza jej jako formalnego poświadczenia klienta.",
+    projectReportViolation: "Zgłoś naruszenie",
     projectTechnologyLabel: "Technologia / usługa",
     projectIndustryLabel: "Branża / zastosowanie",
     projectNoImages: "Realizacja bez zdjęć",

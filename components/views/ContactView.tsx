@@ -20,6 +20,13 @@ function getSingleParam(
   return Array.isArray(value) ? value[0] ?? "" : value ?? "";
 }
 
+function getSafeQueryText(
+  searchParams: ContactPageProps["searchParams"],
+  key: string
+) {
+  return getSingleParam(searchParams, key).trim().slice(0, 120);
+}
+
 export default async function ContactView({
   searchParams,
   locale = defaultLocale,
@@ -30,9 +37,18 @@ export default async function ContactView({
     topicParam === "credos" ||
     topicParam === "logimarket" ||
     topicParam === "administracja" ||
-    topicParam === "wyroznienie-oferty"
+    topicParam === "wyroznienie-oferty" ||
+    topicParam === "naruszenie"
       ? t.partnerTopics[topicParam as keyof typeof t.partnerTopics]
       : null;
+  const projectIdParam = getSafeQueryText(searchParams, "project_id");
+  const companySlugParam = getSafeQueryText(searchParams, "firma");
+  const initialMessage =
+    topicParam === "naruszenie"
+      ? t.companyProjectAbuseInitialMessage
+          .replace("{id}", projectIdParam || "brak")
+          .replace("{slug}", companySlugParam || "brak")
+      : "";
   const supabase = createClient();
   const {
     data: { user },
@@ -119,6 +135,7 @@ export default async function ContactView({
 
             <ContactFormClient
               initialTopic={partnerTopic?.subject ?? ""}
+              initialMessage={initialMessage}
               initialName={initialName}
               initialCompanyName={initialCompanyName}
               initialEmail={initialEmail}

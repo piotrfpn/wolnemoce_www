@@ -345,6 +345,7 @@ const fr: Dictionary = {
         icon: "fas fa-star",
         source: "contact:wyroznienie-oferty",
       },
+      naruszenie: en.contactPage.partnerTopics.naruszenie,
     },
     buyerBoxTitle: "Pour les entreprises cherchant un prestataire",
     buyerBoxDescription: "Nous aidons à structurer la demande et à trouver des entreprises avec capacités disponibles dans un secteur donné.",

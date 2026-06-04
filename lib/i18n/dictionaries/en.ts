@@ -362,7 +362,17 @@ const en: Dictionary = {
         icon: "fas fa-star",
         source: "contact:wyroznienie-oferty",
       },
+      naruszenie: {
+        label: "Violation report",
+        subject: "Violation report",
+        description:
+          "The report will be sent to WolneMoce.pl administration. Briefly describe what the violation concerns and avoid adding sensitive data unless it is needed to handle the case.",
+        icon: "fas fa-flag",
+        source: "contact:company_project_abuse",
+      },
     },
+    companyProjectAbuseInitialMessage:
+      "The report concerns a work example with ID: {id}, company: {slug}.",
     buyerBoxTitle: "For companies looking for a contractor",
     buyerBoxDescription:
       "We help organize the inquiry and find companies with available capacity in a specific industry.",
@@ -515,6 +525,7 @@ const en: Dictionary = {
     projectDeclarationLabel: "Contractor declaration",
     projectDeclarationDescription:
       "The company declares that it completed this work. WolneMoce.pl moderates the content before publication, but does not confirm it as a formal client endorsement.",
+    projectReportViolation: "Report a violation",
     projectTechnologyLabel: "Technology / service",
     projectIndustryLabel: "Industry / use case",
     projectNoImages: "Work example without images",

@@ -11,6 +11,7 @@ type ContactFormClientProps = {
   initialCompanyName?: string;
   initialEmail?: string;
   initialPhone?: string;
+  initialMessage?: string;
   source?: string;
   locale?: Locale;
 };
@@ -76,6 +77,7 @@ export default function ContactFormClient({
   initialCompanyName = "",
   initialEmail = "",
   initialPhone = "",
+  initialMessage = "",
   source = "contact",
   locale = defaultLocale,
 }: ContactFormClientProps) {
@@ -85,7 +87,7 @@ export default function ContactFormClient({
   const [email, setEmail] = useState(initialEmail);
   const [phone, setPhone] = useState(initialPhone);
   const [topic, setTopic] = useState(initialTopic);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(initialMessage);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -110,7 +112,7 @@ export default function ContactFormClient({
     setEmail(initialEmail);
     setPhone(initialPhone);
     setTopic(initialTopic);
-    setMessage("");
+    setMessage(initialMessage);
     setIsSubmitting(false);
   }
 

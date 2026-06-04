@@ -236,6 +236,20 @@ function getCertificateDownloadUrl(certificate: PublicCompanyCertificate) {
   return `${data.publicUrl}${separator}${encodeURIComponent(fileName)}`;
 }
 
+function getCompanyProjectReportHref(
+  projectId: string,
+  companySlug: string,
+  locale: Locale
+) {
+  const params = new URLSearchParams({
+    temat: "naruszenie",
+    project_id: projectId,
+    firma: companySlug,
+  });
+
+  return getLocalizedHref("/kontakt", locale, params.toString());
+}
+
 export async function generateCompanyDetailMetadata({
   slug,
   locale,
@@ -322,6 +336,7 @@ export default async function CompanyDetailView({
         ? [company.industry]
         : [];
   const serviceTypes = company.service_types ?? [];
+  const companySlug = company.slug ?? slug;
   const companyOffersHref = getLocalizedHref(
     "/oferty",
     locale,
@@ -843,6 +858,20 @@ export default async function CompanyDetailView({
                             </div>
                           </div>
                         ) : null}
+
+                        <div className="mt-5 border-t border-slate-200 pt-4">
+                          <Link
+                            href={getCompanyProjectReportHref(
+                              project.id,
+                              companySlug,
+                              locale
+                            )}
+                            className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 no-underline transition hover:text-[#1a5f3c]"
+                          >
+                            <i className="fas fa-flag text-[11px]"></i>
+                            {t.projectReportViolation}
+                          </Link>
+                        </div>
                       </div>
                     </article>
                   ))}

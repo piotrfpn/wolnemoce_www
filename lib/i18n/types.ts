@@ -343,7 +343,15 @@ export type Dictionary = {
         icon: string;
         source: string;
       };
+      naruszenie: {
+        label: string;
+        subject: string;
+        description: string;
+        icon: string;
+        source: string;
+      };
     };
+    companyProjectAbuseInitialMessage: string;
     buyerBoxTitle: string;
     buyerBoxDescription: string;
     supplierBoxTitle: string;
@@ -459,6 +467,7 @@ export type Dictionary = {
     projectsDescription: string;
     projectDeclarationLabel: string;
     projectDeclarationDescription: string;
+    projectReportViolation: string;
     projectTechnologyLabel: string;
     projectIndustryLabel: string;
     projectNoImages: string;

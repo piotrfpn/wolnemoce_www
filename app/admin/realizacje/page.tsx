@@ -202,6 +202,10 @@ export default async function AdminProjectsPage({
               {projects.map((project) => {
                 const statusValue = project.status;
                 const company = project.companies;
+                const isCompanyPublic = Boolean(company?.is_verified && company.slug);
+                const companyProfileHref = isCompanyPublic
+                  ? `/firmy/${company?.slug}`
+                  : null;
                 const location = [
                   company?.location_city,
                   company?.location_voivodeship,
@@ -233,11 +237,15 @@ export default async function AdminProjectsPage({
                               Brak NDA
                             </span>
                           )}
-                          {company?.is_verified ? (
+                          {isCompanyPublic ? (
                             <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
                               Firma publiczna
                             </span>
-                          ) : null}
+                          ) : (
+                            <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700">
+                              Firma niepubliczna
+                            </span>
+                          )}
                         </div>
 
                         <h2 className="break-words text-xl font-extrabold text-slate-900">
@@ -247,6 +255,15 @@ export default async function AdminProjectsPage({
                           {company?.name ?? "Firma bez nazwy"}
                           {location ? ` · ${location}` : ""}
                         </p>
+                        {companyProfileHref ? (
+                          <Link
+                            href={companyProfileHref}
+                            className="mt-2 inline-flex items-center gap-2 text-xs font-bold text-[#1a5f3c] no-underline"
+                          >
+                            Profil publiczny firmy
+                            <i className="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                          </Link>
+                        ) : null}
                         <p className="mt-3 line-clamp-2 text-sm leading-6 text-slate-600">
                           {project.description}
                         </p>

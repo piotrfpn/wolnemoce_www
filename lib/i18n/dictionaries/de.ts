@@ -351,6 +351,7 @@ const de: Dictionary = {
         icon: "fas fa-star",
         source: "contact:wyroznienie-oferty",
       },
+      naruszenie: en.contactPage.partnerTopics.naruszenie,
     },
     buyerBoxTitle: "Für Firmen, die Auftragnehmer suchen",
     buyerBoxDescription: "Wir helfen, Anfragen zu ordnen und Firmen mit freien Kapazitäten in der passenden Branche zu finden.",

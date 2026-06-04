@@ -67,6 +67,8 @@ export default async function AdminProjectDetailsPage({
     .order("created_at", { ascending: true });
   const images = (imageData ?? []) as AdminProjectImage[];
   const company = project.companies;
+  const isCompanyPublic = Boolean(company?.is_verified && company.slug);
+  const companyProfileHref = isCompanyPublic ? `/firmy/${company?.slug}` : null;
   const location = [company?.location_city, company?.location_voivodeship]
     .filter(Boolean)
     .join(", ");
@@ -95,6 +97,15 @@ export default async function AdminProjectDetailsPage({
                 {company?.name ?? "Firma bez nazwy"}
                 {location ? ` · ${location}` : ""}
               </p>
+              {companyProfileHref ? (
+                <Link
+                  href={companyProfileHref}
+                  className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
+                >
+                  Profil publiczny firmy
+                  <i className="fas fa-arrow-up-right-from-square text-xs"></i>
+                </Link>
+              ) : null}
             </div>
             <span
               className={`inline-flex shrink-0 rounded-full px-4 py-2 text-sm font-bold ${
@@ -133,11 +144,15 @@ export default async function AdminProjectDetailsPage({
                       Brak NDA
                     </span>
                   )}
-                  {company?.is_verified ? (
+                  {isCompanyPublic ? (
                     <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
                       Firma publiczna
                     </span>
-                  ) : null}
+                  ) : (
+                    <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700">
+                      Firma niepubliczna
+                    </span>
+                  )}
                 </div>
 
                 <div className="grid min-w-0 gap-4 sm:grid-cols-2">
