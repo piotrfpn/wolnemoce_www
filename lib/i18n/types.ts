@@ -587,6 +587,7 @@ export type Dictionary = {
       subtitle: string;
       price: string;
       priceSuffix: string;
+      priceNote?: string;
       features: string[];
       cta: string;
       ctaHref: string;

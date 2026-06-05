@@ -33,6 +33,9 @@ export default function Pricing({ locale = defaultLocale }: { locale?: Locale })
             <div className="price">
               {plan.price} <span>{plan.priceSuffix}</span>
             </div>
+            {plan.priceNote && (
+              <p className="price-note">{plan.priceNote}</p>
+            )}
 
             <ul>
               {plan.features.map((feature) => (

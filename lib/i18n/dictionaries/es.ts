@@ -627,8 +627,10 @@ const es: Dictionary = {
       {
         name: "Plan PRO",
         subtitle: "Para fabricantes activos",
-        price: "299 PLN",
-        priceSuffix: "/ mes",
+        price: "199 PLN",
+        priceSuffix: "neto + IVA / mes",
+        priceNote:
+          "Precio de lanzamiento para los primeros socios de la plataforma. Garantizado durante 6 meses desde la activación del plan. Precio regular: 299 PLN neto / mes.",
         features: [
           "5 ofertas activas o pendientes",
           "Mayor visibilidad en resultados",

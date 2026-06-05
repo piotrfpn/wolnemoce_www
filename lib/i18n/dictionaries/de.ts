@@ -637,8 +637,10 @@ const de: Dictionary = {
       {
         name: "Plan PRO",
         subtitle: "Für aktive Hersteller",
-        price: "299 PLN",
-        priceSuffix: "/ Monat",
+        price: "199 PLN",
+        priceSuffix: "netto + MwSt. / Monat",
+        priceNote:
+          "Einführungspreis für die ersten Plattformpartner. Für 6 Monate ab Aktivierung des Plans garantiert. Regulärer Preis: 299 PLN netto / Monat.",
         features: [
           "5 aktive oder wartende Angebote",
           "Höhere Sichtbarkeit in Ergebnissen",

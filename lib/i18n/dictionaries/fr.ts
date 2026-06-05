@@ -627,8 +627,10 @@ const fr: Dictionary = {
       {
         name: "Plan PRO",
         subtitle: "Pour les fabricants actifs",
-        price: "299 PLN",
-        priceSuffix: "/ mois",
+        price: "199 PLN",
+        priceSuffix: "HT + TVA / mois",
+        priceNote:
+          "Prix de lancement pour les premiers partenaires de la plateforme. Garanti pendant 6 mois à partir de l’activation du plan. Prix régulier : 299 PLN HT / mois.",
         features: [
           "5 offres actives ou en attente",
           "Meilleure visibilité dans les résultats",
