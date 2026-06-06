@@ -7,7 +7,7 @@ import {
 } from "@/lib/i18n/config";
 
 const siteUrl = "https://www.wolnemoce.com";
-const defaultOgImage = "/images/offers/automation.jpg";
+const defaultOgImage = "/og/wolnemoce-og.png";
 
 const openGraphLocales: Record<Locale, string> = {
   pl: "pl_PL",
