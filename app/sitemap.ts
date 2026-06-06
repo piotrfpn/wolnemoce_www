@@ -6,6 +6,10 @@ import { getSiteUrl } from "@/lib/seo";
 const baseUrl = getSiteUrl();
 const dynamicRouteLimit = 1000;
 
+function createAbsoluteSitemapUrl(route: string) {
+  return new URL(route, baseUrl).toString();
+}
+
 function createSitemapSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -102,7 +106,7 @@ async function getPublishedBlogRoutes() {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
-    "",
+    "/",
     "/oferty",
     "/firmy",
     "/blog",
@@ -116,7 +120,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/zapytanie-ofertowe",
   ];
   const localizedStaticRoutes = supportedLocales.flatMap((locale) =>
-    staticRoutes.map((route) => getLocalizedPath(route || "/", locale))
+    staticRoutes.map((route) => getLocalizedPath(route, locale))
   );
 
   const offerRoutes = await getActiveOfferRoutes();
@@ -131,7 +135,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...blogRoutes,
     ])
   ).map((route) => ({
-    url: `${baseUrl}${route}`,
+    url: createAbsoluteSitemapUrl(route),
     lastModified: new Date(),
     changeFrequency: route === "/" ? "weekly" : "monthly",
     priority: route === "/" ? 1 : 0.7,
