@@ -92,6 +92,7 @@ const en: Dictionary = {
       { icon: "🧴", name: "Chemicals and cosmetics", description: "Filling, mixing, packaging" },
       { icon: "🪵", name: "Wood and furniture", description: "Joinery, custom furniture, CNC" },
       { icon: "🖨️", name: "Printing", description: "Offset, digital printing, labels" },
+      { icon: "🧊", name: "3D printing and prototyping", description: "Additive printing, prototypes, 3D scanning" },
       { icon: "🔌", name: "Electronics", description: "PCB assembly, testing, programming" },
       { icon: "💻", name: "IT", description: "Apps, ERP/MES/WMS, API integrations" },
       { icon: "🎨", name: "Painting", description: "Powder, wet and industrial coating" },

@@ -6,6 +6,7 @@ const industryImages: Record<string, string> = {
   "Chemia i kosmetyki": "/images/offers/injection.jpg",
   "Drewno i meble": "/images/offers/cnc.jpg",
   "Druk i poligrafia": "/images/offers/automation.jpg",
+  "Druk 3D i prototypowanie": "/images/offers/cnc.jpg",
   Elektronika: "/images/offers/automation.jpg",
   Lakiernictwo: "/images/offers/cnc.jpg",
   Logistyka: "/images/offers/automation.jpg",

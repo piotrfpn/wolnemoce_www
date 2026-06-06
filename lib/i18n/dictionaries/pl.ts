@@ -90,6 +90,7 @@ const pl: Dictionary = {
       { icon: "🧴", name: "Chemia i kosmetyki", description: "Konfekcja, mieszanie, pakowanie" },
       { icon: "🪵", name: "Drewno i meble", description: "Stolarka, meble na zamówienie, CNC" },
       { icon: "🖨️", name: "Druk i poligrafia", description: "Druk offsetowy, cyfrowy, etykiety" },
+      { icon: "🧊", name: "Druk 3D i prototypowanie", description: "Druk addytywny, prototypy, skanowanie 3D" },
       { icon: "🔌", name: "Elektronika", description: "Montaż PCB, testowanie, programowanie" },
       { icon: "💻", name: "IT", description: "Aplikacje, ERP/MES/WMS, integracje API" },
       { icon: "🎨", name: "Lakiernictwo", description: "Lakierowanie proszkowe, mokre, przemysłowe" },

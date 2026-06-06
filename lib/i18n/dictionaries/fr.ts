@@ -93,6 +93,7 @@ const fr: Dictionary = {
       { icon: "🧴", name: "Chimie et cosmétiques", description: "Conditionnement, mélange, emballage" },
       { icon: "🪵", name: "Bois et meubles", description: "Menuiserie, meubles sur mesure, CNC" },
       { icon: "🖨️", name: "Impression", description: "Offset, numérique, étiquettes" },
+      { icon: "🧊", name: "Impression 3D et prototypage", description: "Fabrication additive, prototypes, scan 3D" },
       { icon: "🔌", name: "Électronique", description: "Assemblage PCB, tests, programmation" },
       { icon: "💻", name: "IT", description: "Applications, ERP/MES/WMS, intégrations API" },
       { icon: "🎨", name: "Peinture", description: "Poudre, liquide, revêtement industriel" },

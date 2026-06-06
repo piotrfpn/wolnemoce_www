@@ -93,6 +93,7 @@ const de: Dictionary = {
       { icon: "🧴", name: "Chemie und Kosmetik", description: "Abfüllung, Mischen, Verpackung" },
       { icon: "🪵", name: "Holz und Möbel", description: "Tischlerei, Möbel nach Maß, CNC" },
       { icon: "🖨️", name: "Druck", description: "Offset, Digitaldruck, Etiketten" },
+      { icon: "🧊", name: "3D-Druck und Prototyping", description: "Additiver Druck, Prototypen, 3D-Scans" },
       { icon: "🔌", name: "Elektronik", description: "PCB-Montage, Tests, Programmierung" },
       { icon: "💻", name: "IT", description: "Apps, ERP/MES/WMS, API-Integrationen" },
       { icon: "🎨", name: "Lackierung", description: "Pulver-, Nass- und Industrielackierung" },
