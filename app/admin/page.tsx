@@ -6,18 +6,16 @@ import LogoutButton from "@/components/LogoutButton";
 import PanelNavbar from "@/components/PanelNavbar";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import {
-  buildMailtoHref,
-  buildServiceRequestReplyBody,
-  buildServiceRequestReplySubject,
-} from "@/lib/adminReplyMailto";
 import PendingCompaniesClient, {
   type PendingCompany,
 } from "./PendingCompaniesClient";
 import PendingOffersClient, { type PendingOffer } from "./PendingOffersClient";
-import PendingServicesClient, {
-  type PendingServiceRequest,
-} from "./PendingServicesClient";
+import PendingServicesClient from "./PendingServicesClient";
+import {
+  enrichServiceRequestsWithReplyContext,
+  serviceRequestsAdminSelect,
+  type ServiceRequestRecord,
+} from "./serviceRequestsData";
 
 type FreeLimitOffer = {
   id: string;
@@ -40,19 +38,6 @@ type FreeLimitCompanySummary = {
     title: string;
     status: string;
   }[];
-};
-
-type ServiceRequestProfile = {
-  id: string;
-  contact_email: string | null;
-  email: string | null;
-  full_name: string | null;
-  display_name: string | null;
-};
-
-type ServiceRequestCompanyContact = {
-  company_id: string;
-  contact_email: string | null;
 };
 
 export const metadata: Metadata = {
@@ -85,6 +70,7 @@ export default async function AdminPage() {
     companiesResult,
     offersResult,
     serviceRequestsResult,
+    serviceRequestsCountResult,
     contactMessagesResult,
     freeLimitOffersResult,
     certificatesResult,
@@ -106,11 +92,14 @@ export default async function AdminPage() {
       .order("created_at", { ascending: false }),
     supabase
       .from("service_requests")
-      .select(
-        "id, user_id, company_id, industry, proposed_service, reason, status, created_at, admin_handled_at, admin_response_note, companies(name)"
-      )
+      .select(serviceRequestsAdminSelect)
+      .or("status.eq.pending,admin_handled_at.is.null")
       .order("created_at", { ascending: false })
       .limit(50),
+    supabase
+      .from("service_requests")
+      .select("id", { count: "exact", head: true })
+      .or("status.eq.pending,admin_handled_at.is.null"),
     supabase
       .from("contact_messages")
       .select("id", { count: "exact", head: true })
@@ -133,93 +122,18 @@ export default async function AdminPage() {
   const pendingCompanies = (companiesResult.data ?? []) as PendingCompany[];
   const pendingOffers = (offersResult.data ?? []) as unknown as PendingOffer[];
   const pendingServiceRequests = (serviceRequestsResult.data ??
-    []) as unknown as PendingServiceRequest[];
-  const pendingServiceRequestsCount = pendingServiceRequests.filter(
-    (request) => request.status === "pending"
-  ).length;
+    []) as unknown as ServiceRequestRecord[];
+  const pendingServiceRequestsCount =
+    serviceRequestsCountResult.count ?? pendingServiceRequests.length;
   const newContactMessagesCount = contactMessagesResult.count ?? 0;
   const pendingCertificatesCount = certificatesResult.count ?? 0;
   const pendingCompanyProjectsCount = companyProjectsResult.count ?? 0;
   const freeLimitOffers = (freeLimitOffersResult.data ?? []) as unknown as FreeLimitOffer[];
   const freeLimitCompanies = new Map<string, FreeLimitCompanySummary>();
-  const serviceRequestUserIds = Array.from(
-    new Set(
-      pendingServiceRequests
-        .map((request) => request.user_id)
-        .filter((value): value is string => Boolean(value))
-    )
-  );
-  const serviceRequestCompanyIds = Array.from(
-    new Set(
-      pendingServiceRequests
-        .map((request) => request.company_id)
-        .filter((value): value is string => Boolean(value))
-    )
-  );
-  const [serviceRequestProfilesResult, serviceRequestCompanyContactsResult] =
-    await Promise.all([
-      serviceRequestUserIds.length > 0
-        ? supabase
-            .from("profiles")
-            .select("id, contact_email, email, full_name, display_name")
-            .in("id", serviceRequestUserIds)
-        : Promise.resolve({ data: [] as ServiceRequestProfile[], error: null }),
-      serviceRequestCompanyIds.length > 0
-        ? supabase
-            .from("company_contact_settings")
-            .select("company_id, contact_email")
-            .in("company_id", serviceRequestCompanyIds)
-        : Promise.resolve({
-            data: [] as ServiceRequestCompanyContact[],
-            error: null,
-          }),
-    ]);
-  const serviceRequestProfiles = new Map(
-    ((serviceRequestProfilesResult.data ?? []) as ServiceRequestProfile[]).map(
-      (profile) => [profile.id, profile]
-    )
-  );
-  const serviceRequestCompanyContacts = new Map(
-    (
-      (serviceRequestCompanyContactsResult.data ??
-        []) as ServiceRequestCompanyContact[]
-    ).map((settings) => [settings.company_id, settings])
-  );
-  const serviceRequestReplyBody = buildServiceRequestReplyBody();
-  const serviceRequestsWithReplyContext = pendingServiceRequests.map((request) => {
-    const profile = request.user_id
-      ? serviceRequestProfiles.get(request.user_id)
-      : null;
-    const companyContact = request.company_id
-      ? serviceRequestCompanyContacts.get(request.company_id)
-      : null;
-    const profileContactEmail = profile?.contact_email?.trim() || "";
-    const profileAccountEmail = profile?.email?.trim() || "";
-    const companyContactEmail = companyContact?.contact_email?.trim() || "";
-    const replyEmail =
-      profileContactEmail || profileAccountEmail || companyContactEmail || null;
-    const replyEmailSource = profileContactEmail
-      ? "profil użytkownika"
-      : profileAccountEmail
-        ? "konto użytkownika"
-        : companyContactEmail
-          ? "profil firmy"
-          : null;
-
-    return {
-      ...request,
-      submitter_name: profile?.full_name || profile?.display_name || null,
-      reply_email: replyEmail,
-      reply_email_source: replyEmailSource,
-      reply_href: replyEmail
-        ? buildMailtoHref({
-            to: replyEmail,
-            subject: buildServiceRequestReplySubject(request.proposed_service),
-            body: serviceRequestReplyBody,
-          })
-        : null,
-    };
-  });
+  const {
+    requests: serviceRequestsWithReplyContext,
+    contactContextError: serviceRequestContactContextError,
+  } = await enrichServiceRequestsWithReplyContext(supabase, pendingServiceRequests);
 
   for (const offer of freeLimitOffers) {
     const companyId = offer.companies?.id ?? offer.company_id;
@@ -331,7 +245,7 @@ export default async function AdminPage() {
                   alert: pendingCompanyProjectsCount > 0,
                 },
                 {
-                  title: "Zgłoszenia usług pending",
+                  title: "Zgłoszenia usług do obsługi",
                   count: pendingServiceRequestsCount,
                   icon: "fa-screwdriver-wrench",
                   href: "#pending-services",
@@ -390,10 +304,11 @@ export default async function AdminPage() {
               <h2 className="text-2xl font-extrabold text-slate-900">Szybkie akcje</h2>
               <p className="mt-2 text-sm text-slate-500">Najczęściej używane sekcje panelu administracyjnego.</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 { title: "Przejdź do firm", icon: "fa-building", href: "/admin/firmy" },
                 { title: "Przejdź do ofert", icon: "fa-list-check", href: "/admin/oferty" },
+                { title: "Przejdź do zgłoszeń usług", icon: "fa-screwdriver-wrench", href: "/admin/service-requests" },
                 { title: "Przejdź do realizacji", icon: "fa-briefcase", href: "/admin/realizacje" },
                 { title: "Monitoring RFQ", icon: "fa-inbox", href: "/admin/rfq" },
                 { title: "Przejdź do certyfikatów", icon: "fa-certificate", href: "/admin/certyfikaty" },
@@ -506,12 +421,10 @@ export default async function AdminPage() {
             </div>
           ) : null}
 
-          {serviceRequestProfilesResult.error ||
-          serviceRequestCompanyContactsResult.error ? (
+          {serviceRequestContactContextError ? (
             <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-              Nie udało się pobrać pełnych danych kontaktowych dla części
-              zgłoszeń. Odpowiedź mailowa może być niedostępna do ręcznej
-              weryfikacji profilu użytkownika lub firmy.
+              {serviceRequestContactContextError} Odpowiedź mailowa może być
+              niedostępna do ręcznej weryfikacji profilu użytkownika lub firmy.
             </div>
           ) : null}
 
@@ -564,7 +477,11 @@ export default async function AdminPage() {
                   przygotowywana jest przez mailto.
                 </p>
               </div>
-              <PendingServicesClient requests={serviceRequestsWithReplyContext} />
+              <PendingServicesClient
+                requests={serviceRequestsWithReplyContext}
+                emptyIcon="fa-circle-check"
+                emptyMessage="Brak zgłoszeń usług wymagających obsługi."
+              />
             </section>
           </div>
         </section>

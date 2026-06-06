@@ -56,8 +56,14 @@ function formatDate(value: string | null) {
 
 export default function PendingServicesClient({
   requests,
+  emptyIcon,
+  emptyMessage = "Brak zgłoszeń usług w ostatniej historii.",
+  showAdminNote = false,
 }: {
   requests: PendingServiceRequest[];
+  emptyIcon?: string;
+  emptyMessage?: string;
+  showAdminNote?: boolean;
 }) {
   const [isPending, startTransition] = useTransition();
   const [activeId, setActiveId] = useState("");
@@ -83,8 +89,13 @@ export default function PendingServicesClient({
 
   if (requests.length === 0) {
     return (
-      <div className="rounded-[20px] border border-dashed border-slate-300 bg-slate-50 p-6 text-sm text-slate-500">
-        Brak zgłoszeń usług w ostatniej historii.
+      <div className="rounded-[20px] border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-sm text-slate-500">
+        {emptyIcon ? (
+          <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+            <i className={`fas ${emptyIcon}`}></i>
+          </div>
+        ) : null}
+        {emptyMessage}
       </div>
     );
   }
@@ -184,6 +195,17 @@ export default function PendingServicesClient({
                   <p className="mt-4 text-xs font-bold uppercase tracking-wide text-slate-400">
                     Obsłużone: {formatDate(request.admin_handled_at)}
                   </p>
+                ) : null}
+
+                {showAdminNote && request.admin_response_note ? (
+                  <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50 p-4">
+                    <p className="mb-1 text-xs font-bold uppercase tracking-wide text-slate-500">
+                      Notatka admina
+                    </p>
+                    <p className="whitespace-pre-line break-words text-sm leading-6 text-slate-700">
+                      {request.admin_response_note}
+                    </p>
+                  </div>
                 ) : null}
               </div>
 

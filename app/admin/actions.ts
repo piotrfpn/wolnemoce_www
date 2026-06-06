@@ -86,6 +86,7 @@ export async function approveServiceRequest(requestId: string) {
   }
 
   revalidatePath("/admin");
+  revalidatePath("/admin/service-requests");
 }
 
 export async function rejectServiceRequest(requestId: string) {
@@ -100,6 +101,7 @@ export async function rejectServiceRequest(requestId: string) {
   }
 
   revalidatePath("/admin");
+  revalidatePath("/admin/service-requests");
 }
 
 export async function markServiceRequestHandled(requestId: string) {
@@ -126,6 +128,7 @@ export async function markServiceRequestHandled(requestId: string) {
   }
 
   revalidatePath("/admin");
+  revalidatePath("/admin/service-requests");
 }
 
 export async function verifyCompany(companyId: string) {
