@@ -278,6 +278,8 @@ export default async function AdminContactMessagesPage({
                       <ContactMessageActionsClient
                         messageId={message.id}
                         status={message.status}
+                        email={message.email}
+                        topic={message.topic}
                       />
                     </div>
 

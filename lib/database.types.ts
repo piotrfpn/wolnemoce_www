@@ -2559,6 +2559,9 @@ export type Database = {
       }
       service_requests: {
         Row: {
+          admin_handled_at: string | null
+          admin_handled_by: string | null
+          admin_response_note: string | null
           company_id: string | null
           created_at: string
           id: string
@@ -2570,6 +2573,9 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          admin_handled_at?: string | null
+          admin_handled_by?: string | null
+          admin_response_note?: string | null
           company_id?: string | null
           created_at?: string
           id?: string
@@ -2581,6 +2587,9 @@ export type Database = {
           user_id: string
         }
         Update: {
+          admin_handled_at?: string | null
+          admin_handled_by?: string | null
+          admin_response_note?: string | null
           company_id?: string | null
           created_at?: string
           id?: string
@@ -2592,6 +2601,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "service_requests_admin_handled_by_fkey"
+            columns: ["admin_handled_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "service_requests_company_id_fkey"
             columns: ["company_id"]

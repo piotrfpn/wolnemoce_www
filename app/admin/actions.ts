@@ -102,6 +102,32 @@ export async function rejectServiceRequest(requestId: string) {
   revalidatePath("/admin");
 }
 
+export async function markServiceRequestHandled(requestId: string) {
+  const supabase = await requireAdmin();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  const { error } = await supabase
+    .from("service_requests")
+    .update({
+      admin_handled_at: new Date().toISOString(),
+      admin_handled_by: user.id,
+      admin_response_note: "Odpowiedź przygotowana przez mailto w panelu admina.",
+    })
+    .eq("id", requestId);
+
+  if (error) {
+    throw new Error(`Nie udało się oznaczyć zgłoszenia jako obsłużone: ${error.message}`);
+  }
+
+  revalidatePath("/admin");
+}
+
 export async function verifyCompany(companyId: string) {
   const supabase = await requireAdmin();
   const { data, error } = await supabase

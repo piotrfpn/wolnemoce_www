@@ -5,17 +5,31 @@ import {
   markContactMessageHandled,
   markContactMessageRead,
 } from "./actions";
+import {
+  buildContactMessageReplyBody,
+  buildContactMessageReplySubject,
+  buildMailtoHref,
+} from "@/lib/adminReplyMailto";
 
 export default function ContactMessageActionsClient({
   messageId,
   status,
+  email,
+  topic,
 }: {
   messageId: string;
   status: string | null;
+  email: string | null;
+  topic: string | null;
 }) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
   const hasActions = status !== "handled" && status !== "archived";
+  const replyHref = buildMailtoHref({
+    to: email,
+    subject: buildContactMessageReplySubject(topic),
+    body: buildContactMessageReplyBody(),
+  });
 
   function runAction(action: (id: string) => Promise<void>) {
     setError("");
@@ -32,7 +46,7 @@ export default function ContactMessageActionsClient({
     });
   }
 
-  if (!hasActions && !error) {
+  if (!hasActions && !error && !replyHref) {
     return null;
   }
 
@@ -46,6 +60,26 @@ export default function ContactMessageActionsClient({
 
       {hasActions ? (
         <div className="flex flex-col gap-2 sm:flex-row">
+          {replyHref ? (
+            <a
+              href={replyHref}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-bold text-white no-underline transition hover:bg-slate-700"
+            >
+              <i className="fas fa-reply"></i>
+              Odpowiedz
+            </a>
+          ) : (
+            <button
+              type="button"
+              disabled
+              title="Brak adresu e-mail w wiadomości."
+              className="inline-flex cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-slate-200 px-4 py-3 text-sm font-bold text-slate-500 opacity-80"
+            >
+              <i className="fas fa-reply"></i>
+              Odpowiedz
+            </button>
+          )}
+
           {status !== "read" && status !== "handled" && status !== "archived" ? (
             <button
               type="button"
@@ -70,6 +104,14 @@ export default function ContactMessageActionsClient({
             </button>
           ) : null}
         </div>
+      ) : replyHref ? (
+        <a
+          href={replyHref}
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-bold text-white no-underline transition hover:bg-slate-700"
+        >
+          <i className="fas fa-reply"></i>
+          Odpowiedz
+        </a>
       ) : null}
     </div>
   );
