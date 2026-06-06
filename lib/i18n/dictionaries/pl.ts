@@ -637,7 +637,7 @@ const pl: Dictionary = {
     privacy: {
       title: "Polityka prywatności",
       description:
-        "Informacje o przetwarzaniu danych osobowych w portalu WolneMoce.",
+        "Informacje o przetwarzaniu danych kont, firm, ofert, RFQ, formularzy i logów technicznych w portalu WolneMoce.",
       companyProjects: {
         title: "Opisy i zdjęcia realizacji",
         intro:
@@ -652,7 +652,7 @@ const pl: Dictionary = {
     cookies: {
       title: "Polityka Cookies",
       description:
-        "Informacje o plikach cookies i podobnych technologiach wykorzystywanych w WolneMoce.",
+        "Na etapie soft-launch WolneMoce używa tylko cookies i podobnych technologii niezbędnych, bez cookies analitycznych i marketingowych.",
     },
   },
   howItWorks: {

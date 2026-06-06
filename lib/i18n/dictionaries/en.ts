@@ -623,7 +623,7 @@ const en: Dictionary = {
     privacy: {
       title: "Privacy Policy",
       description:
-        "Information about personal data processing in WolneMoce.",
+        "Information about account, company, offer, RFQ, form and technical log data processing in WolneMoce.",
       companyProjects: {
         title: "Work descriptions and images",
         intro:
@@ -638,7 +638,7 @@ const en: Dictionary = {
     cookies: {
       title: "Cookie Policy",
       description:
-        "Information about cookies and similar technologies used by WolneMoce.",
+        "During soft launch WolneMoce uses only necessary cookies and similar technologies, with no analytics or marketing cookies.",
     },
   },
   howItWorks: {

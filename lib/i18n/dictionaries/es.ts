@@ -577,13 +577,13 @@ const es: Dictionary = {
     privacy: {
       title: "Política de privacidad",
       description:
-        "Información sobre el tratamiento de datos personales en WolneMoce.",
+        "Información sobre el tratamiento de datos de cuentas, empresas, ofertas, RFQ, formularios y registros técnicos en WolneMoce.",
       companyProjects: en.legal.privacy.companyProjects,
     },
     cookies: {
       title: "Política de cookies",
       description:
-        "Información sobre cookies y tecnologías similares utilizadas por WolneMoce.",
+        "Durante el soft launch WolneMoce usa solo cookies y tecnologías similares necesarias, sin cookies analíticas ni de marketing.",
     },
   },
   howItWorks: {

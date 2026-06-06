@@ -111,23 +111,61 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
 
               <Section number={5} title="Cele i podstawy prawne">
                 <ul className="list-disc space-y-2 pl-5">
-                  <li>świadczenie usług elektronicznych i obsługa konta,</li>
-                  <li>obsługa profilu firmy, ofert, branż i rodzajów usług,</li>
-                  <li>obsługa zapytań RFQ, załączników i czasowych signed URLs oraz monitorowanie zapytań przez administratora w celu zapewnienia bezpieczeństwa, przeciwdziałania nadużyciom i prawidłowej obsługi portalu,</li>
-                  <li>obsługa płatności, faktur, księgowości i obowiązków podatkowych,</li>
-                  <li>bezpieczeństwo IT, zapobieganie nadużyciom i ochrona Serwisu,</li>
-                  <li>dochodzenie, ustalenie i obrona roszczeń,</li>
-                  <li>kontakt, obsługa zgłoszeń i reklamacji,</li>
-                  <li>opcjonalna analityka, jeżeli zostanie wdrożona i będzie wymagała zgody.</li>
+                  <li>świadczenie usług elektronicznych i obsługa konta - art. 6 ust. 1 lit. b RODO,</li>
+                  <li>obsługa profilu firmy, ofert, branż, rodzajów usług, panelu użytkownika i zapytań RFQ - art. 6 ust. 1 lit. b RODO,</li>
+                  <li>obsługa załączników RFQ, prywatnych plików i czasowych signed URLs - art. 6 ust. 1 lit. b RODO oraz art. 6 ust. 1 lit. f RODO w zakresie bezpieczeństwa i przeciwdziałania nadużyciom,</li>
+                  <li>obsługa faktur, księgowości i obowiązków podatkowych, jeżeli płatności lub rozliczenia zostaną uruchomione - art. 6 ust. 1 lit. c RODO,</li>
+                  <li>bezpieczeństwo IT, logi techniczne, zapobieganie nadużyciom, moderacja i ochrona Serwisu - art. 6 ust. 1 lit. f RODO,</li>
+                  <li>dochodzenie, ustalenie i obrona roszczeń - art. 6 ust. 1 lit. f RODO,</li>
+                  <li>kontakt, obsługa zgłoszeń, reklamacji i zapytań partnerskich - art. 6 ust. 1 lit. b lub f RODO zależnie od kontekstu sprawy.</li>
                 </ul>
                 <p>
-                  Podstawami prawnymi mogą być w szczególności wykonanie umowy,
-                  obowiązek prawny, prawnie uzasadniony interes administratora
-                  albo zgoda, jeżeli jest wymagana.
+                  Serwis stosuje zasadę minimalizacji danych. Zakres danych
+                  powinien być ograniczony do informacji potrzebnych do działania
+                  konta, profilu firmy, ofert, RFQ, kontaktu, bezpieczeństwa i
+                  rozliczalności działań w portalu B2B.
                 </p>
               </Section>
 
-              <Section number={6} title="Odbiorcy danych">
+              <Section number={6} title="Dane operacyjne, logi i podstawowa analiza działania platformy">
+                <p>
+                  Na etapie soft-launch Serwis może analizować podstawowe dane
+                  biznesowe i operacyjne pochodzące z działania samej aplikacji,
+                  takie jak liczba rejestracji firm, liczba dodanych ofert, liczba
+                  zapytań ofertowych, statusy moderacji oraz podstawowe zdarzenia
+                  związane z obsługą konta i bezpieczeństwem.
+                </p>
+                <p>
+                  Dane te służą ocenie działania platformy, poprawie jakości
+                  usług, zapewnieniu bezpieczeństwa Serwisu oraz przeciwdziałaniu
+                  nadużyciom. Przetwarzanie odbywa się w zakresie niezbędnym do
+                  realizacji prawnie uzasadnionego interesu administratora, tj.
+                  art. 6 ust. 1 lit. f RODO.
+                </p>
+                <p>
+                  Taka analiza nie oznacza cookies marketingowych, remarketingu,
+                  profilowania reklamowego ani śledzenia użytkownika przez
+                  zewnętrzne narzędzia reklamowe.
+                </p>
+              </Section>
+
+              <Section number={7} title="Analityka marketingowa i profilowanie reklamowe">
+                <p>
+                  Na obecnym etapie WolneMoce.pl nie korzysta z Google Analytics,
+                  GA4, Meta Pixel, Hotjar, heatmap, remarketingu ani podobnych
+                  narzędzi marketingowych lub śledzących. Serwis nie udostępnia
+                  danych użytkowników firmom reklamowym w celu profilowania
+                  reklamowego.
+                </p>
+                <p>
+                  Dane podawane w formularzach, kontach, ofertach i RFQ są
+                  przetwarzane jako dane potrzebne do świadczenia usługi B2B,
+                  obsługi kontaktu, bezpieczeństwa i moderacji, a nie jako dane
+                  zbierane przez cookies marketingowe.
+                </p>
+              </Section>
+
+              <Section number={8} title="Odbiorcy danych">
                 <p>Dane mogą być przekazywane podmiotom wspierającym działanie Serwisu, w tym:</p>
                 <ul className="list-disc space-y-2 pl-5">
                   <li>Supabase - infrastruktura bazy danych, Auth i Storage,</li>
@@ -139,7 +177,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </ul>
               </Section>
 
-              <Section number={7} title="Stripe">
+              <Section number={9} title="Stripe">
                 <p>
                   Jeżeli płatności zostaną wdrożone, Stripe może obsługiwać dane
                   potrzebne do płatności, fakturowania, bezpieczeństwa, anti-fraud
@@ -151,7 +189,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={8} title="Transfer danych poza EOG">
+              <Section number={10} title="Transfer danych poza EOG">
                 <p>
                   Dane mogą być przetwarzane poza Europejskim Obszarem Gospodarczym
                   przez dostawców infrastruktury lub płatności. W takim przypadku
@@ -161,7 +199,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={9} title="Okres przechowywania">
+              <Section number={11} title="Okres przechowywania">
                 <ul className="list-disc space-y-2 pl-5">
                   <li>dane konta - przez czas korzystania z Serwisu oraz okres przedawnienia roszczeń,</li>
                   <li>faktury i dokumenty księgowe - zgodnie z przepisami podatkowymi,</li>
@@ -170,7 +208,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </ul>
               </Section>
 
-              <Section number={10} title="Prawa osób">
+              <Section number={12} title="Prawa osób">
                 <p>Osobie, której dane dotyczą, przysługuje prawo:</p>
                 <ul className="list-disc space-y-2 pl-5">
                   <li>dostępu do danych,</li>
@@ -183,7 +221,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </ul>
               </Section>
 
-              <Section number={11} title="Dobrowolność podania danych">
+              <Section number={13} title="Dobrowolność podania danych">
                 <p>
                   Podanie danych jest dobrowolne, ale niezbędne do utworzenia
                   konta, obsługi profilu firmy, dodawania ofert, wysyłania RFQ,
@@ -192,15 +230,17 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={12} title="Zautomatyzowane decyzje i profilowanie">
+              <Section number={14} title="Zautomatyzowane decyzje i profilowanie">
                 <p>
                   Operator nie stosuje zautomatyzowanego podejmowania decyzji, w
                   tym profilowania, które wywoływałoby wobec osoby skutki prawne
                   lub w podobny sposób istotnie na nią wpływało w rozumieniu RODO.
+                  Operator nie stosuje również profilowania reklamowego na etapie
+                  soft-launch.
                 </p>
               </Section>
 
-              <Section number={13} title="Bezpieczeństwo danych">
+              <Section number={15} title="Bezpieczeństwo danych">
                 <p>
                   Operator stosuje środki organizacyjne i techniczne adekwatne do
                   ryzyka, w tym uwierzytelnianie, kontrolę dostępu, RLS, prywatne
@@ -210,7 +250,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={14} title="Dane w załącznikach RFQ">
+              <Section number={16} title="Dane w załącznikach RFQ">
                 <p>
                   Użytkownik nie powinien przesyłać danych nadmiarowych ani
                   dokumentów, których nie ma prawa udostępnić. Użytkownik odpowiada
@@ -220,7 +260,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={15} title={t.privacy.companyProjects.title}>
+              <Section number={17} title={t.privacy.companyProjects.title}>
                 <p>{t.privacy.companyProjects.intro}</p>
                 <ul className="list-disc space-y-2 pl-5">
                   {t.privacy.companyProjects.items.map((item) => (
@@ -229,7 +269,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </ul>
               </Section>
 
-              <Section number={16} title="Kontakt w sprawie usług partnerskich">
+              <Section number={18} title="Kontakt w sprawie usług partnerskich">
                 <p>
                   Dane podane w formularzu kontaktowym mogą być wykorzystywane do
                   obsługi zapytania użytkownika. Jeżeli zapytanie dotyczy usługi
@@ -243,7 +283,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={17} title="Zmiany polityki prywatności">
+              <Section number={19} title="Zmiany polityki prywatności">
                 <p>
                   Polityka prywatności może być aktualizowana w związku z rozwojem
                   Serwisu, zmianą dostawców, wdrożeniem płatności, zmianami prawa

@@ -66,85 +66,122 @@ export default function CookiesDocumentView({ locale = defaultLocale }: LegalPag
                   Kontakt w sprawach cookies i ochrony prywatności: piotr.fiszer@pfconsulting.pl, tel: +48 604 904 150.
                 </p>
               </Section>
-              <Section number={1} title="Czym są cookies">
+
+              <Section number={2} title="Czym są cookies i podobne technologie">
                 <p>
                   Cookies to niewielkie pliki tekstowe zapisywane na urządzeniu
-                  użytkownika przez przeglądarkę. Mogą służyć do utrzymania sesji,
-                  zapamiętania ustawień, bezpieczeństwa, obsługi płatności lub
-                  analityki. Podobne funkcje mogą pełnić także inne technologie
-                  lokalnego przechowywania danych.
+                  użytkownika przez przeglądarkę. Podobne funkcje mogą pełnić
+                  także inne technologie lokalnego przechowywania danych, w tym
+                  mechanizmy sesji logowania, preferencji języka lub tymczasowe
+                  zapamiętanie danych formularza po stronie przeglądarki.
+                </p>
+                <p>
+                  Zasady przechowywania informacji lub uzyskiwania dostępu do
+                  informacji na urządzeniu końcowym użytkownika wynikają w
+                  szczególności z Prawa komunikacji elektronicznej, w tym art.
+                  399 PKE, oraz z zasad ePrivacy.
                 </p>
               </Section>
 
-              <Section number={2} title="Jakich kategorii cookies używa portal">
+              <Section number={3} title="Stan soft-launch">
+                <p>
+                  Na obecnym etapie WolneMoce.pl nie wykorzystuje cookies
+                  analitycznych ani marketingowych. Serwis nie używa Google
+                  Analytics, GA4, Meta Pixel, Hotjar, heatmap, remarketingu ani
+                  podobnych narzędzi śledzących zachowanie użytkowników w celach
+                  reklamowych lub marketingowych.
+                </p>
+                <p>
+                  Serwis nie wyświetla obecnie banera zgody na cookies, ponieważ
+                  korzysta wyłącznie z cookies i podobnych technologii
+                  niezbędnych do działania aplikacji. Baner cookies i panel
+                  preferencji zostaną wdrożone, jeżeli w przyszłości pojawią się
+                  technologie wymagające zgody użytkownika, takie jak analityka,
+                  piksele reklamowe, remarketing, heatmapy lub podobne narzędzia.
+                </p>
+              </Section>
+
+              <Section number={4} title="Jakich kategorii technologii używa portal">
                 <ul className="list-disc space-y-2 pl-5">
                   <li><strong>Niezbędne i techniczne</strong> - wymagane do działania Serwisu.</li>
                   <li><strong>Bezpieczeństwa</strong> - pomagają chronić konto i panel.</li>
                   <li><strong>Sesyjne i logowania</strong> - utrzymują sesję użytkownika.</li>
-                  <li><strong>Płatnicze Stripe</strong> - mogą być używane, jeżeli płatności zostaną wdrożone.</li>
-                  <li><strong>Analityczne opcjonalne</strong> - mogą zostać wdrożone po uzyskaniu wymaganej zgody.</li>
+                  <li><strong>Preferencje języka</strong> - obejmują m.in. cookie <code>wm_locale</code>, które zapamiętuje wybrany język lub język panelu.</li>
+                  <li><strong>Formularze i panel</strong> - obejmują technologie potrzebne do obsługi formularzy, panelu użytkownika, RFQ i przejść między ekranami.</li>
                 </ul>
               </Section>
 
-              <Section number={3} title="Cookies Supabase/Auth">
+              <Section number={5} title="Supabase Auth i sesja logowania">
                 <p>
                   Serwis może wykorzystywać mechanizmy sesyjne Supabase Auth do
                   utrzymania logowania użytkownika, zabezpieczenia dostępu do
                   panelu oraz autoryzacji działań w aplikacji. Bez tych mechanizmów
                   logowanie i ochrona konta nie działałyby prawidłowo.
                 </p>
-              </Section>
-
-              <Section number={4} title="Cookies Stripe">
                 <p>
-                  Jeżeli płatności zostaną wdrożone, Stripe może wykorzystywać
-                  cookies lub podobne technologie do obsługi płatności,
-                  bezpieczeństwa, przeciwdziałania nadużyciom, anti-fraud oraz
-                  obsługi 3D Secure.
+                  Repozytorium potwierdza użycie <code>@supabase/ssr</code> i
+                  adaptera cookies dla sesji po stronie serwera i middleware.
+                  Dokument nie wskazuje konkretnych nazw tokenów Supabase, ponieważ
+                  nie są one jawnie zdefiniowane w kodzie aplikacji. Technologie
+                  Supabase Auth służą do utrzymania bezpiecznej sesji zalogowanego
+                  użytkownika, w tym tokenu dostępu i tokenu odświeżania
+                  przechowywanych zgodnie z konfiguracją aplikacji.
                 </p>
               </Section>
 
-              <Section number={5} title="Cookies Vercel/Supabase techniczne">
+              <Section number={6} title="Dostawcy infrastruktury">
                 <p>
                   Dostawcy infrastruktury, tacy jak Vercel i Supabase, mogą
-                  wykorzystywać techniczne cookies lub podobne identyfikatory
+                  wykorzystywać techniczne cookies, logi lub podobne identyfikatory
                   konieczne do działania aplikacji, bezpieczeństwa, routingu,
                   obsługi sesji i stabilności usług.
                 </p>
               </Section>
 
-              <Section number={6} title="Analityka">
+              <Section number={7} title="Dane formularzy, kont, ofert i RFQ">
                 <p>
-                  Portal może wykorzystywać narzędzia analityczne po uzyskaniu
-                  wymaganej zgody, jeżeli zostaną wdrożone. Cookies analityczne,
-                  jeżeli zostaną uruchomione, będą traktowane jako opcjonalne.
+                  Dane podawane w formularzach, kontach użytkowników, profilach
+                  firm, ofertach i RFQ nie są zbierane przez cookies marketingowe.
+                  Są przetwarzane jako dane potrzebne do świadczenia usługi,
+                  obsługi konta, publikacji treści, komunikacji B2B,
+                  bezpieczeństwa, moderacji i obsługi zapytań.
                 </p>
               </Section>
 
-              <Section number={7} title="Zgoda i zarządzanie cookies">
+              <Section number={8} title="Zgoda i zarządzanie cookies">
                 <p>
                   Cookies niezbędne są wymagane do działania portalu i mogą być
-                  stosowane bez odrębnej zgody. Cookies opcjonalne powinny być
-                  uruchamiane po uzyskaniu zgody, jeżeli zostaną wdrożone.
+                  stosowane bez odrębnej zgody w zakresie dopuszczalnym przez
+                  prawo. Na obecnym etapie Serwis nie uruchamia cookies
+                  opcjonalnych wymagających zgody.
+                </p>
+                <p>
+                  Jeżeli w przyszłości zostaną wdrożone narzędzia analityczne,
+                  marketingowe, remarketingowe, heatmapy, piksele reklamowe lub
+                  podobne technologie niekonieczne, zostanie wdrożony baner zgody
+                  i panel preferencji. Zgoda nie będzie oparta na samym
+                  scrollowaniu, dalszym korzystaniu ze strony ani domyślnie
+                  zaznaczonych zgodach.
+                </p>
+                <p>
                   Użytkownik może zarządzać cookies w ustawieniach swojej
                   przeglądarki.
                 </p>
               </Section>
 
-              <Section number={8} title="Skutki wyłączenia cookies">
+              <Section number={9} title="Skutki wyłączenia cookies">
                 <p>
                   Wyłączenie cookies niezbędnych może spowodować, że logowanie,
-                  panel użytkownika, ochrona sesji, autoryzacja lub płatności nie
-                  będą działały prawidłowo. Wyłączenie cookies opcjonalnych nie
-                  powinno blokować podstawowego korzystania z Serwisu.
+                  panel użytkownika, ochrona sesji, autoryzacja, formularze lub
+                  podstawowe funkcje Serwisu nie będą działały prawidłowo.
                 </p>
               </Section>
 
-              <Section number={9} title="Zmiany polityki cookies">
+              <Section number={10} title="Zmiany polityki cookies">
                 <p>
                   Polityka Cookies może być aktualizowana w związku z rozwojem
-                  Serwisu, wdrożeniem płatności, zmianami dostawców, dodaniem
-                  narzędzi analitycznych albo zmianami prawa.
+                  Serwisu, zmianami dostawców, wdrożeniem narzędzi wymagających
+                  zgody użytkownika albo zmianami prawa.
                 </p>
                 <p>
                   Signed URLs używane do czasowego dostępu do prywatnych plików

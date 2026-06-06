@@ -137,6 +137,13 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                   bezpieczeństwa, nadużycia albo korzystania z konta niezgodnie z
                   Regulaminem.
                 </p>
+                <p>
+                  Działanie logowania, panelu użytkownika, preferencji języka,
+                  formularzy i podstawowych zabezpieczeń może wymagać cookies lub
+                  podobnych technologii niezbędnych. Na etapie soft-launch Serwis
+                  nie wdraża cookies marketingowych, remarketingu, heatmap ani
+                  narzędzi analitycznych wymagających banera zgody.
+                </p>
               </Section>
 
               <Section number={7} title="Profil firmy">
@@ -453,6 +460,12 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                   automatycznie. Płatności mogą być obsługiwane przez Stripe jako
                   zewnętrznego operatora płatności. Operator może wystawiać
                   faktury elektroniczne.
+                </p>
+                <p>
+                  Na etapie soft-launch płatności online i automatyczne
+                  subskrypcje mogą nie być dostępne w aplikacji. Plany płatne lub
+                  dodatki mogą być uruchamiane indywidualnie po kontakcie z
+                  Operatorem, zgodnie z aktualnym cennikiem i ustaleniami stron.
                 </p>
               </Section>
 

@@ -577,13 +577,13 @@ const uk: Dictionary = {
     privacy: {
       title: "Політика конфіденційності",
       description:
-        "Інформація про обробку персональних даних у WolneMoce.",
+        "Інформація про обробку даних облікових записів, компаній, пропозицій, RFQ, форм і технічних логів у WolneMoce.",
       companyProjects: en.legal.privacy.companyProjects,
     },
     cookies: {
       title: "Політика cookies",
       description:
-        "Інформація про cookies та подібні технології, що використовуються WolneMoce.",
+        "На етапі soft-launch WolneMoce використовує лише необхідні cookies і подібні технології, без аналітичних або маркетингових cookies.",
     },
   },
   howItWorks: {

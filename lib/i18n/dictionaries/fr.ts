@@ -577,13 +577,13 @@ const fr: Dictionary = {
     privacy: {
       title: "Politique de confidentialité",
       description:
-        "Informations sur le traitement des données personnelles dans WolneMoce.",
+        "Informations sur le traitement des données de comptes, entreprises, offres, RFQ, formulaires et journaux techniques dans WolneMoce.",
       companyProjects: en.legal.privacy.companyProjects,
     },
     cookies: {
       title: "Politique de cookies",
       description:
-        "Informations sur les cookies et technologies similaires utilisés par WolneMoce.",
+        "Pendant le soft launch, WolneMoce utilise uniquement les cookies et technologies similaires nécessaires, sans cookies analytiques ni marketing.",
     },
   },
   howItWorks: {
