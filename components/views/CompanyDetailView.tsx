@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
+import StructuredData from "@/components/StructuredData";
 import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
 import { getCompanyProjectImagePublicUrl } from "@/lib/companyProjectImageUploads";
 import { getLocalizedHref, getLocalizedPath, type Locale } from "@/lib/i18n/config";
@@ -342,9 +343,54 @@ export default async function CompanyDetailView({
     locale,
     company.name ? `q=${encodeURIComponent(company.name)}` : ""
   );
+  const canonicalUrl = getAbsoluteUrl(`/firmy/${companySlug}`);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        name: company.name,
+        url: canonicalUrl,
+        description: company.description ?? undefined,
+        address: location
+          ? {
+              "@type": "PostalAddress",
+              addressLocality: company.location_city ?? undefined,
+              addressRegion: company.location_voivodeship ?? undefined,
+              addressCountry: "PL",
+            }
+          : undefined,
+        sameAs: company.website_url ? [company.website_url] : undefined,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "WolneMoce",
+            item: getAbsoluteUrl("/"),
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: t.backToCompanies,
+            item: getAbsoluteUrl("/firmy"),
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: company.name,
+            item: canonicalUrl,
+          },
+        ],
+      },
+    ],
+  };
 
   return (
     <>
+      <StructuredData data={jsonLd} />
       <Navbar locale={locale} />
       <main className="bg-white">
         <section className="relative overflow-hidden bg-gradient-to-br from-[#0d3d26] via-[#1a5f3c] to-[#2d8a5e] px-6 pb-16 pt-36 text-white md:pb-20">

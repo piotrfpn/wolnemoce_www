@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import { getLocalizedPath, supportedLocales } from "@/lib/i18n/config";
 import { getSiteUrl } from "@/lib/seo";
 
 const baseUrl = getSiteUrl();
@@ -25,9 +26,13 @@ async function getActiveOfferRoutes() {
 
   const { data, error } = await supabase
     .from("offers")
-    .select("slug")
+    .select("slug, companies!inner(slug, is_verified)")
     .eq("status", "active")
+    .eq("companies.is_verified", true)
     .not("slug", "is", null)
+    .neq("slug", "")
+    .not("companies.slug", "is", null)
+    .neq("companies.slug", "")
     .limit(dynamicRouteLimit);
 
   if (error) {
@@ -52,6 +57,7 @@ async function getPublicCompanyRoutes() {
     .select("slug")
     .eq("is_verified", true)
     .not("slug", "is", null)
+    .neq("slug", "")
     .limit(dynamicRouteLimit);
 
   const slugs = new Set<string>();
@@ -81,6 +87,7 @@ async function getPublishedBlogRoutes() {
     .select("slug")
     .eq("status", "published")
     .not("slug", "is", null)
+    .neq("slug", "")
     .limit(dynamicRouteLimit);
 
   if (error) {
@@ -107,17 +114,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/polityka-prywatnosci",
     "/polityka-cookies",
     "/zapytanie-ofertowe",
-    "/zapytanie-wyslane",
   ];
+  const localizedStaticRoutes = supportedLocales.flatMap((locale) =>
+    staticRoutes.map((route) => getLocalizedPath(route || "/", locale))
+  );
 
   const offerRoutes = await getActiveOfferRoutes();
   const companyRoutes = await getPublicCompanyRoutes();
   const blogRoutes = await getPublishedBlogRoutes();
 
-  return [...staticRoutes, ...offerRoutes, ...companyRoutes, ...blogRoutes].map((route) => ({
+  return Array.from(
+    new Set([
+      ...localizedStaticRoutes,
+      ...offerRoutes,
+      ...companyRoutes,
+      ...blogRoutes,
+    ])
+  ).map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
-    changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : 0.7,
+    changeFrequency: route === "/" ? "weekly" : "monthly",
+    priority: route === "/" ? 1 : 0.7,
   }));
 }

@@ -111,6 +111,7 @@ export type Dictionary = {
     previewMeta: string;
     previewTitle: string;
     previewAsk: string;
+    previewStatus: string;
     trustedTitle: string;
     trustedText: string;
     qualityTitle: string;
@@ -512,11 +513,14 @@ export type Dictionary = {
       subtitle: string;
       email: string;
       password: string;
+      googleSubmit: string;
+      separator: string;
       submit: string;
       submitting: string;
       forgotPassword: string;
       noAccount: string;
       createAccount: string;
+      oauthError: string;
       errorFallback: string;
     };
     register: {
@@ -525,8 +529,11 @@ export type Dictionary = {
       fullName: string;
       email: string;
       password: string;
+      googleSubmit: string;
+      separator: string;
       submit: string;
       submitting: string;
+      oauthError: string;
       alreadyHaveAccount: string;
       loginLink: string;
       termsPrefix: string;

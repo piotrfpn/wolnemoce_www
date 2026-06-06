@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ContactView from "@/components/views/ContactView";
 import {
-  getLocalizedPath,
   isSupportedLocale,
   prefixedLocales,
-  supportedLocales,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { createPageMetadata } from "@/lib/seo";
 
 type LocaleContactPageProps = {
   params: {
@@ -27,18 +26,12 @@ export function generateMetadata({ params }: LocaleContactPageProps): Metadata {
 
   const dictionary = getDictionary(params.locale);
 
-  return {
+  return createPageMetadata({
     title: dictionary.seo.contact.title,
     description: dictionary.seo.contact.description,
-    alternates: {
-      languages: Object.fromEntries(
-        supportedLocales.map((locale) => [
-          locale,
-          getLocalizedPath("/kontakt", locale),
-        ])
-      ),
-    },
-  };
+    path: "/kontakt",
+    locale: params.locale,
+  });
 }
 
 export default function LocalizedContactPage({

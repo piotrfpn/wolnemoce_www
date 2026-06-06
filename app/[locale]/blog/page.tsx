@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import BlogListView from "@/components/views/BlogListView";
 import {
-  getLocalizedPath,
   isSupportedLocale,
   prefixedLocales,
-  supportedLocales,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { createPageMetadata } from "@/lib/seo";
 
 type LocaleBlogPageProps = {
   params: {
@@ -28,18 +27,12 @@ export function generateMetadata({ params }: LocaleBlogPageProps): Metadata {
 
   const dictionary = getDictionary(params.locale);
 
-  return {
+  return createPageMetadata({
     title: dictionary.seo.blog.title,
     description: dictionary.seo.blog.description,
-    alternates: {
-      languages: Object.fromEntries(
-        supportedLocales.map((locale) => [
-          locale,
-          getLocalizedPath("/blog", locale),
-        ])
-      ),
-    },
-  };
+    path: "/blog",
+    locale: params.locale,
+  });
 }
 
 export default function LocalizedBlogPage({ params }: LocaleBlogPageProps) {

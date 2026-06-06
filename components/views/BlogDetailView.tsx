@@ -5,6 +5,7 @@ import AddOfferLinkClient from "@/components/AddOfferLinkClient";
 import BlogCard, { type BlogCardArticle } from "@/components/BlogCard";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import StructuredData from "@/components/StructuredData";
 import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getAbsoluteUrl, truncateSeoDescription } from "@/lib/seo";
@@ -220,9 +221,58 @@ export default async function BlogDetailView({
   const date = formatDate(post.published_at ?? post.created_at, locale);
   const imageUrl = getBlogImageUrl(post.featured_image_path);
   const imageAlt = post.featured_image_alt || post.title;
+  const canonicalUrl = getAbsoluteUrl(`/blog/${post.slug}`);
+  const description = truncateSeoDescription(
+    post.meta_description || post.excerpt || post.content
+  );
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        headline: post.title,
+        description,
+        image: getAbsoluteUrl(imageUrl),
+        datePublished: post.published_at ?? post.created_at,
+        author: {
+          "@type": "Organization",
+          name: post.author_name || "WolneMoce",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "WolneMoce",
+        },
+        mainEntityOfPage: canonicalUrl,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "WolneMoce",
+            item: getAbsoluteUrl("/"),
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: t.relatedArticles,
+            item: getAbsoluteUrl("/blog"),
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: post.title,
+            item: canonicalUrl,
+          },
+        ],
+      },
+    ],
+  };
 
   return (
     <>
+      <StructuredData data={jsonLd} />
       <Navbar locale={locale} />
 
       <main className="bg-white">

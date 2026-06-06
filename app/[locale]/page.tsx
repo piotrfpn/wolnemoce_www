@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import HomeView from "@/components/views/HomeView";
 import {
-  getLocalizedPath,
   isSupportedLocale,
   prefixedLocales,
-  supportedLocales,
   type Locale,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { createPageMetadata } from "@/lib/seo";
 
 type LocalePageProps = {
   params: {
@@ -28,15 +27,12 @@ export function generateMetadata({ params }: LocalePageProps): Metadata {
   const locale = params.locale;
   const dictionary = getDictionary(locale);
 
-  return {
+  return createPageMetadata({
     title: dictionary.seo.home.title,
     description: dictionary.seo.home.description,
-    alternates: {
-      languages: Object.fromEntries(
-        supportedLocales.map((item) => [item, getLocalizedPath("/", item)])
-      ),
-    },
-  };
+    path: "/",
+    locale,
+  });
 }
 
 export default function LocalizedHomePage({ params }: LocalePageProps) {
@@ -46,4 +42,3 @@ export default function LocalizedHomePage({ params }: LocalePageProps) {
 
   return <HomeView locale={params.locale as Locale} />;
 }
-

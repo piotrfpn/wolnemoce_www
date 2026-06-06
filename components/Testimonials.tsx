@@ -17,7 +17,7 @@ export default function Testimonials({ locale = defaultLocale }: { locale?: Loca
       </div>
 
       <div className="testimonials-grid">
-        {t.items.map((item, index) => (
+        {t.items.map((item) => (
           <div key={item.author} className="testimonial-card fade-in visible">
             <div className="testimonial-quote">&quot;</div>
 
@@ -36,13 +36,7 @@ export default function Testimonials({ locale = defaultLocale }: { locale?: Loca
                 <p>{item.role}</p>
               </div>
 
-              <div className="testimonial-rating">
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-                <i className={`fas ${index === 2 ? "fa-star-half-alt" : "fa-star"}`}></i>
-              </div>
+              <i className="fas fa-circle-check text-[#1a5f3c]"></i>
             </div>
           </div>
         ))}

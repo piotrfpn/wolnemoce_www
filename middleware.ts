@@ -4,8 +4,13 @@ import { updateSession } from "@/lib/supabase/middleware";
 const protectedPrefixes = ["/panel", "/admin"];
 
 export async function middleware(request: NextRequest) {
-  const { response, user } = await updateSession(request);
   const { pathname } = request.nextUrl;
+
+  if (pathname === "/auth/callback") {
+    return NextResponse.next();
+  }
+
+  const { response, user } = await updateSession(request);
   const isProtectedRoute = protectedPrefixes.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
   );

@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CompaniesListView from "@/components/views/CompaniesListView";
 import {
-  getLocalizedPath,
   isSupportedLocale,
   prefixedLocales,
-  supportedLocales,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { createPageMetadata } from "@/lib/seo";
 
 type LocaleCompaniesPageProps = {
   params: {
@@ -29,18 +28,12 @@ export function generateMetadata({ params }: LocaleCompaniesPageProps): Metadata
 
   const dictionary = getDictionary(params.locale);
 
-  return {
+  return createPageMetadata({
     title: dictionary.seo.companies.title,
     description: dictionary.seo.companies.description,
-    alternates: {
-      languages: Object.fromEntries(
-        supportedLocales.map((locale) => [
-          locale,
-          getLocalizedPath("/firmy", locale),
-        ])
-      ),
-    },
-  };
+    path: "/firmy",
+    locale: params.locale,
+  });
 }
 
 export default function LocalizedCompaniesPage({

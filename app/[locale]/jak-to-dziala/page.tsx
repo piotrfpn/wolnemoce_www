@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import HowItWorksView from "@/components/views/HowItWorksView";
 import {
-  getLocalizedPath,
   isSupportedLocale,
   prefixedLocales,
-  supportedLocales,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { createPageMetadata } from "@/lib/seo";
 
 type LocaleHowItWorksPageProps = {
   params: {
@@ -26,18 +25,12 @@ export function generateMetadata({ params }: LocaleHowItWorksPageProps): Metadat
 
   const dictionary = getDictionary(params.locale);
 
-  return {
+  return createPageMetadata({
     title: dictionary.seo.howItWorks.title,
     description: dictionary.seo.howItWorks.description,
-    alternates: {
-      languages: Object.fromEntries(
-        supportedLocales.map((locale) => [
-          locale,
-          getLocalizedPath("/jak-to-dziala", locale),
-        ])
-      ),
-    },
-  };
+    path: "/jak-to-dziala",
+    locale: params.locale,
+  });
 }
 
 export default function LocalizedHowItWorksPage({

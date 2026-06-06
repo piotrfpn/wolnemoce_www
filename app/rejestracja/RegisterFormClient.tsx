@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
+import GoogleOAuthButton from "@/components/auth/GoogleOAuthButton";
+import { getSafeNextPath } from "@/lib/safeNextPath";
 import { registerUser } from "./actions";
 import type { Dictionary } from "@/lib/i18n/types";
 
@@ -13,14 +15,6 @@ type RegisterFormClientProps = {
   privacyHref: string;
   termsHref: string;
 };
-
-function getSafeNextPath(nextPath?: string) {
-  if (!nextPath || !nextPath.startsWith("/") || nextPath.startsWith("//")) {
-    return "";
-  }
-
-  return nextPath;
-}
 
 export default function RegisterFormClient({
   labels,
@@ -106,6 +100,19 @@ export default function RegisterFormClient({
           ) : null}
         </div>
       ) : null}
+
+      <GoogleOAuthButton
+        errorLabel={labels.oauthError}
+        label={labels.googleSubmit}
+        nextPath="/panel"
+        onError={setError}
+      />
+
+      <div className="my-6 flex items-center gap-3 text-xs font-bold uppercase tracking-wide text-slate-400">
+        <span className="h-px flex-1 bg-slate-200"></span>
+        <span>{labels.separator}</span>
+        <span className="h-px flex-1 bg-slate-200"></span>
+      </div>
 
       <div className="space-y-5">
         <label className="block min-w-0">

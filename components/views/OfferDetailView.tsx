@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard";
 import RfqInlineFormClient from "@/components/RfqInlineFormClient";
+import StructuredData from "@/components/StructuredData";
 import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
 import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
@@ -193,6 +194,31 @@ export default async function OfferDetailView({
   const imageAlt =
     mainImage?.alt ||
     `${offer.title ?? t.imageAltFallback} - ${offer.branch ?? t.capacityFallback}`;
+  const canonicalUrl = getAbsoluteUrl(`/oferty/${offer.slug}`);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "WolneMoce",
+        item: getAbsoluteUrl("/"),
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: t.offerFallback,
+        item: getAbsoluteUrl("/oferty"),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: offer.title,
+        item: canonicalUrl,
+      },
+    ],
+  };
 
   const parameters = [
     [t.company, companyName, "fas fa-building"],
@@ -207,6 +233,7 @@ export default async function OfferDetailView({
 
   return (
     <>
+      <StructuredData data={jsonLd} />
       <Navbar locale={locale} />
 
       <main className="bg-white pb-24 lg:pb-0">

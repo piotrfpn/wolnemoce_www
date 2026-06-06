@@ -105,13 +105,9 @@ export default function Hero({ locale = defaultLocale }: { locale?: Locale }) {
             </div>
 
             <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-1 text-xs text-[#fbbf24]">
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star-half-alt"></i>
-                <span className="ml-2 text-white/80">4.8 (24)</span>
+              <div className="flex items-center gap-2 text-xs font-bold text-white/80">
+                <i className="fas fa-circle-check text-[#fbbf24]"></i>
+                <span>{t.previewStatus}</span>
               </div>
               <button className="rounded-lg bg-white px-4 py-2 text-xs font-bold text-[#1a5f3c]">
                 {t.previewAsk}

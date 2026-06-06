@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import OffersListView from "@/components/views/OffersListView";
 import {
-  getLocalizedPath,
   isSupportedLocale,
   prefixedLocales,
-  supportedLocales,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { createPageMetadata } from "@/lib/seo";
 
 type LocaleOffersPageProps = {
   params: {
@@ -29,18 +28,12 @@ export function generateMetadata({ params }: LocaleOffersPageProps): Metadata {
 
   const dictionary = getDictionary(params.locale);
 
-  return {
+  return createPageMetadata({
     title: dictionary.seo.offers.title,
     description: dictionary.seo.offers.description,
-    alternates: {
-      languages: Object.fromEntries(
-        supportedLocales.map((locale) => [
-          locale,
-          getLocalizedPath("/oferty", locale),
-        ])
-      ),
-    },
-  };
+    path: "/oferty",
+    locale: params.locale,
+  });
 }
 
 export default function LocalizedOffersPage({

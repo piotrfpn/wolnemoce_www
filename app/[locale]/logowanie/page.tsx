@@ -9,6 +9,7 @@ type LocaleLoginPageProps = {
     locale: string;
   };
   searchParams?: {
+    error?: string;
     next?: string;
   };
 };
@@ -41,5 +42,11 @@ export default function LocaleLoginPage({
 }: LocaleLoginPageProps) {
   const locale = getLocale(params.locale);
 
-  return <LoginView locale={locale} nextPath={searchParams?.next} />;
+  return (
+    <LoginView
+      locale={locale}
+      nextPath={searchParams?.next}
+      oauthError={searchParams?.error === "oauth"}
+    />
+  );
 }

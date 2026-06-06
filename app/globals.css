@@ -1006,12 +1006,6 @@
             color: var(--text-muted);
         }
 
-        .testimonial-rating {
-            margin-left: auto;
-            color: var(--accent);
-            font-size: 13px;
-        }
-
         /* ========== BLOG ========== */
         .blog-grid {
             display: grid;

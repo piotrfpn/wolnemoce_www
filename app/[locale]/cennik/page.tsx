@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PricingView from "@/components/views/PricingView";
 import {
-  getLocalizedPath,
   isSupportedLocale,
   prefixedLocales,
-  supportedLocales,
   type Locale,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { createPageMetadata } from "@/lib/seo";
 
 type LocalePricingPageProps = {
   params: {
@@ -28,18 +27,12 @@ export function generateMetadata({ params }: LocalePricingPageProps): Metadata {
   const locale = params.locale;
   const dictionary = getDictionary(locale);
 
-  return {
+  return createPageMetadata({
     title: dictionary.seo.pricing.title,
     description: dictionary.seo.pricing.description,
-    alternates: {
-      languages: Object.fromEntries(
-        supportedLocales.map((item) => [
-          item,
-          getLocalizedPath("/cennik", item),
-        ])
-      ),
-    },
-  };
+    path: "/cennik",
+    locale,
+  });
 }
 
 export default function LocalizedPricingPage({
@@ -51,4 +44,3 @@ export default function LocalizedPricingPage({
 
   return <PricingView locale={params.locale as Locale} />;
 }
-

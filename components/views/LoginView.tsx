@@ -3,19 +3,13 @@ import Navbar from "@/components/Navbar";
 import LoginFormClient from "@/app/logowanie/LoginFormClient";
 import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import { getSafeNextPath } from "@/lib/safeNextPath";
 
 type LoginViewProps = {
   locale?: Locale;
   nextPath?: string;
+  oauthError?: boolean;
 };
-
-function getSafeNextPath(nextPath?: string) {
-  if (!nextPath || !nextPath.startsWith("/") || nextPath.startsWith("//")) {
-    return "";
-  }
-
-  return nextPath;
-}
 
 function withNextParam(href: string, nextPath: string) {
   return nextPath ? `${href}?next=${encodeURIComponent(nextPath)}` : href;
@@ -24,6 +18,7 @@ function withNextParam(href: string, nextPath: string) {
 export default function LoginView({
   locale = defaultLocale,
   nextPath,
+  oauthError = false,
 }: LoginViewProps) {
   const dictionary = getDictionary(locale);
   const safeNextPath = getSafeNextPath(nextPath);
@@ -40,6 +35,7 @@ export default function LoginView({
           <LoginFormClient
             labels={dictionary.auth.login}
             nextPath={safeNextPath}
+            oauthError={oauthError}
             registerHref={registerHref}
           />
         </section>

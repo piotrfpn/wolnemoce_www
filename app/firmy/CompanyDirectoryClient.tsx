@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
+import AddOfferLinkClient from "@/components/AddOfferLinkClient";
 import { defaultLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 
@@ -489,9 +490,9 @@ export default function CompanyDirectoryClient({
               {labels.clearFilters}
             </button>
           ) : (
-            <Link href="/oferty" className="btn btn-outline">
-              {labels.viewOffers}
-            </Link>
+            <AddOfferLinkClient locale={locale} className="btn btn-outline">
+              {labels.addCompanyAndOffer}
+            </AddOfferLinkClient>
           )}
         </div>
       )}

@@ -11,10 +11,17 @@ export const metadata: Metadata = {
 
 type LoginPageProps = {
   searchParams?: {
+    error?: string;
     next?: string;
   };
 };
 
 export default function LoginPage({ searchParams }: LoginPageProps) {
-  return <LoginView locale="pl" nextPath={searchParams?.next} />;
+  return (
+    <LoginView
+      locale="pl"
+      nextPath={searchParams?.next}
+      oauthError={searchParams?.error === "oauth"}
+    />
+  );
 }
