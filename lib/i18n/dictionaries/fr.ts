@@ -132,6 +132,7 @@ const fr: Dictionary = {
   offerCard: {
     ...en.offerCard,
     noOfferImage: "Pas d'image",
+    imagePlaceholderAlt: "WolneMoce — aucune image d'offre disponible",
     viewOffer: "Voir l'offre",
     askAboutOffer: "Demander l'offre",
     industryLabel: "Industrie",
@@ -429,6 +430,7 @@ const fr: Dictionary = {
     leadTime: "Délai de réalisation",
     toBeAgreed: "À convenir",
     imageAltFallback: "Offre WolneMoce",
+    imagePlaceholderAlt: "WolneMoce — aucune image d'offre disponible",
     galleryImageAltFallback: "Photo de l’offre",
     parametersTitle: "Paramètres de l’offre",
     parametersDescription: "Informations clés pour une première qualification.",

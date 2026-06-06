@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getPublicOfferImageUrl } from "@/lib/offerImages";
+import { OFFER_IMAGE_PLACEHOLDER, getPublicOfferImageUrl } from "@/lib/offerImages";
 import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
@@ -77,10 +77,13 @@ export default function PublicOfferCard({
   const mainImage = [...(offer.offer_images ?? [])].sort(
     (a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)
   )[0];
-  const imageSrc = getPublicOfferImageUrl(mainImage?.path);
-  const imageAlt =
-    mainImage?.alt ||
-    `${offer.title ?? labels.offerFallback} - ${offer.branch ?? labels.capacityFallback}`;
+  const uploadedImageSrc = getPublicOfferImageUrl(mainImage?.path);
+  const hasUploadedImage = Boolean(uploadedImageSrc);
+  const imageSrc = uploadedImageSrc ?? OFFER_IMAGE_PLACEHOLDER;
+  const imageAlt = hasUploadedImage
+    ? mainImage?.alt ||
+      `${offer.title ?? labels.offerFallback} - ${offer.branch ?? labels.capacityFallback}`
+    : labels.imagePlaceholderAlt;
   const featured = isActiveFeatured(offer);
   const isCatalog = variant === "catalog";
   const offerHref = offer.slug ? getLocalizedPath(`/oferty/${offer.slug}`, locale) : "";
@@ -102,29 +105,17 @@ export default function PublicOfferCard({
       ) : null}
 
       <div className="relative aspect-video overflow-hidden bg-slate-100 flex items-center justify-center">
-        {imageSrc ? (
-          <img
-            src={imageSrc}
-            alt={imageAlt}
-            loading="lazy"
-            decoding="async"
-            className="h-full w-full max-w-full object-cover transition duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div className="flex h-full w-full flex-col items-center justify-center bg-[radial-gradient(circle_at_top_left,rgba(26,95,60,0.14),transparent_34%),linear-gradient(135deg,#f8fafc,#e2e8f0)] px-6 text-center text-slate-500">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[#1a5f3c] shadow-sm">
-              <i className="fas fa-industry text-xl"></i>
-            </div>
-            <span className="text-xs font-bold uppercase tracking-wide text-slate-500">
-              {labels.noOfferImage}
-            </span>
-            {offer.branch ? (
-              <span className="mt-2 line-clamp-1 text-sm font-semibold text-slate-700">
-                {offer.branch}
-              </span>
-            ) : null}
-          </div>
-        )}
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          loading="lazy"
+          decoding="async"
+          className={`h-full w-full max-w-full transition duration-500 ${
+            hasUploadedImage
+              ? "object-cover group-hover:scale-105"
+              : "bg-slate-50 object-contain p-4"
+          }`}
+        />
         {location ? (
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-4 text-white">
             <span className="flex items-center gap-2 text-xs font-medium">

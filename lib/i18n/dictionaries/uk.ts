@@ -132,6 +132,7 @@ const uk: Dictionary = {
   offerCard: {
     ...en.offerCard,
     noOfferImage: "Немає зображення",
+    imagePlaceholderAlt: "WolneMoce — зображення пропозиції відсутнє",
     viewOffer: "Переглянути пропозицію",
     askAboutOffer: "Запитати про пропозицію",
     industryLabel: "Галузь",
@@ -429,6 +430,7 @@ const uk: Dictionary = {
     leadTime: "Термін виконання",
     toBeAgreed: "За домовленістю",
     imageAltFallback: "Пропозиція WolneMoce",
+    imagePlaceholderAlt: "WolneMoce — зображення пропозиції відсутнє",
     galleryImageAltFallback: "Фото пропозиції",
     parametersTitle: "Параметри пропозиції",
     parametersDescription: "Ключова інформація для первинної оцінки.",

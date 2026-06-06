@@ -10,7 +10,7 @@ import StructuredData from "@/components/StructuredData";
 import VerifiedCompanyBadge from "@/components/VerifiedCompanyBadge";
 import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
-import { getOfferImageByIndustry, getPublicOfferImageUrl } from "@/lib/offerImages";
+import { OFFER_IMAGE_PLACEHOLDER, getPublicOfferImageUrl } from "@/lib/offerImages";
 import { getInitialRfqBuyerData } from "@/lib/rfqBuyerData";
 import { getAbsoluteUrl, truncateSeoDescription } from "@/lib/seo";
 import { createClient } from "@/lib/supabase/server";
@@ -115,6 +115,12 @@ async function getPublicOfferImages(offerId: string): Promise<OfferImage[]> {
   return (data ?? []) as OfferImage[];
 }
 
+function getPrimaryOfferImage(images?: { path: string | null; alt: string | null; sort_order: number | null }[]) {
+  return [...(images ?? [])].sort(
+    (first, second) => (first.sort_order ?? 0) - (second.sort_order ?? 0)
+  )[0];
+}
+
 export async function generateOfferDetailMetadata({
   slug,
   locale,
@@ -136,6 +142,12 @@ export async function generateOfferDetailMetadata({
   const descriptionSource =
     offer.description ||
     `${offer.branch ?? t.offerFallback} - ${offer.service_type ?? t.capacityFallback}`;
+  const metadataMainImage = getPrimaryOfferImage(offer.offer_images);
+  const metadataUploadedImageSrc = getPublicOfferImageUrl(metadataMainImage?.path);
+  const metadataImageSrc = metadataUploadedImageSrc ?? OFFER_IMAGE_PLACEHOLDER;
+  const metadataImageAlt = metadataUploadedImageSrc
+    ? metadataMainImage?.alt || offer.title || t.offerFallback
+    : t.imagePlaceholderAlt;
 
   return {
     title: `${offer.title} | ${companyName} | WolneMoce`,
@@ -151,10 +163,10 @@ export async function generateOfferDetailMetadata({
       type: "article",
       images: [
         {
-          url: getAbsoluteUrl(getOfferImageByIndustry(offer.branch)),
+          url: getAbsoluteUrl(metadataImageSrc),
           width: 1200,
           height: 630,
-          alt: offer.title ?? t.offerFallback,
+          alt: metadataImageAlt,
         },
       ],
     },
@@ -162,7 +174,7 @@ export async function generateOfferDetailMetadata({
       card: "summary_large_image",
       title: `${offer.title} | ${companyName}`,
       description: truncateSeoDescription(descriptionSource),
-      images: [getAbsoluteUrl(getOfferImageByIndustry(offer.branch))],
+      images: [getAbsoluteUrl(metadataImageSrc)],
     },
   };
 }
@@ -189,11 +201,13 @@ export default async function OfferDetailView({
     .filter(Boolean)
     .join(", ");
   const mainImage = offerImages[0];
-  const imageSrc =
-    getPublicOfferImageUrl(mainImage?.path) ?? getOfferImageByIndustry(offer.branch);
-  const imageAlt =
-    mainImage?.alt ||
-    `${offer.title ?? t.imageAltFallback} - ${offer.branch ?? t.capacityFallback}`;
+  const uploadedImageSrc = getPublicOfferImageUrl(mainImage?.path);
+  const hasUploadedImage = Boolean(uploadedImageSrc);
+  const imageSrc = uploadedImageSrc ?? OFFER_IMAGE_PLACEHOLDER;
+  const imageAlt = hasUploadedImage
+    ? mainImage?.alt ||
+      `${offer.title ?? t.imageAltFallback} - ${offer.branch ?? t.capacityFallback}`
+    : t.imagePlaceholderAlt;
   const canonicalUrl = getAbsoluteUrl(`/oferty/${offer.slug}`);
   const jsonLd = {
     "@context": "https://schema.org",
@@ -315,7 +329,9 @@ export default async function OfferDetailView({
                 alt={imageAlt}
                 loading="lazy"
                 decoding="async"
-                className="h-[260px] w-full max-w-full rounded-[18px] object-cover md:h-[360px]"
+                className={`h-[260px] w-full max-w-full rounded-[18px] md:h-[360px] ${
+                  hasUploadedImage ? "object-cover" : "bg-slate-50 object-contain p-4"
+                }`}
               />
             </div>
           </div>
@@ -331,7 +347,9 @@ export default async function OfferDetailView({
                     alt={imageAlt}
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-cover"
+                    className={`h-full w-full ${
+                      hasUploadedImage ? "object-cover" : "bg-slate-50 object-contain p-4"
+                    }`}
                   />
                 </div>
               </div>

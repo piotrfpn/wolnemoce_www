@@ -171,6 +171,7 @@ export type Dictionary = {
     active: string;
     details: string;
     noOfferImage: string;
+    imagePlaceholderAlt: string;
     viewOffer: string;
     askAboutOffer: string;
     industryLabel: string;
@@ -406,6 +407,7 @@ export type Dictionary = {
     leadTime: string;
     toBeAgreed: string;
     imageAltFallback: string;
+    imagePlaceholderAlt: string;
     galleryImageAltFallback: string;
     parametersTitle: string;
     parametersDescription: string;

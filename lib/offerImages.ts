@@ -1,31 +1,8 @@
-const fallbackImage = "/images/offers/cnc.jpg";
+export const OFFER_IMAGE_PLACEHOLDER = "/images/wolnemoce-offer-placeholder.png";
 const offerImagesBucket = "offer-images";
 
-const industryImages: Record<string, string> = {
-  Automatyka: "/images/offers/automation.jpg",
-  "Chemia i kosmetyki": "/images/offers/injection.jpg",
-  "Drewno i meble": "/images/offers/cnc.jpg",
-  "Druk i poligrafia": "/images/offers/automation.jpg",
-  "Druk 3D i prototypowanie": "/images/offers/cnc.jpg",
-  Elektronika: "/images/offers/automation.jpg",
-  Lakiernictwo: "/images/offers/cnc.jpg",
-  Logistyka: "/images/offers/automation.jpg",
-  Magazynowanie: "/images/offers/automation.jpg",
-  Metalurgia: "/images/offers/cnc.jpg",
-  Tekstylia: "/images/offers/injection.jpg",
-  "Tworzywa sztuczne": "/images/offers/injection.jpg",
-  "Utrzymanie ruchu": "/images/offers/automation.jpg",
-  Żywność: "/images/offers/injection.jpg",
-};
-
-export function getOfferImageByIndustry(industry?: string | null): string {
-  const normalizedIndustry = industry?.trim();
-
-  if (!normalizedIndustry) {
-    return fallbackImage;
-  }
-
-  return industryImages[normalizedIndustry] ?? fallbackImage;
+export function getOfferImageByIndustry(_industry?: string | null): string {
+  return OFFER_IMAGE_PLACEHOLDER;
 }
 
 export function getPublicOfferImageUrl(path?: string | null): string | null {
