@@ -46,7 +46,7 @@ const pl: Dictionary = {
     partnerPage: "Strona partnera",
   },
   hero: {
-    badge: "Platforma w fazie soft-launch",
+    badge: "#1 Portal wolnych mocy produkcyjnych w Polsce",
     headlineBefore: "Znajdź",
     headlineHighlight: "wolne moce",
     headlineAfter: "produkcyjne dla swojej firmy",

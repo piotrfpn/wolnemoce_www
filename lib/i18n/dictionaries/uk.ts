@@ -48,7 +48,7 @@ const uk: Dictionary = {
     partnerPage: "Сайт партнера",
   },
   hero: {
-    badge: "Платформа на етапі soft-launch",
+    badge: "Маркетплейс №1 вільних виробничих потужностей у Польщі",
     headlineBefore: "Знайдіть",
     headlineHighlight: "вільні потужності",
     headlineAfter: "для вашої компанії",

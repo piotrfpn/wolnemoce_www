@@ -48,7 +48,7 @@ const es: Dictionary = {
     partnerPage: "Sitio del partner",
   },
   hero: {
-    badge: "Plataforma en soft-launch",
+    badge: "Marketplace n.º 1 de capacidad productiva disponible en Polonia",
     headlineBefore: "Encuentra",
     headlineHighlight: "capacidad disponible",
     headlineAfter: "para tu empresa",

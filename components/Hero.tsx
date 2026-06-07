@@ -16,9 +16,9 @@ export default function Hero({ locale = defaultLocale }: { locale?: Locale }) {
 
       <div className="relative z-10 mx-auto grid max-w-[1400px] items-center gap-14 lg:grid-cols-2">
         <div>
-          <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/15 px-5 py-2 text-sm font-medium text-white backdrop-blur">
-            <i className="fas fa-star text-[#fbbf24]"></i>
-            {t.badge}
+          <div className="mb-6 inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-white/20 bg-white/15 px-5 py-2 text-center text-sm font-medium leading-snug text-white backdrop-blur">
+            <i className="fas fa-star shrink-0 text-[#fbbf24]"></i>
+            <span className="min-w-0 whitespace-normal">{t.badge}</span>
           </div>
 
           <h1 className="mb-5 max-w-3xl text-4xl font-black leading-tight tracking-[-1.5px] text-white md:text-5xl lg:text-[52px]">
