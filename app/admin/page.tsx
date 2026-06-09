@@ -75,6 +75,7 @@ export default async function AdminPage() {
     freeLimitOffersResult,
     certificatesResult,
     companyProjectsResult,
+    capacityRequestsResult,
   ] = await Promise.all([
     supabase
       .from("companies")
@@ -117,6 +118,10 @@ export default async function AdminPage() {
       .from("company_projects")
       .select("id", { count: "exact", head: true })
       .eq("status", "pending"),
+    supabase
+      .from("capacity_requests")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending"),
   ]);
 
   const pendingCompanies = (companiesResult.data ?? []) as PendingCompany[];
@@ -128,6 +133,7 @@ export default async function AdminPage() {
   const newContactMessagesCount = contactMessagesResult.count ?? 0;
   const pendingCertificatesCount = certificatesResult.count ?? 0;
   const pendingCompanyProjectsCount = companyProjectsResult.count ?? 0;
+  const pendingCapacityRequestsCount = capacityRequestsResult.count ?? 0;
   const freeLimitOffers = (freeLimitOffersResult.data ?? []) as unknown as FreeLimitOffer[];
   const freeLimitCompanies = new Map<string, FreeLimitCompanySummary>();
   const {
@@ -214,7 +220,7 @@ export default async function AdminPage() {
               <h2 className="text-2xl font-extrabold text-slate-900">Do obsługi</h2>
               <p className="mt-2 text-sm text-slate-500">Sprawy wymagające decyzji administratora.</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-7 gap-4">
               {[
                 {
                   title: "Firmy do weryfikacji",
@@ -243,6 +249,13 @@ export default async function AdminPage() {
                   icon: "fa-briefcase",
                   href: "/admin/realizacje?status=pending",
                   alert: pendingCompanyProjectsCount > 0,
+                },
+                {
+                  title: "Zapytania produkcyjne",
+                  count: pendingCapacityRequestsCount,
+                  icon: "fa-clipboard-list",
+                  href: "/admin/zapytania?status=pending",
+                  alert: pendingCapacityRequestsCount > 0,
                 },
                 {
                   title: "Zgłoszenia usług do obsługi",
@@ -309,6 +322,7 @@ export default async function AdminPage() {
                 { title: "Przejdź do firm", icon: "fa-building", href: "/admin/firmy" },
                 { title: "Przejdź do ofert", icon: "fa-list-check", href: "/admin/oferty" },
                 { title: "Przejdź do zgłoszeń usług", icon: "fa-screwdriver-wrench", href: "/admin/service-requests" },
+                { title: "Moderuj zlecenia produkcyjne", icon: "fa-clipboard-list", href: "/admin/zapytania" },
                 { title: "Przejdź do realizacji", icon: "fa-briefcase", href: "/admin/realizacje" },
                 { title: "Monitoring RFQ", icon: "fa-inbox", href: "/admin/rfq" },
                 { title: "Przejdź do certyfikatów", icon: "fa-certificate", href: "/admin/certyfikaty" },

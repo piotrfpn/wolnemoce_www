@@ -13,6 +13,7 @@ type LoginPageProps = {
   searchParams?: {
     error?: string;
     next?: string;
+    return_to?: string;
   };
 };
 
@@ -20,7 +21,7 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
   return (
     <LoginView
       locale="pl"
-      nextPath={searchParams?.next}
+      nextPath={searchParams?.next ?? searchParams?.return_to}
       oauthError={searchParams?.error === "oauth"}
     />
   );

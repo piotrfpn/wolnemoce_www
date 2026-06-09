@@ -135,6 +135,12 @@ export default async function PanelPage() {
         .is("recipient_read_at", null)
     : { count: 0 };
 
+  const { data: capacityRequestStatusCounts } = company?.id
+    ? await supabase.rpc("count_my_capacity_requests_by_status", {
+        p_company_id: company.id,
+      })
+    : { data: [] };
+
   const offerCounts = {
     draft: 0,
     pending: 0,
@@ -149,6 +155,12 @@ export default async function PanelPage() {
       offerCounts[status] += 1;
     }
   });
+
+  const capacityRequestStatusCount = capacityRequestStatusCounts?.[0];
+  const capacityRequestCounts = {
+    pending: Number(capacityRequestStatusCount?.pending_count ?? 0),
+    rejected: Number(capacityRequestStatusCount?.rejected_count ?? 0),
+  };
 
   const plan = company?.plan ?? "free";
   const activePendingCount = offerCounts.active + offerCounts.pending;
@@ -278,7 +290,7 @@ export default async function PanelPage() {
             </div>
           </div>
 
-          <div className="mb-8 grid min-w-0 gap-5 lg:grid-cols-2">
+          <div className="mb-8 grid min-w-0 gap-5 lg:grid-cols-3">
             <div className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 shadow-sm">
               <div className="mb-4 flex items-start gap-3">
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
@@ -357,6 +369,56 @@ export default async function PanelPage() {
               </p>
               <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c]">
                 Zaktualizuj dane rejestrowe
+                <i className="fas fa-arrow-right text-xs"></i>
+              </span>
+            </Link>
+
+            <Link
+              href="/panel/moje-zapytania"
+              className="min-w-0 rounded-[20px] border border-slate-200 bg-white p-6 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-[#1a5f3c] hover:shadow-md"
+            >
+              <div className="mb-4 flex items-start gap-3">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
+                  <i className="fas fa-clipboard-list"></i>
+                </span>
+                <div className="min-w-0">
+                  <h2 className="text-lg font-extrabold text-slate-900">
+                    Moje zlecenia
+                  </h2>
+                  <p className="mt-1 text-sm leading-6 text-slate-500">
+                    Zapytania produkcyjne dodane przez Twoją firmę jako
+                    zlecającego.
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                <div className="rounded-2xl bg-amber-50 px-4 py-3">
+                  <strong className="block text-2xl font-extrabold text-amber-800">
+                    {capacityRequestCounts.pending}
+                  </strong>
+                  <span className="text-xs font-semibold text-amber-800">
+                    w moderacji
+                  </span>
+                </div>
+                <div className="rounded-2xl bg-red-50 px-4 py-3">
+                  <strong className="block text-2xl font-extrabold text-red-700">
+                    {capacityRequestCounts.rejected}
+                  </strong>
+                  <span className="text-xs font-semibold text-red-700">
+                    odrzucone
+                  </span>
+                </div>
+              </div>
+
+              {capacityRequestCounts.rejected > 0 ? (
+                <p className="mt-4 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
+                  Masz odrzucone zlecenie wymagające poprawy.
+                </p>
+              ) : null}
+
+              <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c]">
+                Przejdź do moich zleceń
                 <i className="fas fa-arrow-right text-xs"></i>
               </span>
             </Link>

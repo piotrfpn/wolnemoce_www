@@ -182,6 +182,146 @@ export type Database = {
           },
         ]
       }
+      capacity_request_interests: {
+        Row: {
+          capacity_request_id: string
+          company_id: string
+          created_at: string
+          id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          capacity_request_id: string
+          company_id: string
+          created_at?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          capacity_request_id?: string
+          company_id?: string
+          created_at?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "capacity_request_interests_capacity_request_id_fkey"
+            columns: ["capacity_request_id"]
+            isOneToOne: false
+            referencedRelation: "capacity_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "capacity_request_interests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      capacity_requests: {
+        Row: {
+          admin_note: string | null
+          branch: string
+          budget_max: number | null
+          budget_min: number | null
+          budget_type: string
+          company_id: string
+          contact_visibility: string
+          created_at: string
+          deadline: string
+          description: string
+          expires_at: string
+          id: string
+          interest_count: number
+          is_featured: boolean
+          location: string | null
+          preferred_region: string | null
+          quantity: number | null
+          rejection_reason: string | null
+          service_type: string
+          slug: string
+          status: string
+          technical_documentation_available: boolean
+          title: string
+          unit: string | null
+          updated_at: string
+          views_count: number
+        }
+        Insert: {
+          admin_note?: string | null
+          branch: string
+          budget_max?: number | null
+          budget_min?: number | null
+          budget_type: string
+          company_id: string
+          contact_visibility?: string
+          created_at?: string
+          deadline: string
+          description: string
+          expires_at?: string
+          id?: string
+          interest_count?: number
+          is_featured?: boolean
+          location?: string | null
+          preferred_region?: string | null
+          quantity?: number | null
+          rejection_reason?: string | null
+          service_type: string
+          slug: string
+          status?: string
+          technical_documentation_available?: boolean
+          title: string
+          unit?: string | null
+          updated_at?: string
+          views_count?: number
+        }
+        Update: {
+          admin_note?: string | null
+          branch?: string
+          budget_max?: number | null
+          budget_min?: number | null
+          budget_type?: string
+          company_id?: string
+          contact_visibility?: string
+          created_at?: string
+          deadline?: string
+          description?: string
+          expires_at?: string
+          id?: string
+          interest_count?: number
+          is_featured?: boolean
+          location?: string | null
+          preferred_region?: string | null
+          quantity?: number | null
+          rejection_reason?: string | null
+          service_type?: string
+          slug?: string
+          status?: string
+          technical_documentation_available?: boolean
+          title?: string
+          unit?: string | null
+          updated_at?: string
+          views_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "capacity_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blog_articles: {
         Row: {
           author_name: string | null
@@ -2714,6 +2854,45 @@ export type Database = {
       admin_change_company_plan: {
         Args: { p_company_id: string; p_new_plan: string; p_reason: string }
         Returns: undefined
+      }
+      count_my_recent_capacity_requests: {
+        Args: { p_company_id: string; p_since: string }
+        Returns: number
+      }
+      count_my_capacity_requests_by_status: {
+        Args: { p_company_id: string }
+        Returns: {
+          active_count: number
+          expired_count: number
+          pending_count: number
+          rejected_count: number
+        }[]
+      }
+      get_my_capacity_requests: {
+        Args: { p_company_id: string }
+        Returns: {
+          branch: string
+          budget_max: number | null
+          budget_min: number | null
+          budget_type: string
+          created_at: string
+          deadline: string
+          description: string
+          expires_at: string
+          id: string
+          interest_count: number
+          location: string | null
+          preferred_region: string | null
+          quantity: number | null
+          rejection_reason: string | null
+          service_type: string
+          slug: string
+          status: string
+          technical_documentation_available: boolean
+          title: string
+          unit: string | null
+          updated_at: string
+        }[]
       }
       admin_set_company_verification: {
         Args: {

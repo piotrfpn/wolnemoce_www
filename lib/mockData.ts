@@ -134,6 +134,24 @@ export const services = [
   "DevOps / CI/CD",
 ];
 
+export const capacityRequestUnits = [
+  "szt.",
+  "kg",
+  "m",
+  "m2",
+  "m3",
+  "h",
+  "partia",
+  "paleta",
+  "tona",
+];
+
+export const capacityRequestBudgetTypes = [
+  { value: "not_provided", label: "Nie podaję budżetu" },
+  { value: "indicative", label: "Budżet orientacyjny" },
+  { value: "range", label: "Zakres budżetu" },
+];
+
 export const industryServiceTypes: Record<string, string[]> = {
   Metalurgia: [
     "Obróbka CNC",
@@ -306,6 +324,16 @@ export const industryServiceTypes: Record<string, string[]> = {
     "Modernizacja urządzeń",
   ],
 };
+
+export function getServicesForIndustry(industry: string) {
+  const normalizedIndustry = industry.trim();
+
+  if (!normalizedIndustry) {
+    return services;
+  }
+
+  return industryServiceTypes[normalizedIndustry] ?? [];
+}
 
 // Legacy fallback / demo data — public offers are now loaded from Supabase.
 export const offers: Offer[] = [

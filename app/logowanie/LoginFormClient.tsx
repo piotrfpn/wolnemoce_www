@@ -73,7 +73,7 @@ export default function LoginFormClient({
       <GoogleOAuthButton
         errorLabel={labels.oauthError}
         label={labels.googleSubmit}
-        nextPath="/panel"
+        nextPath={safeNextPath || "/panel"}
         onError={setError}
       />
 

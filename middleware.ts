@@ -18,8 +18,9 @@ export async function middleware(request: NextRequest) {
   if (isProtectedRoute && !user) {
     const redirectUrl = request.nextUrl.clone();
     const nextPath = `${request.nextUrl.pathname}${request.nextUrl.search}`;
+    const encodedNextPath = encodeURIComponent(nextPath);
     redirectUrl.pathname = "/logowanie";
-    redirectUrl.search = `?next=${encodeURIComponent(nextPath)}`;
+    redirectUrl.search = `?next=${encodedNextPath}&return_to=${encodedNextPath}`;
     return NextResponse.redirect(redirectUrl);
   }
 

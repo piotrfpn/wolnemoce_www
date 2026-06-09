@@ -12,9 +12,10 @@ export const metadata: Metadata = {
 type RegisterPageProps = {
   searchParams?: {
     next?: string;
+    return_to?: string;
   };
 };
 
 export default function RegisterPage({ searchParams }: RegisterPageProps) {
-  return <RegisterView locale="pl" nextPath={searchParams?.next} />;
+  return <RegisterView locale="pl" nextPath={searchParams?.next ?? searchParams?.return_to} />;
 }

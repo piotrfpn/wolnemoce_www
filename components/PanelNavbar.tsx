@@ -36,7 +36,8 @@ export default async function PanelNavbar() {
     profile: dictionary.panel.nav.profile,
     offers: dictionary.panel.nav.offers,
     projects: dictionary.panel.nav.projects,
-    inquiries: dictionary.panel.nav.inquiries,
+    inquiries: "Otrzymane zapytania",
+    myRequests: "Moje zlecenia",
     settings: dictionary.panel.nav.settings,
   };
 

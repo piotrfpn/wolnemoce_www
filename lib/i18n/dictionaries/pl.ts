@@ -71,7 +71,7 @@ const pl: Dictionary = {
     qualityText: "Profile firmowe",
   },
   search: {
-    offerLabel: "Szukaj oferty",
+    offerLabel: "Szukaj ofert",
     offerPlaceholder: "Np. obróbka CNC, druk 3D...",
     industryLabel: "Branża",
     allIndustries: "Wszystkie branże",

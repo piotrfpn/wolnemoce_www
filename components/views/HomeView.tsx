@@ -1,3 +1,4 @@
+import Link from "next/link";
 import BlogPreview from "@/components/BlogPreview";
 import Categories from "@/components/Categories";
 import CtaSection from "@/components/CtaSection";
@@ -12,7 +13,7 @@ import Pricing from "@/components/Pricing";
 import SearchBar from "@/components/SearchBar";
 import StructuredData from "@/components/StructuredData";
 import Testimonials from "@/components/Testimonials";
-import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getAbsoluteUrl, getSiteUrl } from "@/lib/seo";
 
 export default function HomeView({
@@ -56,6 +57,37 @@ export default function HomeView({
       <Navbar locale={locale} />
       <Hero locale={locale} />
       <SearchBar locale={locale} />
+      <section className="bg-white px-6 pb-10">
+        <div className="mx-auto flex max-w-[1180px] flex-col gap-5 rounded-[20px] border border-slate-200 bg-slate-50 p-5 shadow-sm md:flex-row md:items-center md:justify-between md:p-6">
+          <div className="min-w-0">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-[#1a5f3c]/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-[#1a5f3c]">
+              <i className="fas fa-clipboard-list"></i>
+              Zlecenia produkcyjne
+            </div>
+            <h2 className="text-xl font-extrabold text-slate-900">
+              Szukasz wykonawcy?
+            </h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+              Dodaj zapytanie produkcyjne i pokaż je firmom z wolnymi mocami.
+            </p>
+          </div>
+          <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+            <Link
+              href={getLocalizedPath("/zapytania", locale)}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] no-underline transition hover:bg-[#1a5f3c] hover:text-white"
+            >
+              Przeglądaj zapytania
+            </Link>
+            <Link
+              href={getLocalizedPath("/dodaj-zapytanie", locale)}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#1a5f3c] px-5 py-3 text-sm font-bold text-white no-underline transition hover:bg-[#164f32]"
+            >
+              <i className="fas fa-plus"></i>
+              Dodaj zapytanie
+            </Link>
+          </div>
+        </div>
+      </section>
       <Categories locale={locale} />
       <FeaturedOffers locale={locale} />
       <HowItWorks locale={locale} />

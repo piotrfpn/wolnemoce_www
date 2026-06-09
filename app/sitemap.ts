@@ -104,6 +104,32 @@ async function getPublishedBlogRoutes() {
     .map((slug) => `/blog/${slug}`);
 }
 
+async function getActiveCapacityRequestRoutes() {
+  const supabase = createSitemapSupabaseClient();
+
+  if (!supabase) {
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from("capacity_requests")
+    .select("slug")
+    .eq("status", "active")
+    .gt("expires_at", new Date().toISOString())
+    .not("slug", "is", null)
+    .neq("slug", "")
+    .limit(dynamicRouteLimit);
+
+  if (error) {
+    return [];
+  }
+
+  return (data ?? [])
+    .map((request) => request.slug)
+    .filter(Boolean)
+    .map((slug) => `/zapytania/${slug}`);
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
     "/",
@@ -114,10 +140,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/cennik",
     "/kontakt",
     "/dodaj-oferte",
+    "/dodaj-zapytanie",
     "/regulamin",
     "/polityka-prywatnosci",
     "/polityka-cookies",
     "/zapytanie-ofertowe",
+    "/zapytania",
   ];
   const localizedStaticRoutes = supportedLocales.flatMap((locale) =>
     staticRoutes.map((route) => getLocalizedPath(route, locale))
@@ -126,6 +154,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const offerRoutes = await getActiveOfferRoutes();
   const companyRoutes = await getPublicCompanyRoutes();
   const blogRoutes = await getPublishedBlogRoutes();
+  const capacityRequestRoutes = await getActiveCapacityRequestRoutes();
 
   return Array.from(
     new Set([
@@ -133,6 +162,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...offerRoutes,
       ...companyRoutes,
       ...blogRoutes,
+      ...capacityRequestRoutes,
     ])
   ).map((route) => ({
     url: createAbsoluteSitemapUrl(route),
