@@ -52,6 +52,91 @@ type AdminCapacityRequest = {
   } | null;
 };
 
+type CapacityRequestInterestSummary = {
+  company_name: string;
+  company_slug: string | null;
+  city: string | null;
+  region: string | null;
+  branch: string | null;
+  is_verified: boolean;
+  interested_at: string;
+};
+
+function formatInterestLocation(interest: CapacityRequestInterestSummary) {
+  return [interest.city, interest.region].filter(Boolean).join(", ");
+}
+
+function AdminCapacityRequestInterests({
+  count,
+  interests,
+}: {
+  count: number;
+  interests: CapacityRequestInterestSummary[];
+}) {
+  return (
+    <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <h3 className="text-sm font-extrabold text-slate-900">
+          Zainteresowania: {count}
+        </h3>
+        {interests.length >= 50 ? (
+          <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700">
+            Pokazano 50 najnowszych
+          </span>
+        ) : null}
+      </div>
+
+      {interests.length > 0 ? (
+        <div className="max-h-72 space-y-3 overflow-y-auto pr-1">
+          {interests.map((interest) => {
+            const location = formatInterestLocation(interest);
+
+            return (
+              <div
+                key={`${interest.company_name}-${interest.interested_at}`}
+                className="rounded-xl border border-slate-200 bg-white p-4"
+              >
+                <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="min-w-0">
+                    {interest.company_slug ? (
+                      <Link
+                        href={`/firmy/${interest.company_slug}`}
+                        className="break-words text-sm font-extrabold text-slate-900 transition hover:text-[#1a5f3c]"
+                      >
+                        {interest.company_name}
+                      </Link>
+                    ) : (
+                      <p className="break-words text-sm font-extrabold text-slate-900">
+                        {interest.company_name}
+                      </p>
+                    )}
+                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                      {[location, interest.branch].filter(Boolean).join(" · ") ||
+                        "Brak danych lokalizacji"}
+                    </p>
+                  </div>
+                  {interest.is_verified ? (
+                    <span className="inline-flex shrink-0 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+                      Zweryfikowana firma
+                    </span>
+                  ) : null}
+                </div>
+                <p className="mt-3 text-xs font-semibold text-slate-400">
+                  Zgłoszono: {formatCapacityRequestDate(interest.interested_at)}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p className="text-xs leading-5 text-slate-500">
+          Brak zgłoszeń zainteresowania dla tego zapytania.
+        </p>
+      )}
+    </div>
+  );
+}
+
 async function requireAdmin() {
   const supabase = createClient();
   const {
@@ -72,7 +157,10 @@ async function requireAdmin() {
     redirect("/panel");
   }
 
-  return createAdminClient();
+  return {
+    admin: createAdminClient(),
+    supabase,
+  };
 }
 
 type AdminCapacityRequestStatusFilter =
@@ -105,7 +193,7 @@ export default async function AdminCapacityRequestsPage({
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const admin = await requireAdmin();
+  const { admin, supabase } = await requireAdmin();
   const statusFilter = getStatusFilter(searchParams?.status);
   let query = admin
     .from("capacity_requests")
@@ -134,6 +222,23 @@ export default async function AdminCapacityRequestsPage({
       );
     }
   );
+  const interestEntries =
+    requests.length > 0
+      ? await Promise.all(
+          requests.map(async (request) => {
+            const { data: interests } = await supabase.rpc(
+              "get_capacity_request_interests_for_owner",
+              { p_capacity_request_id: request.id }
+            );
+
+            return [
+              request.id,
+              (interests ?? []) as CapacityRequestInterestSummary[],
+            ] as const;
+          })
+        )
+      : [];
+  const interestsByRequestId = new Map(interestEntries);
   const filters = [
     ["all", "Wszystkie"],
     ["pending", "W moderacji"],
@@ -241,6 +346,10 @@ export default async function AdminCapacityRequestsPage({
                         {formatCapacityRequestDate(request.expires_at)}
                       </p>
                     </div>
+                    <AdminCapacityRequestInterests
+                      count={request.interest_count ?? 0}
+                      interests={interestsByRequestId.get(request.id) ?? []}
+                    />
                     {request.status === "active" ? (
                       <Link
                         href={`/zapytania/${request.slug}`}

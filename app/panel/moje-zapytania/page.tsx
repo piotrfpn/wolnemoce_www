@@ -42,6 +42,98 @@ type OwnerCapacityRequestRpcRow = Omit<OwnerCapacityRequest, "status"> & {
   status: string;
 };
 
+type CapacityRequestInterestSummary = {
+  company_name: string;
+  company_slug: string | null;
+  city: string | null;
+  region: string | null;
+  branch: string | null;
+  is_verified: boolean;
+  interested_at: string;
+};
+
+function formatInterestLocation(interest: CapacityRequestInterestSummary) {
+  return [interest.city, interest.region].filter(Boolean).join(", ");
+}
+
+function CapacityRequestInterestsList({
+  count,
+  interests,
+}: {
+  count: number;
+  interests: CapacityRequestInterestSummary[];
+}) {
+  return (
+    <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+      <div className="mb-3 flex min-w-0 flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h3 className="text-sm font-extrabold text-slate-900">
+            Zainteresowane firmy
+          </h3>
+          <p className="mt-1 text-xs leading-5 text-slate-500">
+            {count > 0
+              ? `${count} ${count === 1 ? "firma zgłosiła" : "firmy zgłosiły"} zainteresowanie tym zapytaniem.`
+              : "Na razie brak zgłoszeń zainteresowania."}
+          </p>
+        </div>
+      </div>
+
+      {interests.length > 0 ? (
+        <div className="max-h-72 space-y-3 overflow-y-auto pr-1">
+          {interests.map((interest) => {
+            const location = formatInterestLocation(interest);
+
+            return (
+              <div
+                key={`${interest.company_name}-${interest.interested_at}`}
+                className="rounded-xl border border-slate-200 bg-white p-4"
+              >
+                <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="min-w-0">
+                    {interest.company_slug ? (
+                      <Link
+                        href={`/firmy/${interest.company_slug}`}
+                        className="break-words text-sm font-extrabold text-slate-900 transition hover:text-[#1a5f3c]"
+                      >
+                        {interest.company_name}
+                      </Link>
+                    ) : (
+                      <p className="break-words text-sm font-extrabold text-slate-900">
+                        {interest.company_name}
+                      </p>
+                    )}
+                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                      {[location, interest.branch].filter(Boolean).join(" · ") ||
+                        "Brak danych lokalizacji"}
+                    </p>
+                  </div>
+                  {interest.is_verified ? (
+                    <span className="inline-flex shrink-0 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+                      Zweryfikowana firma
+                    </span>
+                  ) : null}
+                </div>
+                <p className="mt-3 text-xs font-semibold text-slate-400">
+                  Zgłoszono: {formatCapacityRequestDate(interest.interested_at)}
+                </p>
+                {interest.company_slug ? (
+                  <Link
+                    href={`/firmy/${interest.company_slug}`}
+                    className="mt-3 inline-flex items-center gap-2 text-xs font-bold text-[#1a5f3c]"
+                  >
+                    Zobacz profil firmy
+                    <i className="fas fa-arrow-right text-[10px]"></i>
+                  </Link>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
@@ -75,6 +167,23 @@ export default async function PanelMyCapacityRequestsPage() {
     ...request,
     status: request.status as CapacityRequestStatus,
   }));
+  const interestEntries =
+    ownerRequests.length > 0
+      ? await Promise.all(
+          ownerRequests.map(async (request) => {
+            const { data } = await supabase.rpc(
+              "get_capacity_request_interests_for_owner",
+              { p_capacity_request_id: request.id }
+            );
+
+            return [
+              request.id,
+              (data ?? []) as CapacityRequestInterestSummary[],
+            ] as const;
+          })
+        )
+      : [];
+  const interestsByRequestId = new Map(interestEntries);
 
   return (
     <>
@@ -184,6 +293,10 @@ export default async function PanelMyCapacityRequestsPage() {
                             {request.rejection_reason}
                           </div>
                         ) : null}
+                        <CapacityRequestInterestsList
+                          count={request.interest_count}
+                          interests={interestsByRequestId.get(request.id) ?? []}
+                        />
                       </div>
                       <div className="flex min-w-0 flex-col gap-3 sm:flex-row lg:flex-col">
                         {canPreview ? (

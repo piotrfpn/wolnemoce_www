@@ -2868,6 +2868,18 @@ export type Database = {
           rejected_count: number
         }[]
       }
+      get_capacity_request_interests_for_owner: {
+        Args: { p_capacity_request_id: string }
+        Returns: {
+          branch: string | null
+          city: string | null
+          company_name: string
+          company_slug: string | null
+          interested_at: string
+          is_verified: boolean
+          region: string | null
+        }[]
+      }
       get_my_capacity_requests: {
         Args: { p_company_id: string }
         Returns: {
