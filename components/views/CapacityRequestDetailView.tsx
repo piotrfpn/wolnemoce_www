@@ -13,7 +13,7 @@ import {
   getPublicCapacityRequestBySlug,
   getSimilarCapacityRequests,
 } from "@/lib/capacityRequests";
-import { getAbsoluteUrl, truncateSeoDescription } from "@/lib/seo";
+import { getAbsoluteUrl } from "@/lib/seo";
 
 type CapacityRequestDetailViewProps = {
   slug: string;
@@ -25,33 +25,44 @@ export async function generateCapacityRequestMetadata({
   const request = await getPublicCapacityRequestBySlug(slug);
 
   if (!request) {
+    const title = "Zapytanie nie znalezione | WolneMoce";
+    const description = "Zapytanie produkcyjne nie istnieje albo nie jest aktywne.";
+
     return {
-      title: "Zapytanie nie znalezione | WolneMoce",
-      description: "Zapytanie produkcyjne nie istnieje albo nie jest aktywne.",
+      title,
+      description,
       alternates: {
         canonical: `/zapytania/${slug}`,
+      },
+      openGraph: {
+        title,
+        description,
+        url: `/zapytania/${slug}`,
+        siteName: "WolneMoce",
+        type: "website",
       },
     };
   }
 
-  const description = truncateSeoDescription(request.description);
+  const title = `${request.title} | Zapytanie produkcyjne | WolneMoce`;
+  const description = `Zapytanie produkcyjne z branży ${request.branch} / ${request.service_type}. Sprawdź szczegóły i zgłoś zainteresowanie jako wykonawca.`;
 
   return {
-    title: `${request.title} | Zapytania produkcyjne | WolneMoce`,
+    title,
     description,
     alternates: {
       canonical: `/zapytania/${request.slug}`,
     },
     openGraph: {
-      title: request.title,
+      title,
       description,
       url: `/zapytania/${request.slug}`,
       siteName: "WolneMoce",
-      type: "article",
+      type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: request.title,
+      title,
       description,
     },
   };

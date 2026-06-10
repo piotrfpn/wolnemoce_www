@@ -64,22 +64,22 @@ export default async function CapacityRequestsListView({
             <div className="min-w-0">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-5 py-2 text-sm font-medium backdrop-blur">
                 <i className="fas fa-clipboard-list text-[#fbbf24]"></i>
-                Giełda zleceń produkcyjnych
+                Publiczne zlecenia B2B
               </div>
               <h1 className="mb-5 max-w-4xl text-4xl font-black leading-tight tracking-[-1px] md:text-5xl lg:text-[56px]">
-                Zapytania produkcyjne od firm szukających wykonawców
+                Zapytania produkcyjne
               </h1>
               <p className="mb-8 max-w-2xl text-lg leading-8 text-white/85">
-                Przeglądaj aktywne zlecenia firm, które szukają podwykonawców,
-                wykonawców CNC, drukarni 3D, spawalni i innych partnerów B2B.
+                Firmy szukające wykonawców, podwykonawców i dostępnych mocy
+                produkcyjnych.
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link href="/dodaj-zapytanie" className="btn btn-accent">
                   <i className="fas fa-plus"></i>
                   Dodaj zapytanie
                 </Link>
-                <Link href="/oferty" className="btn btn-outline bg-white text-[#1a5f3c]">
-                  Oferuję moce produkcyjne
+                <Link href="/dodaj-oferte" className="btn btn-outline bg-white text-[#1a5f3c]">
+                  Mam wolne moce - dodaj ofertę
                 </Link>
               </div>
             </div>
@@ -175,11 +175,11 @@ export default async function CapacityRequestsListView({
                   <i className="fas fa-circle-info text-xl"></i>
                 </div>
                 <h3 className="mb-2 text-xl font-extrabold text-slate-900">
-                  Pierwsze zapytania produkcyjne są obecnie w przygotowaniu.
+                  Bądź pierwszą firmą, która doda zapytanie w tej kategorii.
                 </h3>
                 <p className="mx-auto mb-6 max-w-2xl text-sm leading-6 text-slate-500">
-                  Chcesz znaleźć wykonawcę? Dodaj zapytanie, a po weryfikacji
-                  pokażemy je firmom produkcyjnym z odpowiedniej branży.
+                  Zleć produkcję lub znajdź podwykonawcę wśród sprawdzonych firm
+                  na WolneMoce.
                 </p>
                 <Link href="/dodaj-zapytanie" className="btn btn-primary">
                   Dodaj zapytanie
