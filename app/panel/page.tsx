@@ -442,32 +442,32 @@ export default async function PanelPage() {
                 </div>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-                <div className="rounded-2xl bg-amber-50 px-4 py-3">
-                  <strong className="block text-2xl font-extrabold text-amber-800">
+              <div className="grid grid-cols-3 items-stretch gap-2 sm:gap-3">
+                <div className="flex min-h-[76px] min-w-0 flex-col items-center justify-between rounded-2xl bg-amber-50 px-2 py-3 text-center sm:px-3">
+                  <strong className="block text-2xl font-extrabold leading-none tabular-nums text-amber-800">
                     {capacityRequestCounts.pending}
                   </strong>
-                  <span className="text-xs font-semibold text-amber-800">
+                  <span className="mt-2 block min-w-0 break-words text-[11px] font-semibold leading-tight text-amber-800 sm:text-xs">
                     w moderacji
                   </span>
                 </div>
-                <div className="rounded-2xl bg-red-50 px-4 py-3">
-                  <strong className="block text-2xl font-extrabold text-red-700">
+                <div className="flex min-h-[76px] min-w-0 flex-col items-center justify-between rounded-2xl bg-red-50 px-2 py-3 text-center sm:px-3">
+                  <strong className="block text-2xl font-extrabold leading-none tabular-nums text-red-700">
                     {capacityRequestCounts.rejected}
                   </strong>
-                  <span className="text-xs font-semibold text-red-700">
+                  <span className="mt-2 block min-w-0 break-words text-[11px] font-semibold leading-tight text-red-700 sm:text-xs">
                     odrzucone
                   </span>
                 </div>
                 <div
-                  className={`rounded-2xl px-4 py-3 ${
+                  className={`flex min-h-[76px] min-w-0 flex-col items-center justify-between rounded-2xl px-2 py-3 text-center sm:px-3 ${
                     activeCapacityRequestInterestsCount > 0
                       ? "bg-emerald-50"
                       : "bg-slate-100"
                   }`}
                 >
                   <strong
-                    className={`block text-2xl font-extrabold ${
+                    className={`block text-2xl font-extrabold leading-none tabular-nums ${
                       activeCapacityRequestInterestsCount > 0
                         ? "text-emerald-700"
                         : "text-slate-600"
@@ -476,7 +476,7 @@ export default async function PanelPage() {
                     {activeCapacityRequestInterestsCount}
                   </strong>
                   <span
-                    className={`text-xs font-semibold ${
+                    className={`mt-2 block min-w-0 break-words text-[11px] font-semibold leading-tight sm:text-xs ${
                       activeCapacityRequestInterestsCount > 0
                         ? "text-emerald-700"
                         : "text-slate-600"
