@@ -5,7 +5,7 @@ import { createPageMetadata } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Zapytania produkcyjne i zlecenia B2B | WolneMoce",
+  title: "Zapytania produkcyjne i zlecenia B2B",
   description:
     "Przeglądaj zapytania firm szukających wykonawców, podwykonawców i wolnych mocy produkcyjnych w Polsce.",
   path: "/zapytania",
