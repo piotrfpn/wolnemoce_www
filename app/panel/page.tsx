@@ -442,41 +442,32 @@ export default async function PanelPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 items-stretch gap-2 sm:gap-3">
-                <div className="flex min-h-[76px] min-w-0 flex-col items-center justify-between rounded-2xl bg-amber-50 px-2 py-3 text-center sm:px-3">
-                  <strong className="block text-2xl font-extrabold leading-none tabular-nums text-amber-800">
-                    {capacityRequestCounts.pending}
-                  </strong>
-                  <span className="mt-2 block min-w-0 break-words text-[11px] font-semibold leading-tight text-amber-800 sm:text-xs">
+              <div className="space-y-2">
+                <div className="flex min-w-0 items-center justify-between gap-3 rounded-xl bg-amber-50 px-3 py-2.5">
+                  <span className="min-w-0 text-xs font-semibold leading-tight text-amber-800">
                     w moderacji
                   </span>
-                </div>
-                <div className="flex min-h-[76px] min-w-0 flex-col items-center justify-between rounded-2xl bg-red-50 px-2 py-3 text-center sm:px-3">
-                  <strong className="block text-2xl font-extrabold leading-none tabular-nums text-red-700">
-                    {capacityRequestCounts.rejected}
+                  <strong className="shrink-0 text-lg font-extrabold leading-none tabular-nums text-amber-800">
+                    {capacityRequestCounts.pending}
                   </strong>
-                  <span className="mt-2 block min-w-0 break-words text-[11px] font-semibold leading-tight text-red-700 sm:text-xs">
+                </div>
+                <div className="flex min-w-0 items-center justify-between gap-3 rounded-xl bg-red-50 px-3 py-2.5">
+                  <span className="min-w-0 text-xs font-semibold leading-tight text-red-700">
                     odrzucone
                   </span>
+                  <strong className="shrink-0 text-lg font-extrabold leading-none tabular-nums text-red-700">
+                    {capacityRequestCounts.rejected}
+                  </strong>
                 </div>
                 <div
-                  className={`flex min-h-[76px] min-w-0 flex-col items-center justify-between rounded-2xl px-2 py-3 text-center sm:px-3 ${
+                  className={`flex min-w-0 items-center justify-between gap-3 rounded-xl px-3 py-2.5 ${
                     activeCapacityRequestInterestsCount > 0
                       ? "bg-emerald-50"
                       : "bg-slate-100"
                   }`}
                 >
-                  <strong
-                    className={`block text-2xl font-extrabold leading-none tabular-nums ${
-                      activeCapacityRequestInterestsCount > 0
-                        ? "text-emerald-700"
-                        : "text-slate-600"
-                    }`}
-                  >
-                    {activeCapacityRequestInterestsCount}
-                  </strong>
                   <span
-                    className={`mt-2 block min-w-0 break-words text-[11px] font-semibold leading-tight sm:text-xs ${
+                    className={`min-w-0 text-xs font-semibold leading-tight ${
                       activeCapacityRequestInterestsCount > 0
                         ? "text-emerald-700"
                         : "text-slate-600"
@@ -484,6 +475,15 @@ export default async function PanelPage() {
                   >
                     {t.myRequestsActiveInterests}
                   </span>
+                  <strong
+                    className={`shrink-0 text-lg font-extrabold leading-none tabular-nums ${
+                      activeCapacityRequestInterestsCount > 0
+                        ? "text-emerald-700"
+                        : "text-slate-600"
+                    }`}
+                  >
+                    {activeCapacityRequestInterestsCount}
+                  </strong>
                 </div>
               </div>
 
