@@ -219,16 +219,39 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={9} title="Odbiorcy danych">
+              <Section number={9} title="Odbiorcy danych i dostawcy infrastruktury">
                 <p>Dane mogą być przekazywane podmiotom wspierającym działanie Serwisu, w tym:</p>
                 <ul className="list-disc space-y-2 pl-5">
-                  <li>Supabase - infrastruktura bazy danych, Auth i Storage,</li>
+                  <li>Supabase - infrastruktura bazy danych, uwierzytelniania użytkowników, Storage, bezpieczeństwa i usług backendowych,</li>
                   <li>Vercel - hosting i infrastruktura aplikacji,</li>
                   <li>Stripe - płatności i rozliczenia, jeżeli zostaną wdrożone,</li>
                   <li>dostawcy poczty e-mail i narzędzi IT,</li>
                   <li>biuro księgowe, kancelaria prawna i doradcy,</li>
                   <li>organy publiczne, jeżeli wymagają tego przepisy prawa.</li>
                 </ul>
+                <p>
+                  WolneMoce korzysta z usług dostawców infrastruktury technicznej
+                  niezbędnych do działania portalu. Jednym z takich dostawców
+                  jest Supabase, wykorzystywany m.in. do obsługi bazy danych,
+                  uwierzytelniania użytkowników, przechowywania plików,
+                  mechanizmów bezpieczeństwa oraz usług backendowych.
+                </p>
+                <p>
+                  W zakresie, w jakim Supabase przetwarza dane osobowe w imieniu
+                  WolneMoce, działa jako podmiot przetwarzający na podstawie Data
+                  Processing Addendum oraz właściwych warunków świadczenia usług.
+                  Dane mogą obejmować w szczególności dane konta, dane
+                  kontaktowe, dane rejestracyjne, dane użycia oraz dane
+                  wprowadzone przez użytkowników do portalu.
+                </p>
+                <p>
+                  Supabase może korzystać z dalszych podmiotów przetwarzających w
+                  zakresie niezbędnym do świadczenia usług infrastrukturalnych. W
+                  przypadku transferów danych poza Europejski Obszar Gospodarczy
+                  stosowane są odpowiednie mechanizmy ochrony danych, w
+                  szczególności Standardowe Klauzule Umowne, jeżeli mają
+                  zastosowanie.
+                </p>
                 <p>
                   W ramach funkcji zapytań produkcyjnych ograniczone dane firmy,
                   która zgłosiła zainteresowanie, mogą być widoczne dla
