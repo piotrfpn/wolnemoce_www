@@ -69,6 +69,12 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                   oznacza informację o dostępnych mocach produkcyjnych,
                   magazynowych, logistycznych lub technicznych. <strong>RFQ</strong>
                   oznacza zapytanie ofertowe kierowane do firmy przez Serwis.
+                  <strong> Zapytanie produkcyjne</strong> oznacza informację
+                  dodawaną przez firmę szukającą wykonawcy, podwykonawcy,
+                  kooperanta lub wolnych mocy produkcyjnych, magazynowych,
+                  logistycznych albo technicznych. <strong>Zainteresowanie</strong>
+                  oznacza zgłoszenie przez inną firmę chęci dalszej rozmowy lub
+                  kontaktu biznesowego w związku z zapytaniem produkcyjnym.
                 </p>
               </Section>
 
@@ -88,10 +94,12 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                   Serwis jest narzędziem B2B typu marketplace/SaaS służącym do
                   publikacji profili firm, prezentacji ofert wolnych mocy
                   produkcyjnych, magazynowych, logistycznych i technicznych oraz
-                  obsługi zapytań RFQ. Serwis ułatwia nawiązanie kontaktu
-                  biznesowego między firmami, ale nie świadczy usług
-                  produkcyjnych, logistycznych, magazynowych ani technicznych we
-                  własnym imieniu.
+                  obsługi zapytań RFQ. Serwis umożliwia również publikowanie
+                  zapytań produkcyjnych przez firmy szukające wykonawców,
+                  podwykonawców, kooperantów lub wolnych mocy produkcyjnych.
+                  Serwis ułatwia nawiązanie kontaktu biznesowego między firmami,
+                  ale nie świadczy usług produkcyjnych, logistycznych,
+                  magazynowych ani technicznych we własnym imieniu.
                 </p>
                 <p>
                   WolneMoce nie gwarantuje pozyskania zapytania, zlecenia,
@@ -285,7 +293,62 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={14} title="Załączniki RFQ i prywatne pliki">
+              <Section number={14} title="Zapytania produkcyjne i zgłoszenia zainteresowania">
+                <p>
+                  Użytkownik działający w imieniu firmy może dodać zapytanie
+                  produkcyjne, czyli opis potrzeby biznesowej związanej z
+                  poszukiwaniem wykonawcy, podwykonawcy, kooperanta lub wolnych
+                  mocy produkcyjnych. Zapytanie może obejmować w szczególności
+                  tytuł, branżę, rodzaj usługi, opis potrzeby, parametry
+                  zlecenia, termin, ogólną lokalizację lub preferowany region,
+                  budżet, jeżeli został podany, oraz inne informacje potrzebne
+                  do oceny charakteru zapytania.
+                </p>
+                <p>
+                  Dodanie zapytania produkcyjnego oznacza zgłoszenie treści do
+                  moderacji i nie gwarantuje jej publikacji. Administrator może
+                  zaakceptować zapytanie, odrzucić je, zarchiwizować, ograniczyć
+                  jego widoczność, usunąć albo poprosić użytkownika o poprawienie
+                  treści. Publiczny widok zapytania produkcyjnego nie pokazuje
+                  danych kontaktowych firmy zlecającej ani prywatnych danych
+                  administracyjnych.
+                </p>
+                <p>
+                  Firma dodająca zapytanie odpowiada za prawdziwość, legalność,
+                  kompletność i aktualność przekazywanych informacji. Zabronione
+                  jest dodawanie treści naruszających prawo, prawa osób trzecich,
+                  tajemnice przedsiębiorstwa, poufność, dobre obyczaje B2B lub
+                  zasady bezpieczeństwa Serwisu.
+                </p>
+                <p>
+                  Zapytanie produkcyjne publikowane w WolneMoce ma charakter
+                  informacyjny i stanowi zaproszenie do składania ofert lub
+                  podjęcia rokowań w rozumieniu art. 71 Kodeksu cywilnego,
+                  chyba że z jego treści jednoznacznie wynika inaczej i strony
+                  ustalą odmienne warunki poza platformą.
+                </p>
+                <p>
+                  Kliknięcie „Jestem zainteresowany” oznacza wyrażenie
+                  zainteresowania kontaktem lub dalszą rozmową biznesową. Nie
+                  powoduje zawarcia umowy, nie tworzy obowiązku zawarcia umowy
+                  i nie oznacza przyjęcia oferty. Szczegóły ewentualnej
+                  współpracy strony ustalają samodzielnie poza automatycznym
+                  mechanizmem platformy. WolneMoce nie prowadzi negocjacji w
+                  imieniu stron.
+                </p>
+                <p>
+                  Właściciel zapytania może widzieć w panelu minimalne dane
+                  firmy, która zgłosiła zainteresowanie, w zakresie potrzebnym do
+                  oceny zgłoszenia i ewentualnego nawiązania kontaktu
+                  biznesowego. WolneMoce nie jest stroną umowy między firmą
+                  szukającą wykonawcy a firmą zainteresowaną realizacją i nie
+                  odpowiada za jakość wykonania, cenę, termin, rozliczenia,
+                  rękojmię, wady, reklamacje ani wykonanie zobowiązań między
+                  firmami.
+                </p>
+              </Section>
+
+              <Section number={15} title="Załączniki RFQ i prywatne pliki">
                 <p>
                   Użytkownik wysyłający RFQ może dołączyć pliki, takie jak
                   rysunki, zdjęcia, specyfikacje lub dokumenty techniczne.
@@ -296,7 +359,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={15} title="Signed URLs">
+              <Section number={16} title="Signed URLs">
                 <p>
                   Dostęp do prywatnych załączników może być realizowany przez
                   czasowe signed URLs. Taki link ma ograniczony czas ważności i
@@ -306,7 +369,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={16} title="Prezentacje firmowe PDF/PPT/PPTX w prywatnym Storage">
+              <Section number={17} title="Prezentacje firmowe PDF/PPT/PPTX w prywatnym Storage">
                 <p>
                   Firma może dodać prezentację firmową w formacie PDF, PPT albo
                   PPTX. Pliki prezentacji są przechowywane w prywatnym Storage,
@@ -316,23 +379,30 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={17} title="Panel administratora i moderacja">
+              <Section number={18} title="Panel administratora i moderacja">
                 <p>
-                  Administrator może moderować oferty, firmy oraz zgłoszenia usług.
-                  Moderacja może obejmować zatwierdzanie, odrzucanie, ukrywanie
-                  lub ograniczanie widoczności treści oraz weryfikację profili
-                  firm.
+                  Administrator może moderować oferty, zapytania produkcyjne,
+                  firmy, realizacje oraz zgłoszenia usług. Moderacja może
+                  obejmować zatwierdzanie, odrzucanie, ukrywanie, archiwizowanie,
+                  usuwanie lub ograniczanie widoczności treści oraz weryfikację
+                  profili firm.
                 </p>
                 <p>
-                  Administrator może w szczególności zaakceptować ofertę, odrzucić
-                  ją, zarchiwizować, ukryć, zmienić jej status, odmówić publikacji
-                  oferty niespełniającej standardów platformy, poprosić
-                  użytkownika o poprawienie treści albo usunąć lub ukryć materiały
-                  naruszające zasady Serwisu.
+                  Administrator może w szczególności zaakceptować ofertę lub
+                  zapytanie produkcyjne, odrzucić je, zarchiwizować, ukryć,
+                  zmienić status, odmówić publikacji treści niespełniającej
+                  standardów platformy, poprosić użytkownika o poprawienie treści
+                  albo usunąć lub ukryć materiały naruszające zasady Serwisu.
+                </p>
+                <p>
+                  W przypadku odmowy publikacji lub ograniczenia widoczności
+                  treści administrator może przekazać użytkownikowi informację o
+                  przyczynie decyzji, w szczególności przez panel użytkownika lub
+                  inny dostępny kanał kontaktu.
                 </p>
               </Section>
 
-              <Section number={18} title="WolneMoce nie jest stroną umowy produkcyjnej">
+              <Section number={19} title="WolneMoce nie jest stroną umowy produkcyjnej">
                 <p>
                   WolneMoce jest dostawcą infrastruktury teleinformatycznej i
                   platformą kojarzącą firmy B2B. Serwis nie jest stroną umowy
@@ -353,7 +423,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={19} title="Plany, wyróżnienia i dodatki płatne">
+              <Section number={20} title="Plany, wyróżnienia i dodatki płatne">
                 <p>
                   Serwis może udostępniać plany FREE, PRO i ENTERPRISE. Szczegółowy
                   zakres planów, limity, funkcje i ceny są prezentowane w cenniku
@@ -374,7 +444,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={20} title="Usługi partnerskie">
+              <Section number={21} title="Usługi partnerskie">
                 <p>
                   WolneMoce może prezentować płatne usługi partnerów
                   usługowych. Credos może świadczyć wsparcie księgowo-prawne, a
@@ -395,12 +465,13 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={21} title="Zasady treści ofert i zakaz obchodzenia platformy">
+              <Section number={22} title="Zasady treści ofert, zapytań i zakaz obchodzenia platformy">
                 <p>
-                  Użytkownik nie może publikować w treści oferty, zdjęciach,
-                  grafikach, nazwach plików, materiałach ani innych elementach
-                  oferty danych lub elementów służących bezpośredniemu obchodzeniu
-                  komunikacji przez platformę.
+                  Użytkownik nie może publikować w treści oferty, zapytania
+                  produkcyjnego, zdjęciach, grafikach, nazwach plików,
+                  materiałach ani innych elementach treści danych lub elementów
+                  służących bezpośredniemu obchodzeniu komunikacji przez
+                  platformę.
                 </p>
                 <p>Zakaz obejmuje w szczególności:</p>
                 <ul className="list-disc space-y-2 pl-5">
@@ -414,15 +485,15 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                   Celem tych zasad jest utrzymanie jakości i bezpieczeństwa
                   komunikacji, zapewnienie spójnej obsługi zapytań, ochrona modelu
                   działania marketplace oraz zapobieganie obchodzeniu mechanizmów
-                  platformy. Administrator może edytować treść oferty w celu
-                  usunięcia bezpośrednich danych kontaktowych, ukryć ofertę,
-                  wstrzymać jej publikację, zmienić status oferty na
-                  pending/rejected/archived albo poprosić użytkownika o poprawienie
-                  oferty.
+                  platformy. Administrator może edytować treść oferty lub
+                  zapytania w celu usunięcia bezpośrednich danych kontaktowych,
+                  ukryć ofertę lub zapytanie, wstrzymać publikację, zmienić
+                  status treści na pending/rejected/archived albo poprosić
+                  użytkownika o poprawienie treści.
                 </p>
               </Section>
 
-              <Section number={22} title="Zdjęcia, grafiki i materiały ofertowe">
+              <Section number={23} title="Zdjęcia, grafiki i materiały ofertowe">
                 <p>
                   Zdjęcia i materiały graficzne dodawane do ofert powinny
                   przedstawiać maszyny, park maszynowy, hale, stanowiska,
@@ -438,7 +509,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={23} title="Zgłaszanie naruszeń / notice and takedown / notice and action">
+              <Section number={24} title="Zgłaszanie naruszeń / notice and takedown / notice and action">
                 <p>
                   Użytkownik lub osoba trzecia może zgłosić treści bezprawne,
                   naruszające prawa osób trzecich, poufność, prawa autorskie,
@@ -451,9 +522,19 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                   ukryć, ograniczyć lub usunąć treść, a w przypadku rażących lub
                   powtarzających się naruszeń także zablokować konto.
                 </p>
+                <p>
+                  Niedozwolone są w szczególności treści bezprawne, spam, treści
+                  wprowadzające w błąd, naruszające prawa osób trzecich,
+                  publikujące dane, do których użytkownik nie ma prawa, albo
+                  ujawniające tajemnice przedsiębiorstwa lub informacje poufne
+                  bez podstawy prawnej lub biznesowej. Operator może odmówić
+                  publikacji, ograniczyć widoczność, zarchiwizować lub usunąć
+                  takie treści w celu ochrony bezpieczeństwa, jakości i zaufania
+                  do platformy.
+                </p>
               </Section>
 
-              <Section number={24} title="Płatności, subskrypcje i Stripe">
+              <Section number={25} title="Płatności, subskrypcje i Stripe">
                 <p>
                   Docelowy model Serwisu może obejmować odpłatne plany B2B SaaS
                   lub abonament miesięczny. Subskrypcja może odnawiać się
@@ -469,7 +550,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={25} title="Anulowanie subskrypcji i brak proporcjonalnych zwrotów">
+              <Section number={26} title="Anulowanie subskrypcji i brak proporcjonalnych zwrotów">
                 <p>
                   Użytkownik może anulować subskrypcję w dowolnym momencie, ze
                   skutkiem na koniec opłaconego okresu rozliczeniowego. Użytkownik
@@ -480,7 +561,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={26} title="Zawieszenie konta przy braku płatności lub naruszeniu regulaminu">
+              <Section number={27} title="Zawieszenie konta przy braku płatności lub naruszeniu regulaminu">
                 <p>
                   Operator może zawiesić lub ograniczyć dostęp do płatnych funkcji
                   w przypadku braku płatności, błędu płatności, cofnięcia płatności
@@ -490,28 +571,29 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={27} title="Odpowiedzialność użytkowników">
+              <Section number={28} title="Odpowiedzialność użytkowników">
                 <p>
-                  Użytkownicy odpowiadają za treści ofert, dane profili, treść RFQ,
-                  załączniki, legalność dokumentacji technicznej oraz działania
-                  podejmowane poza Serwisem. Umowy produkcyjne, usługowe,
-                  logistyczne lub handlowe są zawierane bezpośrednio między
-                  użytkownikami poza portalem.
+                  Użytkownicy odpowiadają za treści ofert, zapytań produkcyjnych,
+                  dane profili, treść RFQ, załączniki, legalność dokumentacji
+                  technicznej oraz działania podejmowane poza Serwisem. Umowy
+                  produkcyjne, usługowe, logistyczne lub handlowe są zawierane
+                  bezpośrednio między użytkownikami poza portalem.
                 </p>
               </Section>
 
-              <Section number={28} title="Wyłączenia odpowiedzialności Operatora">
+              <Section number={29} title="Wyłączenia odpowiedzialności Operatora">
                 <p>
                   Operator nie gwarantuje zawarcia umowy, jakości usług,
-                  wypłacalności firm, terminowości, dostępności mocy, kompletności
-                  ofert ani realizacji zleceń. Operator nie jest stroną relacji
-                  handlowej między użytkownikami i nie odpowiada za ich wzajemne
-                  rozliczenia, z zastrzeżeniem przepisów bezwzględnie
+                  wypłacalności firm, terminowości, dostępności mocy,
+                  kompletności ofert, zapytań ani realizacji zleceń. Operator nie
+                  jest stroną relacji handlowej między użytkownikami i nie
+                  odpowiada za ich wzajemne rozliczenia, z zastrzeżeniem
+                  przepisów bezwzględnie
                   obowiązujących.
                 </p>
               </Section>
 
-              <Section number={29} title="Dostępność techniczna i przerwy serwisowe">
+              <Section number={30} title="Dostępność techniczna i przerwy serwisowe">
                 <p>
                   Operator dokłada starań, aby Serwis działał stabilnie, ale nie
                   gwarantuje nieprzerwanej dostępności. Możliwe są przerwy
@@ -520,7 +602,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={30} title="Reklamacje">
+              <Section number={31} title="Reklamacje">
                 <p>
                   Reklamacje dotyczące działania Serwisu można kierować na adres
                   piotr.fiszer@pfconsulting.pl. Reklamacja powinna zawierać opis
@@ -529,7 +611,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={31} title="Zmiany regulaminu">
+              <Section number={32} title="Zmiany regulaminu">
                 <p>
                   Operator może zmienić Regulamin w szczególności w razie rozwoju
                   Serwisu, wdrożenia płatności, zmian prawnych, zmian technicznych
@@ -537,7 +619,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={32} title="Prawo właściwe i sąd właściwy">
+              <Section number={33} title="Prawo właściwe i sąd właściwy">
                 <p>
                   Regulamin podlega prawu polskiemu. Spory będą rozstrzygane przez
                   sąd właściwy zgodnie z bezwzględnie obowiązującymi przepisami
@@ -545,7 +627,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                 </p>
               </Section>
 
-              <Section number={33} title="Postanowienia końcowe">
+              <Section number={34} title="Postanowienia końcowe">
                 <p>
                   W sprawach nieuregulowanych Regulaminem stosuje się przepisy
                   prawa powszechnie obowiązującego. Jeżeli którekolwiek

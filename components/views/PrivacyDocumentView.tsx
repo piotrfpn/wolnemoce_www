@@ -79,6 +79,8 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                   <li>właściciele firm,</li>
                   <li>pracownicy i reprezentanci firm,</li>
                   <li>osoby kontaktowe wskazane w zapytaniach RFQ,</li>
+                  <li>użytkownicy dodający zapytania produkcyjne,</li>
+                  <li>użytkownicy i firmy zgłaszające zainteresowanie zapytaniami produkcyjnymi,</li>
                   <li>administratorzy i operatorzy kont firmowych,</li>
                   <li>osoby zgłaszające naruszenia lub kontaktujące się z Operatorem.</li>
                 </ul>
@@ -91,9 +93,12 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                   <li>nazwa firmy, NIP, REGON i adres firmy,</li>
                   <li>dane profilu firmy, branże, usługi, opis i strona WWW,</li>
                   <li>treści ofert, treści RFQ i dane kontaktowe w RFQ,</li>
+                  <li>treści zapytań produkcyjnych, w tym tytuł, branża, rodzaj usługi, opis potrzeby, parametry zlecenia, termin, ogólna lokalizacja, preferowany region i budżet, jeżeli został podany,</li>
+                  <li>dane zgłoszeń zainteresowania zapytaniem produkcyjnym, w tym data zgłoszenia oraz ograniczone dane firmy zgłaszającej zainteresowanie,</li>
                   <li>załączniki RFQ oraz metadane plików,</li>
                   <li>dane techniczne, logi, adres IP, informacje o urządzeniu i przeglądarce,</li>
-                  <li>identyfikatory konta Supabase i dane sesji,</li>
+                  <li>identyfikatory konta Supabase, dane sesji oraz identyfikatory techniczne, takie jak user_id, company_id lub capacity_request_id,</li>
+                  <li>dane administracyjne, notatki administratora, statusy moderacji oraz powody odrzucenia treści, jeżeli funkcja jest dostępna,</li>
                   <li>dane płatnicze obsługiwane przez Stripe, jeżeli płatności zostaną wdrożone.</li>
                 </ul>
                 <p>
@@ -112,7 +117,8 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
               <Section number={5} title="Cele i podstawy prawne">
                 <ul className="list-disc space-y-2 pl-5">
                   <li>świadczenie usług elektronicznych i obsługa konta - art. 6 ust. 1 lit. b RODO,</li>
-                  <li>obsługa profilu firmy, ofert, branż, rodzajów usług, panelu użytkownika i zapytań RFQ - art. 6 ust. 1 lit. b RODO,</li>
+                  <li>obsługa profilu firmy, ofert, branż, rodzajów usług, panelu użytkownika, zapytań RFQ oraz zapytań produkcyjnych - art. 6 ust. 1 lit. b RODO,</li>
+                  <li>obsługa zgłoszeń zainteresowania zapytaniami produkcyjnymi i umożliwienie komunikacji B2B między użytkownikami - art. 6 ust. 1 lit. b RODO oraz art. 6 ust. 1 lit. f RODO,</li>
                   <li>obsługa załączników RFQ, prywatnych plików i czasowych signed URLs - art. 6 ust. 1 lit. b RODO oraz art. 6 ust. 1 lit. f RODO w zakresie bezpieczeństwa i przeciwdziałania nadużyciom,</li>
                   <li>obsługa faktur, księgowości i obowiązków podatkowych, jeżeli płatności lub rozliczenia zostaną uruchomione - art. 6 ust. 1 lit. c RODO,</li>
                   <li>bezpieczeństwo IT, logi techniczne, zapobieganie nadużyciom, moderacja i ochrona Serwisu - art. 6 ust. 1 lit. f RODO,</li>
@@ -122,12 +128,60 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 <p>
                   Serwis stosuje zasadę minimalizacji danych. Zakres danych
                   powinien być ograniczony do informacji potrzebnych do działania
-                  konta, profilu firmy, ofert, RFQ, kontaktu, bezpieczeństwa i
-                  rozliczalności działań w portalu B2B.
+                  konta, profilu firmy, ofert, zapytań produkcyjnych, RFQ,
+                  kontaktu, bezpieczeństwa i rozliczalności działań w portalu
+                  B2B.
+                </p>
+                <p>
+                  WolneMoce działa w modelu B2B. Dane osób prawnych same w sobie
+                  nie zawsze są danymi osobowymi, jednak w praktyce korzystania z
+                  Serwisu mogą być przetwarzane dane osób fizycznych, w tym
+                  użytkowników kont, osób kontaktowych, przedsiębiorców
+                  prowadzących jednoosobową działalność gospodarczą, właścicieli,
+                  reprezentantów i pracowników firm.
                 </p>
               </Section>
 
-              <Section number={6} title="Dane operacyjne, logi i podstawowa analiza działania platformy">
+              <Section number={6} title="Zapytania produkcyjne, zainteresowania i widoczność danych">
+                <p>
+                  W publicznych widokach zapytań produkcyjnych WolneMoce pokazuje
+                  tylko informacje potrzebne do oceny charakteru zapytania, takie
+                  jak tytuł, branża, rodzaj usługi, opis potrzeby, parametry
+                  zlecenia, termin, ogólna lokalizacja, budżet, jeżeli został
+                  podany, oraz informacja o publicznym statusie zapytania.
+                </p>
+                <p>
+                  Publiczny widok zapytania produkcyjnego nie ujawnia danych
+                  kontaktowych zlecającego, danych administracyjnych,
+                  identyfikatorów technicznych, notatek administratora ani
+                  prywatnych danych firmy. Niepubliczne lub chronione mogą być w
+                  szczególności: e-mail użytkownika, e-mail do zapytań ofertowych,
+                  telefon, dane osoby kontaktowej, company_id, user_id,
+                  capacity_request_id, dane administracyjne, notatki admina,
+                  powód odrzucenia treści oraz dane kontaktowe zlecającego
+                  niewidoczne w publicznym widoku zapytania.
+                </p>
+                <p>
+                  W przypadku kliknięcia „Jestem zainteresowany” przy zapytaniu
+                  produkcyjnym ograniczone dane firmy deklarującej
+                  zainteresowanie, takie jak nazwa firmy, ogólna lokalizacja,
+                  branża, status weryfikacji oraz data zgłoszenia
+                  zainteresowania, mogą zostać udostępnione użytkownikowi, który
+                  opublikował zapytanie, w celu umożliwienia oceny
+                  zainteresowania i ewentualnego nawiązania kontaktu biznesowego.
+                </p>
+                <p>
+                  Dashboard może prezentować liczbę zainteresowań jako licznik,
+                  natomiast szczegóły zainteresowanych firm są dostępne w
+                  ograniczonym zakresie w dedykowanym widoku panelu właściciela
+                  zapytania. Dane kontaktowe nie są automatycznie ujawniane
+                  publicznie. Zakres widocznych danych może zależeć od ustawień
+                  profilu, statusu weryfikacji i funkcji dostępnych w danym
+                  momencie.
+                </p>
+              </Section>
+
+              <Section number={7} title="Dane operacyjne, logi i podstawowa analiza działania platformy">
                 <p>
                   Na etapie soft-launch Serwis może analizować podstawowe dane
                   biznesowe i operacyjne pochodzące z działania samej aplikacji,
@@ -149,7 +203,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={7} title="Analityka marketingowa i profilowanie reklamowe">
+              <Section number={8} title="Analityka marketingowa i profilowanie reklamowe">
                 <p>
                   Na obecnym etapie WolneMoce.pl nie korzysta z Google Analytics,
                   GA4, Meta Pixel, Hotjar, heatmap, remarketingu ani podobnych
@@ -165,7 +219,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={8} title="Odbiorcy danych">
+              <Section number={9} title="Odbiorcy danych">
                 <p>Dane mogą być przekazywane podmiotom wspierającym działanie Serwisu, w tym:</p>
                 <ul className="list-disc space-y-2 pl-5">
                   <li>Supabase - infrastruktura bazy danych, Auth i Storage,</li>
@@ -175,9 +229,17 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                   <li>biuro księgowe, kancelaria prawna i doradcy,</li>
                   <li>organy publiczne, jeżeli wymagają tego przepisy prawa.</li>
                 </ul>
+                <p>
+                  W ramach funkcji zapytań produkcyjnych ograniczone dane firmy,
+                  która zgłosiła zainteresowanie, mogą być widoczne dla
+                  właściciela danego zapytania zgodnie z zasadami opisanymi w tej
+                  Polityce. Nie oznacza to publicznego udostępnienia danych
+                  kontaktowych ani automatycznego przekazania pełnych danych
+                  firmy.
+                </p>
               </Section>
 
-              <Section number={9} title="Stripe">
+              <Section number={10} title="Stripe">
                 <p>
                   Jeżeli płatności zostaną wdrożone, Stripe może obsługiwać dane
                   potrzebne do płatności, fakturowania, bezpieczeństwa, anti-fraud
@@ -189,7 +251,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={10} title="Transfer danych poza EOG">
+              <Section number={11} title="Transfer danych poza EOG">
                 <p>
                   Dane mogą być przetwarzane poza Europejskim Obszarem Gospodarczym
                   przez dostawców infrastruktury lub płatności. W takim przypadku
@@ -199,16 +261,16 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={11} title="Okres przechowywania">
+              <Section number={12} title="Okres przechowywania">
                 <ul className="list-disc space-y-2 pl-5">
                   <li>dane konta - przez czas korzystania z Serwisu oraz okres przedawnienia roszczeń,</li>
                   <li>faktury i dokumenty księgowe - zgodnie z przepisami podatkowymi,</li>
                   <li>logi bezpieczeństwa - przez okres niezbędny do zapewnienia bezpieczeństwa,</li>
-                  <li>RFQ i załączniki - przez okres potrzebny do świadczenia usługi, moderacji, bezpieczeństwa i roszczeń.</li>
+                  <li>RFQ, zapytania produkcyjne, zgłoszenia zainteresowania i załączniki - przez okres potrzebny do świadczenia usługi, moderacji, bezpieczeństwa i roszczeń.</li>
                 </ul>
               </Section>
 
-              <Section number={12} title="Prawa osób">
+              <Section number={13} title="Prawa osób">
                 <p>Osobie, której dane dotyczą, przysługuje prawo:</p>
                 <ul className="list-disc space-y-2 pl-5">
                   <li>dostępu do danych,</li>
@@ -221,16 +283,18 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </ul>
               </Section>
 
-              <Section number={13} title="Dobrowolność podania danych">
+              <Section number={14} title="Dobrowolność podania danych">
                 <p>
                   Podanie danych jest dobrowolne, ale niezbędne do utworzenia
-                  konta, obsługi profilu firmy, dodawania ofert, wysyłania RFQ,
-                  obsługi płatności lub kontaktu. Niepodanie wymaganych danych
-                  może uniemożliwić korzystanie z wybranych funkcji Serwisu.
+                  konta, obsługi profilu firmy, dodawania ofert, dodawania
+                  zapytań produkcyjnych, zgłaszania zainteresowania, wysyłania
+                  RFQ, obsługi płatności lub kontaktu. Niepodanie wymaganych
+                  danych może uniemożliwić korzystanie z wybranych funkcji
+                  Serwisu.
                 </p>
               </Section>
 
-              <Section number={14} title="Zautomatyzowane decyzje i profilowanie">
+              <Section number={15} title="Zautomatyzowane decyzje i profilowanie">
                 <p>
                   Operator nie stosuje zautomatyzowanego podejmowania decyzji, w
                   tym profilowania, które wywoływałoby wobec osoby skutki prawne
@@ -240,7 +304,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={15} title="Bezpieczeństwo danych">
+              <Section number={16} title="Bezpieczeństwo danych">
                 <p>
                   Operator stosuje środki organizacyjne i techniczne adekwatne do
                   ryzyka, w tym uwierzytelnianie, kontrolę dostępu, RLS, prywatne
@@ -250,7 +314,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={16} title="Dane w załącznikach RFQ">
+              <Section number={17} title="Dane w załącznikach RFQ">
                 <p>
                   Użytkownik nie powinien przesyłać danych nadmiarowych ani
                   dokumentów, których nie ma prawa udostępnić. Użytkownik odpowiada
@@ -260,7 +324,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={17} title={t.privacy.companyProjects.title}>
+              <Section number={18} title={t.privacy.companyProjects.title}>
                 <p>{t.privacy.companyProjects.intro}</p>
                 <ul className="list-disc space-y-2 pl-5">
                   {t.privacy.companyProjects.items.map((item) => (
@@ -269,7 +333,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </ul>
               </Section>
 
-              <Section number={18} title="Kontakt w sprawie usług partnerskich">
+              <Section number={19} title="Kontakt w sprawie usług partnerskich">
                 <p>
                   Dane podane w formularzu kontaktowym mogą być wykorzystywane do
                   obsługi zapytania użytkownika. Jeżeli zapytanie dotyczy usługi
@@ -283,7 +347,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={19} title="Zmiany polityki prywatności">
+              <Section number={20} title="Zmiany polityki prywatności">
                 <p>
                   Polityka prywatności może być aktualizowana w związku z rozwojem
                   Serwisu, zmianą dostawców, wdrożeniem płatności, zmianami prawa
