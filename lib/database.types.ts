@@ -2868,6 +2868,10 @@ export type Database = {
           rejected_count: number
         }[]
       }
+      count_my_active_capacity_request_interests: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
       get_capacity_request_interests_for_owner: {
         Args: { p_capacity_request_id: string }
         Returns: {

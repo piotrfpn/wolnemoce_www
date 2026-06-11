@@ -726,6 +726,7 @@ export type Dictionary = {
     offers: string;
     projects: string;
     inquiries: string;
+    myRequests: string;
     settings: string;
   };
     dashboard: {
@@ -745,9 +746,17 @@ export type Dictionary = {
       notVerifiedCompany: string;
       verifiedCompanyDescription: string;
       submittedForModerationDescription: string;
+      myRequestsTitle: string;
+      myRequestsDescription: string;
+      myRequestsActiveInterests: string;
+      myRequestsInterestNotice: string;
+      myRequestsInterestSingular: string;
+      myRequestsInterestFew: string;
+      myRequestsInterestMany: string;
       goToProfile: string;
       goToOffers: string;
       goToInquiries: string;
+      goToMyRequests: string;
       settings: string;
       adminCard: string;
     };

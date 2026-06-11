@@ -7,6 +7,7 @@ import { type Locale, getLocalizedPath } from "@/lib/i18n/config";
 type PanelNavLinksProps = {
   locale: Locale;
   unreadCount: number;
+  activeCapacityRequestInterestsCount: number;
   labels: {
     panel: string;
     profile: string;
@@ -21,6 +22,7 @@ type PanelNavLinksProps = {
 export default function PanelNavLinks({
   locale,
   unreadCount,
+  activeCapacityRequestInterestsCount,
   labels,
 }: PanelNavLinksProps) {
   const pathname = usePathname();
@@ -31,7 +33,13 @@ export default function PanelNavLinks({
     { href: "/panel/oferty", label: labels.offers, exact: false, icon: "fas fa-list-check" },
     { href: "/panel/realizacje", label: labels.projects, exact: false, icon: "fas fa-briefcase" },
     { href: "/panel/zapytania", label: labels.inquiries, exact: false, icon: "fas fa-inbox", showBadge: true },
-    { href: "/panel/moje-zapytania", label: labels.myRequests, exact: false, icon: "fas fa-clipboard-list" },
+    {
+      href: "/panel/moje-zapytania",
+      label: labels.myRequests,
+      exact: false,
+      icon: "fas fa-clipboard-list",
+      showInterestBadge: true,
+    },
     { href: "/panel/ustawienia", label: labels.settings, exact: false, icon: "fas fa-gear" },
   ];
 
@@ -64,6 +72,11 @@ export default function PanelNavLinks({
                   {link.showBadge && unreadCount > 0 && (
                     <span className="ml-1 inline-flex h-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white">
                       {unreadCount}
+                    </span>
+                  )}
+                  {link.showInterestBadge && activeCapacityRequestInterestsCount > 0 && (
+                    <span className="ml-1 inline-flex h-5 items-center justify-center rounded-full bg-[#1a5f3c] px-1.5 text-[10px] font-bold text-white">
+                      {activeCapacityRequestInterestsCount}
                     </span>
                   )}
                 </Link>

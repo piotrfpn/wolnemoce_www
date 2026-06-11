@@ -888,6 +888,7 @@ const pl: Dictionary = {
       offers: "Oferty",
       projects: "Realizacje",
       inquiries: "Zapytania",
+      myRequests: "Moje zlecenia",
       settings: "Ustawienia",
     },
     dashboard: {
@@ -908,9 +909,18 @@ const pl: Dictionary = {
       verifiedCompanyDescription: "Profil firmy jest aktywny i zweryfikowany.",
       submittedForModerationDescription:
         "Dane firmy są zapisane. Weryfikację kończy administrator.",
+      myRequestsTitle: "Moje zlecenia",
+      myRequestsDescription:
+        "Zapytania produkcyjne dodane przez Twoją firmę jako zlecającego.",
+      myRequestsActiveInterests: "zainteresowania",
+      myRequestsInterestNotice: "Masz zainteresowania przy swoich zleceniach.",
+      myRequestsInterestSingular: "zainteresowanie",
+      myRequestsInterestFew: "zainteresowania",
+      myRequestsInterestMany: "zainteresowań",
       goToProfile: "Przejdź do profilu",
       goToOffers: "Przejdź do ofert",
       goToInquiries: "Przejdź do zapytań",
+      goToMyRequests: "Przejdź do moich zleceń",
       settings: "Przejdź do ustawień",
       adminCard: "Zarządzaj ofertami, firmami i zgłoszeniami w panelu administracyjnym.",
     },

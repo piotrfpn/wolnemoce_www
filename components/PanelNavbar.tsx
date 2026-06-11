@@ -13,6 +13,7 @@ export default async function PanelNavbar() {
   } = await supabase.auth.getUser();
 
   let unreadCount = 0;
+  let activeCapacityRequestInterestsCount = 0;
   if (user) {
     const { data: company } = await supabase
       .from("companies")
@@ -28,6 +29,17 @@ export default async function PanelNavbar() {
         .neq("status", "archived")
         .is("recipient_read_at", null);
       unreadCount = count ?? 0;
+
+      const { data: interestCount, error: interestCountError } =
+        await supabase.rpc("count_my_active_capacity_request_interests");
+
+      if (interestCountError) {
+        console.warn("Failed to count active capacity request interests for panel nav.", {
+          code: interestCountError.code,
+        });
+      }
+
+      activeCapacityRequestInterestsCount = Number(interestCount ?? 0);
     }
   }
 
@@ -37,14 +49,19 @@ export default async function PanelNavbar() {
     offers: dictionary.panel.nav.offers,
     projects: dictionary.panel.nav.projects,
     inquiries: "Otrzymane zapytania",
-    myRequests: "Moje zlecenia",
+    myRequests: dictionary.panel.nav.myRequests,
     settings: dictionary.panel.nav.settings,
   };
 
   return (
     <>
       <Navbar locale={locale} />
-      <PanelNavLinks locale={locale} unreadCount={unreadCount} labels={navLabels} />
+      <PanelNavLinks
+        locale={locale}
+        unreadCount={unreadCount}
+        activeCapacityRequestInterestsCount={activeCapacityRequestInterestsCount}
+        labels={navLabels}
+      />
     </>
   );
 }

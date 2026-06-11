@@ -780,6 +780,7 @@ const uk: Dictionary = {
       offers: "Пропозиції",
       projects: "Проєкти",
       inquiries: "Запити",
+      myRequests: "Мої замовлення",
       settings: "Налаштування",
     },
     dashboard: {
@@ -800,9 +801,18 @@ const uk: Dictionary = {
       verifiedCompanyDescription: "Профіль компанії активний і перевірений.",
       submittedForModerationDescription:
         "Дані компанії збережено. Перевірку завершить адміністратор.",
+      myRequestsTitle: "Мої замовлення",
+      myRequestsDescription:
+        "Виробничі запити, додані вашою компанією як замовником.",
+      myRequestsActiveInterests: "зацікавлення",
+      myRequestsInterestNotice: "Є зацікавлення щодо ваших замовлень.",
+      myRequestsInterestSingular: "зацікавлення",
+      myRequestsInterestFew: "зацікавлення",
+      myRequestsInterestMany: "зацікавлень",
       goToProfile: "Перейти до профілю",
       goToOffers: "Перейти до пропозицій",
       goToInquiries: "Перейти до запитів",
+      goToMyRequests: "Перейти до моїх замовлень",
       settings: "Перейти до налаштувань",
       adminCard: "Керуйте пропозиціями, компаніями та запитами в панелі адміністратора.",
     },

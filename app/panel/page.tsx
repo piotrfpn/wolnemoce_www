@@ -14,7 +14,37 @@ export const metadata: Metadata = {
   description: "Panel użytkownika WolneMoce.",
 };
 
+type InterestPluralLabels = {
+  myRequestsInterestSingular: string;
+  myRequestsInterestFew: string;
+  myRequestsInterestMany: string;
+};
 
+function getPolishInterestLabel(count: number): string {
+  const absolute = Math.abs(count);
+  const lastDigit = absolute % 10;
+  const lastTwoDigits = absolute % 100;
+
+  if (absolute === 1) {
+    return "zainteresowanie";
+  }
+
+  if (lastDigit >= 2 && lastDigit <= 4 && !(lastTwoDigits >= 12 && lastTwoDigits <= 14)) {
+    return "zainteresowania";
+  }
+
+  return "zainteresowań";
+}
+
+function getInterestLabel(count: number, locale: string, labels: InterestPluralLabels): string {
+  if (locale === "pl") {
+    return getPolishInterestLabel(count);
+  }
+
+  return count === 1
+    ? labels.myRequestsInterestSingular
+    : labels.myRequestsInterestMany;
+}
 
 export const dynamic = "force-dynamic";
 
@@ -141,6 +171,19 @@ export default async function PanelPage() {
       })
     : { data: [] };
 
+  const {
+    data: activeCapacityRequestInterestsCountResult,
+    error: activeCapacityRequestInterestsCountError,
+  } = company?.id
+    ? await supabase.rpc("count_my_active_capacity_request_interests")
+    : { data: 0, error: null };
+
+  if (activeCapacityRequestInterestsCountError) {
+    console.warn("Failed to count active capacity request interests for panel.", {
+      code: activeCapacityRequestInterestsCountError.code,
+    });
+  }
+
   const offerCounts = {
     draft: 0,
     pending: 0,
@@ -161,6 +204,14 @@ export default async function PanelPage() {
     pending: Number(capacityRequestStatusCount?.pending_count ?? 0),
     rejected: Number(capacityRequestStatusCount?.rejected_count ?? 0),
   };
+  const activeCapacityRequestInterestsCount = Number(
+    activeCapacityRequestInterestsCountResult ?? 0
+  );
+  const activeCapacityRequestInterestsLabel = `${activeCapacityRequestInterestsCount} ${getInterestLabel(
+    activeCapacityRequestInterestsCount,
+    locale,
+    t
+  )}`;
 
   const plan = company?.plan ?? "free";
   const activePendingCount = offerCounts.active + offerCounts.pending;
@@ -383,16 +434,15 @@ export default async function PanelPage() {
                 </span>
                 <div className="min-w-0">
                   <h2 className="text-lg font-extrabold text-slate-900">
-                    Moje zlecenia
+                    {t.myRequestsTitle}
                   </h2>
                   <p className="mt-1 text-sm leading-6 text-slate-500">
-                    Zapytania produkcyjne dodane przez Twoją firmę jako
-                    zlecającego.
+                    {t.myRequestsDescription}
                   </p>
                 </div>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
                 <div className="rounded-2xl bg-amber-50 px-4 py-3">
                   <strong className="block text-2xl font-extrabold text-amber-800">
                     {capacityRequestCounts.pending}
@@ -409,6 +459,32 @@ export default async function PanelPage() {
                     odrzucone
                   </span>
                 </div>
+                <div
+                  className={`rounded-2xl px-4 py-3 ${
+                    activeCapacityRequestInterestsCount > 0
+                      ? "bg-emerald-50"
+                      : "bg-slate-100"
+                  }`}
+                >
+                  <strong
+                    className={`block text-2xl font-extrabold ${
+                      activeCapacityRequestInterestsCount > 0
+                        ? "text-emerald-700"
+                        : "text-slate-600"
+                    }`}
+                  >
+                    {activeCapacityRequestInterestsCount}
+                  </strong>
+                  <span
+                    className={`text-xs font-semibold ${
+                      activeCapacityRequestInterestsCount > 0
+                        ? "text-emerald-700"
+                        : "text-slate-600"
+                    }`}
+                  >
+                    {t.myRequestsActiveInterests}
+                  </span>
+                </div>
               </div>
 
               {capacityRequestCounts.rejected > 0 ? (
@@ -417,8 +493,18 @@ export default async function PanelPage() {
                 </p>
               ) : null}
 
+              {activeCapacityRequestInterestsCount > 0 ? (
+                <p className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-800">
+                  {t.myRequestsInterestNotice}{" "}
+                  <span className="font-bold">
+                    {activeCapacityRequestInterestsLabel}
+                  </span>
+                  .
+                </p>
+              ) : null}
+
               <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c]">
-                Przejdź do moich zleceń
+                {t.goToMyRequests}
                 <i className="fas fa-arrow-right text-xs"></i>
               </span>
             </Link>

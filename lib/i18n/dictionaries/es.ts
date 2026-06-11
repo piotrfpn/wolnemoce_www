@@ -781,6 +781,7 @@ const es: Dictionary = {
       offers: "Ofertas",
       projects: "Realizaciones",
       inquiries: "Consultas",
+      myRequests: "Mis encargos",
       settings: "Ajustes",
     },
     dashboard: {
@@ -801,9 +802,18 @@ const es: Dictionary = {
       verifiedCompanyDescription: "El perfil de la empresa está activo y verificado.",
       submittedForModerationDescription:
         "Los datos de la empresa se han guardado. Un administrador completará la verificación.",
+      myRequestsTitle: "Mis encargos",
+      myRequestsDescription:
+        "Solicitudes de producción añadidas por su empresa como comprador.",
+      myRequestsActiveInterests: "intereses",
+      myRequestsInterestNotice: "Hay empresas interesadas en sus encargos.",
+      myRequestsInterestSingular: "interés",
+      myRequestsInterestFew: "intereses",
+      myRequestsInterestMany: "intereses",
       goToProfile: "Ir al perfil",
       goToOffers: "Ir a las ofertas",
       goToInquiries: "Ir a las consultas",
+      goToMyRequests: "Ir a mis encargos",
       settings: "Ir a configuración",
       adminCard: "Gestione ofertas, empresas y consultas en el panel de administración.",
     },

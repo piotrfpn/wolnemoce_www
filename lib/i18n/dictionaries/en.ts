@@ -861,6 +861,7 @@ const en: Dictionary = {
       offers: "Offers",
       projects: "Projects",
       inquiries: "Inquiries",
+      myRequests: "My orders",
       settings: "Settings",
     },
     dashboard: {
@@ -881,9 +882,18 @@ const en: Dictionary = {
       verifiedCompanyDescription: "The company profile is active and verified.",
       submittedForModerationDescription:
         "Company details have been saved. An administrator will complete the verification.",
+      myRequestsTitle: "My orders",
+      myRequestsDescription:
+        "Production requests added by your company as a buyer.",
+      myRequestsActiveInterests: "interests",
+      myRequestsInterestNotice: "You have interests on your orders.",
+      myRequestsInterestSingular: "interest",
+      myRequestsInterestFew: "interests",
+      myRequestsInterestMany: "interests",
       goToProfile: "Go to Profile",
       goToOffers: "Go to Offers",
       goToInquiries: "Go to Inquiries",
+      goToMyRequests: "Go to my orders",
       settings: "Go to Settings",
       adminCard: "Manage offers, companies, and inquiries in the admin panel.",
     },

@@ -797,6 +797,7 @@ const de: Dictionary = {
       offers: "Angebote",
       projects: "Projekte",
       inquiries: "Anfragen",
+      myRequests: "Meine Aufträge",
       settings: "Einstellungen",
     },
     dashboard: {
@@ -817,9 +818,18 @@ const de: Dictionary = {
       verifiedCompanyDescription: "Das Firmenprofil ist aktiv und verifiziert.",
       submittedForModerationDescription:
         "Die Firmendaten wurden gespeichert. Die Verifizierung wird durch einen Administrator abgeschlossen.",
+      myRequestsTitle: "Meine Aufträge",
+      myRequestsDescription:
+        "Produktionsanfragen, die Ihr Unternehmen als Auftraggeber hinzugefügt hat.",
+      myRequestsActiveInterests: "Interessen",
+      myRequestsInterestNotice: "Es gibt Interessenten für Ihre Aufträge.",
+      myRequestsInterestSingular: "Interesse",
+      myRequestsInterestFew: "Interessen",
+      myRequestsInterestMany: "Interessen",
       goToProfile: "Zum Profil",
       goToOffers: "Zu den Angeboten",
       goToInquiries: "Zu den Anfragen",
+      goToMyRequests: "Zu meinen Aufträgen",
       settings: "Zu den Einstellungen",
       adminCard: "Angebote, Firmen und Anfragen im Admin-Panel verwalten.",
     },
