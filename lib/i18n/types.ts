@@ -721,14 +721,15 @@ export type Dictionary = {
       successGeneric: string;
     };
     nav: {
-    dashboard: string;
-    profile: string;
-    offers: string;
-    projects: string;
-    inquiries: string;
-    myRequests: string;
-    settings: string;
-  };
+      dashboard: string;
+      profile: string;
+      offers: string;
+      projects: string;
+      inquiries: string;
+      receivedInquiries: string;
+      myRequests: string;
+      settings: string;
+    };
     dashboard: {
       title: string;
       subtitle: string;

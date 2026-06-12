@@ -888,6 +888,7 @@ const pl: Dictionary = {
       offers: "Oferty",
       projects: "Realizacje",
       inquiries: "Zapytania",
+      receivedInquiries: "Otrzymane zapytania",
       myRequests: "Moje zlecenia",
       settings: "Ustawienia",
     },

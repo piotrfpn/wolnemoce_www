@@ -797,6 +797,7 @@ const de: Dictionary = {
       offers: "Angebote",
       projects: "Projekte",
       inquiries: "Anfragen",
+      receivedInquiries: "Erhaltene Anfragen",
       myRequests: "Meine Aufträge",
       settings: "Einstellungen",
     },

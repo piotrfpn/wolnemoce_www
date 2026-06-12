@@ -861,6 +861,7 @@ const en: Dictionary = {
       offers: "Offers",
       projects: "Projects",
       inquiries: "Inquiries",
+      receivedInquiries: "Received inquiries",
       myRequests: "My orders",
       settings: "Settings",
     },
