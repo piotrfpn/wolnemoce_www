@@ -304,8 +304,8 @@ export default function CapacityRequestFormClient() {
               Posiadam dokumentację techniczną
             </span>
             <span className="mt-1 block text-xs leading-5 text-slate-500">
-              W Sprint 12A nie dodajemy załączników. Informacja tylko sygnalizuje,
-              że dokumentacja może być dostępna w dalszej obsłudze.
+              Dodatkową dokumentację możesz przekazać na dalszym etapie kontaktu
+              z wykonawcą.
             </span>
           </span>
         </label>

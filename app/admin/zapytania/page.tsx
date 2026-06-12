@@ -12,6 +12,7 @@ import {
   getCapacityRequestStatusClass,
   getCapacityRequestStatusLabel,
 } from "@/lib/capacityRequests";
+import { getEffectiveCapacityRequestStatus } from "@/lib/capacityRequestStatus";
 import AdminCapacityRequestActionsClient from "./AdminCapacityRequestActionsClient";
 
 export const dynamic = "force-dynamic";
@@ -195,13 +196,21 @@ export default async function AdminCapacityRequestsPage({
 }) {
   const { admin, supabase } = await requireAdmin();
   const statusFilter = getStatusFilter(searchParams?.status);
+  const now = new Date();
+  const nowIso = now.toISOString();
   let query = admin
     .from("capacity_requests")
     .select(
       "id, company_id, title, slug, branch, service_type, location, preferred_region, quantity, unit, deadline, budget_type, budget_min, budget_max, description, technical_documentation_available, status, is_featured, interest_count, admin_note, rejection_reason, expires_at, created_at, companies!inner(id, name, slug)"
     );
 
-  if (statusFilter !== "all") {
+  if (statusFilter === "active") {
+    query = query.eq("status", "active").gt("expires_at", nowIso);
+  } else if (statusFilter === "expired") {
+    query = query.or(
+      `status.eq.expired,and(status.eq.active,expires_at.lte.${nowIso})`
+    );
+  } else if (statusFilter !== "all") {
     query = query.eq("status", statusFilter);
   }
 
@@ -243,6 +252,7 @@ export default async function AdminCapacityRequestsPage({
     ["all", "Wszystkie"],
     ["pending", "W moderacji"],
     ["active", "Aktywne"],
+    ["expired", "Wygasłe"],
     ["rejected", "Odrzucone"],
     ["archived", "Zarchiwizowane"],
   ];
@@ -300,76 +310,84 @@ export default async function AdminCapacityRequestsPage({
 
           {requests.length > 0 ? (
             <div className="grid min-w-0 gap-5">
-              {requests.map((request) => (
-                <article
-                  key={request.id}
-                  className="grid min-w-0 gap-6 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm lg:grid-cols-[1fr_360px] md:p-6"
-                >
-                  <div className="min-w-0">
-                    <div className="mb-3 flex flex-wrap gap-2">
-                      <span className={`rounded-full px-3 py-1 text-xs font-bold ${getCapacityRequestStatusClass(request.status)}`}>
-                        {getCapacityRequestStatusLabel(request.status)}
-                      </span>
-                      <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
-                        {request.interest_count ?? 0} zainteresowanych
-                      </span>
-                      {request.technical_documentation_available ? (
-                        <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-                          Dokumentacja dostępna
+              {requests.map((request) => {
+                const effectiveStatus = getEffectiveCapacityRequestStatus({
+                  status: request.status,
+                  expiresAt: request.expires_at,
+                  now,
+                });
+
+                return (
+                  <article
+                    key={request.id}
+                    className="grid min-w-0 gap-6 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm lg:grid-cols-[1fr_360px] md:p-6"
+                  >
+                    <div className="min-w-0">
+                      <div className="mb-3 flex flex-wrap gap-2">
+                        <span className={`rounded-full px-3 py-1 text-xs font-bold ${getCapacityRequestStatusClass(effectiveStatus)}`}>
+                          {getCapacityRequestStatusLabel(effectiveStatus)}
                         </span>
+                        <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
+                          {request.interest_count ?? 0} zainteresowanych
+                        </span>
+                        {request.technical_documentation_available ? (
+                          <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+                            Dokumentacja dostępna
+                          </span>
+                        ) : null}
+                      </div>
+                      <h2 className="break-words text-xl font-extrabold text-slate-900">
+                        {request.title}
+                      </h2>
+                      <p className="mt-2 text-sm leading-6 text-slate-500">
+                        {request.companies?.name ?? "Firma bez nazwy"} · {request.branch} · {request.service_type}
+                      </p>
+                      <p className="mt-4 whitespace-pre-line rounded-2xl bg-slate-50 p-4 text-sm leading-7 text-slate-600">
+                        {request.description}
+                      </p>
+                      <div className="mt-5 grid min-w-0 gap-3 text-sm text-slate-600 md:grid-cols-4">
+                        <p>
+                          <strong className="block text-slate-900">Wolumen</strong>
+                          {formatCapacityRequestVolume(request)}
+                        </p>
+                        <p>
+                          <strong className="block text-slate-900">Termin</strong>
+                          {formatCapacityRequestDate(request.deadline)}
+                        </p>
+                        <p>
+                          <strong className="block text-slate-900">Budżet</strong>
+                          {formatCapacityRequestBudget(request)}
+                        </p>
+                        <p>
+                          <strong className="block text-slate-900">Wygasa</strong>
+                          {formatCapacityRequestDate(request.expires_at)}
+                        </p>
+                      </div>
+                      <AdminCapacityRequestInterests
+                        count={request.interest_count ?? 0}
+                        interests={interestsByRequestId.get(request.id) ?? []}
+                      />
+                      {effectiveStatus === "active" ? (
+                        <Link
+                          href={`/zapytania/${request.slug}`}
+                          className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c]"
+                        >
+                          Podgląd publiczny
+                          <i className="fas fa-arrow-right text-xs"></i>
+                        </Link>
                       ) : null}
                     </div>
-                    <h2 className="break-words text-xl font-extrabold text-slate-900">
-                      {request.title}
-                    </h2>
-                    <p className="mt-2 text-sm leading-6 text-slate-500">
-                      {request.companies?.name ?? "Firma bez nazwy"} · {request.branch} · {request.service_type}
-                    </p>
-                    <p className="mt-4 whitespace-pre-line rounded-2xl bg-slate-50 p-4 text-sm leading-7 text-slate-600">
-                      {request.description}
-                    </p>
-                    <div className="mt-5 grid min-w-0 gap-3 text-sm text-slate-600 md:grid-cols-4">
-                      <p>
-                        <strong className="block text-slate-900">Wolumen</strong>
-                        {formatCapacityRequestVolume(request)}
-                      </p>
-                      <p>
-                        <strong className="block text-slate-900">Termin</strong>
-                        {formatCapacityRequestDate(request.deadline)}
-                      </p>
-                      <p>
-                        <strong className="block text-slate-900">Budżet</strong>
-                        {formatCapacityRequestBudget(request)}
-                      </p>
-                      <p>
-                        <strong className="block text-slate-900">Wygasa</strong>
-                        {formatCapacityRequestDate(request.expires_at)}
-                      </p>
-                    </div>
-                    <AdminCapacityRequestInterests
-                      count={request.interest_count ?? 0}
-                      interests={interestsByRequestId.get(request.id) ?? []}
-                    />
-                    {request.status === "active" ? (
-                      <Link
-                        href={`/zapytania/${request.slug}`}
-                        className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c]"
-                      >
-                        Podgląd publiczny
-                        <i className="fas fa-arrow-right text-xs"></i>
-                      </Link>
-                    ) : null}
-                  </div>
-                  <aside className="min-w-0 rounded-2xl bg-slate-50 p-4">
-                    <AdminCapacityRequestActionsClient
-                      requestId={request.id}
-                      status={request.status}
-                      adminNote={request.admin_note}
-                      rejectionReason={request.rejection_reason}
-                    />
-                  </aside>
-                </article>
-              ))}
+                    <aside className="min-w-0 rounded-2xl bg-slate-50 p-4">
+                      <AdminCapacityRequestActionsClient
+                        requestId={request.id}
+                        status={request.status}
+                        adminNote={request.admin_note}
+                        rejectionReason={request.rejection_reason}
+                      />
+                    </aside>
+                  </article>
+                );
+              })}
             </div>
           ) : (
             <div className="rounded-[24px] border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">

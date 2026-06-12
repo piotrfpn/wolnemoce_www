@@ -11,6 +11,7 @@ import {
   getCapacityRequestStatusLabel,
   type CapacityRequestStatus,
 } from "@/lib/capacityRequests";
+import { getEffectiveCapacityRequestStatus } from "@/lib/capacityRequestStatus";
 import { createClient } from "@/lib/supabase/server";
 import { archiveOwnerCapacityRequest } from "./capacityRequestActions";
 
@@ -167,6 +168,7 @@ export default async function PanelMyCapacityRequestsPage() {
     ...request,
     status: request.status as CapacityRequestStatus,
   }));
+  const now = new Date();
   const interestEntries =
     ownerRequests.length > 0
       ? await Promise.all(
@@ -238,8 +240,13 @@ export default async function PanelMyCapacityRequestsPage() {
           ) : ownerRequests.length > 0 ? (
             <div className="grid min-w-0 gap-5">
               {ownerRequests.map((request) => {
-                const statusClass = getCapacityRequestStatusClass(request.status);
-                const canPreview = request.status === "active";
+                const effectiveStatus = getEffectiveCapacityRequestStatus({
+                  status: request.status,
+                  expiresAt: request.expires_at,
+                  now,
+                });
+                const statusClass = getCapacityRequestStatusClass(effectiveStatus);
+                const canPreview = effectiveStatus === "active";
                 const canArchive = request.status !== "archived";
 
                 return (
@@ -252,7 +259,7 @@ export default async function PanelMyCapacityRequestsPage() {
                         <div className="mb-3 flex flex-wrap items-center gap-2">
                           <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold ${statusClass}`}>
                             <i className="fas fa-circle"></i>
-                            {getCapacityRequestStatusLabel(request.status)}
+                            {getCapacityRequestStatusLabel(effectiveStatus)}
                           </span>
                           <span className="text-xs font-semibold text-slate-400">
                             Utworzono: {formatCapacityRequestDate(request.created_at)}
