@@ -47,6 +47,70 @@ export type CapacityRequestFilters = {
   q?: string;
 };
 
+type SafeCapacityRequestErrorCode =
+  | string
+  | "NETWORK_ERROR"
+  | "UNKNOWN_ERROR";
+
+type CapacityRequestQueryOperation = "public_list";
+
+const capacityRequestQueryEventKeys: Record<
+  CapacityRequestQueryOperation,
+  string
+> = {
+  public_list: "capacity_requests.public_list_query_failed",
+};
+
+function hasStringErrorCode(value: unknown): value is { code: string } {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "code" in value &&
+    typeof value.code === "string" &&
+    value.code.trim().length > 0
+  );
+}
+
+function isLikelyNetworkError(value: unknown): boolean {
+  if (!(value instanceof Error)) {
+    return false;
+  }
+
+  const normalizedMessage = value.message.toLowerCase();
+
+  return (
+    value instanceof TypeError &&
+    (normalizedMessage.includes("fetch") ||
+      normalizedMessage.includes("network") ||
+      normalizedMessage.includes("connection"))
+  );
+}
+
+function getSafeCapacityRequestErrorCode(
+  error: unknown
+): SafeCapacityRequestErrorCode {
+  if (hasStringErrorCode(error)) {
+    return error.code;
+  }
+
+  if (isLikelyNetworkError(error)) {
+    return "NETWORK_ERROR";
+  }
+
+  return "UNKNOWN_ERROR";
+}
+
+function logCapacityRequestQueryError(
+  operation: CapacityRequestQueryOperation,
+  error: unknown
+) {
+  console.error({
+    eventKey: capacityRequestQueryEventKeys[operation],
+    operation,
+    errorCode: getSafeCapacityRequestErrorCode(error),
+  });
+}
+
 function sanitizeSearchTerm(value: string) {
   return value.replace(/[(),%{}[\]]/g, " ").replace(/\s+/g, " ").trim().slice(0, 80);
 }
@@ -151,7 +215,7 @@ export async function getPublicCapacityRequests(filters: CapacityRequestFilters 
     .limit(100);
 
   if (error) {
-    console.error("Public capacity requests query failed", error);
+    logCapacityRequestQueryError("public_list", error);
     return [];
   }
 
