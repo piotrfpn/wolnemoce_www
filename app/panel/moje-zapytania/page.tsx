@@ -138,7 +138,7 @@ function CapacityRequestInterestsList({
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Moje zlecenia | Panel firmy",
+  title: "Moje zapytania produkcyjne | Panel firmy",
   description: "Lista zapytań produkcyjnych dodanych przez Twoją firmę.",
 };
 
@@ -195,10 +195,10 @@ export default async function PanelMyCapacityRequestsPage() {
           <div className="mb-8 flex min-w-0 flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div className="min-w-0">
               <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-                Moje zlecenia — szukam wykonawcy
+                Moje zapytania produkcyjne — szukam wykonawcy
               </p>
               <h1 className="text-3xl font-extrabold text-slate-900">
-                Moje zlecenia
+                Moje zapytania produkcyjne
               </h1>
               <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-500">
                 Tu zarządzasz zapytaniami produkcyjnymi dodanymi przez Twoją firmę
@@ -339,7 +339,7 @@ export default async function PanelMyCapacityRequestsPage() {
                 <i className="fas fa-clipboard-list text-xl"></i>
               </div>
               <h2 className="text-2xl font-extrabold text-slate-900">
-                Nie masz jeszcze zleceń.
+                Nie masz jeszcze zapytań produkcyjnych.
               </h2>
               <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-500">
                 Dodaj pierwsze zapytanie produkcyjne, jeśli szukasz wykonawcy,

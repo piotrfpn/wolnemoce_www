@@ -489,7 +489,7 @@ export default async function PanelPage() {
 
               {capacityRequestCounts.rejected > 0 ? (
                 <p className="mt-4 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
-                  Masz odrzucone zlecenie wymagające poprawy.
+                  Masz odrzucone zapytanie produkcyjne wymagające poprawy.
                 </p>
               ) : null}
 

@@ -73,7 +73,7 @@ export default function CapacityRequestFormClient() {
     >
       <div className="mb-8">
         <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-          Moje zlecenia
+          Moje zapytania produkcyjne
         </p>
         <h1 className="text-2xl font-extrabold text-slate-900">
           Dodaj zapytanie produkcyjne
@@ -94,7 +94,7 @@ export default function CapacityRequestFormClient() {
         <div className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-800">
           {result.success}
           <Link href="/panel/moje-zapytania" className="mt-3 block font-bold text-[#1a5f3c]">
-            Przejdź do listy moich zleceń
+            Przejdź do listy moich zapytań
           </Link>
         </div>
       ) : null}

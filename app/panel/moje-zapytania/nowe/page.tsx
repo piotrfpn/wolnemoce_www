@@ -46,7 +46,7 @@ export default async function NewCapacityRequestPage() {
               className="mb-4 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
             >
               <i className="fas fa-arrow-left"></i>
-              Wróć do moich zleceń
+              Wróć do moich zapytań
             </Link>
           </div>
           <CapacityRequestFormClient />
