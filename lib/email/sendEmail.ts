@@ -1,4 +1,6 @@
-type SendEmailParams = {
+import "server-only";
+
+export type SendEmailParams = {
   to: string;
   subject: string;
   html: string;
@@ -12,6 +14,13 @@ type SkippedReason =
   | "disabled"
   | "log_only"
   | "domain_not_allowed";
+
+export type EmailDeliveryConfig = {
+  enabled: boolean;
+  logOnly: boolean;
+  testRecipient?: string | null;
+  allowedRecipientDomain?: string | null;
+};
 
 export type SendEmailResult =
   | { ok: true }
@@ -30,14 +39,23 @@ export function isRfqEmailNotificationEnabled() {
   return process.env.RFQ_EMAIL_NOTIFICATIONS_ENABLED === "true";
 }
 
-function getResolvedRecipient(to: string) {
-  const testRecipient = process.env.RFQ_EMAIL_TEST_RECIPIENT?.trim();
+function getRfqEmailDeliveryConfig(): EmailDeliveryConfig {
+  return {
+    enabled: isRfqEmailNotificationEnabled(),
+    logOnly: process.env.RFQ_EMAIL_LOG_ONLY === "true",
+    testRecipient: process.env.RFQ_EMAIL_TEST_RECIPIENT,
+    allowedRecipientDomain: process.env.RFQ_EMAIL_ALLOWED_RECIPIENT_DOMAIN,
+  };
+}
+
+function getResolvedRecipient(to: string, config: EmailDeliveryConfig) {
+  const testRecipient = config.testRecipient?.trim();
 
   return testRecipient || to;
 }
 
-function isAllowedRecipientDomain(to: string) {
-  const allowedDomain = process.env.RFQ_EMAIL_ALLOWED_RECIPIENT_DOMAIN
+function isAllowedRecipientDomain(to: string, config: EmailDeliveryConfig) {
+  const allowedDomain = config.allowedRecipientDomain
     ?.trim()
     .replace(/^@/, "")
     .toLowerCase();
@@ -54,28 +72,31 @@ function isAllowedRecipientDomain(to: string) {
   );
 }
 
-export async function sendEmail({
-  to,
-  subject,
-  html,
-  text,
-  idempotencyKey,
-}: SendEmailParams): Promise<SendEmailResult> {
-  if (!isRfqEmailNotificationEnabled()) {
+export async function sendEmailWithConfig(
+  {
+    to,
+    subject,
+    html,
+    text,
+    idempotencyKey,
+  }: SendEmailParams,
+  config: EmailDeliveryConfig
+): Promise<SendEmailResult> {
+  if (!config.enabled) {
     return { ok: false, skipped: true, reason: "disabled" };
   }
 
-  const resolvedRecipient = getResolvedRecipient(to);
+  const resolvedRecipient = getResolvedRecipient(to, config);
 
   if (!isValidEmailAddress(resolvedRecipient)) {
     return { ok: false, skipped: true, reason: "invalid_recipient" };
   }
 
-  if (!isAllowedRecipientDomain(resolvedRecipient)) {
+  if (!isAllowedRecipientDomain(resolvedRecipient, config)) {
     return { ok: false, skipped: true, reason: "domain_not_allowed" };
   }
 
-  if (process.env.RFQ_EMAIL_LOG_ONLY === "true") {
+  if (config.logOnly) {
     return { ok: false, skipped: true, reason: "log_only" };
   }
 
@@ -123,4 +144,23 @@ export async function sendEmail({
       error: error instanceof Error ? error.message : "Unknown email error",
     };
   }
+}
+
+export async function sendEmail({
+  to,
+  subject,
+  html,
+  text,
+  idempotencyKey,
+}: SendEmailParams): Promise<SendEmailResult> {
+  return sendEmailWithConfig(
+    {
+      to,
+      subject,
+      html,
+      text,
+      idempotencyKey,
+    },
+    getRfqEmailDeliveryConfig()
+  );
 }

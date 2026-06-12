@@ -1,6 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import {
+  isCapacityRequestEmailNotificationEnabled,
+  sendCapacityRequestEmail,
+} from "@/lib/email/capacityRequestEmailDelivery";
+import { buildCapacityRequestInterestCreatedEmail } from "@/lib/email/capacityRequestEmails";
+import { resolveCapacityRequestInterestEmailContext } from "@/lib/email/resolveCapacityRequestEmailContext";
+import { getAppBaseUrl } from "@/lib/email/sendEmail";
 import { createClient } from "@/lib/supabase/server";
 
 export type CapacityRequestInterestResult = {
@@ -12,6 +19,108 @@ export type CapacityRequestInterestResult = {
 function loginRedirect(returnTo: string) {
   const encoded = encodeURIComponent(returnTo);
   return `/logowanie?next=${encoded}&return_to=${encoded}`;
+}
+
+const capacityRequestInterestCreatedEventKey = "capacity_request.interest.created";
+
+type CapacityRequestEmailLogParams = {
+  interestId: string;
+  outcome: "sent" | "skipped" | "failed";
+  reason?:
+    | "disabled"
+    | "log_only"
+    | "invalid_recipient"
+    | "recipient_unavailable"
+    | "domain_not_allowed"
+    | "missing_config"
+    | "provider_error"
+    | "unexpected_error";
+};
+
+function logCapacityRequestInterestEmail(params: CapacityRequestEmailLogParams) {
+  const logPayload: {
+    eventKey: string;
+    interestId: string;
+    outcome: CapacityRequestEmailLogParams["outcome"];
+    reason?: NonNullable<CapacityRequestEmailLogParams["reason"]>;
+  } = {
+    eventKey: capacityRequestInterestCreatedEventKey,
+    interestId: params.interestId,
+    outcome: params.outcome,
+  };
+
+  if (params.reason) {
+    logPayload.reason = params.reason;
+  }
+
+  console.info(logPayload);
+}
+
+async function notifyCapacityRequestOwnerAboutInterest(
+  interestId: string
+): Promise<void> {
+  try {
+    if (!isCapacityRequestEmailNotificationEnabled()) {
+      logCapacityRequestInterestEmail({
+        interestId,
+        outcome: "skipped",
+        reason: "disabled",
+      });
+      return;
+    }
+
+    const context = await resolveCapacityRequestInterestEmailContext(interestId);
+
+    if (!context) {
+      logCapacityRequestInterestEmail({
+        interestId,
+        outcome: "skipped",
+        reason: "recipient_unavailable",
+      });
+      return;
+    }
+
+    const email = buildCapacityRequestInterestCreatedEmail({
+      appBaseUrl: getAppBaseUrl(),
+      requestTitle: context.requestTitle,
+      interestedCompanyName: context.interestedCompanyName,
+    });
+    const emailResult = await sendCapacityRequestEmail({
+      to: context.recipientEmail,
+      ...email,
+      idempotencyKey: `capacity-request-interest:${interestId}:owner`,
+    });
+
+    if (emailResult.ok) {
+      logCapacityRequestInterestEmail({
+        interestId,
+        outcome: "sent",
+      });
+      return;
+    }
+
+    if ("skipped" in emailResult) {
+      logCapacityRequestInterestEmail({
+        interestId,
+        outcome: "skipped",
+        reason: emailResult.reason,
+      });
+      return;
+    }
+
+    logCapacityRequestInterestEmail({
+      interestId,
+      outcome: "failed",
+      reason: "provider_error",
+    });
+  } catch {
+    logCapacityRequestInterestEmail({
+      interestId,
+      outcome: "failed",
+      reason: "unexpected_error",
+    });
+    return;
+  }
 }
 
 export async function submitCapacityRequestInterest(
@@ -56,7 +165,9 @@ export async function submitCapacityRequestInterest(
     return { error: "To zlecenie nie jest już aktywne." };
   }
 
+  const interestId = crypto.randomUUID();
   const { error } = await supabase.from("capacity_request_interests").insert({
+    id: interestId,
     capacity_request_id: capacityRequestId,
     company_id: company.id,
     user_id: user.id,
@@ -85,6 +196,7 @@ export async function submitCapacityRequestInterest(
 
   revalidatePath("/zapytania");
   revalidatePath(safeReturnTo);
+  await notifyCapacityRequestOwnerAboutInterest(interestId);
 
   return {
     success:
