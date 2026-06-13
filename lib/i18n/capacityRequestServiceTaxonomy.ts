@@ -123,6 +123,27 @@ const maintenanceServiceValues = [
   "Modernizacja urządzeń",
 ] as const;
 
+const itServiceValues = [
+  "Tworzenie aplikacji webowych",
+  "Tworzenie aplikacji mobilnych",
+  "Systemy ERP / MES / WMS",
+  "Integracje API / EDI",
+  "Automatyzacja procesów biznesowych",
+  "Business Intelligence / dashboardy",
+  "AI / automatyzacja danych",
+  "Cyberbezpieczeństwo",
+  "Administracja serwerami i chmurą",
+  "DevOps / CI/CD",
+  "E-commerce B2B",
+  "Portale klienta / platformy B2B",
+  "IoT / integracje przemysłowe",
+  "SCADA / integracje produkcyjne",
+  "Outsourcing IT / helpdesk",
+  "Audyt IT",
+  "Migracje danych",
+  "Utrzymanie systemów legacy",
+] as const;
+
 const batchOneServiceValues = [
   ...metalServiceValues,
   ...plasticsServiceValues,
@@ -143,6 +164,8 @@ const batchThreeServiceValues = [
   ...maintenanceServiceValues,
 ] as const;
 
+const batchFourServiceValues = [...itServiceValues] as const;
+
 type BatchOneServiceValue =
   | (typeof metalServiceValues)[number]
   | (typeof plasticsServiceValues)[number]
@@ -160,9 +183,12 @@ type BatchThreeServiceValue =
   | (typeof industrialCoatingServiceValues)[number]
   | (typeof maintenanceServiceValues)[number];
 
+type BatchFourServiceValue = (typeof itServiceValues)[number];
+
 const expectedBatchOneServiceCount = 29;
 const expectedBatchTwoServiceCount = 28;
 const expectedBatchThreeServiceCount = 23;
+const expectedBatchFourServiceCount = 18;
 
 const serviceLabelsBatchOne = {
   "Obróbka CNC": {
@@ -813,6 +839,153 @@ const serviceLabelsBatchThree = {
   },
 } satisfies ServiceLabelRegistry<BatchThreeServiceValue>;
 
+const serviceLabelsBatchFour = {
+  "Tworzenie aplikacji webowych": {
+    pl: "Tworzenie aplikacji webowych",
+    en: "Web application development",
+    de: "Entwicklung von Webanwendungen",
+    uk: "Розробка вебзастосунків",
+    es: "Desarrollo de aplicaciones web",
+    fr: "Développement d'applications web",
+  },
+  "Tworzenie aplikacji mobilnych": {
+    pl: "Tworzenie aplikacji mobilnych",
+    en: "Mobile application development",
+    de: "Entwicklung mobiler Anwendungen",
+    uk: "Розробка мобільних застосунків",
+    es: "Desarrollo de aplicaciones móviles",
+    fr: "Développement d'applications mobiles",
+  },
+  "Systemy ERP / MES / WMS": {
+    pl: "Systemy ERP / MES / WMS",
+    en: "ERP / MES / WMS systems",
+    de: "ERP-/MES-/WMS-Systeme",
+    uk: "Системи ERP / MES / WMS",
+    es: "Sistemas ERP / MES / WMS",
+    fr: "Systèmes ERP / MES / WMS",
+  },
+  "Integracje API / EDI": {
+    pl: "Integracje API / EDI",
+    en: "API / EDI integrations",
+    de: "API-/EDI-Integrationen",
+    uk: "Інтеграції API / EDI",
+    es: "Integraciones API / EDI",
+    fr: "Intégrations API / EDI",
+  },
+  "Automatyzacja procesów biznesowych": {
+    pl: "Automatyzacja procesów biznesowych",
+    en: "Business process automation",
+    de: "Geschäftsprozessautomatisierung",
+    uk: "Автоматизація бізнес-процесів",
+    es: "Automatización de procesos empresariales",
+    fr: "Automatisation des processus métier",
+  },
+  "Business Intelligence / dashboardy": {
+    pl: "Business Intelligence / dashboardy",
+    en: "Business Intelligence / dashboards",
+    de: "Business Intelligence / Dashboards",
+    uk: "Бізнес-аналітика / дашборди",
+    es: "Business Intelligence / cuadros de mando",
+    fr: "Business Intelligence / tableaux de bord",
+  },
+  "AI / automatyzacja danych": {
+    pl: "AI / automatyzacja danych",
+    en: "AI / data automation",
+    de: "KI / Datenautomatisierung",
+    uk: "ШІ / автоматизація даних",
+    es: "IA / automatización de datos",
+    fr: "IA / automatisation des données",
+  },
+  Cyberbezpieczeństwo: {
+    pl: "Cyberbezpieczeństwo",
+    en: "Cybersecurity",
+    de: "Cybersicherheit",
+    uk: "Кібербезпека",
+    es: "Ciberseguridad",
+    fr: "Cybersécurité",
+  },
+  "Administracja serwerami i chmurą": {
+    pl: "Administracja serwerami i chmurą",
+    en: "Server and cloud administration",
+    de: "Server- und Cloud-Administration",
+    uk: "Адміністрування серверів і хмари",
+    es: "Administración de servidores y nube",
+    fr: "Administration des serveurs et du cloud",
+  },
+  "DevOps / CI/CD": {
+    pl: "DevOps / CI/CD",
+    en: "DevOps / CI/CD",
+    de: "DevOps / CI/CD",
+    uk: "DevOps / CI/CD",
+    es: "DevOps / CI/CD",
+    fr: "DevOps / CI/CD",
+  },
+  "E-commerce B2B": {
+    pl: "E-commerce B2B",
+    en: "B2B e-commerce",
+    de: "B2B-E-Commerce",
+    uk: "B2B-електронна комерція",
+    es: "E-commerce B2B",
+    fr: "E-commerce B2B",
+  },
+  "Portale klienta / platformy B2B": {
+    pl: "Portale klienta / platformy B2B",
+    en: "Customer portals / B2B platforms",
+    de: "Kundenportale / B2B-Plattformen",
+    uk: "Клієнтські портали / B2B-платформи",
+    es: "Portales de cliente / plataformas B2B",
+    fr: "Portails clients / plateformes B2B",
+  },
+  "IoT / integracje przemysłowe": {
+    pl: "IoT / integracje przemysłowe",
+    en: "IoT / industrial systems integration",
+    de: "IoT / Integration industrieller Systeme",
+    uk: "IoT / інтеграція промислових систем",
+    es: "IoT / integración de sistemas industriales",
+    fr: "IoT / intégration de systèmes industriels",
+  },
+  "SCADA / integracje produkcyjne": {
+    pl: "SCADA / integracje produkcyjne",
+    en: "SCADA / production systems integration",
+    de: "SCADA / Integration von Produktionssystemen",
+    uk: "SCADA / інтеграція виробничих систем",
+    es: "SCADA / integración de sistemas de producción",
+    fr: "SCADA / intégration des systèmes de production",
+  },
+  "Outsourcing IT / helpdesk": {
+    pl: "Outsourcing IT / helpdesk",
+    en: "IT outsourcing / helpdesk",
+    de: "IT-Outsourcing / Helpdesk",
+    uk: "IT-аутсорсинг / helpdesk",
+    es: "Outsourcing IT / helpdesk",
+    fr: "Externalisation IT / helpdesk",
+  },
+  "Audyt IT": {
+    pl: "Audyt IT",
+    en: "IT audit",
+    de: "IT-Audit",
+    uk: "IT-аудит",
+    es: "Auditoría de TI",
+    fr: "Audit informatique",
+  },
+  "Migracje danych": {
+    pl: "Migracje danych",
+    en: "Data migrations",
+    de: "Datenmigrationen",
+    uk: "Міграції даних",
+    es: "Migraciones de datos",
+    fr: "Migrations de données",
+  },
+  "Utrzymanie systemów legacy": {
+    pl: "Utrzymanie systemów legacy",
+    en: "Legacy system maintenance",
+    de: "Wartung von Legacy-Systemen",
+    uk: "Підтримка застарілих систем",
+    es: "Mantenimiento de sistemas legacy",
+    fr: "Maintenance des systèmes legacy",
+  },
+} satisfies ServiceLabelRegistry<BatchFourServiceValue>;
+
 function assertIndustryServicesSynced(
   industry: string,
   registryValues: readonly string[],
@@ -943,5 +1116,19 @@ assertRegistryCoverage(
 if (batchThreeServiceValues.length !== expectedBatchThreeServiceCount) {
   throw new Error(
     "Capacity request service label batch three must contain 23 values."
+  );
+}
+
+assertIndustryServicesSynced("IT", itServiceValues, industryServiceTypes["IT"]);
+assertUniqueValues("service label batch four", batchFourServiceValues);
+assertRegistryCoverage(
+  "service label batch four",
+  batchFourServiceValues,
+  serviceLabelsBatchFour
+);
+
+if (batchFourServiceValues.length !== expectedBatchFourServiceCount) {
+  throw new Error(
+    "Capacity request service label batch four must contain 18 values."
   );
 }
