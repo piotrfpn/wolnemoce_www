@@ -198,6 +198,65 @@ const en: Dictionary = {
       clear: "Clear filters",
     },
   },
+  publicCapacityRequests: {
+    seo: {
+      title: "B2B production requests",
+      description:
+        "Browse public production requests from companies looking for contractors, subcontractors and available production capacity.",
+    },
+    list: {
+      badge: "Public B2B requests",
+      title: "Production requests",
+      description:
+        "Companies looking for contractors, subcontractors and available production capacity.",
+      addRequest: "Add a production request",
+      addOffer: "I have available capacity - add an offer",
+      currentDemand: "Current demand",
+      privateContactInfo:
+        "Requester contact details remain hidden from the public view.",
+      activeRequests: "Active requests",
+      filtersTitle: "Request filters",
+      filtersDescription:
+        "Narrow the list by industry, service type or a phrase from the description.",
+      searchLabel: "Search requests",
+      searchPlaceholder: "e.g. CNC, welding, aluminium part",
+      industryLabel: "Industry",
+      serviceLabel: "Service type",
+      allIndustries: "All industries",
+      allServices: "All services",
+      submitFilters: "Filter",
+      clearFilters: "Clear filters",
+      loadingFilters: "Loading filters...",
+      results: "Results",
+      oneRequest: "production request",
+      fewRequests: "production requests",
+      manyRequests: "production requests",
+      otherRequests: "production requests",
+      contractorCtaTitle: "Looking for a contractor?",
+      contractorCtaDescription:
+        "Add a production request and, after moderation, we will show it to production companies.",
+      emptyTitle:
+        "Be the first company to add a request in this category.",
+      emptyDescription:
+        "Describe your production need or find a subcontractor among verified companies on WolneMoce.",
+    },
+    card: {
+      active: "Active request",
+      featured: "Featured",
+      technicalDocumentationAvailable: "Documentation available",
+      industryService: "Industry / service",
+      deadline: "Deadline",
+      validUntil: "Valid until",
+      location: "Location",
+      volume: "Volume",
+      budget: "Budget",
+      budgetIndicative: "Indicative budget",
+      details: "View details",
+      toBeAgreed: "to be agreed",
+      notProvided: "Not provided",
+      wholePoland: "Poland-wide",
+    },
+  },
   companiesList: {
     heroLabel: "Verified companies",
     title: "Company directory",

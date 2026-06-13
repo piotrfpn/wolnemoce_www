@@ -5,6 +5,7 @@ import {
   isSupportedLocale,
   prefixedLocales,
 } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createPageMetadata } from "@/lib/seo";
 
 type LocalizedCapacityRequestsPageProps = {
@@ -27,10 +28,11 @@ export function generateMetadata({
     notFound();
   }
 
+  const dictionary = getDictionary(params.locale);
+
   return createPageMetadata({
-    title: "Zapytania produkcyjne i zlecenia B2B",
-    description:
-      "Przeglądaj zapytania firm szukających wykonawców, podwykonawców i wolnych mocy produkcyjnych w Polsce.",
+    title: dictionary.publicCapacityRequests.seo.title,
+    description: dictionary.publicCapacityRequests.seo.description,
     path: "/zapytania",
     locale: params.locale,
   });

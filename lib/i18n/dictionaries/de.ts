@@ -203,6 +203,65 @@ const de: Dictionary = {
       clear: "Filter löschen",
     },
   },
+  publicCapacityRequests: {
+    seo: {
+      title: "B2B-Produktionsanfragen",
+      description:
+        "Durchsuchen Sie öffentliche Produktionsanfragen von Unternehmen, die Auftragnehmer, Subunternehmer und freie Produktionskapazitäten suchen.",
+    },
+    list: {
+      badge: "Öffentliche B2B-Anfragen",
+      title: "Produktionsanfragen",
+      description:
+        "Unternehmen suchen Auftragnehmer, Subunternehmer und verfügbare Produktionskapazitäten.",
+      addRequest: "Produktionsanfrage hinzufügen",
+      addOffer: "Ich habe freie Kapazitäten - Angebot hinzufügen",
+      currentDemand: "Aktuelle Nachfrage",
+      privateContactInfo:
+        "Kontaktdaten der anfragenden Unternehmen bleiben öffentlich verborgen.",
+      activeRequests: "Aktive Anfragen",
+      filtersTitle: "Anfragefilter",
+      filtersDescription:
+        "Grenzen Sie die Liste nach Branche, Leistungsart oder Begriff aus der Beschreibung ein.",
+      searchLabel: "Anfragen suchen",
+      searchPlaceholder: "z. B. CNC, Schweißen, Aluminiumteil",
+      industryLabel: "Branche",
+      serviceLabel: "Leistungsart",
+      allIndustries: "Alle Branchen",
+      allServices: "Alle Leistungen",
+      submitFilters: "Filtern",
+      clearFilters: "Filter löschen",
+      loadingFilters: "Filter werden geladen...",
+      results: "Ergebnisse",
+      oneRequest: "Produktionsanfrage",
+      fewRequests: "Produktionsanfragen",
+      manyRequests: "Produktionsanfragen",
+      otherRequests: "Produktionsanfragen",
+      contractorCtaTitle: "Auftragnehmer gesucht?",
+      contractorCtaDescription:
+        "Fügen Sie eine Produktionsanfrage hinzu. Nach der Moderation zeigen wir sie Produktionsunternehmen.",
+      emptyTitle:
+        "Seien Sie das erste Unternehmen, das in dieser Kategorie eine Anfrage hinzufügt.",
+      emptyDescription:
+        "Beschreiben Sie Ihren Produktionsbedarf oder finden Sie Subunternehmer unter geprüften Unternehmen auf WolneMoce.",
+    },
+    card: {
+      active: "Aktive Anfrage",
+      featured: "Hervorgehoben",
+      technicalDocumentationAvailable: "Dokumentation verfügbar",
+      industryService: "Branche / Leistung",
+      deadline: "Frist",
+      validUntil: "Gültig bis",
+      location: "Standort",
+      volume: "Volumen",
+      budget: "Budget",
+      budgetIndicative: "Orientierungsbudget",
+      details: "Details ansehen",
+      toBeAgreed: "zu vereinbaren",
+      notProvided: "Nicht angegeben",
+      wholePoland: "Ganz Polen",
+    },
+  },
   companiesList: {
     ...en.companiesList,
     heroLabel: "Verifizierte Firmen",

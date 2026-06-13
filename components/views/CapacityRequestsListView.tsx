@@ -8,11 +8,19 @@ import CapacityRequestsFiltersClient from "@/app/zapytania/CapacityRequestsFilte
 import { categories, getServicesForIndustry } from "@/lib/mockData";
 import { getPublicCapacityRequests } from "@/lib/capacityRequests";
 import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getAbsoluteUrl } from "@/lib/seo";
 
 type CapacityRequestsListViewProps = {
   locale: Locale;
   searchParams?: Record<string, string | string[] | undefined>;
+};
+
+type RequestCountLabels = {
+  oneRequest: string;
+  fewRequests: string;
+  manyRequests: string;
+  otherRequests: string;
 };
 
 function getSingleParam(
@@ -42,10 +50,31 @@ function getOptionFromParam(value: string, options: string[]) {
   return options.find((option) => option === value || normalizeParamValue(option) === normalized) ?? "";
 }
 
+function getRequestCountLabel(
+  count: number,
+  locale: Locale,
+  labels: RequestCountLabels
+) {
+  const category = new Intl.PluralRules(locale).select(count);
+
+  switch (category) {
+    case "one":
+      return labels.oneRequest;
+    case "few":
+      return labels.fewRequests;
+    case "many":
+      return labels.manyRequests;
+    default:
+      return labels.otherRequests;
+  }
+}
+
 export default async function CapacityRequestsListView({
   locale,
   searchParams,
 }: CapacityRequestsListViewProps) {
+  const dictionary = getDictionary(locale);
+  const copy = dictionary.publicCapacityRequests.list;
   const branch = getOptionFromParam(getSingleParam(searchParams, "branza"), categories);
   const serviceOptions = getServicesForIndustry(branch);
   const serviceType = getOptionFromParam(
@@ -61,6 +90,16 @@ export default async function CapacityRequestsListView({
   const requestsPath = getLocalizedPath("/zapytania", locale);
   const homePath = getLocalizedPath("/", locale);
   const addOfferPath = getLocalizedPath("/dodaj-oferte", locale);
+  const filterLabels = {
+    searchLabel: copy.searchLabel,
+    searchPlaceholder: copy.searchPlaceholder,
+    industryLabel: copy.industryLabel,
+    serviceLabel: copy.serviceLabel,
+    allIndustries: copy.allIndustries,
+    allServices: copy.allServices,
+    submitFilters: copy.submitFilters,
+    clearFilters: copy.clearFilters,
+  };
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -74,7 +113,7 @@ export default async function CapacityRequestsListView({
       {
         "@type": "ListItem",
         position: 2,
-        name: "Zapytania produkcyjne",
+        name: copy.title,
         item: getAbsoluteUrl(requestsPath),
       },
     ],
@@ -91,22 +130,21 @@ export default async function CapacityRequestsListView({
             <div className="min-w-0">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-5 py-2 text-sm font-medium backdrop-blur">
                 <i className="fas fa-clipboard-list text-[#fbbf24]"></i>
-                Publiczne zlecenia B2B
+                {copy.badge}
               </div>
               <h1 className="mb-5 max-w-4xl text-4xl font-black leading-tight tracking-[-1px] md:text-5xl lg:text-[56px]">
-                Zapytania produkcyjne
+                {copy.title}
               </h1>
               <p className="mb-8 max-w-2xl text-lg leading-8 text-white/85">
-                Firmy szukające wykonawców, podwykonawców i dostępnych mocy
-                produkcyjnych.
+                {copy.description}
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Link href="/dodaj-zapytanie" className="btn btn-accent">
                   <i className="fas fa-plus"></i>
-                  Dodaj zapytanie
+                  {copy.addRequest}
                 </Link>
                 <Link href={addOfferPath} className="btn btn-outline bg-white text-[#1a5f3c]">
-                  Mam wolne moce - dodaj ofertę
+                  {copy.addOffer}
                 </Link>
               </div>
             </div>
@@ -118,16 +156,16 @@ export default async function CapacityRequestsListView({
                     WM
                   </div>
                   <div>
-                    <h2 className="font-bold">Aktualny popyt</h2>
+                    <h2 className="font-bold">{copy.currentDemand}</h2>
                     <p className="text-sm text-white/65">
-                      Dane kontaktowe zlecających pozostają ukryte publicznie.
+                      {copy.privateContactInfo}
                     </p>
                   </div>
                 </div>
                 <div className="grid gap-3">
                   <div className="rounded-2xl bg-white/10 px-4 py-3">
                     <p className="text-3xl font-extrabold">{requests.length}</p>
-                    <p className="text-xs text-white/70">aktywnych zapytań</p>
+                    <p className="text-xs text-white/70">{copy.activeRequests}</p>
                   </div>
                   {categories.slice(0, 3).map((item) => (
                     <div key={item} className="rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold">
@@ -144,31 +182,32 @@ export default async function CapacityRequestsListView({
           <aside className="h-fit min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm lg:sticky lg:top-24">
             <div className="mb-6">
               <h2 className="text-lg font-extrabold text-slate-900">
-                Filtry zapytań
+                {copy.filtersTitle}
               </h2>
               <p className="mt-1 text-sm text-slate-500">
-                Zawęź listę po branży, usłudze albo frazie z opisu.
+                {copy.filtersDescription}
               </p>
             </div>
-            <Suspense fallback={<div className="text-sm text-slate-500">Ładowanie filtrów...</div>}>
+            <Suspense fallback={<div className="text-sm text-slate-500">{copy.loadingFilters}</div>}>
               <CapacityRequestsFiltersClient
                 categories={categories}
                 services={serviceOptions}
+                labels={filterLabels}
               />
             </Suspense>
             <div className="mt-7 rounded-2xl bg-gradient-to-br from-[#0d3d26] to-[#1a5f3c] p-5 text-white">
               <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white/15">
                 <i className="fas fa-bullhorn"></i>
               </div>
-              <h3 className="mb-2 font-bold">Szukasz wykonawcy?</h3>
+              <h3 className="mb-2 font-bold">{copy.contractorCtaTitle}</h3>
               <p className="mb-4 text-sm leading-6 text-white/75">
-                Dodaj zlecenie, a po moderacji pokażemy je firmom produkcyjnym.
+                {copy.contractorCtaDescription}
               </p>
               <Link
                 href="/dodaj-zapytanie"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#1a5f3c]"
               >
-                Dodaj zapytanie
+                {copy.addRequest}
                 <i className="fas fa-arrow-right text-xs"></i>
               </Link>
             </div>
@@ -177,16 +216,17 @@ export default async function CapacityRequestsListView({
           <div className="min-w-0">
             <div className="mb-6 flex flex-col gap-4 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-sm text-slate-500">Wyniki</p>
+                <p className="text-sm text-slate-500">{copy.results}</p>
                 <h2 className="text-2xl font-extrabold text-slate-900">
-                  {requests.length} {requests.length === 1 ? "zapytanie" : "zapytań"}
+                  {requests.length}{" "}
+                  {getRequestCountLabel(requests.length, locale, copy)}
                 </h2>
               </div>
               <Link
                 href={requestsPath}
                 className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white"
               >
-                Wyczyść filtry
+                {copy.clearFilters}
               </Link>
             </div>
 
@@ -202,21 +242,20 @@ export default async function CapacityRequestsListView({
                   <i className="fas fa-circle-info text-xl"></i>
                 </div>
                 <h3 className="mb-2 text-xl font-extrabold text-slate-900">
-                  Bądź pierwszą firmą, która doda zapytanie w tej kategorii.
+                  {copy.emptyTitle}
                 </h3>
                 <p className="mx-auto mb-6 max-w-2xl text-sm leading-6 text-slate-500">
-                  Zleć produkcję lub znajdź podwykonawcę wśród sprawdzonych firm
-                  na WolneMoce.
+                  {copy.emptyDescription}
                 </p>
                 <Link href="/dodaj-zapytanie" className="btn btn-primary">
-                  Dodaj zapytanie
+                  {copy.addRequest}
                 </Link>
               </div>
             )}
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer locale={locale} />
     </>
   );
 }

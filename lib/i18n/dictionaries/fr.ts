@@ -202,6 +202,65 @@ const fr: Dictionary = {
       clear: "Effacer les filtres",
     },
   },
+  publicCapacityRequests: {
+    seo: {
+      title: "Demandes de production B2B",
+      description:
+        "Parcourez les demandes de production publiques d’entreprises recherchant des prestataires, des sous-traitants et des capacités de production disponibles.",
+    },
+    list: {
+      badge: "Demandes B2B publiques",
+      title: "Demandes de production",
+      description:
+        "Entreprises recherchant des prestataires, des sous-traitants et des capacités de production disponibles.",
+      addRequest: "Ajouter une demande de production",
+      addOffer: "J’ai des capacités disponibles - ajouter une offre",
+      currentDemand: "Demande actuelle",
+      privateContactInfo:
+        "Les coordonnées des demandeurs restent masquées publiquement.",
+      activeRequests: "Demandes actives",
+      filtersTitle: "Filtres des demandes",
+      filtersDescription:
+        "Affinez la liste par secteur, type de service ou phrase dans la description.",
+      searchLabel: "Rechercher des demandes",
+      searchPlaceholder: "ex. CNC, soudage, pièce en aluminium",
+      industryLabel: "Secteur",
+      serviceLabel: "Type de service",
+      allIndustries: "Tous les secteurs",
+      allServices: "Tous les services",
+      submitFilters: "Filtrer",
+      clearFilters: "Effacer les filtres",
+      loadingFilters: "Chargement des filtres...",
+      results: "Résultats",
+      oneRequest: "demande de production",
+      fewRequests: "demandes de production",
+      manyRequests: "demandes de production",
+      otherRequests: "demandes de production",
+      contractorCtaTitle: "Vous recherchez un prestataire ?",
+      contractorCtaDescription:
+        "Ajoutez une demande de production et, après modération, nous la montrerons aux entreprises de production.",
+      emptyTitle:
+        "Soyez la première entreprise à ajouter une demande dans cette catégorie.",
+      emptyDescription:
+        "Décrivez votre besoin de production ou trouvez un sous-traitant parmi les entreprises vérifiées sur WolneMoce.",
+    },
+    card: {
+      active: "Demande active",
+      featured: "Mise en avant",
+      technicalDocumentationAvailable: "Documentation disponible",
+      industryService: "Secteur / service",
+      deadline: "Échéance",
+      validUntil: "Valable jusqu’au",
+      location: "Localisation",
+      volume: "Volume",
+      budget: "Budget",
+      budgetIndicative: "Budget indicatif",
+      details: "Voir les détails",
+      toBeAgreed: "à convenir",
+      notProvided: "Non indiqué",
+      wholePoland: "Toute la Pologne",
+    },
+  },
   companiesList: {
     ...en.companiesList,
     heroLabel: "Entreprises vérifiées",

@@ -202,6 +202,65 @@ const uk: Dictionary = {
       clear: "Очистити фільтри",
     },
   },
+  publicCapacityRequests: {
+    seo: {
+      title: "B2B виробничі запити",
+      description:
+        "Переглядайте публічні виробничі запити компаній, які шукають виконавців, субпідрядників і доступні виробничі потужності.",
+    },
+    list: {
+      badge: "Публічні B2B-запити",
+      title: "Виробничі запити",
+      description:
+        "Компанії шукають виконавців, субпідрядників і доступні виробничі потужності.",
+      addRequest: "Додати виробничий запит",
+      addOffer: "Маю вільні потужності - додати пропозицію",
+      currentDemand: "Поточний попит",
+      privateContactInfo:
+        "Контактні дані авторів запитів залишаються прихованими публічно.",
+      activeRequests: "Активні запити",
+      filtersTitle: "Фільтри запитів",
+      filtersDescription:
+        "Звузьте список за галуззю, типом послуги або фразою з опису.",
+      searchLabel: "Шукати запити",
+      searchPlaceholder: "напр. CNC, зварювання, алюмінієва деталь",
+      industryLabel: "Галузь",
+      serviceLabel: "Тип послуги",
+      allIndustries: "Усі галузі",
+      allServices: "Усі послуги",
+      submitFilters: "Фільтрувати",
+      clearFilters: "Очистити фільтри",
+      loadingFilters: "Завантаження фільтрів...",
+      results: "Результати",
+      oneRequest: "виробничий запит",
+      fewRequests: "виробничі запити",
+      manyRequests: "виробничих запитів",
+      otherRequests: "виробничих запитів",
+      contractorCtaTitle: "Шукаєте виконавця?",
+      contractorCtaDescription:
+        "Додайте виробничий запит, і після модерації ми покажемо його виробничим компаніям.",
+      emptyTitle:
+        "Будьте першою компанією, що додасть запит у цій категорії.",
+      emptyDescription:
+        "Опишіть виробничу потребу або знайдіть субпідрядника серед перевірених компаній на WolneMoce.",
+    },
+    card: {
+      active: "Активний запит",
+      featured: "Рекомендований",
+      technicalDocumentationAvailable: "Документація доступна",
+      industryService: "Галузь / послуга",
+      deadline: "Термін",
+      validUntil: "Дійсний до",
+      location: "Локація",
+      volume: "Обсяг",
+      budget: "Бюджет",
+      budgetIndicative: "Орієнтовний бюджет",
+      details: "Переглянути деталі",
+      toBeAgreed: "за домовленістю",
+      notProvided: "Не вказано",
+      wholePoland: "Уся Польща",
+    },
+  },
   companiesList: {
     ...en.companiesList,
     heroLabel: "Перевірені компанії",

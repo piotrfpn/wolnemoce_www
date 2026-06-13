@@ -202,6 +202,65 @@ const es: Dictionary = {
       clear: "Limpiar filtros",
     },
   },
+  publicCapacityRequests: {
+    seo: {
+      title: "Solicitudes de producción B2B",
+      description:
+        "Explore solicitudes públicas de producción de empresas que buscan proveedores, subcontratistas y capacidad productiva disponible.",
+    },
+    list: {
+      badge: "Solicitudes B2B públicas",
+      title: "Solicitudes de producción",
+      description:
+        "Empresas que buscan proveedores, subcontratistas y capacidad productiva disponible.",
+      addRequest: "Añadir solicitud de producción",
+      addOffer: "Tengo capacidad disponible - añadir oferta",
+      currentDemand: "Demanda actual",
+      privateContactInfo:
+        "Los datos de contacto de los solicitantes permanecen ocultos públicamente.",
+      activeRequests: "Solicitudes activas",
+      filtersTitle: "Filtros de solicitudes",
+      filtersDescription:
+        "Acote la lista por sector, tipo de servicio o una frase de la descripción.",
+      searchLabel: "Buscar solicitudes",
+      searchPlaceholder: "p. ej. CNC, soldadura, pieza de aluminio",
+      industryLabel: "Sector",
+      serviceLabel: "Tipo de servicio",
+      allIndustries: "Todos los sectores",
+      allServices: "Todos los servicios",
+      submitFilters: "Filtrar",
+      clearFilters: "Limpiar filtros",
+      loadingFilters: "Cargando filtros...",
+      results: "Resultados",
+      oneRequest: "solicitud de producción",
+      fewRequests: "solicitudes de producción",
+      manyRequests: "solicitudes de producción",
+      otherRequests: "solicitudes de producción",
+      contractorCtaTitle: "¿Busca un proveedor?",
+      contractorCtaDescription:
+        "Añada una solicitud de producción y, tras la moderación, la mostraremos a empresas productivas.",
+      emptyTitle:
+        "Sea la primera empresa en añadir una solicitud en esta categoría.",
+      emptyDescription:
+        "Describa su necesidad de producción o encuentre un subcontratista entre empresas verificadas en WolneMoce.",
+    },
+    card: {
+      active: "Solicitud activa",
+      featured: "Destacada",
+      technicalDocumentationAvailable: "Documentación disponible",
+      industryService: "Sector / servicio",
+      deadline: "Plazo",
+      validUntil: "Válida hasta",
+      location: "Ubicación",
+      volume: "Volumen",
+      budget: "Presupuesto",
+      budgetIndicative: "Presupuesto orientativo",
+      details: "Ver detalles",
+      toBeAgreed: "a acordar",
+      notProvided: "No indicado",
+      wholePoland: "Toda Polonia",
+    },
+  },
   companiesList: {
     ...en.companiesList,
     heroLabel: "Empresas verificadas",

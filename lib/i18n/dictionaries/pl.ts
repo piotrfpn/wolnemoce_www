@@ -197,6 +197,65 @@ const pl: Dictionary = {
       clear: "Wyczyść filtry",
     },
   },
+  publicCapacityRequests: {
+    seo: {
+      title: "Zapytania produkcyjne B2B",
+      description:
+        "Przeglądaj publiczne zapytania produkcyjne firm szukających wykonawców, podwykonawców i dostępnych mocy produkcyjnych.",
+    },
+    list: {
+      badge: "Publiczne zapytania B2B",
+      title: "Zapytania produkcyjne",
+      description:
+        "Firmy szukające wykonawców, podwykonawców i dostępnych mocy produkcyjnych.",
+      addRequest: "Dodaj zapytanie",
+      addOffer: "Mam wolne moce - dodaj ofertę",
+      currentDemand: "Aktualny popyt",
+      privateContactInfo:
+        "Dane kontaktowe zgłaszających pozostają ukryte publicznie.",
+      activeRequests: "Aktywne zapytania",
+      filtersTitle: "Filtry zapytań",
+      filtersDescription:
+        "Zawęź listę po branży, usłudze albo frazie z opisu.",
+      searchLabel: "Szukaj zapytań",
+      searchPlaceholder: "np. CNC, spawanie, detal aluminiowy",
+      industryLabel: "Branża",
+      serviceLabel: "Rodzaj usługi",
+      allIndustries: "Wszystkie branże",
+      allServices: "Wszystkie usługi",
+      submitFilters: "Filtruj",
+      clearFilters: "Wyczyść filtry",
+      loadingFilters: "Ładowanie filtrów...",
+      results: "Wyniki",
+      oneRequest: "zapytanie",
+      fewRequests: "zapytania",
+      manyRequests: "zapytań",
+      otherRequests: "zapytania",
+      contractorCtaTitle: "Szukasz wykonawcy?",
+      contractorCtaDescription:
+        "Dodaj zapytanie produkcyjne, a po moderacji pokażemy je firmom produkcyjnym.",
+      emptyTitle:
+        "Bądź pierwszą firmą, która doda zapytanie w tej kategorii.",
+      emptyDescription:
+        "Opisz potrzebę produkcyjną lub znajdź podwykonawcę wśród sprawdzonych firm na WolneMoce.",
+    },
+    card: {
+      active: "Aktywne zapytanie",
+      featured: "Wyróżnione",
+      technicalDocumentationAvailable: "Dokumentacja dostępna",
+      industryService: "Branża / usługa",
+      deadline: "Termin",
+      validUntil: "Ważne do",
+      location: "Lokalizacja",
+      volume: "Wolumen",
+      budget: "Budżet",
+      budgetIndicative: "Budżet orientacyjny",
+      details: "Zobacz szczegóły",
+      toBeAgreed: "do ustalenia",
+      notProvided: "Nie podano",
+      wholePoland: "Cała Polska",
+    },
+  },
   companiesList: {
     heroLabel: "Zweryfikowane firmy",
     title: "Katalog firm",

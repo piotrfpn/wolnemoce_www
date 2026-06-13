@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
 import CapacityRequestsListView from "@/components/views/CapacityRequestsListView";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createPageMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = createPageMetadata({
-  title: "Zapytania produkcyjne i zlecenia B2B",
-  description:
-    "Przeglądaj zapytania firm szukających wykonawców, podwykonawców i wolnych mocy produkcyjnych w Polsce.",
-  path: "/zapytania",
-});
+export function generateMetadata(): Metadata {
+  const dictionary = getDictionary("pl");
+
+  return createPageMetadata({
+    title: dictionary.publicCapacityRequests.seo.title,
+    description: dictionary.publicCapacityRequests.seo.description,
+    path: "/zapytania",
+    locale: "pl",
+  });
+}
 
 type CapacityRequestsPageProps = {
   searchParams?: Record<string, string | string[] | undefined>;

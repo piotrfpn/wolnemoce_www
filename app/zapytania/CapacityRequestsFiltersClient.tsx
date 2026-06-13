@@ -6,6 +6,16 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 type CapacityRequestsFiltersClientProps = {
   categories: string[];
   services: string[];
+  labels: {
+    searchLabel: string;
+    searchPlaceholder: string;
+    industryLabel: string;
+    serviceLabel: string;
+    allIndustries: string;
+    allServices: string;
+    submitFilters: string;
+    clearFilters: string;
+  };
 };
 
 function getParam(searchParams: { get: (key: string) => string | null }, key: string) {
@@ -34,6 +44,7 @@ function getOptionFromParam(value: string, options: string[]) {
 export default function CapacityRequestsFiltersClient({
   categories,
   services,
+  labels,
 }: CapacityRequestsFiltersClientProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -74,14 +85,14 @@ export default function CapacityRequestsFiltersClient({
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-          Szukaj zapytań
+          {labels.searchLabel}
         </label>
         <div className="relative">
           <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="np. CNC, spawanie, detal aluminiowy"
+            placeholder={labels.searchPlaceholder}
             className="h-12 min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
           />
         </div>
@@ -89,19 +100,21 @@ export default function CapacityRequestsFiltersClient({
 
       <div>
         <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-          Branża
+          {labels.industryLabel}
         </label>
         <select
           value={current.branch}
           onChange={(event) =>
             updateUrl({
-              branza: event.target.value ? normalizeParam(event.target.value) : "",
+              branza: event.target.value
+                ? normalizeParam(event.target.value)
+                : "",
               usluga: "",
             })
           }
           className="h-12 min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
         >
-          <option value="">Wszystkie branże</option>
+          <option value="">{labels.allIndustries}</option>
           {categories.map((category) => (
             <option key={category} value={category}>
               {category}
@@ -112,16 +125,20 @@ export default function CapacityRequestsFiltersClient({
 
       <div>
         <label className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-          Rodzaj usługi
+          {labels.serviceLabel}
         </label>
         <select
           value={current.serviceType}
           onChange={(event) =>
-            updateUrl({ usluga: event.target.value ? normalizeParam(event.target.value) : "" })
+            updateUrl({
+              usluga: event.target.value
+                ? normalizeParam(event.target.value)
+                : "",
+            })
           }
           className="h-12 min-w-0 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 text-sm outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
         >
-          <option value="">Wszystkie usługi</option>
+          <option value="">{labels.allServices}</option>
           {services.map((service) => (
             <option key={service} value={service}>
               {service}
@@ -133,7 +150,7 @@ export default function CapacityRequestsFiltersClient({
       <div className="flex flex-col gap-3">
         <button type="submit" className="btn btn-primary w-full">
           <i className="fas fa-search"></i>
-          Filtruj
+          {labels.submitFilters}
         </button>
         <button
           type="button"
@@ -143,7 +160,7 @@ export default function CapacityRequestsFiltersClient({
           }}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white"
         >
-          Wyczyść filtry
+          {labels.clearFilters}
         </button>
       </div>
     </form>

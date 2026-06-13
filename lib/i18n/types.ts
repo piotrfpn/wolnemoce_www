@@ -222,6 +222,58 @@ export type Dictionary = {
       clear: string;
     };
   };
+  publicCapacityRequests: {
+    seo: {
+      title: string;
+      description: string;
+    };
+    list: {
+      badge: string;
+      title: string;
+      description: string;
+      addRequest: string;
+      addOffer: string;
+      currentDemand: string;
+      privateContactInfo: string;
+      activeRequests: string;
+      filtersTitle: string;
+      filtersDescription: string;
+      searchLabel: string;
+      searchPlaceholder: string;
+      industryLabel: string;
+      serviceLabel: string;
+      allIndustries: string;
+      allServices: string;
+      submitFilters: string;
+      clearFilters: string;
+      loadingFilters: string;
+      results: string;
+      oneRequest: string;
+      fewRequests: string;
+      manyRequests: string;
+      otherRequests: string;
+      contractorCtaTitle: string;
+      contractorCtaDescription: string;
+      emptyTitle: string;
+      emptyDescription: string;
+    };
+    card: {
+      active: string;
+      featured: string;
+      technicalDocumentationAvailable: string;
+      industryService: string;
+      deadline: string;
+      validUntil: string;
+      location: string;
+      volume: string;
+      budget: string;
+      budgetIndicative: string;
+      details: string;
+      toBeAgreed: string;
+      notProvided: string;
+      wholePoland: string;
+    };
+  };
   companiesList: {
     heroLabel: string;
     title: string;
