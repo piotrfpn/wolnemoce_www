@@ -1,6 +1,7 @@
 import {
   capacityRequestBudgetTypes,
   capacityRequestUnits,
+  categories,
   provinces,
 } from "@/lib/mockData";
 import type { CapacityRequestBudgetType } from "@/lib/capacityRequestValidation";
@@ -51,9 +52,29 @@ const budgetTypeValues = [
   "range",
 ] as const satisfies readonly CapacityRequestBudgetType[];
 
+const industryValues = [
+  "Automatyka",
+  "Chemia i kosmetyki",
+  "Drewno i meble",
+  "Druk i poligrafia",
+  "Druk 3D i prototypowanie",
+  "Elektronika",
+  "IT",
+  "Lakiernictwo",
+  "Logistyka",
+  "Magazynowanie",
+  "Marketing",
+  "Metalurgia",
+  "Tekstylia",
+  "Tworzywa sztuczne",
+  "Utrzymanie ruchu",
+  "Żywność",
+] as const;
+
 export type CapacityRequestProvinceValue = (typeof provinceValues)[number];
 export type CapacityRequestUnitValue = (typeof unitValues)[number];
 export type CapacityRequestBudgetTypeValue = (typeof budgetTypeValues)[number];
+export type CapacityRequestIndustryValue = (typeof industryValues)[number];
 
 const provinceLabels = {
   Dolnośląskie: {
@@ -288,6 +309,137 @@ const budgetTypeLabels = {
   },
 } satisfies LabelRegistry<CapacityRequestBudgetTypeValue>;
 
+const industryLabels = {
+  Automatyka: {
+    pl: "Automatyka",
+    en: "Automation",
+    de: "Automatisierung",
+    uk: "Автоматизація",
+    es: "Automatización",
+    fr: "Automatisation",
+  },
+  "Chemia i kosmetyki": {
+    pl: "Chemia i kosmetyki",
+    en: "Chemicals and cosmetics",
+    de: "Chemie und Kosmetik",
+    uk: "Хімія та косметика",
+    es: "Química y cosmética",
+    fr: "Chimie et cosmétiques",
+  },
+  "Drewno i meble": {
+    pl: "Drewno i meble",
+    en: "Wood and furniture",
+    de: "Holz und Möbel",
+    uk: "Дерево та меблі",
+    es: "Madera y muebles",
+    fr: "Bois et mobilier",
+  },
+  "Druk i poligrafia": {
+    pl: "Druk i poligrafia",
+    en: "Printing and print production",
+    de: "Druck und Printproduktion",
+    uk: "Друк і поліграфія",
+    es: "Impresión y artes gráficas",
+    fr: "Impression et arts graphiques",
+  },
+  "Druk 3D i prototypowanie": {
+    pl: "Druk 3D i prototypowanie",
+    en: "3D printing and prototyping",
+    de: "3D-Druck und Prototypenbau",
+    uk: "3D-друк і прототипування",
+    es: "Impresión 3D y prototipado",
+    fr: "Impression 3D et prototypage",
+  },
+  Elektronika: {
+    pl: "Elektronika",
+    en: "Electronics",
+    de: "Elektronik",
+    uk: "Електроніка",
+    es: "Electrónica",
+    fr: "Électronique",
+  },
+  IT: {
+    pl: "IT",
+    en: "IT",
+    de: "IT",
+    uk: "IT",
+    es: "IT",
+    fr: "IT",
+  },
+  Lakiernictwo: {
+    pl: "Lakiernictwo",
+    en: "Industrial coating",
+    de: "Lackierung",
+    uk: "Фарбування та покриття",
+    es: "Pintura industrial",
+    fr: "Peinture industrielle",
+  },
+  Logistyka: {
+    pl: "Logistyka",
+    en: "Logistics",
+    de: "Logistik",
+    uk: "Логістика",
+    es: "Logística",
+    fr: "Logistique",
+  },
+  Magazynowanie: {
+    pl: "Magazynowanie",
+    en: "Warehousing",
+    de: "Lagerhaltung",
+    uk: "Складування",
+    es: "Almacenamiento",
+    fr: "Entreposage",
+  },
+  Marketing: {
+    pl: "Marketing",
+    en: "Marketing",
+    de: "Marketing",
+    uk: "Маркетинг",
+    es: "Marketing",
+    fr: "Marketing",
+  },
+  Metalurgia: {
+    pl: "Metalurgia",
+    en: "Metallurgy",
+    de: "Metallurgie",
+    uk: "Металургія",
+    es: "Metalurgia",
+    fr: "Métallurgie",
+  },
+  Tekstylia: {
+    pl: "Tekstylia",
+    en: "Textiles",
+    de: "Textilien",
+    uk: "Текстиль",
+    es: "Textiles",
+    fr: "Textiles",
+  },
+  "Tworzywa sztuczne": {
+    pl: "Tworzywa sztuczne",
+    en: "Plastics",
+    de: "Kunststoffe",
+    uk: "Пластмаси",
+    es: "Plásticos",
+    fr: "Plastiques",
+  },
+  "Utrzymanie ruchu": {
+    pl: "Utrzymanie ruchu",
+    en: "Industrial maintenance",
+    de: "Instandhaltung",
+    uk: "Технічне обслуговування виробництва",
+    es: "Mantenimiento industrial",
+    fr: "Maintenance industrielle",
+  },
+  Żywność: {
+    pl: "Żywność",
+    en: "Food industry",
+    de: "Lebensmittelindustrie",
+    uk: "Харчова промисловість",
+    es: "Industria alimentaria",
+    fr: "Industrie agroalimentaire",
+  },
+} satisfies LabelRegistry<CapacityRequestIndustryValue>;
+
 function assertSyncedValues(
   groupName: string,
   registryValues: readonly string[],
@@ -311,6 +463,7 @@ assertSyncedValues(
   budgetTypeValues,
   capacityRequestBudgetTypes.map(({ value }) => value)
 );
+assertSyncedValues("industry", industryValues, categories);
 
 function getLocalizedOptions<TValue extends string>(
   values: readonly TValue[],
@@ -333,4 +486,8 @@ export function getCapacityRequestUnitOptions(locale: Locale) {
 
 export function getCapacityRequestBudgetTypeOptions(locale: Locale) {
   return getLocalizedOptions(budgetTypeValues, budgetTypeLabels, locale);
+}
+
+export function getCapacityRequestIndustryOptions(locale: Locale) {
+  return getLocalizedOptions(industryValues, industryLabels, locale);
 }
