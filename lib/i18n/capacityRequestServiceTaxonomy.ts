@@ -144,6 +144,26 @@ const itServiceValues = [
   "Utrzymanie systemów legacy",
 ] as const;
 
+const marketingServiceValues = [
+  "Branding i identyfikacja wizualna",
+  "Projektowanie graficzne",
+  "DTP i przygotowanie do druku",
+  "Opakowania i etykiety",
+  "Materiały POS / ekspozytory / standy",
+  "Druk cyfrowy i offsetowy",
+  "Druk wielkoformatowy",
+  "Fotografia produktowa",
+  "Video produktowe / industrial video",
+  "Copywriting B2B",
+  "Content marketing",
+  "Kampanie lead generation B2B",
+  "Performance marketing",
+  "SEO / SEM",
+  "Obsługa targów i wydarzeń branżowych",
+  "Badania rynku i analiza konkurencji",
+  "Strony landing page / microsites",
+] as const;
+
 const batchOneServiceValues = [
   ...metalServiceValues,
   ...plasticsServiceValues,
@@ -166,6 +186,8 @@ const batchThreeServiceValues = [
 
 const batchFourServiceValues = [...itServiceValues] as const;
 
+const batchFiveServiceValues = [...marketingServiceValues] as const;
+
 type BatchOneServiceValue =
   | (typeof metalServiceValues)[number]
   | (typeof plasticsServiceValues)[number]
@@ -185,10 +207,13 @@ type BatchThreeServiceValue =
 
 type BatchFourServiceValue = (typeof itServiceValues)[number];
 
+type BatchFiveServiceValue = (typeof marketingServiceValues)[number];
+
 const expectedBatchOneServiceCount = 29;
 const expectedBatchTwoServiceCount = 28;
 const expectedBatchThreeServiceCount = 23;
 const expectedBatchFourServiceCount = 18;
+const expectedBatchFiveServiceCount = 17;
 
 const serviceLabelsBatchOne = {
   "Obróbka CNC": {
@@ -986,6 +1011,145 @@ const serviceLabelsBatchFour = {
   },
 } satisfies ServiceLabelRegistry<BatchFourServiceValue>;
 
+const serviceLabelsBatchFive = {
+  "Branding i identyfikacja wizualna": {
+    pl: "Branding i identyfikacja wizualna",
+    en: "Branding and visual identity",
+    de: "Branding und visuelle Identität",
+    uk: "Брендинг і візуальна айдентика",
+    es: "Branding e identidad visual",
+    fr: "Branding et identité visuelle",
+  },
+  "Projektowanie graficzne": {
+    pl: "Projektowanie graficzne",
+    en: "Graphic design",
+    de: "Grafikdesign",
+    uk: "Графічний дизайн",
+    es: "Diseño gráfico",
+    fr: "Design graphique",
+  },
+  "DTP i przygotowanie do druku": {
+    pl: "DTP i przygotowanie do druku",
+    en: "DTP and prepress",
+    de: "DTP und Druckvorstufe",
+    uk: "DTP і додрукарська підготовка",
+    es: "DTP y preimpresión",
+    fr: "PAO et prépresse",
+  },
+  "Opakowania i etykiety": {
+    pl: "Opakowania i etykiety",
+    en: "Packaging and label design",
+    de: "Verpackungs- und Etikettendesign",
+    uk: "Дизайн паковання та етикеток",
+    es: "Diseño de envases y etiquetas",
+    fr: "Conception d'emballages et d'étiquettes",
+  },
+  "Materiały POS / ekspozytory / standy": {
+    pl: "Materiały POS / ekspozytory / standy",
+    en: "POS materials / displays / stands",
+    de: "POS-Materialien / Displays / Ständer",
+    uk: "POS-матеріали / дисплеї / стенди",
+    es: "Materiales POS / expositores / stands",
+    fr: "Supports POS / présentoirs / stands",
+  },
+  "Druk cyfrowy i offsetowy": {
+    pl: "Druk cyfrowy i offsetowy",
+    en: "Digital and offset printing",
+    de: "Digital- und Offsetdruck",
+    uk: "Цифровий та офсетний друк",
+    es: "Impresión digital y offset",
+    fr: "Impression numérique et offset",
+  },
+  "Druk wielkoformatowy": {
+    pl: "Druk wielkoformatowy",
+    en: "Large-format printing",
+    de: "Großformatdruck",
+    uk: "Широкоформатний друк",
+    es: "Impresión de gran formato",
+    fr: "Impression grand format",
+  },
+  "Fotografia produktowa": {
+    pl: "Fotografia produktowa",
+    en: "Product photography",
+    de: "Produktfotografie",
+    uk: "Предметна фотозйомка",
+    es: "Fotografía de producto",
+    fr: "Photographie produit",
+  },
+  "Video produktowe / industrial video": {
+    pl: "Video produktowe / industrial video",
+    en: "Product videos / industrial videos",
+    de: "Produktvideos / Industrievideos",
+    uk: "Продуктове відео / промислове відео",
+    es: "Vídeos de producto / vídeos industriales",
+    fr: "Vidéos produit / vidéos industrielles",
+  },
+  "Copywriting B2B": {
+    pl: "Copywriting B2B",
+    en: "B2B copywriting",
+    de: "B2B-Copywriting",
+    uk: "B2B-копірайтинг",
+    es: "Copywriting B2B",
+    fr: "Copywriting B2B",
+  },
+  "Content marketing": {
+    pl: "Content marketing",
+    en: "Content marketing",
+    de: "Content Marketing",
+    uk: "Контент-маркетинг",
+    es: "Content marketing",
+    fr: "Content marketing",
+  },
+  "Kampanie lead generation B2B": {
+    pl: "Kampanie lead generation B2B",
+    en: "B2B lead generation campaigns",
+    de: "B2B-Leadgenerierungskampagnen",
+    uk: "Кампанії з генерації B2B-лідів",
+    es: "Campañas de generación de leads B2B",
+    fr: "Campagnes de génération de leads B2B",
+  },
+  "Performance marketing": {
+    pl: "Performance marketing",
+    en: "Performance marketing",
+    de: "Performance Marketing",
+    uk: "Performance marketing",
+    es: "Performance marketing",
+    fr: "Marketing à la performance",
+  },
+  "SEO / SEM": {
+    pl: "SEO / SEM",
+    en: "SEO / SEM",
+    de: "SEO / SEM",
+    uk: "SEO / SEM",
+    es: "SEO / SEM",
+    fr: "SEO / SEM",
+  },
+  "Obsługa targów i wydarzeń branżowych": {
+    pl: "Obsługa targów i wydarzeń branżowych",
+    en: "Trade fair and industry event support",
+    de: "Betreuung von Messen und Branchenveranstaltungen",
+    uk: "Супровід виставок і галузевих подій",
+    es: "Soporte para ferias y eventos sectoriales",
+    fr: "Accompagnement de salons et d'événements professionnels",
+  },
+  "Badania rynku i analiza konkurencji": {
+    pl: "Badania rynku i analiza konkurencji",
+    en: "Market research and competitive analysis",
+    de: "Marktforschung und Wettbewerbsanalyse",
+    uk: "Дослідження ринку та аналіз конкурентів",
+    es: "Investigación de mercado y análisis competitivo",
+    fr: "Études de marché et analyse concurrentielle",
+  },
+  "Strony landing page / microsites": {
+    pl: "Strony landing page / microsites",
+    en: "Landing pages / microsites",
+    de: "Landingpages / Microsites",
+    uk: "Лендінги / мікросайти",
+    es: "Landing pages / microsites",
+    fr: "Landing pages / microsites",
+  },
+} satisfies ServiceLabelRegistry<BatchFiveServiceValue>;
+
 function assertIndustryServicesSynced(
   industry: string,
   registryValues: readonly string[],
@@ -1130,5 +1294,23 @@ assertRegistryCoverage(
 if (batchFourServiceValues.length !== expectedBatchFourServiceCount) {
   throw new Error(
     "Capacity request service label batch four must contain 18 values."
+  );
+}
+
+assertIndustryServicesSynced(
+  "Marketing",
+  marketingServiceValues,
+  industryServiceTypes["Marketing"]
+);
+assertUniqueValues("service label batch five", batchFiveServiceValues);
+assertRegistryCoverage(
+  "service label batch five",
+  batchFiveServiceValues,
+  serviceLabelsBatchFive
+);
+
+if (batchFiveServiceValues.length !== expectedBatchFiveServiceCount) {
+  throw new Error(
+    "Capacity request service label batch five must contain 17 values."
   );
 }
