@@ -91,6 +91,38 @@ const woodServiceValues = [
   "Produkcja elementów drewnianych",
 ] as const;
 
+const chemicalsServiceValues = [
+  "Mieszanie surowców",
+  "Konfekcjonowanie",
+  "Pakowanie jednostkowe",
+  "Etykietowanie",
+  "Produkcja kontraktowa",
+  "Kontrola jakości",
+] as const;
+
+const industrialCoatingServiceValues = [
+  "Lakierowanie proszkowe",
+  "Lakierowanie mokre",
+  "Malowanie przemysłowe",
+  "Kataforeza",
+  "Przygotowanie powierzchni",
+  "Piaskowanie",
+  "Śrutowanie",
+  "Podkładowanie",
+  "Lakierowanie elementów metalowych",
+  "Lakierowanie elementów z tworzyw",
+  "Kontrola jakości powłok",
+] as const;
+
+const maintenanceServiceValues = [
+  "Serwis maszyn",
+  "Przeglądy techniczne",
+  "Predykcja awarii",
+  "Części zamienne",
+  "Relokacja maszyn",
+  "Modernizacja urządzeń",
+] as const;
+
 const batchOneServiceValues = [
   ...metalServiceValues,
   ...plasticsServiceValues,
@@ -105,6 +137,12 @@ const batchTwoServiceValues = [
   ...woodServiceValues,
 ] as const;
 
+const batchThreeServiceValues = [
+  ...chemicalsServiceValues,
+  ...industrialCoatingServiceValues,
+  ...maintenanceServiceValues,
+] as const;
+
 type BatchOneServiceValue =
   | (typeof metalServiceValues)[number]
   | (typeof plasticsServiceValues)[number]
@@ -117,8 +155,14 @@ type BatchTwoServiceValue =
   | (typeof threeDPrintingServiceValues)[number]
   | (typeof woodServiceValues)[number];
 
+type BatchThreeServiceValue =
+  | (typeof chemicalsServiceValues)[number]
+  | (typeof industrialCoatingServiceValues)[number]
+  | (typeof maintenanceServiceValues)[number];
+
 const expectedBatchOneServiceCount = 29;
 const expectedBatchTwoServiceCount = 28;
+const expectedBatchThreeServiceCount = 23;
 
 const serviceLabelsBatchOne = {
   "Obróbka CNC": {
@@ -582,6 +626,193 @@ const serviceLabelsBatchTwo = {
   },
 } satisfies ServiceLabelRegistry<BatchTwoServiceValue>;
 
+const serviceLabelsBatchThree = {
+  "Mieszanie surowców": {
+    pl: "Mieszanie surowców",
+    en: "Raw material mixing",
+    de: "Rohstoffmischung",
+    uk: "Змішування сировини",
+    es: "Mezcla de materias primas",
+    fr: "Mélange de matières premières",
+  },
+  Konfekcjonowanie: {
+    pl: "Konfekcjonowanie",
+    en: "Filling and packaging",
+    de: "Abfüllung und Verpackung",
+    uk: "Фасування та пакування",
+    es: "Envasado y acondicionamiento",
+    fr: "Conditionnement",
+  },
+  "Pakowanie jednostkowe": {
+    pl: "Pakowanie jednostkowe",
+    en: "Unit packaging",
+    de: "Einzelverpackung",
+    uk: "Пакування одиниць продукції",
+    es: "Envasado unitario",
+    fr: "Conditionnement unitaire",
+  },
+  Etykietowanie: {
+    pl: "Etykietowanie",
+    en: "Labeling",
+    de: "Etikettierung",
+    uk: "Етикетування",
+    es: "Etiquetado",
+    fr: "Étiquetage",
+  },
+  "Produkcja kontraktowa": {
+    pl: "Produkcja kontraktowa",
+    en: "Contract manufacturing",
+    de: "Auftragsfertigung",
+    uk: "Контрактне виробництво",
+    es: "Fabricación por contrato",
+    fr: "Fabrication sous contrat",
+  },
+  "Kontrola jakości": {
+    pl: "Kontrola jakości",
+    en: "Quality control",
+    de: "Qualitätskontrolle",
+    uk: "Контроль якості",
+    es: "Control de calidad",
+    fr: "Contrôle qualité",
+  },
+  "Lakierowanie proszkowe": {
+    pl: "Lakierowanie proszkowe",
+    en: "Powder coating",
+    de: "Pulverbeschichtung",
+    uk: "Порошкове покриття",
+    es: "Recubrimiento en polvo",
+    fr: "Revêtement par poudre",
+  },
+  "Lakierowanie mokre": {
+    pl: "Lakierowanie mokre",
+    en: "Liquid coating",
+    de: "Nasslackierung",
+    uk: "Нанесення рідких покриттів",
+    es: "Recubrimiento líquido",
+    fr: "Revêtement liquide",
+  },
+  "Malowanie przemysłowe": {
+    pl: "Malowanie przemysłowe",
+    en: "Industrial painting",
+    de: "Industrielackierung",
+    uk: "Промислове фарбування",
+    es: "Pintura industrial",
+    fr: "Peinture industrielle",
+  },
+  Kataforeza: {
+    pl: "Kataforeza",
+    en: "Cataphoretic coating",
+    de: "KTL-Beschichtung",
+    uk: "Катафорезне покриття",
+    es: "Recubrimiento cataforético",
+    fr: "Cataphorèse",
+  },
+  "Przygotowanie powierzchni": {
+    pl: "Przygotowanie powierzchni",
+    en: "Surface preparation",
+    de: "Oberflächenvorbereitung",
+    uk: "Підготовка поверхні",
+    es: "Preparación de superficies",
+    fr: "Préparation de surface",
+  },
+  Piaskowanie: {
+    pl: "Piaskowanie",
+    en: "Sandblasting",
+    de: "Sandstrahlen",
+    uk: "Піскоструминна обробка",
+    es: "Chorreado con arena",
+    fr: "Sablage",
+  },
+  Śrutowanie: {
+    pl: "Śrutowanie",
+    en: "Shot blasting",
+    de: "Schleuderstrahlen",
+    uk: "Дробоструминна обробка",
+    es: "Granallado",
+    fr: "Grenaillage",
+  },
+  Podkładowanie: {
+    pl: "Podkładowanie",
+    en: "Priming",
+    de: "Grundierung",
+    uk: "Ґрунтування",
+    es: "Imprimación",
+    fr: "Application d'apprêt",
+  },
+  "Lakierowanie elementów metalowych": {
+    pl: "Lakierowanie elementów metalowych",
+    en: "Coating of metal components",
+    de: "Lackierung von Metallteilen",
+    uk: "Лакування металевих елементів",
+    es: "Recubrimiento de piezas metálicas",
+    fr: "Revêtement de pièces métalliques",
+  },
+  "Lakierowanie elementów z tworzyw": {
+    pl: "Lakierowanie elementów z tworzyw",
+    en: "Coating of plastic components",
+    de: "Lackierung von Kunststoffteilen",
+    uk: "Лакування пластикових елементів",
+    es: "Recubrimiento de piezas de plástico",
+    fr: "Revêtement de pièces plastiques",
+  },
+  "Kontrola jakości powłok": {
+    pl: "Kontrola jakości powłok",
+    en: "Coating quality control",
+    de: "Qualitätskontrolle von Beschichtungen",
+    uk: "Контроль якості покриттів",
+    es: "Control de calidad de recubrimientos",
+    fr: "Contrôle qualité des revêtements",
+  },
+  "Serwis maszyn": {
+    pl: "Serwis maszyn",
+    en: "Machine servicing",
+    de: "Maschinenservice",
+    uk: "Сервісне обслуговування машин",
+    es: "Servicio técnico de maquinaria",
+    fr: "Maintenance de machines",
+  },
+  "Przeglądy techniczne": {
+    pl: "Przeglądy techniczne",
+    en: "Technical inspections",
+    de: "Technische Inspektionen",
+    uk: "Технічні огляди",
+    es: "Inspecciones técnicas",
+    fr: "Inspections techniques",
+  },
+  "Predykcja awarii": {
+    pl: "Predykcja awarii",
+    en: "Predictive maintenance",
+    de: "Vorausschauende Instandhaltung",
+    uk: "Предиктивне обслуговування",
+    es: "Mantenimiento predictivo",
+    fr: "Maintenance prédictive",
+  },
+  "Części zamienne": {
+    pl: "Części zamienne",
+    en: "Spare parts",
+    de: "Ersatzteile",
+    uk: "Запасні частини",
+    es: "Repuestos industriales",
+    fr: "Pièces de rechange",
+  },
+  "Relokacja maszyn": {
+    pl: "Relokacja maszyn",
+    en: "Machine relocation",
+    de: "Maschinenverlagerung",
+    uk: "Релокація машин",
+    es: "Reubicación de maquinaria",
+    fr: "Relocalisation de machines",
+  },
+  "Modernizacja urządzeń": {
+    pl: "Modernizacja urządzeń",
+    en: "Equipment retrofit",
+    de: "Modernisierung von Anlagen",
+    uk: "Модернізація обладнання",
+    es: "Modernización de equipos industriales",
+    fr: "Modernisation d'équipements industriels",
+  },
+} satisfies ServiceLabelRegistry<BatchThreeServiceValue>;
+
 function assertIndustryServicesSynced(
   industry: string,
   registryValues: readonly string[],
@@ -685,4 +916,32 @@ assertRegistryCoverage(
 
 if (batchTwoServiceValues.length !== expectedBatchTwoServiceCount) {
   throw new Error("Capacity request service label batch two must contain 28 values.");
+}
+
+assertIndustryServicesSynced(
+  "Chemia i kosmetyki",
+  chemicalsServiceValues,
+  industryServiceTypes["Chemia i kosmetyki"]
+);
+assertIndustryServicesSynced(
+  "Lakiernictwo",
+  industrialCoatingServiceValues,
+  industryServiceTypes["Lakiernictwo"]
+);
+assertIndustryServicesSynced(
+  "Utrzymanie ruchu",
+  maintenanceServiceValues,
+  industryServiceTypes["Utrzymanie ruchu"]
+);
+assertUniqueValues("service label batch three", batchThreeServiceValues);
+assertRegistryCoverage(
+  "service label batch three",
+  batchThreeServiceValues,
+  serviceLabelsBatchThree
+);
+
+if (batchThreeServiceValues.length !== expectedBatchThreeServiceCount) {
+  throw new Error(
+    "Capacity request service label batch three must contain 23 values."
+  );
 }
