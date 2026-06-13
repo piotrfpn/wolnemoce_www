@@ -5,6 +5,14 @@ import Footer from "@/components/Footer";
 import PanelNavbar from "@/components/PanelNavbar";
 import { createClient } from "@/lib/supabase/server";
 import CapacityRequestFormClient from "../CapacityRequestFormClient";
+import { getPanelLocale } from "@/lib/i18n/panelLocale";
+import {
+  getCapacityRequestBudgetTypeOptions,
+  getCapacityRequestIndustryOptions,
+  getCapacityRequestProvinceOptions,
+  getCapacityRequestUnitOptions,
+} from "@/lib/i18n/capacityRequestTaxonomy";
+import { getCapacityRequestServiceOptionsByIndustry } from "@/lib/i18n/capacityRequestServiceTaxonomy";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +43,18 @@ export default async function NewCapacityRequestPage() {
     redirect(`/panel/profil?return_to=${encodeURIComponent("/panel/moje-zapytania/nowe")}`);
   }
 
+  const locale = getPanelLocale();
+
+  const industryOptions = getCapacityRequestIndustryOptions(locale);
+  const provinceOptions = getCapacityRequestProvinceOptions(locale);
+  const unitOptions = getCapacityRequestUnitOptions(locale);
+  const budgetTypeOptions = getCapacityRequestBudgetTypeOptions(locale);
+
+  const serviceOptionsByIndustry = industryOptions.map(({ value }) => ({
+    industry: value,
+    options: getCapacityRequestServiceOptionsByIndustry(value, locale),
+  }));
+
   return (
     <>
       <PanelNavbar />
@@ -49,7 +69,13 @@ export default async function NewCapacityRequestPage() {
               Wróć do moich zapytań
             </Link>
           </div>
-          <CapacityRequestFormClient />
+          <CapacityRequestFormClient
+            industryOptions={industryOptions}
+            serviceOptionsByIndustry={serviceOptionsByIndustry}
+            provinceOptions={provinceOptions}
+            unitOptions={unitOptions}
+            budgetTypeOptions={budgetTypeOptions}
+          />
         </section>
       </main>
       <Footer />

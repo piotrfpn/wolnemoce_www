@@ -7,13 +7,27 @@ import {
   createCapacityRequest,
   type CapacityRequestActionResult,
 } from "./capacityRequestActions";
-import {
-  capacityRequestBudgetTypes,
-  capacityRequestUnits,
-  categories,
-  getServicesForIndustry,
-  provinces,
-} from "@/lib/mockData";
+import type {
+  CapacityRequestBudgetTypeValue,
+  CapacityRequestIndustryValue,
+  CapacityRequestOption,
+  CapacityRequestProvinceValue,
+  CapacityRequestUnitValue,
+} from "@/lib/i18n/capacityRequestTaxonomy";
+import type { CapacityRequestServiceValue } from "@/lib/i18n/capacityRequestServiceTaxonomy";
+
+type CapacityRequestServiceOptionGroup = {
+  industry: CapacityRequestIndustryValue;
+  options: Array<CapacityRequestOption<CapacityRequestServiceValue>>;
+};
+
+type CapacityRequestFormClientProps = {
+  industryOptions: Array<CapacityRequestOption<CapacityRequestIndustryValue>>;
+  serviceOptionsByIndustry: CapacityRequestServiceOptionGroup[];
+  provinceOptions: Array<CapacityRequestOption<CapacityRequestProvinceValue>>;
+  unitOptions: Array<CapacityRequestOption<CapacityRequestUnitValue>>;
+  budgetTypeOptions: Array<CapacityRequestOption<CapacityRequestBudgetTypeValue>>;
+};
 
 const inputClass =
   "min-w-0 max-w-full w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400";
@@ -30,24 +44,44 @@ function getMaxDeadlineInputValue() {
   return date.toISOString().slice(0, 10);
 }
 
-export default function CapacityRequestFormClient() {
+export default function CapacityRequestFormClient({
+  industryOptions,
+  serviceOptionsByIndustry,
+  provinceOptions,
+  unitOptions,
+  budgetTypeOptions,
+}: CapacityRequestFormClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [selectedBranch, setSelectedBranch] = useState("");
   const [selectedServiceType, setSelectedServiceType] = useState("");
   const [budgetType, setBudgetType] = useState("not_provided");
   const [result, setResult] = useState<CapacityRequestActionResult>({});
-  const serviceOptions = useMemo(
-    () => getServicesForIndustry(selectedBranch),
-    [selectedBranch]
-  );
+
+  const serviceOptions = useMemo(() => {
+    if (!selectedBranch) {
+      return [];
+    }
+
+    return (
+      serviceOptionsByIndustry.find(({ industry }) => industry === selectedBranch)
+        ?.options ?? []
+    );
+  }, [selectedBranch, serviceOptionsByIndustry]);
 
   function handleBranchChange(event: ChangeEvent<HTMLSelectElement>) {
     const nextBranch = event.target.value;
-    const nextServices = getServicesForIndustry(nextBranch);
+
+    const nextServices =
+      serviceOptionsByIndustry.find(({ industry }) => industry === nextBranch)
+        ?.options ?? [];
+
     setSelectedBranch(nextBranch);
+
     setSelectedServiceType((currentServiceType) =>
-      nextServices.includes(currentServiceType) ? currentServiceType : ""
+      nextServices.some(({ value }) => value === currentServiceType)
+        ? currentServiceType
+        : ""
     );
   }
 
@@ -127,9 +161,9 @@ export default function CapacityRequestFormClient() {
             className={inputClass}
           >
             <option value="">Wybierz branżę</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+            {industryOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
@@ -151,9 +185,9 @@ export default function CapacityRequestFormClient() {
             <option value="">
               {selectedBranch ? "Wybierz usługę" : "Najpierw wybierz branżę"}
             </option>
-            {serviceOptions.map((service) => (
-              <option key={service} value={service}>
-                {service}
+            {serviceOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
@@ -192,9 +226,9 @@ export default function CapacityRequestFormClient() {
           </span>
           <select name="unit" className={inputClass}>
             <option value="">Do ustalenia</option>
-            {capacityRequestUnits.map((unit) => (
-              <option key={unit} value={unit}>
-                {unit}
+            {unitOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
@@ -222,9 +256,9 @@ export default function CapacityRequestFormClient() {
           </span>
           <select name="preferred_region" className={inputClass}>
             <option value="">Cała Polska / do ustalenia</option>
-            {provinces.map((province) => (
-              <option key={province} value={province}>
-                {province}
+            {provinceOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
@@ -254,9 +288,9 @@ export default function CapacityRequestFormClient() {
             required
             className={inputClass}
           >
-            {capacityRequestBudgetTypes.map((item) => (
-              <option key={item.value} value={item.value}>
-                {item.label}
+            {budgetTypeOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
