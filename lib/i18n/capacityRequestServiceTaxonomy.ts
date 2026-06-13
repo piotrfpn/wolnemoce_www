@@ -51,11 +51,58 @@ const automationServiceValues = [
   "Szafy sterownicze",
 ] as const;
 
+const textileServiceValues = [
+  "Szycie",
+  "Krojenie tkanin",
+  "Haft komputerowy",
+  "Nadruk na tekstyliach",
+  "Pakowanie tekstyliów",
+  "Produkcja krótkich serii",
+] as const;
+
+const printingServiceValues = [
+  "Druk cyfrowy",
+  "Druk offsetowy",
+  "Druk etykiet",
+  "Uszlachetnianie druku",
+  "Cięcie i bigowanie",
+  "Pakowanie materiałów drukowanych",
+] as const;
+
+const threeDPrintingServiceValues = [
+  "Druk 3D",
+  "Druk 3D FDM",
+  "Druk 3D SLA / DLP",
+  "Druk 3D SLS / MJF",
+  "Druk 3D z metalu",
+  "Prototypowanie",
+  "Skanowanie 3D",
+  "Projektowanie CAD",
+  "Reverse engineering",
+  "Krótkie serie produkcyjne",
+] as const;
+
+const woodServiceValues = [
+  "Obróbka CNC drewna",
+  "Cięcie płyt",
+  "Oklejanie",
+  "Lakierowanie",
+  "Montaż mebli",
+  "Produkcja elementów drewnianych",
+] as const;
+
 const batchOneServiceValues = [
   ...metalServiceValues,
   ...plasticsServiceValues,
   ...electronicsServiceValues,
   ...automationServiceValues,
+] as const;
+
+const batchTwoServiceValues = [
+  ...textileServiceValues,
+  ...printingServiceValues,
+  ...threeDPrintingServiceValues,
+  ...woodServiceValues,
 ] as const;
 
 type BatchOneServiceValue =
@@ -64,7 +111,14 @@ type BatchOneServiceValue =
   | (typeof electronicsServiceValues)[number]
   | (typeof automationServiceValues)[number];
 
+type BatchTwoServiceValue =
+  | (typeof textileServiceValues)[number]
+  | (typeof printingServiceValues)[number]
+  | (typeof threeDPrintingServiceValues)[number]
+  | (typeof woodServiceValues)[number];
+
 const expectedBatchOneServiceCount = 29;
+const expectedBatchTwoServiceCount = 28;
 
 const serviceLabelsBatchOne = {
   "Obróbka CNC": {
@@ -301,6 +355,233 @@ const serviceLabelsBatchOne = {
   },
 } satisfies ServiceLabelRegistry<BatchOneServiceValue>;
 
+const serviceLabelsBatchTwo = {
+  Szycie: {
+    pl: "Szycie",
+    en: "Sewing",
+    de: "Nähen",
+    uk: "Пошиття",
+    es: "Confección textil",
+    fr: "Couture textile",
+  },
+  "Krojenie tkanin": {
+    pl: "Krojenie tkanin",
+    en: "Fabric cutting",
+    de: "Stoffzuschnitt",
+    uk: "Розкрій тканин",
+    es: "Corte de tejidos",
+    fr: "Découpe de tissus",
+  },
+  "Haft komputerowy": {
+    pl: "Haft komputerowy",
+    en: "Computer embroidery",
+    de: "Computerstickerei",
+    uk: "Комп'ютерна вишивка",
+    es: "Bordado computarizado",
+    fr: "Broderie numérique",
+  },
+  "Nadruk na tekstyliach": {
+    pl: "Nadruk na tekstyliach",
+    en: "Textile printing",
+    de: "Textildruck",
+    uk: "Друк на текстилі",
+    es: "Impresión textil",
+    fr: "Impression textile",
+  },
+  "Pakowanie tekstyliów": {
+    pl: "Pakowanie tekstyliów",
+    en: "Textile packaging",
+    de: "Verpackung von Textilien",
+    uk: "Пакування текстилю",
+    es: "Embalaje de textiles",
+    fr: "Emballage de textiles",
+  },
+  "Produkcja krótkich serii": {
+    pl: "Produkcja krótkich serii",
+    en: "Short-run production",
+    de: "Kleinserienproduktion",
+    uk: "Виробництво малих серій",
+    es: "Producción de series cortas",
+    fr: "Production en petites séries",
+  },
+  "Druk cyfrowy": {
+    pl: "Druk cyfrowy",
+    en: "Digital printing",
+    de: "Digitaldruck",
+    uk: "Цифровий друк",
+    es: "Impresión digital",
+    fr: "Impression numérique",
+  },
+  "Druk offsetowy": {
+    pl: "Druk offsetowy",
+    en: "Offset printing",
+    de: "Offsetdruck",
+    uk: "Офсетний друк",
+    es: "Impresión offset",
+    fr: "Impression offset",
+  },
+  "Druk etykiet": {
+    pl: "Druk etykiet",
+    en: "Label printing",
+    de: "Etikettendruck",
+    uk: "Друк етикеток",
+    es: "Impresión de etiquetas",
+    fr: "Impression d'étiquettes",
+  },
+  "Uszlachetnianie druku": {
+    pl: "Uszlachetnianie druku",
+    en: "Print finishing",
+    de: "Druckveredelung",
+    uk: "Післядрукарське оздоблення",
+    es: "Acabado de impresión",
+    fr: "Finition d'impression",
+  },
+  "Cięcie i bigowanie": {
+    pl: "Cięcie i bigowanie",
+    en: "Cutting and creasing",
+    de: "Schneiden und Rillen",
+    uk: "Різання та бігування",
+    es: "Corte y hendido",
+    fr: "Découpe et rainage",
+  },
+  "Pakowanie materiałów drukowanych": {
+    pl: "Pakowanie materiałów drukowanych",
+    en: "Packaging of printed materials",
+    de: "Verpackung von Drucksachen",
+    uk: "Пакування друкованих матеріалів",
+    es: "Embalaje de materiales impresos",
+    fr: "Emballage de supports imprimés",
+  },
+  "Druk 3D": {
+    pl: "Druk 3D",
+    en: "3D printing",
+    de: "3D-Druck",
+    uk: "3D-друк",
+    es: "Impresión 3D",
+    fr: "Impression 3D",
+  },
+  "Druk 3D FDM": {
+    pl: "Druk 3D FDM",
+    en: "FDM 3D printing",
+    de: "FDM-3D-Druck",
+    uk: "3D-друк FDM",
+    es: "Impresión 3D FDM",
+    fr: "Impression 3D FDM",
+  },
+  "Druk 3D SLA / DLP": {
+    pl: "Druk 3D SLA / DLP",
+    en: "SLA / DLP 3D printing",
+    de: "SLA-/DLP-3D-Druck",
+    uk: "3D-друк SLA / DLP",
+    es: "Impresión 3D SLA / DLP",
+    fr: "Impression 3D SLA / DLP",
+  },
+  "Druk 3D SLS / MJF": {
+    pl: "Druk 3D SLS / MJF",
+    en: "SLS / MJF 3D printing",
+    de: "SLS-/MJF-3D-Druck",
+    uk: "3D-друк SLS / MJF",
+    es: "Impresión 3D SLS / MJF",
+    fr: "Impression 3D SLS / MJF",
+  },
+  "Druk 3D z metalu": {
+    pl: "Druk 3D z metalu",
+    en: "Metal 3D printing",
+    de: "Metall-3D-Druck",
+    uk: "3D-друк металом",
+    es: "Impresión 3D en metal",
+    fr: "Impression 3D métal",
+  },
+  Prototypowanie: {
+    pl: "Prototypowanie",
+    en: "Prototyping",
+    de: "Prototypenbau",
+    uk: "Прототипування",
+    es: "Prototipado",
+    fr: "Prototypage",
+  },
+  "Skanowanie 3D": {
+    pl: "Skanowanie 3D",
+    en: "3D scanning",
+    de: "3D-Scanning",
+    uk: "3D-сканування",
+    es: "Escaneado 3D",
+    fr: "Scan 3D",
+  },
+  "Projektowanie CAD": {
+    pl: "Projektowanie CAD",
+    en: "CAD design",
+    de: "CAD-Konstruktion",
+    uk: "CAD-проєктування",
+    es: "Diseño CAD",
+    fr: "Conception CAO",
+  },
+  "Reverse engineering": {
+    pl: "Reverse engineering",
+    en: "Reverse engineering",
+    de: "Reverse Engineering",
+    uk: "Реверс-інжиніринг",
+    es: "Ingeniería inversa",
+    fr: "Rétro-ingénierie",
+  },
+  "Krótkie serie produkcyjne": {
+    pl: "Krótkie serie produkcyjne",
+    en: "Short production runs",
+    de: "Kurze Produktionsserien",
+    uk: "Короткі виробничі серії",
+    es: "Series de producción cortas",
+    fr: "Petites séries de production",
+  },
+  "Obróbka CNC drewna": {
+    pl: "Obróbka CNC drewna",
+    en: "CNC wood machining",
+    de: "CNC-Holzbearbeitung",
+    uk: "CNC-обробка деревини",
+    es: "Mecanizado CNC de madera",
+    fr: "Usinage CNC du bois",
+  },
+  "Cięcie płyt": {
+    pl: "Cięcie płyt",
+    en: "Panel cutting",
+    de: "Plattenzuschnitt",
+    uk: "Розкрій плит",
+    es: "Corte de tableros",
+    fr: "Découpe de panneaux",
+  },
+  Oklejanie: {
+    pl: "Oklejanie",
+    en: "Edge banding",
+    de: "Kantenanleimen",
+    uk: "Крайкування",
+    es: "Canteado de tableros",
+    fr: "Placage de chants",
+  },
+  Lakierowanie: {
+    pl: "Lakierowanie",
+    en: "Wood surface finishing",
+    de: "Lackierung von Holzoberflächen",
+    uk: "Лакування дерев'яних поверхонь",
+    es: "Acabado de superficies de madera",
+    fr: "Finition de surfaces bois",
+  },
+  "Montaż mebli": {
+    pl: "Montaż mebli",
+    en: "Furniture assembly",
+    de: "Möbelmontage",
+    uk: "Складання меблів",
+    es: "Montaje de muebles",
+    fr: "Assemblage de meubles",
+  },
+  "Produkcja elementów drewnianych": {
+    pl: "Produkcja elementów drewnianych",
+    en: "Production of wooden components",
+    de: "Produktion von Holzkomponenten",
+    uk: "Виробництво дерев'яних компонентів",
+    es: "Producción de componentes de madera",
+    fr: "Production de composants en bois",
+  },
+} satisfies ServiceLabelRegistry<BatchTwoServiceValue>;
+
 function assertIndustryServicesSynced(
   industry: string,
   registryValues: readonly string[],
@@ -373,4 +654,35 @@ assertRegistryCoverage(
 
 if (batchOneServiceValues.length !== expectedBatchOneServiceCount) {
   throw new Error("Capacity request service label batch one must contain 29 values.");
+}
+
+assertIndustryServicesSynced(
+  "Tekstylia",
+  textileServiceValues,
+  industryServiceTypes["Tekstylia"]
+);
+assertIndustryServicesSynced(
+  "Druk i poligrafia",
+  printingServiceValues,
+  industryServiceTypes["Druk i poligrafia"]
+);
+assertIndustryServicesSynced(
+  "Druk 3D i prototypowanie",
+  threeDPrintingServiceValues,
+  industryServiceTypes["Druk 3D i prototypowanie"]
+);
+assertIndustryServicesSynced(
+  "Drewno i meble",
+  woodServiceValues,
+  industryServiceTypes["Drewno i meble"]
+);
+assertUniqueValues("service label batch two", batchTwoServiceValues);
+assertRegistryCoverage(
+  "service label batch two",
+  batchTwoServiceValues,
+  serviceLabelsBatchTwo
+);
+
+if (batchTwoServiceValues.length !== expectedBatchTwoServiceCount) {
+  throw new Error("Capacity request service label batch two must contain 28 values.");
 }
