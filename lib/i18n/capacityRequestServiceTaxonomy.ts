@@ -1,5 +1,9 @@
 import { industryServiceTypes } from "@/lib/mockData";
 import type { Locale } from "@/lib/i18n/config";
+import type {
+  CapacityRequestIndustryValue,
+  CapacityRequestOption,
+} from "@/lib/i18n/capacityRequestTaxonomy";
 
 // Server-side taxonomy batch. Future server components should use it to build
 // a serializable payload for the active locale before passing data to clients.
@@ -1576,3 +1580,170 @@ assertValuesIncluded(
   batchSixReusedServiceValues,
   existingServiceValuesBeforeBatchSix
 );
+
+const allServiceValues = [
+  ...batchOneServiceValues,
+  ...batchTwoServiceValues,
+  ...batchThreeServiceValues,
+  ...batchFourServiceValues,
+  ...batchFiveServiceValues,
+  ...batchSixNewServiceValues,
+] as const;
+
+export type CapacityRequestServiceValue = (typeof allServiceValues)[number];
+
+const expectedAllServiceCount = 127;
+
+const serviceLabelRegistries = [
+  serviceLabelsBatchOne,
+  serviceLabelsBatchTwo,
+  serviceLabelsBatchThree,
+  serviceLabelsBatchFour,
+  serviceLabelsBatchFive,
+  serviceLabelsBatchSix,
+] as const satisfies readonly Readonly<Record<string, LocaleLabels>>[];
+
+function assertNoRegistryKeyOverlap(
+  groupName: string,
+  registries: readonly Readonly<Record<string, LocaleLabels>>[]
+) {
+  const seen = new Set<string>();
+  const duplicates = new Set<string>();
+
+  for (const registry of registries) {
+    for (const key of Object.keys(registry)) {
+      if (seen.has(key)) {
+        duplicates.add(key);
+      }
+
+      seen.add(key);
+    }
+  }
+
+  if (duplicates.size > 0) {
+    throw new Error(
+      `\${groupName} contains duplicate registry keys: \${[
+        ...duplicates,
+      ].join(", ")}`
+    );
+  }
+}
+
+assertNoRegistryKeyOverlap(
+  "capacity request service labels",
+  serviceLabelRegistries
+);
+
+const totalServiceLabelRegistryKeyCount = serviceLabelRegistries.reduce(
+  (total, registry) => total + Object.keys(registry).length,
+  0
+);
+
+if (totalServiceLabelRegistryKeyCount !== expectedAllServiceCount) {
+  throw new Error(
+    "Capacity request service label registries must contain 127 keys before merging."
+  );
+}
+
+const allServiceLabels = {
+  ...serviceLabelsBatchOne,
+  ...serviceLabelsBatchTwo,
+  ...serviceLabelsBatchThree,
+  ...serviceLabelsBatchFour,
+  ...serviceLabelsBatchFive,
+  ...serviceLabelsBatchSix,
+} satisfies ServiceLabelRegistry<CapacityRequestServiceValue>;
+
+const mergedServiceLabelCount = Object.keys(allServiceLabels).length;
+
+if (mergedServiceLabelCount !== totalServiceLabelRegistryKeyCount) {
+  throw new Error(
+    "Capacity request service label registry merge lost or overwrote keys."
+  );
+}
+
+if (mergedServiceLabelCount !== expectedAllServiceCount) {
+  throw new Error(
+    "Capacity request service label registry must contain 127 unique keys."
+  );
+}
+
+assertUniqueValues("all service values", allServiceValues);
+
+assertRegistryCoverage("all service labels", allServiceValues, allServiceLabels);
+
+if (allServiceValues.length !== expectedAllServiceCount) {
+  throw new Error(
+    "Capacity request service taxonomy must contain 127 unique values."
+  );
+}
+
+const allIndustryServiceOccurrences = Object.values(industryServiceTypes).flat();
+const expectedIndustryServiceOccurrenceCount = 138;
+
+if (
+  allIndustryServiceOccurrences.length !==
+  expectedIndustryServiceOccurrenceCount
+) {
+  throw new Error("industryServiceTypes must contain 138 service occurrences.");
+}
+
+if (new Set(allIndustryServiceOccurrences).size !== expectedAllServiceCount) {
+  throw new Error(
+    "industryServiceTypes must contain 127 unique service values."
+  );
+}
+
+assertValuesIncluded(
+  "industryServiceTypes",
+  allIndustryServiceOccurrences,
+  allServiceValues
+);
+
+function assertCapacityRequestServiceValue(
+  value: string
+): asserts value is CapacityRequestServiceValue {
+  if (!Object.prototype.hasOwnProperty.call(allServiceLabels, value)) {
+    throw new Error(
+      `Unknown capacity request service technical value: \${value}`
+    );
+  }
+}
+
+export function getCapacityRequestServiceLabel(
+  value: CapacityRequestServiceValue,
+  locale: Locale
+): string {
+  return allServiceLabels[value][locale];
+}
+
+export function getCapacityRequestServiceOptions(
+  locale: Locale
+): Array<CapacityRequestOption<CapacityRequestServiceValue>> {
+  return allServiceValues.map((value) => ({
+    value,
+    label: getCapacityRequestServiceLabel(value, locale),
+  }));
+}
+
+export function getCapacityRequestServiceOptionsByIndustry(
+  industry: CapacityRequestIndustryValue,
+  locale: Locale
+): Array<CapacityRequestOption<CapacityRequestServiceValue>> {
+  const values = industryServiceTypes[industry];
+
+  if (!values) {
+    throw new Error(
+      `Missing capacity request services for industry: \${industry}`
+    );
+  }
+
+  return values.map((value) => {
+    assertCapacityRequestServiceValue(value);
+
+    return {
+      value,
+      label: getCapacityRequestServiceLabel(value, locale),
+    };
+  });
+}
