@@ -1314,3 +1314,265 @@ if (batchFiveServiceValues.length !== expectedBatchFiveServiceCount) {
     "Capacity request service label batch five must contain 17 values."
   );
 }
+
+const foodServiceValues = [
+  "Przetwórstwo spożywcze",
+  "Pakowanie żywności",
+  "Etykietowanie",
+  "Chłodnia / mroźnia",
+  "Produkcja krótkich serii",
+  "Kontrola jakości",
+] as const;
+
+const logisticsServiceValues = [
+  "Magazynowanie",
+  "Składowanie paletowe/drobnicowe",
+  "Kompletacja zamówień",
+  "Cross-docking",
+  "Pakowanie i etykietowanie",
+  "Obsługa e-commerce",
+  "Transport lokalny",
+  "Fulfillment B2B",
+  "Obsługa zwrotów",
+] as const;
+
+const warehousingServiceValues = [
+  "Magazynowanie",
+  "Składowanie paletowe/drobnicowe",
+  "Kompletacja zamówień",
+  "Cross-docking",
+  "Pakowanie i etykietowanie",
+  "Obsługa e-commerce",
+  "Fulfillment B2B",
+  "Obsługa zwrotów",
+] as const;
+
+const batchSixIndustryServiceOccurrences = [
+  ...foodServiceValues,
+  ...logisticsServiceValues,
+  ...warehousingServiceValues,
+] as const;
+
+const expectedBatchSixOccurrenceCount = 23;
+
+if (
+  batchSixIndustryServiceOccurrences.length !==
+  expectedBatchSixOccurrenceCount
+) {
+  throw new Error(
+    "Capacity request service label batch six must contain 23 industry occurrences."
+  );
+}
+
+type ExistingServiceValue =
+  | BatchOneServiceValue
+  | BatchTwoServiceValue
+  | BatchThreeServiceValue
+  | BatchFourServiceValue
+  | BatchFiveServiceValue;
+
+const batchSixReusedServiceValues = [
+  "Etykietowanie",
+  "Produkcja krótkich serii",
+  "Kontrola jakości",
+] as const satisfies readonly ExistingServiceValue[];
+
+const batchSixNewServiceValues = [
+  "Przetwórstwo spożywcze",
+  "Pakowanie żywności",
+  "Chłodnia / mroźnia",
+  "Magazynowanie",
+  "Składowanie paletowe/drobnicowe",
+  "Kompletacja zamówień",
+  "Cross-docking",
+  "Pakowanie i etykietowanie",
+  "Obsługa e-commerce",
+  "Transport lokalny",
+  "Fulfillment B2B",
+  "Obsługa zwrotów",
+] as const;
+
+type BatchSixNewServiceValue = (typeof batchSixNewServiceValues)[number];
+
+const expectedBatchSixNewServiceCount = 12;
+
+const serviceLabelsBatchSix = {
+  "Przetwórstwo spożywcze": {
+    pl: "Przetwórstwo spożywcze",
+    en: "Food processing",
+    de: "Lebensmittelverarbeitung",
+    uk: "Переробка харчових продуктів",
+    es: "Procesamiento de alimentos",
+    fr: "Transformation alimentaire",
+  },
+  "Pakowanie żywności": {
+    pl: "Pakowanie żywności",
+    en: "Food packaging",
+    de: "Lebensmittelverpackung",
+    uk: "Пакування харчових продуктів",
+    es: "Envasado de alimentos",
+    fr: "Conditionnement alimentaire",
+  },
+  "Chłodnia / mroźnia": {
+    pl: "Chłodnia / mroźnia",
+    en: "Cold storage / freezer storage",
+    de: "Kühllagerung / Tiefkühllagerung",
+    uk: "Холодильне / морозильне зберігання",
+    es: "Almacenamiento refrigerado / congelado",
+    fr: "Stockage réfrigéré / surgelé",
+  },
+  Magazynowanie: {
+    pl: "Magazynowanie",
+    en: "Warehousing",
+    de: "Lagerhaltung",
+    uk: "Складське зберігання",
+    es: "Almacenamiento",
+    fr: "Entreposage",
+  },
+  "Składowanie paletowe/drobnicowe": {
+    pl: "Składowanie paletowe/drobnicowe",
+    en: "Pallet and small-goods storage",
+    de: "Paletten- und Stückgutlagerung",
+    uk: "Палетне зберігання та зберігання дрібних вантажів",
+    es: "Almacenamiento paletizado y de mercancía fraccionada",
+    fr: "Stockage palettisé et de petites marchandises",
+  },
+  "Kompletacja zamówień": {
+    pl: "Kompletacja zamówień",
+    en: "Order picking",
+    de: "Kommissionierung",
+    uk: "Комплектація замовлень",
+    es: "Preparación de pedidos",
+    fr: "Préparation de commandes",
+  },
+  "Cross-docking": {
+    pl: "Cross-docking",
+    en: "Cross-docking",
+    de: "Cross-Docking",
+    uk: "Крос-докінг",
+    es: "Cross-docking",
+    fr: "Cross-docking",
+  },
+  "Pakowanie i etykietowanie": {
+    pl: "Pakowanie i etykietowanie",
+    en: "Packing and labeling",
+    de: "Verpackung und Etikettierung",
+    uk: "Пакування та маркування",
+    es: "Embalaje y etiquetado",
+    fr: "Emballage et étiquetage",
+  },
+  "Obsługa e-commerce": {
+    pl: "Obsługa e-commerce",
+    en: "E-commerce operations",
+    de: "E-Commerce-Abwicklung",
+    uk: "Обслуговування електронної комерції",
+    es: "Gestión de e-commerce",
+    fr: "Gestion e-commerce",
+  },
+  "Transport lokalny": {
+    pl: "Transport lokalny",
+    en: "Local transport",
+    de: "Nahverkehr",
+    uk: "Місцеві перевезення",
+    es: "Transporte local",
+    fr: "Transport local",
+  },
+  "Fulfillment B2B": {
+    pl: "Fulfillment B2B",
+    en: "B2B fulfillment",
+    de: "B2B-Fulfillment",
+    uk: "B2B-фулфілмент",
+    es: "Fulfillment B2B",
+    fr: "Fulfillment B2B",
+  },
+  "Obsługa zwrotów": {
+    pl: "Obsługa zwrotów",
+    en: "Returns handling",
+    de: "Retourenmanagement",
+    uk: "Обробка повернень",
+    es: "Gestión de devoluciones",
+    fr: "Gestion des retours",
+  },
+} satisfies ServiceLabelRegistry<BatchSixNewServiceValue>;
+
+assertIndustryServicesSynced(
+  "Żywność",
+  foodServiceValues,
+  industryServiceTypes["Żywność"]
+);
+
+assertIndustryServicesSynced(
+  "Logistyka",
+  logisticsServiceValues,
+  industryServiceTypes["Logistyka"]
+);
+
+assertIndustryServicesSynced(
+  "Magazynowanie",
+  warehousingServiceValues,
+  industryServiceTypes["Magazynowanie"]
+);
+
+assertUniqueValues("service label batch six new keys", batchSixNewServiceValues);
+
+assertRegistryCoverage(
+  "service label batch six",
+  batchSixNewServiceValues,
+  serviceLabelsBatchSix
+);
+
+if (batchSixNewServiceValues.length !== expectedBatchSixNewServiceCount) {
+  throw new Error(
+    "Capacity request service label batch six must contain 12 new values."
+  );
+}
+
+function assertNoValueOverlap(
+  groupName: string,
+  existingValues: readonly string[],
+  newValues: readonly string[]
+) {
+  const existing = new Set(existingValues);
+  const overlapping = newValues.filter((value) => existing.has(value));
+
+  if (overlapping.length > 0) {
+    throw new Error(
+      `\${groupName} contains values already registered: \${overlapping.join(", ")}`
+    );
+  }
+}
+
+const existingServiceValuesBeforeBatchSix = [
+  ...batchOneServiceValues,
+  ...batchTwoServiceValues,
+  ...batchThreeServiceValues,
+  ...batchFourServiceValues,
+  ...batchFiveServiceValues,
+] as const;
+
+assertNoValueOverlap(
+  "batchSixNewServiceValues",
+  existingServiceValuesBeforeBatchSix,
+  batchSixNewServiceValues
+);
+
+function assertValuesIncluded(
+  groupName: string,
+  requiredValues: readonly string[],
+  availableValues: readonly string[]
+) {
+  const available = new Set(availableValues);
+  const missing = requiredValues.filter((value) => !available.has(value));
+
+  if (missing.length > 0) {
+    throw new Error(
+      `\${groupName} contains unregistered reused values: \${missing.join(", ")}`
+    );
+  }
+}
+
+assertValuesIncluded(
+  "batchSixReusedServiceValues",
+  batchSixReusedServiceValues,
+  existingServiceValuesBeforeBatchSix
+);
