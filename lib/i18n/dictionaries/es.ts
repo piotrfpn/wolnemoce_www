@@ -1074,6 +1074,80 @@ const es: Dictionary = {
         save: "Guardar oferta",
       },
     },
+    capacityRequestForm: {
+      metadata: {
+        title: "Añadir solicitud de producción | Panel de la empresa",
+        description:
+          "Añada una solicitud de producción y envíela a moderación.",
+      },
+      backToRequests: "Volver a mis solicitudes",
+      eyebrow: "Mis solicitudes de producción",
+      title: "Añadir solicitud de producción",
+      description:
+        "Describa el proveedor o contratista que está buscando. Tras la moderación, la solicitud se publicará sin los datos de contacto de su empresa.",
+      successLink: "Ir a mis solicitudes",
+      fields: {
+        title: {
+          label: "Título de la solicitud",
+          placeholder:
+            "p. ej., Se requiere fresado CNC de 200 piezas de aluminio",
+        },
+        branch: {
+          label: "Sector",
+          placeholder: "Seleccione un sector",
+        },
+        serviceType: {
+          label: "Tipo de servicio",
+          placeholder: "Seleccione un servicio",
+          selectBranchFirst: "Seleccione primero el sector",
+        },
+        description: {
+          label: "Descripción de la necesidad",
+          placeholder:
+            "Describa el material, la tecnología, la calidad esperada, el alcance del trabajo, las tolerancias, los requisitos de producción y cualquier información que ayude al proveedor a evaluar la solicitud.",
+          help:
+            "Mínimo 150 caracteres. No publique datos de contacto en la solicitud.",
+        },
+        quantity: {
+          label: "Cantidad / volumen",
+        },
+        unit: {
+          label: "Unidad",
+          placeholder: "A convenir",
+        },
+        deadline: {
+          label: "Fecha de finalización requerida",
+        },
+        preferredRegion: {
+          label: "Región preferida",
+          placeholder: "Toda Polonia / a convenir",
+        },
+        location: {
+          label: "Ubicación preferida",
+          placeholder:
+            "p. ej., zona de Poznań, recogida por el cliente o envío por mensajería",
+        },
+        budget: {
+          label: "Presupuesto",
+        },
+        budgetMin: {
+          label: "Mín",
+        },
+        budgetMax: {
+          label: "Máx",
+        },
+        technicalDocumentation: {
+          label: "Dispongo de documentación técnica",
+          description:
+            "Puede proporcionar documentación adicional más adelante durante el contacto directo con el proveedor o contratista.",
+        },
+      },
+      submit: {
+        submitting: "Guardando...",
+        submit: "Enviar a moderación",
+        cancel: "Cancelar",
+      },
+    },
     profile: {
       ...en.panel.profile,
       title: "Perfil de la empresa",

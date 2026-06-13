@@ -1090,6 +1090,80 @@ const de: Dictionary = {
         save: "Angebot speichern",
       },
     },
+    capacityRequestForm: {
+      metadata: {
+        title: "Produktionsanfrage hinzufügen | Firmenbereich",
+        description:
+          "Fügen Sie eine Produktionsanfrage hinzu und reichen Sie sie zur Moderation ein.",
+      },
+      backToRequests: "Zurück zu meinen Anfragen",
+      eyebrow: "Meine Produktionsanfragen",
+      title: "Produktionsanfrage hinzufügen",
+      description:
+        "Beschreiben Sie, welchen Auftragnehmer Sie suchen. Nach der Moderation wird die Anfrage ohne die Kontaktdaten Ihres Unternehmens veröffentlicht.",
+      successLink: "Zu meinen Anfragen",
+      fields: {
+        title: {
+          label: "Titel der Anfrage",
+          placeholder:
+            "z. B. CNC-Fräsen von 200 Aluminiumteilen gesucht",
+        },
+        branch: {
+          label: "Branche",
+          placeholder: "Branche auswählen",
+        },
+        serviceType: {
+          label: "Dienstleistungsart",
+          placeholder: "Dienstleistung auswählen",
+          selectBranchFirst: "Zuerst Branche auswählen",
+        },
+        description: {
+          label: "Beschreibung des Bedarfs",
+          placeholder:
+            "Beschreiben Sie Material, Technologie, erwartete Qualität, Leistungsumfang, Toleranzen, Produktionsanforderungen und alle Informationen, die einem Auftragnehmer helfen, die Anfrage einzuschätzen.",
+          help:
+            "Mindestens 150 Zeichen. Veröffentlichen Sie keine Kontaktdaten in der Anfrage.",
+        },
+        quantity: {
+          label: "Menge / Volumen",
+        },
+        unit: {
+          label: "Einheit",
+          placeholder: "Nach Vereinbarung",
+        },
+        deadline: {
+          label: "Gewünschter Fertigstellungstermin",
+        },
+        preferredRegion: {
+          label: "Bevorzugte Woiwodschaft / Region",
+          placeholder: "Ganz Polen / nach Vereinbarung",
+        },
+        location: {
+          label: "Bevorzugter Standort",
+          placeholder:
+            "z. B. Raum Poznań, Selbstabholung oder Kurierversand",
+        },
+        budget: {
+          label: "Budget",
+        },
+        budgetMin: {
+          label: "Min",
+        },
+        budgetMax: {
+          label: "Max",
+        },
+        technicalDocumentation: {
+          label: "Ich verfüge über technische Dokumentation",
+          description:
+            "Zusätzliche Dokumentation können Sie später im direkten Kontakt mit dem Auftragnehmer bereitstellen.",
+        },
+      },
+      submit: {
+        submitting: "Speichern...",
+        submit: "Zur Moderation einreichen",
+        cancel: "Abbrechen",
+      },
+    },
     profile: {
       ...en.panel.profile,
       title: "Firmenprofil",

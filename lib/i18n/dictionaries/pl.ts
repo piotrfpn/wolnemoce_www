@@ -1180,6 +1180,80 @@ const pl: Dictionary = {
         save: "Zapisz ofertę",
       },
     },
+    capacityRequestForm: {
+      metadata: {
+        title: "Dodaj zapytanie produkcyjne | Panel firmy",
+        description:
+          "Dodaj zlecenie produkcyjne i przekaż je do moderacji.",
+      },
+      backToRequests: "Wróć do moich zapytań",
+      eyebrow: "Moje zapytania produkcyjne",
+      title: "Dodaj zapytanie produkcyjne",
+      description:
+        "Opisz, jakiego wykonawcy szukasz. Po moderacji zapytanie pojawi się publicznie bez danych kontaktowych Twojej firmy.",
+      successLink: "Przejdź do listy moich zapytań",
+      fields: {
+        title: {
+          label: "Tytuł zapytania",
+          placeholder:
+            "np. Zlecę frezowanie 200 detali aluminiowych",
+        },
+        branch: {
+          label: "Branża",
+          placeholder: "Wybierz branżę",
+        },
+        serviceType: {
+          label: "Rodzaj usługi",
+          placeholder: "Wybierz usługę",
+          selectBranchFirst: "Najpierw wybierz branżę",
+        },
+        description: {
+          label: "Opis potrzeby",
+          placeholder:
+            "Opisz materiał, technologię, oczekiwaną jakość, zakres prac, tolerancje, wymagania produkcyjne i informacje, które pomogą wykonawcy ocenić zlecenie.",
+          help:
+            "Minimum 150 znaków. Nie dodawaj publicznie danych kontaktowych.",
+        },
+        quantity: {
+          label: "Ilość / wolumen",
+        },
+        unit: {
+          label: "Jednostka",
+          placeholder: "Do ustalenia",
+        },
+        deadline: {
+          label: "Oczekiwany termin",
+        },
+        preferredRegion: {
+          label: "Preferowane województwo",
+          placeholder: "Cała Polska / do ustalenia",
+        },
+        location: {
+          label: "Preferowana lokalizacja",
+          placeholder:
+            "np. okolice Poznania, odbiór własny, wysyłka kurierem",
+        },
+        budget: {
+          label: "Budżet",
+        },
+        budgetMin: {
+          label: "Min",
+        },
+        budgetMax: {
+          label: "Max",
+        },
+        technicalDocumentation: {
+          label: "Posiadam dokumentację techniczną",
+          description:
+            "Dodatkową dokumentację możesz przekazać na dalszym etapie kontaktu z wykonawcą.",
+        },
+      },
+      submit: {
+        submitting: "Zapisywanie...",
+        submit: "Przekaż do moderacji",
+        cancel: "Anuluj",
+      },
+    },
     profile: {
       title: "Profil firmy",
       subtitle: "Uzupełnij dane firmy widoczne dla klientów.",

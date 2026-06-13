@@ -986,6 +986,73 @@ export type Dictionary = {
         save: string;
       };
     };
+    capacityRequestForm: {
+      metadata: {
+        title: string;
+        description: string;
+      };
+      backToRequests: string;
+      eyebrow: string;
+      title: string;
+      description: string;
+      successLink: string;
+      fields: {
+        title: {
+          label: string;
+          placeholder: string;
+        };
+        branch: {
+          label: string;
+          placeholder: string;
+        };
+        serviceType: {
+          label: string;
+          placeholder: string;
+          selectBranchFirst: string;
+        };
+        description: {
+          label: string;
+          placeholder: string;
+          help: string;
+        };
+        quantity: {
+          label: string;
+        };
+        unit: {
+          label: string;
+          placeholder: string;
+        };
+        deadline: {
+          label: string;
+        };
+        preferredRegion: {
+          label: string;
+          placeholder: string;
+        };
+        location: {
+          label: string;
+          placeholder: string;
+        };
+        budget: {
+          label: string;
+        };
+        budgetMin: {
+          label: string;
+        };
+        budgetMax: {
+          label: string;
+        };
+        technicalDocumentation: {
+          label: string;
+          description: string;
+        };
+      };
+      submit: {
+        submitting: string;
+        submit: string;
+        cancel: string;
+      };
+    };
     profile: {
       title: string;
       subtitle: string;
@@ -1131,6 +1198,7 @@ export type PanelCommonDictionary = Dictionary["panel"]["common"];
 export type PanelDashboardDictionary = Dictionary["panel"]["dashboard"];
 export type PanelOffersDictionary = Dictionary["panel"]["offers"];
 export type PanelOfferFormDictionary = Dictionary["panel"]["offerForm"];
+export type PanelCapacityRequestFormDictionary = Dictionary["panel"]["capacityRequestForm"];
 export type PanelProfileDictionary = Dictionary["panel"]["profile"];
 export type PanelInquiriesDictionary = Dictionary["panel"]["inquiries"];
 export type PanelSettingsDictionary = Dictionary["panel"]["settings"];

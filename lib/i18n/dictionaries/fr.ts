@@ -1074,6 +1074,80 @@ const fr: Dictionary = {
         save: "Enregistrer l'offre",
       },
     },
+    capacityRequestForm: {
+      metadata: {
+        title: "Ajouter une demande de production | Espace entreprise",
+        description:
+          "Ajoutez une demande de production et soumettez-la à la modération.",
+      },
+      backToRequests: "Retour à mes demandes",
+      eyebrow: "Mes demandes de production",
+      title: "Ajouter une demande de production",
+      description:
+        "Décrivez le prestataire que vous recherchez. Après modération, la demande sera publiée sans les coordonnées de votre entreprise.",
+      successLink: "Accéder à mes demandes",
+      fields: {
+        title: {
+          label: "Titre de la demande",
+          placeholder:
+            "p. ex. Fraisage CNC recherché pour 200 pièces en aluminium",
+        },
+        branch: {
+          label: "Secteur",
+          placeholder: "Sélectionnez un secteur",
+        },
+        serviceType: {
+          label: "Type de service",
+          placeholder: "Sélectionnez un service",
+          selectBranchFirst: "Sélectionnez d'abord un secteur",
+        },
+        description: {
+          label: "Description du besoin",
+          placeholder:
+            "Décrivez le matériau, la technologie, la qualité attendue, l’étendue des travaux, les tolérances, les exigences de production et toute information permettant au prestataire d’évaluer la demande.",
+          help:
+            "Minimum 150 caractères. Ne publiez pas de coordonnées dans la demande.",
+        },
+        quantity: {
+          label: "Quantité / volume",
+        },
+        unit: {
+          label: "Unité",
+          placeholder: "À convenir",
+        },
+        deadline: {
+          label: "Date de réalisation souhaitée",
+        },
+        preferredRegion: {
+          label: "Région souhaitée",
+          placeholder: "Toute la Pologne / à convenir",
+        },
+        location: {
+          label: "Localisation souhaitée",
+          placeholder:
+            "p. ex. région de Poznań, enlèvement par le client ou livraison par transporteur",
+        },
+        budget: {
+          label: "Budget",
+        },
+        budgetMin: {
+          label: "Min",
+        },
+        budgetMax: {
+          label: "Max",
+        },
+        technicalDocumentation: {
+          label: "Je dispose d'une documentation technique",
+          description:
+            "Vous pourrez fournir des documents supplémentaires ultérieurement lors d’un échange direct avec le prestataire.",
+        },
+      },
+      submit: {
+        submitting: "Enregistrement...",
+        submit: "Soumettre à la modération",
+        cancel: "Annuler",
+      },
+    },
     profile: {
       ...en.panel.profile,
       title: "Profil de l'entreprise",

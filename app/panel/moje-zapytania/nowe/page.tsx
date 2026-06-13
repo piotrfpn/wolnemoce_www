@@ -14,12 +14,20 @@ import {
 } from "@/lib/i18n/capacityRequestTaxonomy";
 import { getCapacityRequestServiceOptionsByIndustry } from "@/lib/i18n/capacityRequestServiceTaxonomy";
 
+import { getDictionary } from "@/lib/i18n/getDictionary";
+
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Dodaj zapytanie produkcyjne | Panel firmy",
-  description: "Dodaj zlecenie produkcyjne i przekaż je do moderacji.",
-};
+export function generateMetadata(): Metadata {
+  const locale = getPanelLocale();
+  const dictionary = getDictionary(locale);
+  const t = dictionary.panel.capacityRequestForm;
+
+  return {
+    title: t.metadata.title,
+    description: t.metadata.description,
+  };
+}
 
 export default async function NewCapacityRequestPage() {
   const supabase = createClient();
@@ -44,6 +52,8 @@ export default async function NewCapacityRequestPage() {
   }
 
   const locale = getPanelLocale();
+  const dictionary = getDictionary(locale);
+  const t = dictionary.panel.capacityRequestForm;
 
   const industryOptions = getCapacityRequestIndustryOptions(locale);
   const provinceOptions = getCapacityRequestProvinceOptions(locale);
@@ -66,10 +76,11 @@ export default async function NewCapacityRequestPage() {
               className="mb-4 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
             >
               <i className="fas fa-arrow-left"></i>
-              Wróć do moich zapytań
+              {t.backToRequests}
             </Link>
           </div>
           <CapacityRequestFormClient
+            dict={t}
             industryOptions={industryOptions}
             serviceOptionsByIndustry={serviceOptionsByIndustry}
             provinceOptions={provinceOptions}

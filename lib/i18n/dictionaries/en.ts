@@ -1153,6 +1153,80 @@ const en: Dictionary = {
         save: "Save offer",
       },
     },
+    capacityRequestForm: {
+      metadata: {
+        title: "Add production request | Company Panel",
+        description:
+          "Add a production request and submit it for moderation.",
+      },
+      backToRequests: "Back to my requests",
+      eyebrow: "My production requests",
+      title: "Add production request",
+      description:
+        "Describe the contractor you are looking for. After moderation, the request will be published without your company’s contact details.",
+      successLink: "Go to my requests",
+      fields: {
+        title: {
+          label: "Request title",
+          placeholder:
+            "e.g. CNC milling required for 200 aluminium parts",
+        },
+        branch: {
+          label: "Industry",
+          placeholder: "Select industry",
+        },
+        serviceType: {
+          label: "Service type",
+          placeholder: "Select service",
+          selectBranchFirst: "Select industry first",
+        },
+        description: {
+          label: "Requirement description",
+          placeholder:
+            "Describe the material, technology, expected quality, scope of work, tolerances, production requirements and any information that will help a contractor assess the request.",
+          help:
+            "Minimum 150 characters. Do not publish contact details in the request.",
+        },
+        quantity: {
+          label: "Quantity / volume",
+        },
+        unit: {
+          label: "Unit",
+          placeholder: "To be agreed",
+        },
+        deadline: {
+          label: "Required completion date",
+        },
+        preferredRegion: {
+          label: "Preferred region",
+          placeholder: "Whole Poland / to be agreed",
+        },
+        location: {
+          label: "Preferred location",
+          placeholder:
+            "e.g. Poznań area, customer collection or courier delivery",
+        },
+        budget: {
+          label: "Budget",
+        },
+        budgetMin: {
+          label: "Min",
+        },
+        budgetMax: {
+          label: "Max",
+        },
+        technicalDocumentation: {
+          label: "I have technical documentation",
+          description:
+            "You can provide additional documentation at a later stage of contact with the contractor.",
+        },
+      },
+      submit: {
+        submitting: "Saving...",
+        submit: "Submit for moderation",
+        cancel: "Cancel",
+      },
+    },
     profile: {
       title: "Company profile",
       subtitle: "Complete the company details visible to customers.",

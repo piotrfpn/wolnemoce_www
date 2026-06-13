@@ -15,6 +15,7 @@ import type {
   CapacityRequestUnitValue,
 } from "@/lib/i18n/capacityRequestTaxonomy";
 import type { CapacityRequestServiceValue } from "@/lib/i18n/capacityRequestServiceTaxonomy";
+import type { PanelCapacityRequestFormDictionary } from "@/lib/i18n/types";
 
 type CapacityRequestServiceOptionGroup = {
   industry: CapacityRequestIndustryValue;
@@ -22,6 +23,7 @@ type CapacityRequestServiceOptionGroup = {
 };
 
 type CapacityRequestFormClientProps = {
+  dict: PanelCapacityRequestFormDictionary;
   industryOptions: Array<CapacityRequestOption<CapacityRequestIndustryValue>>;
   serviceOptionsByIndustry: CapacityRequestServiceOptionGroup[];
   provinceOptions: Array<CapacityRequestOption<CapacityRequestProvinceValue>>;
@@ -45,6 +47,7 @@ function getMaxDeadlineInputValue() {
 }
 
 export default function CapacityRequestFormClient({
+  dict,
   industryOptions,
   serviceOptionsByIndustry,
   provinceOptions,
@@ -107,14 +110,13 @@ export default function CapacityRequestFormClient({
     >
       <div className="mb-8">
         <p className="mb-2 text-sm font-bold uppercase tracking-wide text-[#1a5f3c]">
-          Moje zapytania produkcyjne
+          {dict.eyebrow}
         </p>
         <h1 className="text-2xl font-extrabold text-slate-900">
-          Dodaj zapytanie produkcyjne
+          {dict.title}
         </h1>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          Opisz, jakiego wykonawcy szukasz. Po moderacji zapytanie pojawi się
-          publicznie bez danych kontaktowych Twojej firmy.
+          {dict.description}
         </p>
       </div>
 
@@ -128,7 +130,7 @@ export default function CapacityRequestFormClient({
         <div className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-800">
           {result.success}
           <Link href="/panel/moje-zapytania" className="mt-3 block font-bold text-[#1a5f3c]">
-            Przejdź do listy moich zapytań
+            {dict.successLink}
           </Link>
         </div>
       ) : null}
@@ -137,21 +139,21 @@ export default function CapacityRequestFormClient({
         <label className="block min-w-0 md:col-span-2">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-heading text-[#1a5f3c]"></i>
-            Tytuł zapytania
+            {dict.fields.title.label}
           </span>
           <input
             name="title"
             minLength={10}
             required
             className={inputClass}
-            placeholder="np. Zlecę frezowanie 200 detali aluminiowych"
+            placeholder={dict.fields.title.placeholder}
           />
         </label>
 
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-industry text-[#1a5f3c]"></i>
-            Branża
+            {dict.fields.branch.label}
           </span>
           <select
             name="branch"
@@ -160,7 +162,7 @@ export default function CapacityRequestFormClient({
             required
             className={inputClass}
           >
-            <option value="">Wybierz branżę</option>
+            <option value="">{dict.fields.branch.placeholder}</option>
             {industryOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -172,7 +174,7 @@ export default function CapacityRequestFormClient({
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-screwdriver-wrench text-[#1a5f3c]"></i>
-            Rodzaj usługi
+            {dict.fields.serviceType.label}
           </span>
           <select
             name="service_type"
@@ -183,7 +185,7 @@ export default function CapacityRequestFormClient({
             className={inputClass}
           >
             <option value="">
-              {selectedBranch ? "Wybierz usługę" : "Najpierw wybierz branżę"}
+              {selectedBranch ? dict.fields.serviceType.placeholder : dict.fields.serviceType.selectBranchFirst}
             </option>
             {serviceOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -196,7 +198,7 @@ export default function CapacityRequestFormClient({
         <label className="block min-w-0 md:col-span-2">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-align-left text-[#1a5f3c]"></i>
-            Opis potrzeby
+            {dict.fields.description.label}
           </span>
           <textarea
             name="description"
@@ -204,17 +206,17 @@ export default function CapacityRequestFormClient({
             minLength={150}
             required
             className={inputClass}
-            placeholder="Opisz materiał, technologię, oczekiwaną jakość, zakres prac, tolerancje, wymagania produkcyjne i informacje, które pomogą wykonawcy ocenić zlecenie."
+            placeholder={dict.fields.description.placeholder}
           />
           <p className="mt-2 text-xs leading-5 text-slate-500">
-            Minimum 150 znaków. Nie dodawaj publicznie danych kontaktowych.
+            {dict.fields.description.help}
           </p>
         </label>
 
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-boxes-stacked text-[#1a5f3c]"></i>
-            Ilość / wolumen
+            {dict.fields.quantity.label}
           </span>
           <input name="quantity" type="number" min={0} step="any" className={inputClass} />
         </label>
@@ -222,10 +224,10 @@ export default function CapacityRequestFormClient({
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-ruler text-[#1a5f3c]"></i>
-            Jednostka
+            {dict.fields.unit.label}
           </span>
           <select name="unit" className={inputClass}>
-            <option value="">Do ustalenia</option>
+            <option value="">{dict.fields.unit.placeholder}</option>
             {unitOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -237,7 +239,7 @@ export default function CapacityRequestFormClient({
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-calendar-day text-[#1a5f3c]"></i>
-            Oczekiwany termin
+            {dict.fields.deadline.label}
           </span>
           <input
             name="deadline"
@@ -252,10 +254,10 @@ export default function CapacityRequestFormClient({
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-map text-[#1a5f3c]"></i>
-            Preferowane województwo
+            {dict.fields.preferredRegion.label}
           </span>
           <select name="preferred_region" className={inputClass}>
-            <option value="">Cała Polska / do ustalenia</option>
+            <option value="">{dict.fields.preferredRegion.placeholder}</option>
             {provinceOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -267,19 +269,19 @@ export default function CapacityRequestFormClient({
         <label className="block min-w-0 md:col-span-2">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-location-dot text-[#1a5f3c]"></i>
-            Preferowana lokalizacja
+            {dict.fields.location.label}
           </span>
           <input
             name="location"
             className={inputClass}
-            placeholder="np. okolice Poznania, odbiór własny, wysyłka kurierem"
+            placeholder={dict.fields.location.placeholder}
           />
         </label>
 
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-wallet text-[#1a5f3c]"></i>
-            Budżet
+            {dict.fields.budget.label}
           </span>
           <select
             name="budget_type"
@@ -299,7 +301,7 @@ export default function CapacityRequestFormClient({
         <div className="grid min-w-0 gap-5 sm:grid-cols-2">
           <label className="block min-w-0">
             <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-              Min
+              {dict.fields.budgetMin.label}
             </span>
             <input
               name="budget_min"
@@ -313,7 +315,7 @@ export default function CapacityRequestFormClient({
           </label>
           <label className="block min-w-0">
             <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-              Max
+              {dict.fields.budgetMax.label}
             </span>
             <input
               name="budget_max"
@@ -335,11 +337,10 @@ export default function CapacityRequestFormClient({
           />
           <span className="min-w-0">
             <span className="block text-sm font-bold text-slate-900">
-              Posiadam dokumentację techniczną
+              {dict.fields.technicalDocumentation.label}
             </span>
             <span className="mt-1 block text-xs leading-5 text-slate-500">
-              Dodatkową dokumentację możesz przekazać na dalszym etapie kontaktu
-              z wykonawcą.
+              {dict.fields.technicalDocumentation.description}
             </span>
           </span>
         </label>
@@ -351,10 +352,10 @@ export default function CapacityRequestFormClient({
           disabled={isPending || Boolean(result.success)}
           className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isPending ? "Zapisywanie..." : "Przekaż do moderacji"}
+          {isPending ? dict.submit.submitting : dict.submit.submit}
         </button>
         <Link href="/panel/moje-zapytania" className="btn btn-outline">
-          Anuluj
+          {dict.submit.cancel}
         </Link>
       </div>
     </form>
