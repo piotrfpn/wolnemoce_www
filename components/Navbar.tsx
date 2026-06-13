@@ -45,17 +45,17 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
   const loginHref = getLocalizedPath("/logowanie", locale);
   return (
     <nav className="fixed left-0 right-0 top-0 z-[1000] border-b border-slate-200 bg-white/95 backdrop-blur-xl">
-      <div className="mx-auto flex h-[72px] max-w-[1536px] items-center justify-between gap-4 px-4 sm:px-6">
-        <Link href={getLocalizedPath("/", locale)} className="flex shrink-0 items-center gap-3 no-underline" onClick={closeMenu}>
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] text-xl text-white shadow-md">
+      <div className="mx-auto flex h-[72px] max-w-[1536px] items-center justify-between gap-4 px-4 sm:px-6 min-[1400px]:gap-2 min-[1400px]:px-3 min-[1600px]:gap-4 min-[1600px]:px-6">
+        <Link href={getLocalizedPath("/", locale)} className="flex shrink-0 items-center gap-3 no-underline min-[1400px]:gap-2 min-[1600px]:gap-3" onClick={closeMenu}>
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] text-xl text-white shadow-md min-[1400px]:h-10 min-[1400px]:w-10 min-[1400px]:text-lg min-[1600px]:h-11 min-[1600px]:w-11 min-[1600px]:text-xl">
             <i className="fas fa-industry"></i>
           </div>
-          <div className="text-[22px] font-extrabold tracking-[-0.5px] text-slate-800">
+          <div className="text-[22px] font-extrabold tracking-[-0.5px] text-slate-800 min-[1400px]:text-xl min-[1600px]:text-[22px]">
             Wolne<span className="text-[#1a5f3c]">Moce</span>
           </div>
         </Link>
 
-        <ul className="hidden min-w-0 flex-1 list-none items-center justify-center gap-1 min-[1400px]:flex 2xl:gap-2">
+        <ul className="hidden min-w-0 flex-1 list-none items-center justify-center gap-0.5 min-[1400px]:flex min-[1600px]:gap-2">
           {navLinks.map((link) => {
             const href = getLocalizedPath(link.href, locale);
             const isActive = link.match ? normalizedPathname === link.match : false;
@@ -65,7 +65,7 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
                 <Link
                   href={href}
                   onClick={closeMenu}
-                  className={`inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium leading-none no-underline transition xl:px-3 ${
+                  className={`inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg px-1.5 py-2 text-[13px] font-medium leading-none no-underline transition min-[1600px]:px-3 min-[1600px]:text-sm ${
                     isActive
                       ? "bg-[#1a5f3c]/10 text-[#1a5f3c]"
                       : "text-slate-500 hover:bg-slate-50 hover:text-[#1a5f3c]"
@@ -78,7 +78,7 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
           })}
         </ul>
 
-        <div className="hidden shrink-0 items-center gap-2 min-[1400px]:flex 2xl:gap-3">
+        <div className="hidden shrink-0 items-center gap-1.5 min-[1400px]:flex min-[1600px]:gap-3">
           <Suspense fallback={null}>
             <LanguageSwitcher locale={locale} />
           </Suspense>
@@ -86,12 +86,12 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
           {showContactCta ? (
             <Link
               href={getLocalizedPath("/kontakt", locale)}
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border-2 border-[#1a5f3c] px-4 py-2.5 text-sm font-semibold leading-none text-[#1a5f3c] no-underline transition hover:-translate-y-0.5 hover:bg-[#1a5f3c] hover:text-white hover:shadow-md xl:px-5"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border-2 border-[#1a5f3c] px-3 py-2.5 text-[13px] font-semibold leading-none text-[#1a5f3c] no-underline transition hover:-translate-y-0.5 hover:bg-[#1a5f3c] hover:text-white hover:shadow-md min-[1600px]:px-5 min-[1600px]:text-sm"
             >
               {t.contact}
             </Link>
           ) : null}
-          <AddOfferLinkClient locale={locale} className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-4 py-2.5 text-sm font-semibold leading-none text-white no-underline shadow-lg shadow-[#1a5f3c]/25 transition hover:-translate-y-0.5 hover:shadow-xl xl:px-5">
+          <AddOfferLinkClient locale={locale} className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-3 py-2.5 text-[13px] font-semibold leading-none text-white no-underline shadow-lg shadow-[#1a5f3c]/25 transition hover:-translate-y-0.5 hover:shadow-xl min-[1600px]:px-5 min-[1600px]:text-sm">
             {t.addOffer}
           </AddOfferLinkClient>
         </div>
