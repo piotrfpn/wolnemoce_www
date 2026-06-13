@@ -11,6 +11,7 @@ const uk: Dictionary = {
   },
   nav: {
     offers: "Пропозиції",
+    productionRequests: "Виробничі запити",
     companies: "Компанії",
     industries: "Галузі",
     howItWorks: "Як це працює",

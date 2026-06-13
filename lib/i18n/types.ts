@@ -58,6 +58,7 @@ export type Dictionary = {
   };
   nav: {
     offers: string;
+    productionRequests: string;
     companies: string;
     industries: string;
     howItWorks: string;

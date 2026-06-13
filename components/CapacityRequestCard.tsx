@@ -5,18 +5,22 @@ import {
   formatCapacityRequestVolume,
   type PublicCapacityRequest,
 } from "@/lib/capacityRequests";
+import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
 
 type CapacityRequestCardProps = {
   request: PublicCapacityRequest;
+  locale: Locale;
   variant?: "public" | "compact";
 };
 
 export default function CapacityRequestCard({
   request,
+  locale,
   variant = "public",
 }: CapacityRequestCardProps) {
   const location =
     request.preferred_region || request.location || "Cała Polska / do ustalenia";
+  const requestPath = getLocalizedPath(`/zapytania/${request.slug}`, locale);
 
   return (
     <article className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg md:p-6">
@@ -40,7 +44,7 @@ export default function CapacityRequestCard({
       </div>
 
       <h2 className="break-words text-xl font-extrabold leading-tight text-slate-900">
-        <Link href={`/zapytania/${request.slug}`} className="transition hover:text-[#1a5f3c]">
+        <Link href={requestPath} className="transition hover:text-[#1a5f3c]">
           {request.title}
         </Link>
       </h2>
@@ -93,7 +97,7 @@ export default function CapacityRequestCard({
             </span>
           </div>
           <Link
-            href={`/zapytania/${request.slug}`}
+            href={requestPath}
             className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#1a5f3c] px-5 py-3 text-sm font-bold text-white no-underline transition hover:bg-[#0d3d26]"
           >
             Zobacz szczegóły

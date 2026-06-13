@@ -8,6 +8,7 @@ const pl: Dictionary = {
   },
   nav: {
     offers: "Oferty",
+    productionRequests: "Zapytania",
     companies: "Firmy",
     industries: "Branże",
     howItWorks: "Jak to działa",

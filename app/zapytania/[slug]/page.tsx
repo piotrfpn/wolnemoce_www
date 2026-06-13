@@ -14,11 +14,19 @@ export const dynamic = "force-dynamic";
 export function generateMetadata({
   params,
 }: CapacityRequestDetailsPageProps): Promise<Metadata> {
-  return generateCapacityRequestMetadata({ slug: params.slug });
+  return generateCapacityRequestMetadata({
+    slug: params.slug,
+    locale: "pl",
+  });
 }
 
 export default function CapacityRequestDetailsPage({
   params,
 }: CapacityRequestDetailsPageProps) {
-  return <CapacityRequestDetailView slug={params.slug} />;
+  return (
+    <CapacityRequestDetailView
+      slug={params.slug}
+      locale="pl"
+    />
+  );
 }

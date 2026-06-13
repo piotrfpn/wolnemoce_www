@@ -18,5 +18,10 @@ type CapacityRequestsPageProps = {
 export default function CapacityRequestsPage({
   searchParams,
 }: CapacityRequestsPageProps) {
-  return <CapacityRequestsListView searchParams={searchParams} />;
+  return (
+    <CapacityRequestsListView
+      locale="pl"
+      searchParams={searchParams}
+    />
+  );
 }

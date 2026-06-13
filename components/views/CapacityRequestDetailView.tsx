@@ -13,31 +13,35 @@ import {
   getPublicCapacityRequestBySlug,
   getSimilarCapacityRequests,
 } from "@/lib/capacityRequests";
+import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getAbsoluteUrl } from "@/lib/seo";
 
 type CapacityRequestDetailViewProps = {
   slug: string;
+  locale: Locale;
 };
 
 export async function generateCapacityRequestMetadata({
   slug,
+  locale,
 }: CapacityRequestDetailViewProps): Promise<Metadata> {
   const request = await getPublicCapacityRequestBySlug(slug);
 
   if (!request) {
     const title = "Zapytanie nie znalezione | WolneMoce";
     const description = "Zapytanie produkcyjne nie istnieje albo nie jest aktywne.";
+    const requestPath = getLocalizedPath(`/zapytania/${slug}`, locale);
 
     return {
       title,
       description,
       alternates: {
-        canonical: `/zapytania/${slug}`,
+        canonical: requestPath,
       },
       openGraph: {
         title,
         description,
-        url: `/zapytania/${slug}`,
+        url: requestPath,
         siteName: "WolneMoce",
         type: "website",
       },
@@ -46,17 +50,18 @@ export async function generateCapacityRequestMetadata({
 
   const title = `${request.title} | Zapytanie produkcyjne | WolneMoce`;
   const description = `Zapytanie produkcyjne z branży ${request.branch} / ${request.service_type}. Sprawdź szczegóły i zgłoś zainteresowanie jako wykonawca.`;
+  const requestPath = getLocalizedPath(`/zapytania/${request.slug}`, locale);
 
   return {
     title,
     description,
     alternates: {
-      canonical: `/zapytania/${request.slug}`,
+      canonical: requestPath,
     },
     openGraph: {
       title,
       description,
-      url: `/zapytania/${request.slug}`,
+      url: requestPath,
       siteName: "WolneMoce",
       type: "website",
     },
@@ -70,6 +75,7 @@ export async function generateCapacityRequestMetadata({
 
 export default async function CapacityRequestDetailView({
   slug,
+  locale,
 }: CapacityRequestDetailViewProps) {
   const request = await getPublicCapacityRequestBySlug(slug);
 
@@ -80,7 +86,9 @@ export default async function CapacityRequestDetailView({
   const similarRequests = await getSimilarCapacityRequests(request);
   const location =
     request.preferred_region || request.location || "Cała Polska / do ustalenia";
-  const canonicalUrl = getAbsoluteUrl(`/zapytania/${request.slug}`);
+  const requestsPath = getLocalizedPath("/zapytania", locale);
+  const requestPath = getLocalizedPath(`/zapytania/${request.slug}`, locale);
+  const canonicalUrl = getAbsoluteUrl(requestPath);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -95,7 +103,7 @@ export default async function CapacityRequestDetailView({
         "@type": "ListItem",
         position: 2,
         name: "Zapytania produkcyjne",
-        item: getAbsoluteUrl("/zapytania"),
+        item: getAbsoluteUrl(requestsPath),
       },
       {
         "@type": "ListItem",
@@ -124,13 +132,13 @@ export default async function CapacityRequestDetailView({
   return (
     <>
       <StructuredData data={jsonLd} />
-      <Navbar />
+      <Navbar locale={locale} />
       <main className="bg-white pb-24 lg:pb-0">
         <section className="relative overflow-hidden bg-gradient-to-br from-[#0d3d26] via-[#1a5f3c] to-[#2d8a5e] px-6 pb-16 pt-36 text-white md:pb-20">
           <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(circle_at_20%_50%,white_2px,transparent_2px),radial-gradient(circle_at_80%_20%,white_1px,transparent_1px),radial-gradient(circle_at_40%_80%,white_1.5px,transparent_1.5px)] [background-size:60px_60px,40px_40px,80px_80px]" />
           <div className="relative z-10 mx-auto max-w-[1400px] min-w-0">
             <Link
-              href="/zapytania"
+              href={requestsPath}
               className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-white/80 no-underline transition hover:text-white"
             >
               <i className="fas fa-arrow-left text-xs"></i>
@@ -201,7 +209,7 @@ export default async function CapacityRequestDetailView({
             <div className="sticky top-24 space-y-6">
               <CapacityRequestInterestClient
                 capacityRequestId={request.id}
-                returnTo={`/zapytania/${request.slug}`}
+                returnTo={requestPath}
               />
               <div className="rounded-[24px] border border-amber-100 bg-amber-50 p-5">
                 <h3 className="mb-2 flex items-center gap-2 text-sm font-extrabold text-amber-900">
@@ -224,14 +232,14 @@ export default async function CapacityRequestDetailView({
                 <div className="section-label">Podobne zapytania</div>
                 <h2 className="section-title">Zlecenia z tej samej branży</h2>
               </div>
-              <Link href="/zapytania" className="btn btn-outline">
+              <Link href={requestsPath} className="btn btn-outline">
                 Wszystkie zapytania
               </Link>
             </div>
             {similarRequests.length > 0 ? (
               <div className="grid min-w-0 gap-6 lg:grid-cols-3">
                 {similarRequests.map((item) => (
-                  <CapacityRequestCard key={item.id} request={item} variant="compact" />
+                  <CapacityRequestCard key={item.id} request={item} locale={locale} variant="compact" />
                 ))}
               </div>
             ) : (

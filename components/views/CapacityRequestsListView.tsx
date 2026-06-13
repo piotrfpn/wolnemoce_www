@@ -3,11 +3,15 @@ import { Suspense } from "react";
 import CapacityRequestCard from "@/components/CapacityRequestCard";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import StructuredData from "@/components/StructuredData";
 import CapacityRequestsFiltersClient from "@/app/zapytania/CapacityRequestsFiltersClient";
 import { categories, getServicesForIndustry } from "@/lib/mockData";
 import { getPublicCapacityRequests } from "@/lib/capacityRequests";
+import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
+import { getAbsoluteUrl } from "@/lib/seo";
 
 type CapacityRequestsListViewProps = {
+  locale: Locale;
   searchParams?: Record<string, string | string[] | undefined>;
 };
 
@@ -39,6 +43,7 @@ function getOptionFromParam(value: string, options: string[]) {
 }
 
 export default async function CapacityRequestsListView({
+  locale,
   searchParams,
 }: CapacityRequestsListViewProps) {
   const branch = getOptionFromParam(getSingleParam(searchParams, "branza"), categories);
@@ -53,10 +58,32 @@ export default async function CapacityRequestsListView({
     serviceType,
     q,
   });
+  const requestsPath = getLocalizedPath("/zapytania", locale);
+  const homePath = getLocalizedPath("/", locale);
+  const addOfferPath = getLocalizedPath("/dodaj-oferte", locale);
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "WolneMoce",
+        item: getAbsoluteUrl(homePath),
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Zapytania produkcyjne",
+        item: getAbsoluteUrl(requestsPath),
+      },
+    ],
+  };
 
   return (
     <>
-      <Navbar />
+      <StructuredData data={jsonLd} />
+      <Navbar locale={locale} />
       <main className="bg-white">
         <section className="relative overflow-hidden bg-gradient-to-br from-[#0d3d26] via-[#1a5f3c] to-[#2d8a5e] px-6 pb-24 pt-36 text-white">
           <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(circle_at_20%_50%,white_2px,transparent_2px),radial-gradient(circle_at_80%_20%,white_1px,transparent_1px),radial-gradient(circle_at_40%_80%,white_1.5px,transparent_1.5px)] [background-size:60px_60px,40px_40px,80px_80px]" />
@@ -78,7 +105,7 @@ export default async function CapacityRequestsListView({
                   <i className="fas fa-plus"></i>
                   Dodaj zapytanie
                 </Link>
-                <Link href="/dodaj-oferte" className="btn btn-outline bg-white text-[#1a5f3c]">
+                <Link href={addOfferPath} className="btn btn-outline bg-white text-[#1a5f3c]">
                   Mam wolne moce - dodaj ofertę
                 </Link>
               </div>
@@ -156,7 +183,7 @@ export default async function CapacityRequestsListView({
                 </h2>
               </div>
               <Link
-                href="/zapytania"
+                href={requestsPath}
                 className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-5 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white"
               >
                 Wyczyść filtry
@@ -166,7 +193,7 @@ export default async function CapacityRequestsListView({
             {requests.length > 0 ? (
               <div className="grid min-w-0 gap-6 xl:grid-cols-2">
                 {requests.map((request) => (
-                  <CapacityRequestCard key={request.id} request={request} />
+                  <CapacityRequestCard key={request.id} request={request} locale={locale} />
                 ))}
               </div>
             ) : (

@@ -27,7 +27,7 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
   const closeMenu = () => setIsOpen(false);
   const navLinks = [
     { label: t.offers, href: "/oferty", match: "/oferty" },
-    { label: "Zapytania", href: "/zapytania", match: "/zapytania" },
+    { label: t.productionRequests, href: "/zapytania", match: "/zapytania" },
     { label: t.companies, href: "/firmy", match: "/firmy" },
     { label: t.industries, href: "/#kategorie", match: null },
     { label: t.howItWorks, href: "/jak-to-dziala", match: "/jak-to-dziala" },

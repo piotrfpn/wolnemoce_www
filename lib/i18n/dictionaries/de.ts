@@ -11,6 +11,7 @@ const de: Dictionary = {
   },
   nav: {
     offers: "Angebote",
+    productionRequests: "Produktionsanfragen",
     companies: "Firmen",
     industries: "Branchen",
     howItWorks: "So funktioniert es",

@@ -10,6 +10,7 @@ const en: Dictionary = {
   },
   nav: {
     offers: "Offers",
+    productionRequests: "Production requests",
     companies: "Companies",
     industries: "Industries",
     howItWorks: "How it works",
