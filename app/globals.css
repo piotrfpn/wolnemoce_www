@@ -1497,6 +1497,10 @@
             .footer-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         }
 
+        @media (max-width: 1040px) {
+            .expert-content { grid-template-columns: 1fr; }
+        }
+
         @media (max-width: 992px) {
             .hero-content { grid-template-columns: 1fr; text-align: center; }
             .hero h1 { font-size: 42px; }
@@ -1546,6 +1550,11 @@
         }
 
         @media (max-width: 480px) {
+            .section-title {
+                hyphens: auto;
+                overflow-wrap: anywhere;
+            }
+
             .categories-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
                 gap: 12px;
@@ -1582,4 +1591,20 @@
                 line-height: 1.2;
             }
             .footer-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 340px) {
+            #partnerzy-uslugowi article > div:first-child {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            #partnerzy-uslugowi article > div:first-child > a {
+                width: 100%;
+            }
+
+            #partnerzy-uslugowi article > div:first-child p {
+                hyphens: auto;
+                overflow-wrap: anywhere;
+            }
         }
