@@ -45,7 +45,7 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
   const loginHref = getLocalizedPath("/logowanie", locale);
   return (
     <nav className="fixed left-0 right-0 top-0 z-[1000] border-b border-slate-200 bg-white/95 backdrop-blur-xl">
-      <div className="mx-auto flex h-[72px] max-w-[1400px] items-center justify-between gap-4 px-6">
+      <div className="mx-auto flex h-[72px] max-w-[1536px] items-center justify-between gap-4 px-4 sm:px-6">
         <Link href={getLocalizedPath("/", locale)} className="flex shrink-0 items-center gap-3 no-underline" onClick={closeMenu}>
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] text-xl text-white shadow-md">
             <i className="fas fa-industry"></i>
@@ -55,17 +55,17 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
           </div>
         </Link>
 
-        <ul className="hidden min-w-0 flex-1 list-none items-center justify-center gap-1 lg:flex xl:gap-2">
+        <ul className="hidden min-w-0 flex-1 list-none items-center justify-center gap-1 min-[1400px]:flex 2xl:gap-2">
           {navLinks.map((link) => {
             const href = getLocalizedPath(link.href, locale);
             const isActive = link.match ? normalizedPathname === link.match : false;
 
             return (
-              <li key={link.href} className="min-w-0">
+              <li key={link.href} className="shrink-0">
                 <Link
                   href={href}
                   onClick={closeMenu}
-                  className={`inline-flex items-center justify-center whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium leading-none no-underline transition xl:px-3 ${
+                  className={`inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg px-2.5 py-2 text-sm font-medium leading-none no-underline transition xl:px-3 ${
                     isActive
                       ? "bg-[#1a5f3c]/10 text-[#1a5f3c]"
                       : "text-slate-500 hover:bg-slate-50 hover:text-[#1a5f3c]"
@@ -78,7 +78,7 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
           })}
         </ul>
 
-        <div className="hidden shrink-0 items-center gap-2 lg:flex xl:gap-3">
+        <div className="hidden shrink-0 items-center gap-2 min-[1400px]:flex 2xl:gap-3">
           <Suspense fallback={null}>
             <LanguageSwitcher locale={locale} />
           </Suspense>
@@ -96,7 +96,7 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
           </AddOfferLinkClient>
         </div>
 
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center gap-2 min-[1400px]:hidden">
           <Suspense fallback={null}>
             <LanguageSwitcher locale={locale} />
           </Suspense>
@@ -112,7 +112,7 @@ export default function Navbar({ locale: localeProp }: { locale?: Locale }) {
       </div>
 
       {isOpen && (
-        <div className="border-t border-slate-200 bg-white px-6 py-5 shadow-xl lg:hidden">
+        <div className="border-t border-slate-200 bg-white px-6 py-5 shadow-xl min-[1400px]:hidden">
           <div className="flex flex-col gap-2">
             {navLinks.map((link) => {
               const href = getLocalizedPath(link.href, locale);
