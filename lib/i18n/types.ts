@@ -1052,6 +1052,32 @@ export type Dictionary = {
         submit: string;
         cancel: string;
       };
+      messages: {
+        errors: {
+          authRequired: string;
+          companyLoadFailed: string;
+          companyRequired: string;
+          validationFailed: string;
+          titleTooShort: string;
+          branchRequired: string;
+          serviceTypeRequired: string;
+          serviceNotAllowedForBranch: string;
+          descriptionTooShort: string;
+          deadlineInvalid: string;
+          deadlineTooSoon: string;
+          deadlineTooLate: string;
+          budgetTypeInvalid: string;
+          quantityInvalid: string;
+          budgetRangeRequired: string;
+          budgetRangeInvalid: string;
+          requestLimitCheckFailed: string;
+          requestLimitReached: string;
+          requestSaveFailed: string;
+        };
+        success: {
+          submitted: string;
+        };
+      };
     };
     profile: {
       title: string;

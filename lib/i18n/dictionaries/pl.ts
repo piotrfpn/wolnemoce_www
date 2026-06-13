@@ -1253,6 +1253,48 @@ const pl: Dictionary = {
         submit: "Przekaż do moderacji",
         cancel: "Anuluj",
       },
+      messages: {
+        errors: {
+          authRequired: "Musisz się zalogować.",
+          companyLoadFailed:
+            "Nie udało się pobrać profilu firmy.",
+          companyRequired:
+            "Najpierw uzupełnij profil firmy.",
+          validationFailed:
+            "Wystąpił błąd walidacji danych. Sprawdź formularz i spróbuj ponownie.",
+          titleTooShort:
+            "Tytuł zapytania musi mieć co najmniej 10 znaków.",
+          branchRequired: "Wybierz branżę.",
+          serviceTypeRequired: "Wybierz rodzaj usługi.",
+          serviceNotAllowedForBranch:
+            "Wybierz usługę pasującą do branży.",
+          descriptionTooShort:
+            "Opis potrzeby musi mieć co najmniej 150 znaków.",
+          deadlineInvalid:
+            "Podaj poprawny oczekiwany termin.",
+          deadlineTooSoon:
+            "Oczekiwany termin musi być najwcześniej jutro.",
+          deadlineTooLate:
+            "Oczekiwany termin nie może być dalszy niż 12 miesięcy.",
+          budgetTypeInvalid: "Wybierz typ budżetu.",
+          quantityInvalid:
+            "Ilość musi być liczbą nieujemną.",
+          budgetRangeRequired:
+            "Dla budżetu zakresowego podaj budżet minimalny i maksymalny.",
+          budgetRangeInvalid:
+            "Budżet maksymalny musi być większy lub równy minimalnemu.",
+          requestLimitCheckFailed:
+            "Nie udało się sprawdzić limitu zapytań.",
+          requestLimitReached:
+            "Limit 3 zapytań na firmę w ciągu 7 dni został wykorzystany. Spróbuj ponownie później.",
+          requestSaveFailed:
+            "Nie udało się zapisać zapytania. Sprawdź dane i spróbuj ponownie.",
+        },
+        success: {
+          submitted:
+            "Twoje zapytanie zostało zapisane i przekazane do moderacji. Po weryfikacji przez administratora pojawi się publicznie w sekcji zapytań produkcyjnych. Dane kontaktowe Twojej firmy nie będą publicznie widoczne. Zwykle weryfikujemy zapytania w ciągu 1–2 dni roboczych.",
+        },
+      },
     },
     profile: {
       title: "Profil firmy",

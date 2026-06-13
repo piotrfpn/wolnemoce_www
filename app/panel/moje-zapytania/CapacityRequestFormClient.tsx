@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import { type ChangeEvent, type FormEvent, useMemo, useState, useTransition } from "react";
 import {
   createCapacityRequest,
+  type CapacityRequestActionErrorCode,
   type CapacityRequestActionResult,
+  type CapacityRequestActionSuccessCode,
 } from "./capacityRequestActions";
 import type {
   CapacityRequestBudgetTypeValue,
@@ -61,6 +63,35 @@ export default function CapacityRequestFormClient({
   const [budgetType, setBudgetType] = useState("not_provided");
   const [result, setResult] = useState<CapacityRequestActionResult>({});
 
+  const errorMessages = {
+    AUTH_REQUIRED: dict.messages.errors.authRequired,
+    COMPANY_LOAD_FAILED: dict.messages.errors.companyLoadFailed,
+    COMPANY_REQUIRED: dict.messages.errors.companyRequired,
+    VALIDATION_FAILED: dict.messages.errors.validationFailed,
+    TITLE_TOO_SHORT: dict.messages.errors.titleTooShort,
+    BRANCH_REQUIRED: dict.messages.errors.branchRequired,
+    SERVICE_TYPE_REQUIRED: dict.messages.errors.serviceTypeRequired,
+    SERVICE_NOT_ALLOWED_FOR_BRANCH: dict.messages.errors.serviceNotAllowedForBranch,
+    DESCRIPTION_TOO_SHORT: dict.messages.errors.descriptionTooShort,
+    DEADLINE_INVALID: dict.messages.errors.deadlineInvalid,
+    DEADLINE_TOO_SOON: dict.messages.errors.deadlineTooSoon,
+    DEADLINE_TOO_LATE: dict.messages.errors.deadlineTooLate,
+    BUDGET_TYPE_INVALID: dict.messages.errors.budgetTypeInvalid,
+    QUANTITY_INVALID: dict.messages.errors.quantityInvalid,
+    BUDGET_RANGE_REQUIRED: dict.messages.errors.budgetRangeRequired,
+    BUDGET_RANGE_INVALID: dict.messages.errors.budgetRangeInvalid,
+    REQUEST_LIMIT_CHECK_FAILED: dict.messages.errors.requestLimitCheckFailed,
+    REQUEST_LIMIT_REACHED: dict.messages.errors.requestLimitReached,
+    REQUEST_SAVE_FAILED: dict.messages.errors.requestSaveFailed,
+  } satisfies Record<CapacityRequestActionErrorCode, string>;
+
+  const successMessages = {
+    REQUEST_SUBMITTED: dict.messages.success.submitted,
+  } satisfies Record<CapacityRequestActionSuccessCode, string>;
+
+  const errorMessage = result.errorCode ? errorMessages[result.errorCode] : null;
+  const successMessage = result.successCode ? successMessages[result.successCode] : null;
+
   const serviceOptions = useMemo(() => {
     if (!selectedBranch) {
       return [];
@@ -94,11 +125,18 @@ export default function CapacityRequestFormClient({
     const formData = new FormData(event.currentTarget);
 
     startTransition(async () => {
-      const nextResult = await createCapacityRequest(formData);
-      setResult(nextResult);
+      try {
+        const nextResult = await createCapacityRequest(formData);
 
-      if (nextResult.success) {
-        router.refresh();
+        setResult(nextResult);
+
+        if (nextResult.successCode) {
+          router.refresh();
+        }
+      } catch {
+        setResult({
+          errorCode: "REQUEST_SAVE_FAILED",
+        });
       }
     });
   }
@@ -120,15 +158,15 @@ export default function CapacityRequestFormClient({
         </p>
       </div>
 
-      {result.error ? (
+      {errorMessage ? (
         <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {result.error}
+          {errorMessage}
         </div>
       ) : null}
 
-      {result.success ? (
+      {successMessage ? (
         <div className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-800">
-          {result.success}
+          {successMessage}
           <Link href="/panel/moje-zapytania" className="mt-3 block font-bold text-[#1a5f3c]">
             {dict.successLink}
           </Link>
@@ -349,7 +387,7 @@ export default function CapacityRequestFormClient({
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
         <button
           type="submit"
-          disabled={isPending || Boolean(result.success)}
+          disabled={isPending || Boolean(result.successCode)}
           className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isPending ? dict.submit.submitting : dict.submit.submit}

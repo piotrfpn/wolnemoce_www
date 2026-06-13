@@ -1147,6 +1147,50 @@ const fr: Dictionary = {
         submit: "Soumettre à la modération",
         cancel: "Annuler",
       },
+      messages: {
+        errors: {
+          authRequired: "Vous devez vous connecter.",
+          companyLoadFailed:
+            "Impossible de charger le profil de l’entreprise.",
+          companyRequired:
+            "Complétez d’abord le profil de votre entreprise.",
+          validationFailed:
+            "Une erreur s’est produite lors de la validation des données. Vérifiez le formulaire et réessayez.",
+          titleTooShort:
+            "Le titre de la demande doit contenir au moins 10 caractères.",
+          branchRequired: "Sélectionnez un secteur.",
+          serviceTypeRequired:
+            "Sélectionnez un type de service.",
+          serviceNotAllowedForBranch:
+            "Sélectionnez un service correspondant au secteur choisi.",
+          descriptionTooShort:
+            "La description du besoin doit contenir au moins 150 caractères.",
+          deadlineInvalid:
+            "Indiquez une date de réalisation valide.",
+          deadlineTooSoon:
+            "La date de réalisation doit être fixée au plus tôt à demain.",
+          deadlineTooLate:
+            "La date de réalisation ne peut pas dépasser 12 mois à compter d’aujourd’hui.",
+          budgetTypeInvalid:
+            "Sélectionnez un type de budget.",
+          quantityInvalid:
+            "La quantité doit être un nombre positif ou nul.",
+          budgetRangeRequired:
+            "Pour une fourchette budgétaire, indiquez les montants minimum et maximum.",
+          budgetRangeInvalid:
+            "Le budget maximum doit être supérieur ou égal au budget minimum.",
+          requestLimitCheckFailed:
+            "Impossible de vérifier la limite des demandes de production.",
+          requestLimitReached:
+            "Votre entreprise a atteint la limite de 3 demandes de production sur une période de 7 jours. Réessayez ultérieurement.",
+          requestSaveFailed:
+            "Impossible d’enregistrer la demande de production. Vérifiez le formulaire et réessayez.",
+        },
+        success: {
+          submitted:
+            "Votre demande de production a été enregistrée et soumise à la modération. Après vérification par un administrateur, elle sera publiée dans la section des demandes de production. Les coordonnées de votre entreprise ne seront pas visibles publiquement. Les demandes sont généralement vérifiées sous 1 à 2 jours ouvrés.",
+        },
+      },
     },
     profile: {
       ...en.panel.profile,

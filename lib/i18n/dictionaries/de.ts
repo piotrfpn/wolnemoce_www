@@ -1163,6 +1163,50 @@ const de: Dictionary = {
         submit: "Zur Moderation einreichen",
         cancel: "Abbrechen",
       },
+      messages: {
+        errors: {
+          authRequired: "Sie müssen sich anmelden.",
+          companyLoadFailed:
+            "Das Unternehmensprofil konnte nicht geladen werden.",
+          companyRequired:
+            "Vervollständigen Sie zuerst Ihr Unternehmensprofil.",
+          validationFailed:
+            "Bei der Datenvalidierung ist ein Fehler aufgetreten. Prüfen Sie das Formular und versuchen Sie es erneut.",
+          titleTooShort:
+            "Der Titel der Anfrage muss mindestens 10 Zeichen enthalten.",
+          branchRequired: "Wählen Sie eine Branche aus.",
+          serviceTypeRequired:
+            "Wählen Sie eine Dienstleistungsart aus.",
+          serviceNotAllowedForBranch:
+            "Wählen Sie eine Dienstleistung aus, die zur ausgewählten Branche passt.",
+          descriptionTooShort:
+            "Die Beschreibung des Bedarfs muss mindestens 150 Zeichen enthalten.",
+          deadlineInvalid:
+            "Geben Sie einen gültigen gewünschten Fertigstellungstermin an.",
+          deadlineTooSoon:
+            "Der gewünschte Fertigstellungstermin muss frühestens morgen liegen.",
+          deadlineTooLate:
+            "Der gewünschte Fertigstellungstermin darf höchstens 12 Monate in der Zukunft liegen.",
+          budgetTypeInvalid:
+            "Wählen Sie eine Budgetart aus.",
+          quantityInvalid:
+            "Die Menge muss eine nichtnegative Zahl sein.",
+          budgetRangeRequired:
+            "Geben Sie für einen Budgetrahmen sowohl den Mindest- als auch den Höchstbetrag an.",
+          budgetRangeInvalid:
+            "Das Höchstbudget muss größer oder gleich dem Mindestbudget sein.",
+          requestLimitCheckFailed:
+            "Das Limit für Produktionsanfragen konnte nicht geprüft werden.",
+          requestLimitReached:
+            "Ihr Unternehmen hat das Limit von 3 Produktionsanfragen innerhalb von 7 Tagen ausgeschöpft. Versuchen Sie es später erneut.",
+          requestSaveFailed:
+            "Die Produktionsanfrage konnte nicht gespeichert werden. Prüfen Sie das Formular und versuchen Sie es erneut.",
+        },
+        success: {
+          submitted:
+            "Ihre Produktionsanfrage wurde gespeichert und zur Moderation eingereicht. Nach der Prüfung durch einen Administrator wird sie im Bereich Produktionsanfragen veröffentlicht. Die Kontaktdaten Ihres Unternehmens sind nicht öffentlich sichtbar. Anfragen werden in der Regel innerhalb von 1–2 Werktagen geprüft.",
+        },
+      },
     },
     profile: {
       ...en.panel.profile,

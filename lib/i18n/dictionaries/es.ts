@@ -1147,6 +1147,50 @@ const es: Dictionary = {
         submit: "Enviar a moderación",
         cancel: "Cancelar",
       },
+      messages: {
+        errors: {
+          authRequired: "Debe iniciar sesión.",
+          companyLoadFailed:
+            "No se pudo cargar el perfil de la empresa.",
+          companyRequired:
+            "Complete primero el perfil de su empresa.",
+          validationFailed:
+            "Se produjo un error al validar los datos. Revise el formulario e inténtelo de nuevo.",
+          titleTooShort:
+            "El título de la solicitud debe tener al menos 10 caracteres.",
+          branchRequired: "Seleccione un sector.",
+          serviceTypeRequired:
+            "Seleccione un tipo de servicio.",
+          serviceNotAllowedForBranch:
+            "Seleccione un servicio que corresponda al sector elegido.",
+          descriptionTooShort:
+            "La descripción de la necesidad debe tener al menos 150 caracteres.",
+          deadlineInvalid:
+            "Indique una fecha de finalización válida.",
+          deadlineTooSoon:
+            "La fecha de finalización debe ser, como mínimo, mañana.",
+          deadlineTooLate:
+            "La fecha de finalización no puede superar los 12 meses desde hoy.",
+          budgetTypeInvalid:
+            "Seleccione un tipo de presupuesto.",
+          quantityInvalid:
+            "La cantidad debe ser un número no negativo.",
+          budgetRangeRequired:
+            "Para un intervalo presupuestario, indique los importes mínimo y máximo.",
+          budgetRangeInvalid:
+            "El presupuesto máximo debe ser mayor o igual que el presupuesto mínimo.",
+          requestLimitCheckFailed:
+            "No se pudo comprobar el límite de solicitudes de producción.",
+          requestLimitReached:
+            "Su empresa ha utilizado el límite de 3 solicitudes de producción en un período de 7 días. Inténtelo de nuevo más tarde.",
+          requestSaveFailed:
+            "No se pudo guardar la solicitud de producción. Revise el formulario e inténtelo de nuevo.",
+        },
+        success: {
+          submitted:
+            "Su solicitud de producción se ha guardado y enviado a moderación. Tras la revisión del administrador, se publicará en la sección de solicitudes de producción. Los datos de contacto de su empresa no serán visibles públicamente. Las solicitudes suelen revisarse en un plazo de 1 a 2 días laborables.",
+        },
+      },
     },
     profile: {
       ...en.panel.profile,

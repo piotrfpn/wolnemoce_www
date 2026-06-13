@@ -1226,6 +1226,48 @@ const en: Dictionary = {
         submit: "Submit for moderation",
         cancel: "Cancel",
       },
+      messages: {
+        errors: {
+          authRequired: "You must sign in.",
+          companyLoadFailed:
+            "We could not load your company profile.",
+          companyRequired:
+            "Complete your company profile first.",
+          validationFailed:
+            "A data validation error occurred. Check the form and try again.",
+          titleTooShort:
+            "The request title must contain at least 10 characters.",
+          branchRequired: "Select an industry.",
+          serviceTypeRequired: "Select a service type.",
+          serviceNotAllowedForBranch:
+            "Select a service that matches the chosen industry.",
+          descriptionTooShort:
+            "The requirement description must contain at least 150 characters.",
+          deadlineInvalid:
+            "Enter a valid required completion date.",
+          deadlineTooSoon:
+            "The required completion date must be tomorrow or later.",
+          deadlineTooLate:
+            "The required completion date cannot be more than 12 months from today.",
+          budgetTypeInvalid: "Select a budget type.",
+          quantityInvalid:
+            "Quantity must be a non-negative number.",
+          budgetRangeRequired:
+            "Enter both the minimum and maximum budget for a budget range.",
+          budgetRangeInvalid:
+            "The maximum budget must be greater than or equal to the minimum budget.",
+          requestLimitCheckFailed:
+            "We could not check your production request limit.",
+          requestLimitReached:
+            "Your company has used the limit of 3 production requests within 7 days. Try again later.",
+          requestSaveFailed:
+            "We could not save the production request. Check the form and try again.",
+        },
+        success: {
+          submitted:
+            "Your production request has been saved and submitted for moderation. After administrator review, it will be published in the production requests section. Your company’s contact details will not be publicly visible. Requests are usually reviewed within 1–2 business days.",
+        },
+      },
     },
     profile: {
       title: "Company profile",

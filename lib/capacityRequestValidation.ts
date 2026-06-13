@@ -34,9 +34,30 @@ export type ParsedCapacityRequestValues = {
   technical_documentation_available: boolean;
 };
 
+export type CapacityRequestValidationErrorCode =
+  | "TITLE_TOO_SHORT"
+  | "BRANCH_REQUIRED"
+  | "SERVICE_TYPE_REQUIRED"
+  | "SERVICE_NOT_ALLOWED_FOR_BRANCH"
+  | "DESCRIPTION_TOO_SHORT"
+  | "DEADLINE_INVALID"
+  | "DEADLINE_TOO_SOON"
+  | "DEADLINE_TOO_LATE"
+  | "BUDGET_TYPE_INVALID"
+  | "QUANTITY_INVALID"
+  | "BUDGET_RANGE_REQUIRED"
+  | "BUDGET_RANGE_INVALID"
+  | "VALIDATION_FAILED";
+
 export type CapacityRequestValidationResult =
-  | { ok: true; values: ParsedCapacityRequestValues }
-  | { ok: false; error: string };
+  | {
+      ok: true;
+      values: ParsedCapacityRequestValues;
+    }
+  | {
+      ok: false;
+      errorCode: CapacityRequestValidationErrorCode;
+    };
 
 const allowedBudgetTypes = new Set(["not_provided", "indicative", "range"]);
 
@@ -97,43 +118,43 @@ export function validateCapacityRequestForm(
   maxDeadline.setFullYear(maxDeadline.getFullYear() + 1);
 
   if (title.length < 10) {
-    return { ok: false, error: "Tytuł zapytania musi mieć co najmniej 10 znaków." };
+    return { ok: false, errorCode: "TITLE_TOO_SHORT" };
   }
 
   if (!branch) {
-    return { ok: false, error: "Wybierz branżę." };
+    return { ok: false, errorCode: "BRANCH_REQUIRED" };
   }
 
   if (!serviceType) {
-    return { ok: false, error: "Wybierz rodzaj usługi." };
+    return { ok: false, errorCode: "SERVICE_TYPE_REQUIRED" };
   }
 
   if (!getServicesForIndustry(branch).includes(serviceType)) {
-    return { ok: false, error: "Wybierz usługę pasującą do branży." };
+    return { ok: false, errorCode: "SERVICE_NOT_ALLOWED_FOR_BRANCH" };
   }
 
   if (description.length < 150) {
-    return { ok: false, error: "Opis potrzeby musi mieć co najmniej 150 znaków." };
+    return { ok: false, errorCode: "DESCRIPTION_TOO_SHORT" };
   }
 
   if (!deadlineDate) {
-    return { ok: false, error: "Podaj poprawny oczekiwany termin." };
+    return { ok: false, errorCode: "DEADLINE_INVALID" };
   }
 
   if (deadlineDate < minDeadline) {
-    return { ok: false, error: "Oczekiwany termin musi być najwcześniej jutro." };
+    return { ok: false, errorCode: "DEADLINE_TOO_SOON" };
   }
 
   if (deadlineDate > maxDeadline) {
-    return { ok: false, error: "Oczekiwany termin nie może być dalszy niż 12 miesięcy." };
+    return { ok: false, errorCode: "DEADLINE_TOO_LATE" };
   }
 
   if (!allowedBudgetTypes.has(budgetType)) {
-    return { ok: false, error: "Wybierz typ budżetu." };
+    return { ok: false, errorCode: "BUDGET_TYPE_INVALID" };
   }
 
   if (quantity !== null && (!Number.isFinite(quantity) || quantity < 0)) {
-    return { ok: false, error: "Ilość musi być liczbą nieujemną." };
+    return { ok: false, errorCode: "QUANTITY_INVALID" };
   }
 
   if (budgetType === "range") {
@@ -143,11 +164,11 @@ export function validateCapacityRequestForm(
       !Number.isFinite(budgetMin) ||
       !Number.isFinite(budgetMax)
     ) {
-      return { ok: false, error: "Dla budżetu zakresowego podaj budżet minimalny i maksymalny." };
+      return { ok: false, errorCode: "BUDGET_RANGE_REQUIRED" };
     }
 
     if (budgetMin < 0 || budgetMax < budgetMin) {
-      return { ok: false, error: "Budżet maksymalny musi być większy lub równy minimalnemu." };
+      return { ok: false, errorCode: "BUDGET_RANGE_INVALID" };
     }
   }
 

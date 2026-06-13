@@ -8,12 +8,34 @@ import {
 import {
   type CapacityRequestFormValues,
   validateCapacityRequestForm,
+  type CapacityRequestValidationErrorCode,
 } from "@/lib/capacityRequestValidation";
 
-export type CapacityRequestActionResult = {
-  error?: string;
-  success?: string;
-};
+export type CapacityRequestActionErrorCode =
+  | CapacityRequestValidationErrorCode
+  | "AUTH_REQUIRED"
+  | "COMPANY_LOAD_FAILED"
+  | "COMPANY_REQUIRED"
+  | "REQUEST_LIMIT_CHECK_FAILED"
+  | "REQUEST_LIMIT_REACHED"
+  | "REQUEST_SAVE_FAILED";
+
+export type CapacityRequestActionSuccessCode =
+  "REQUEST_SUBMITTED";
+
+export type CapacityRequestActionResult =
+  | {
+      errorCode: CapacityRequestActionErrorCode;
+      successCode?: never;
+    }
+  | {
+      successCode: CapacityRequestActionSuccessCode;
+      errorCode?: never;
+    }
+  | {
+      errorCode?: never;
+      successCode?: never;
+    };
 
 function getValue(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -45,7 +67,7 @@ async function requireUserCompany() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { error: "Musisz się zalogować.", supabase, company: null, userId: "" };
+    return { errorCode: "AUTH_REQUIRED" as const, supabase, company: null, userId: "" };
   }
 
   const { data: company, error } = await supabase
@@ -55,14 +77,14 @@ async function requireUserCompany() {
     .maybeSingle();
 
   if (error) {
-    return { error: "Nie udało się pobrać profilu firmy.", supabase, company: null, userId: user.id };
+    return { errorCode: "COMPANY_LOAD_FAILED" as const, supabase, company: null, userId: user.id };
   }
 
   if (!company) {
-    return { error: "Najpierw uzupełnij profil firmy.", supabase, company: null, userId: user.id };
+    return { errorCode: "COMPANY_REQUIRED" as const, supabase, company: null, userId: user.id };
   }
 
-  return { supabase, company, userId: user.id, error: "" };
+  return { supabase, company, userId: user.id, errorCode: null };
 }
 
 export async function createCapacityRequest(
@@ -70,14 +92,26 @@ export async function createCapacityRequest(
 ): Promise<CapacityRequestActionResult> {
   const context = await requireUserCompany();
 
-  if (context.error || !context.company) {
-    return { error: context.error || "Brak profilu firmy." };
+  if (context.errorCode || !context.company) {
+    return {
+      errorCode: context.errorCode ?? "COMPANY_REQUIRED",
+    };
   }
 
-  const validation = validateCapacityRequestForm(getFormValues(formData));
+  let validation: ReturnType<typeof validateCapacityRequestForm>;
+
+  try {
+    validation = validateCapacityRequestForm(getFormValues(formData));
+  } catch {
+    return {
+      errorCode: "VALIDATION_FAILED",
+    };
+  }
 
   if (!validation.ok) {
-    return { error: validation.error };
+    return {
+      errorCode: validation.errorCode,
+    };
   }
 
   const weekAgo = new Date();
@@ -92,14 +126,11 @@ export async function createCapacityRequest(
   );
 
   if (countError) {
-    return { error: "Nie udało się sprawdzić limitu zapytań." };
+    return { errorCode: "REQUEST_LIMIT_CHECK_FAILED" };
   }
 
   if ((recentRequestCount ?? 0) >= 3) {
-    return {
-      error:
-        "Limit 3 zapytań na firmę w ciągu 7 dni został wykorzystany. Spróbuj ponownie później.",
-    };
+    return { errorCode: "REQUEST_LIMIT_REACHED" };
   }
 
   const { error } = await context.supabase.from("capacity_requests").insert({
@@ -125,15 +156,14 @@ export async function createCapacityRequest(
   });
 
   if (error) {
-    return { error: "Nie udało się zapisać zapytania. Sprawdź dane i spróbuj ponownie." };
+    return { errorCode: "REQUEST_SAVE_FAILED" };
   }
 
   revalidatePath("/panel/moje-zapytania");
   revalidatePath("/admin/zapytania");
 
   return {
-    success:
-      "Twoje zapytanie zostało zapisane i przekazane do moderacji. Po weryfikacji przez administratora pojawi się publicznie w sekcji zapytań produkcyjnych. Dane kontaktowe Twojej firmy nie będą publicznie widoczne. Zwykle weryfikujemy zapytania w ciągu 1-2 dni roboczych.",
+    successCode: "REQUEST_SUBMITTED",
   };
 }
 
@@ -141,7 +171,7 @@ export async function archiveOwnerCapacityRequest(formData: FormData) {
   const requestId = getValue(formData, "requestId");
   const context = await requireUserCompany();
 
-  if (!requestId || context.error || !context.company) {
+  if (!requestId || context.errorCode || !context.company) {
     return;
   }
 
