@@ -203,6 +203,10 @@ const en: Dictionary = {
       title: "B2B production requests",
       description:
         "Browse public production requests from companies looking for contractors, subcontractors and available production capacity.",
+      detailTitleTemplate:
+        "{title} — production request | WolneMoce",
+      detailDescriptionTemplate:
+        "{title}. Industry: {branch}. Service: {service}. View this public production request on WolneMoce.",
     },
     list: {
       badge: "Public B2B requests",
@@ -255,6 +259,52 @@ const en: Dictionary = {
       toBeAgreed: "to be agreed",
       notProvided: "Not provided",
       wholePoland: "Poland-wide",
+    },
+    detail: {
+      backToRequests: "Back to requests",
+      publicRequestBadge: "Production request",
+      active: "Active request",
+      featured: "Featured",
+      technicalDocumentationAvailable: "Documentation available",
+      technicalDocumentationUnavailable: "Documentation not declared",
+      technicalDocumentation: "Technical documentation",
+      industry: "Industry",
+      service: "Service type",
+      location: "Location",
+      volume: "Volume",
+      deadline: "Deadline",
+      budget: "Budget",
+      validUntil: "Valid until",
+      publishedAt: "Published",
+      parametersTitle: "Request parameters",
+      parametersDescription:
+        "Information made public after moderation.",
+      descriptionTitle: "Request description",
+      heroDescription:
+        "The company is looking for a contractor or subcontractor. Requester contact details remain hidden from the public view.",
+      requesterPrivacyTitle: "Requester contact details are hidden",
+      requesterPrivacyDescription:
+        "The public view does not show the company name, tax ID, email, contact number or contact person.",
+      wholePoland: "Poland-wide",
+      toBeAgreed: "to be agreed",
+      notProvided: "Not provided",
+      budgetIndicative: "Indicative budget",
+      similarRequestsTitle: "Similar production requests",
+      similarRequestsDescription: "Requests from the same industry",
+      allRequests: "All requests",
+      noSimilarRequests: "No similar active requests.",
+    },
+    interest: {
+      title: "Want to express interest?",
+      description:
+        "Save your interest in fulfilling this request. Requester contact details remain hidden and are not disclosed automatically.",
+      submit: "Express interest",
+      submitting: "Saving...",
+      successTitle: "Interest saved",
+      successDescription:
+        "Your interest has been saved. The request owner will see your company in their dashboard. Contact details are not disclosed automatically.",
+      genericError:
+        "We could not save your interest. Please try again in a moment.",
     },
   },
   companiesList: {

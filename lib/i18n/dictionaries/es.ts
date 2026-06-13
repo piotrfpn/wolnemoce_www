@@ -207,6 +207,10 @@ const es: Dictionary = {
       title: "Solicitudes de producción B2B",
       description:
         "Explore solicitudes públicas de producción de empresas que buscan proveedores, subcontratistas y capacidad productiva disponible.",
+      detailTitleTemplate:
+        "{title} — solicitud de producción | WolneMoce",
+      detailDescriptionTemplate:
+        "{title}. Sector: {branch}. Servicio: {service}. Vea esta solicitud de producción pública en WolneMoce.",
     },
     list: {
       badge: "Solicitudes B2B públicas",
@@ -259,6 +263,52 @@ const es: Dictionary = {
       toBeAgreed: "a acordar",
       notProvided: "No indicado",
       wholePoland: "Toda Polonia",
+    },
+    detail: {
+      backToRequests: "Volver a solicitudes",
+      publicRequestBadge: "Solicitud de producción",
+      active: "Solicitud activa",
+      featured: "Destacada",
+      technicalDocumentationAvailable: "Documentación disponible",
+      technicalDocumentationUnavailable: "Documentación no declarada",
+      technicalDocumentation: "Documentación técnica",
+      industry: "Sector",
+      service: "Tipo de servicio",
+      location: "Ubicación",
+      volume: "Volumen",
+      deadline: "Plazo",
+      budget: "Presupuesto",
+      validUntil: "Válida hasta",
+      publishedAt: "Publicada",
+      parametersTitle: "Parámetros de la solicitud",
+      parametersDescription:
+        "Información publicada tras la moderación.",
+      descriptionTitle: "Descripción de la solicitud",
+      heroDescription:
+        "La empresa busca un proveedor o subcontratista. Los datos de contacto del solicitante permanecen ocultos públicamente.",
+      requesterPrivacyTitle: "Los datos de contacto del solicitante están ocultos",
+      requesterPrivacyDescription:
+        "La vista pública no muestra el nombre de la empresa, NIF, email, teléfono ni persona de contacto.",
+      wholePoland: "Toda Polonia",
+      toBeAgreed: "a acordar",
+      notProvided: "No indicado",
+      budgetIndicative: "Presupuesto orientativo",
+      similarRequestsTitle: "Solicitudes de producción similares",
+      similarRequestsDescription: "Solicitudes del mismo sector",
+      allRequests: "Todas las solicitudes",
+      noSimilarRequests: "No hay solicitudes activas similares.",
+    },
+    interest: {
+      title: "¿Quiere mostrar interés?",
+      description:
+        "Guarde su interés en realizar esta solicitud. Los datos de contacto del solicitante permanecen ocultos y no se revelan automáticamente.",
+      submit: "Mostrar interés",
+      submitting: "Guardando...",
+      successTitle: "Interés guardado",
+      successDescription:
+        "El propietario de la solicitud verá su empresa en su panel de control. Los datos de contacto no se revelan automáticamente.",
+      genericError:
+        "No se pudo guardar el interés. Inténtelo de nuevo en un momento.",
     },
   },
   companiesList: {

@@ -7,19 +7,110 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import StructuredData from "@/components/StructuredData";
 import {
-  formatCapacityRequestBudget,
-  formatCapacityRequestDate,
-  formatCapacityRequestVolume,
   getPublicCapacityRequestBySlug,
   getSimilarCapacityRequests,
+  type PublicCapacityRequest,
 } from "@/lib/capacityRequests";
-import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
+import { getLocalizedPath, supportedLocales, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getAbsoluteUrl } from "@/lib/seo";
 
 type CapacityRequestDetailViewProps = {
   slug: string;
   locale: Locale;
 };
+
+type TemplateValues = {
+  title: string;
+  branch: string;
+  service: string;
+};
+
+const intlLocales: Record<Locale, string> = {
+  pl: "pl-PL",
+  en: "en-US",
+  de: "de-DE",
+  uk: "uk-UA",
+  es: "es-ES",
+  fr: "fr-FR",
+};
+
+const openGraphLocales: Record<Locale, string> = {
+  pl: "pl_PL",
+  en: "en_US",
+  de: "de_DE",
+  uk: "uk_UA",
+  es: "es_ES",
+  fr: "fr_FR",
+};
+
+function formatTemplate(template: string, values: TemplateValues) {
+  return template
+    .split("{title}")
+    .join(values.title)
+    .split("{branch}")
+    .join(values.branch)
+    .split("{service}")
+    .join(values.service);
+}
+
+function getLanguageAlternates(slug: string) {
+  const path = `/zapytania/${slug}`;
+
+  return {
+    ...Object.fromEntries(
+      supportedLocales.map((item) => [item, getLocalizedPath(path, item)])
+    ),
+    "x-default": getLocalizedPath(path, "pl"),
+  };
+}
+
+function formatRequestDate(value: string | null, locale: Locale, fallback: string) {
+  if (!value) {
+    return fallback;
+  }
+
+  return new Intl.DateTimeFormat(intlLocales[locale], {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date(value));
+}
+
+function formatRequestVolume(
+  request: Pick<PublicCapacityRequest, "quantity" | "unit">,
+  locale: Locale,
+  fallback: string
+) {
+  if (request.quantity === null) {
+    return fallback;
+  }
+
+  return `${request.quantity.toLocaleString(intlLocales[locale])} ${request.unit ?? ""}`.trim();
+}
+
+function formatRequestBudget(
+  request: Pick<PublicCapacityRequest, "budget_type" | "budget_min" | "budget_max">,
+  locale: Locale,
+  labels: {
+    budgetIndicative: string;
+    notProvided: string;
+  }
+) {
+  if (
+    request.budget_type === "range" &&
+    request.budget_min !== null &&
+    request.budget_max !== null
+  ) {
+    return `${request.budget_min.toLocaleString(intlLocales[locale])} - ${request.budget_max.toLocaleString(intlLocales[locale])} PLN`;
+  }
+
+  if (request.budget_type === "indicative") {
+    return labels.budgetIndicative;
+  }
+
+  return labels.notProvided;
+}
 
 export async function generateCapacityRequestMetadata({
   slug,
@@ -28,47 +119,52 @@ export async function generateCapacityRequestMetadata({
   const request = await getPublicCapacityRequestBySlug(slug);
 
   if (!request) {
-    const title = "Zapytanie nie znalezione | WolneMoce";
-    const description = "Zapytanie produkcyjne nie istnieje albo nie jest aktywne.";
-    const requestPath = getLocalizedPath(`/zapytania/${slug}`, locale);
-
-    return {
-      title,
-      description,
-      alternates: {
-        canonical: requestPath,
-      },
-      openGraph: {
-        title,
-        description,
-        url: requestPath,
-        siteName: "WolneMoce",
-        type: "website",
-      },
-    };
+    notFound();
   }
 
-  const title = `${request.title} | Zapytanie produkcyjne | WolneMoce`;
-  const description = `Zapytanie produkcyjne z branży ${request.branch} / ${request.service_type}. Sprawdź szczegóły i zgłoś zainteresowanie jako wykonawca.`;
+  const dictionary = getDictionary(locale);
+  const seoCopy = dictionary.publicCapacityRequests.seo;
+  const templateValues = {
+    title: request.title,
+    branch: request.branch,
+    service: request.service_type,
+  };
+  const title = formatTemplate(seoCopy.detailTitleTemplate, templateValues);
+  const description = formatTemplate(
+    seoCopy.detailDescriptionTemplate,
+    templateValues
+  );
   const requestPath = getLocalizedPath(`/zapytania/${request.slug}`, locale);
+  const imageUrl = getAbsoluteUrl("/og/wolnemoce-og.png");
 
   return {
     title,
     description,
     alternates: {
       canonical: requestPath,
+      languages: getLanguageAlternates(request.slug),
     },
     openGraph: {
       title,
       description,
       url: requestPath,
       siteName: "WolneMoce",
+      locale: openGraphLocales[locale],
       type: "website",
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [imageUrl],
     },
   };
 }
@@ -83,12 +179,28 @@ export default async function CapacityRequestDetailView({
     notFound();
   }
 
+  const dictionary = getDictionary(locale);
+  const detailCopy = dictionary.publicCapacityRequests.detail;
+  const interestCopy = dictionary.publicCapacityRequests.interest;
+  const listCopy = dictionary.publicCapacityRequests.list;
   const similarRequests = await getSimilarCapacityRequests(request);
   const location =
-    request.preferred_region || request.location || "Cała Polska / do ustalenia";
+    request.preferred_region ||
+    request.location ||
+    `${detailCopy.wholePoland} / ${detailCopy.toBeAgreed}`;
   const requestsPath = getLocalizedPath("/zapytania", locale);
+  const homePath = getLocalizedPath("/", locale);
   const requestPath = getLocalizedPath(`/zapytania/${request.slug}`, locale);
   const canonicalUrl = getAbsoluteUrl(requestPath);
+  const interestLabels = {
+    title: interestCopy.title,
+    description: interestCopy.description,
+    submit: interestCopy.submit,
+    submitting: interestCopy.submitting,
+    successTitle: interestCopy.successTitle,
+    successDescription: interestCopy.successDescription,
+    genericError: interestCopy.genericError,
+  };
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -97,12 +209,12 @@ export default async function CapacityRequestDetailView({
         "@type": "ListItem",
         position: 1,
         name: "WolneMoce",
-        item: getAbsoluteUrl("/"),
+        item: getAbsoluteUrl(homePath),
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: "Zapytania produkcyjne",
+        name: listCopy.title,
         item: getAbsoluteUrl(requestsPath),
       },
       {
@@ -115,18 +227,25 @@ export default async function CapacityRequestDetailView({
   };
 
   const parameters = [
-    ["Branża", request.branch, "fas fa-industry"],
-    ["Rodzaj usługi", request.service_type, "fas fa-screwdriver-wrench"],
-    ["Preferowana lokalizacja", location, "fas fa-location-dot"],
-    ["Wolumen", formatCapacityRequestVolume(request), "fas fa-boxes-stacked"],
-    ["Termin", formatCapacityRequestDate(request.deadline), "fas fa-calendar-day"],
-    ["Budżet", formatCapacityRequestBudget(request), "fas fa-wallet"],
+    [detailCopy.industry, request.branch, "fas fa-industry"],
+    [detailCopy.service, request.service_type, "fas fa-screwdriver-wrench"],
+    [detailCopy.location, location, "fas fa-location-dot"],
+    [detailCopy.volume, formatRequestVolume(request, locale, detailCopy.toBeAgreed), "fas fa-boxes-stacked"],
+    [detailCopy.deadline, formatRequestDate(request.deadline, locale, detailCopy.notProvided), "fas fa-calendar-day"],
     [
-      "Dokumentacja techniczna",
-      request.technical_documentation_available ? "Dostępna u zlecającego" : "Nie zadeklarowano",
+      detailCopy.budget,
+      formatRequestBudget(request, locale, detailCopy),
+      "fas fa-wallet",
+    ],
+    [
+      detailCopy.technicalDocumentation,
+      request.technical_documentation_available
+        ? detailCopy.technicalDocumentationAvailable
+        : detailCopy.technicalDocumentationUnavailable,
       "fas fa-file-lines",
     ],
-    ["Ważne do", formatCapacityRequestDate(request.expires_at), "fas fa-hourglass-half"],
+    [detailCopy.validUntil, formatRequestDate(request.expires_at, locale, detailCopy.notProvided), "fas fa-hourglass-half"],
+    [detailCopy.publishedAt, formatRequestDate(request.created_at, locale, detailCopy.notProvided), "fas fa-clock"],
   ];
 
   return (
@@ -142,24 +261,29 @@ export default async function CapacityRequestDetailView({
               className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-white/80 no-underline transition hover:text-white"
             >
               <i className="fas fa-arrow-left text-xs"></i>
-              Wróć do zapytań
+              {detailCopy.backToRequests}
             </Link>
             <div className="mb-5 flex flex-wrap gap-3">
               <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white">
                 <i className="fas fa-circle-check"></i>
-                Aktywne zlecenie
+                {detailCopy.active}
               </span>
               <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white">
                 <i className="fas fa-shield-halved text-[#fbbf24]"></i>
-                Kontakt ukryty publicznie
+                {detailCopy.publicRequestBadge}
               </span>
+              {request.is_featured ? (
+                <span className="inline-flex items-center gap-2 rounded-full bg-[#fbbf24]/20 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white">
+                  <i className="fas fa-star text-[#fbbf24]"></i>
+                  {detailCopy.featured}
+                </span>
+              ) : null}
             </div>
             <h1 className="max-w-5xl break-words text-3xl font-black leading-tight tracking-[-1px] md:text-5xl">
               {request.title}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/85">
-              Firma szuka wykonawcy lub podwykonawcy. Dane kontaktowe zlecającego
-              nie są publicznie widoczne.
+              {detailCopy.heroDescription}
             </p>
           </div>
         </section>
@@ -173,10 +297,10 @@ export default async function CapacityRequestDetailView({
                 </div>
                 <div>
                   <h2 className="text-2xl font-extrabold text-slate-900">
-                    Parametry zlecenia
+                    {detailCopy.parametersTitle}
                   </h2>
                   <p className="text-sm text-slate-500">
-                    Informacje udostępnione publicznie po moderacji.
+                    {detailCopy.parametersDescription}
                   </p>
                 </div>
               </div>
@@ -196,9 +320,11 @@ export default async function CapacityRequestDetailView({
             </section>
 
             <section className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-              <h2 className="mb-4 text-2xl font-extrabold text-slate-900">
-                Opis potrzeby
-              </h2>
+              <div className="mb-4">
+                <h2 className="text-2xl font-extrabold text-slate-900">
+                  {detailCopy.descriptionTitle}
+                </h2>
+              </div>
               <p className="whitespace-pre-line text-base leading-8 text-slate-600">
                 {request.description}
               </p>
@@ -210,15 +336,15 @@ export default async function CapacityRequestDetailView({
               <CapacityRequestInterestClient
                 capacityRequestId={request.id}
                 returnTo={requestPath}
+                labels={interestLabels}
               />
               <div className="rounded-[24px] border border-amber-100 bg-amber-50 p-5">
                 <h3 className="mb-2 flex items-center gap-2 text-sm font-extrabold text-amber-900">
                   <i className="fas fa-eye-slash text-amber-600"></i>
-                  Dane zlecającego są ukryte
+                  {detailCopy.requesterPrivacyTitle}
                 </h3>
                 <p className="text-sm leading-6 text-amber-800">
-                  Publiczny widok nie pokazuje nazwy firmy, NIP, emaila,
-                  telefonu ani osoby kontaktowej.
+                  {detailCopy.requesterPrivacyDescription}
                 </p>
               </div>
             </div>
@@ -229,11 +355,11 @@ export default async function CapacityRequestDetailView({
           <div className="mx-auto max-w-[1400px]">
             <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
-                <div className="section-label">Podobne zapytania</div>
-                <h2 className="section-title">Zlecenia z tej samej branży</h2>
+                <div className="section-label">{detailCopy.similarRequestsTitle}</div>
+                <h2 className="section-title">{detailCopy.similarRequestsDescription}</h2>
               </div>
               <Link href={requestsPath} className="btn btn-outline">
-                Wszystkie zapytania
+                {detailCopy.allRequests}
               </Link>
             </div>
             {similarRequests.length > 0 ? (
@@ -244,13 +370,13 @@ export default async function CapacityRequestDetailView({
               </div>
             ) : (
               <div className="rounded-[24px] border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
-                Brak podobnych aktywnych zapytań.
+                {detailCopy.noSimilarRequests}
               </div>
             )}
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer locale={locale} />
     </>
   );
 }

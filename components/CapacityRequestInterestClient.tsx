@@ -7,37 +7,50 @@ import { submitCapacityRequestInterest } from "@/app/zapytania/actions";
 type CapacityRequestInterestClientProps = {
   capacityRequestId: string;
   returnTo: string;
+  labels: {
+    title: string;
+    description: string;
+    submit: string;
+    submitting: string;
+    successTitle: string;
+    successDescription: string;
+    genericError: string;
+  };
 };
 
 export default function CapacityRequestInterestClient({
   capacityRequestId,
   returnTo,
+  labels,
 }: CapacityRequestInterestClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   function handleSubmit() {
     setError("");
-    setMessage("");
 
     startTransition(async () => {
-      const result = await submitCapacityRequestInterest(capacityRequestId, returnTo);
+      try {
+        const result = await submitCapacityRequestInterest(capacityRequestId, returnTo);
 
-      if (result.redirectTo) {
-        router.push(result.redirectTo);
-        return;
-      }
+        if (result.redirectTo) {
+          router.push(result.redirectTo);
+          return;
+        }
 
-      if (result.error) {
-        setError(result.error);
-        return;
-      }
+        if (result.error) {
+          setError(labels.genericError);
+          return;
+        }
 
-      if (result.success) {
-        setMessage(result.success);
-        router.refresh();
+        if (result.success) {
+          setIsSubmitted(true);
+          router.refresh();
+        }
+      } catch {
+        setError(labels.genericError);
       }
     });
   }
@@ -48,11 +61,10 @@ export default function CapacityRequestInterestClient({
         <i className="fas fa-handshake"></i>
       </div>
       <h2 className="text-2xl font-extrabold text-slate-900">
-        Chcesz wykonać to zlecenie?
+        {labels.title}
       </h2>
       <p className="mt-3 text-sm leading-6 text-slate-500">
-        Zapisz zainteresowanie. Dane kontaktowe zlecającego pozostają ukryte i
-        nie są automatycznie ujawniane.
+        {labels.description}
       </p>
 
       {error ? (
@@ -61,20 +73,21 @@ export default function CapacityRequestInterestClient({
         </div>
       ) : null}
 
-      {message ? (
+      {isSubmitted ? (
         <div className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-800">
-          {message}
+          <p className="font-bold">{labels.successTitle}</p>
+          <p className="mt-1">{labels.successDescription}</p>
         </div>
       ) : null}
 
       <button
         type="button"
         onClick={handleSubmit}
-        disabled={isPending || Boolean(message)}
+        disabled={isPending || isSubmitted}
         className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#1a5f3c] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#0d3d26] disabled:cursor-not-allowed disabled:opacity-60"
       >
         <i className={isPending ? "fas fa-spinner fa-spin" : "fas fa-paper-plane"}></i>
-        {isPending ? "Zapisywanie..." : "Jestem zainteresowany"}
+        {isPending ? labels.submitting : labels.submit}
       </button>
     </div>
   );

@@ -226,6 +226,8 @@ export type Dictionary = {
     seo: {
       title: string;
       description: string;
+      detailTitleTemplate: string;
+      detailDescriptionTemplate: string;
     };
     list: {
       badge: string;
@@ -272,6 +274,46 @@ export type Dictionary = {
       toBeAgreed: string;
       notProvided: string;
       wholePoland: string;
+    };
+    detail: {
+      backToRequests: string;
+      publicRequestBadge: string;
+      active: string;
+      featured: string;
+      technicalDocumentationAvailable: string;
+      technicalDocumentationUnavailable: string;
+      technicalDocumentation: string;
+      industry: string;
+      service: string;
+      location: string;
+      volume: string;
+      deadline: string;
+      budget: string;
+      validUntil: string;
+      publishedAt: string;
+      parametersTitle: string;
+      parametersDescription: string;
+      descriptionTitle: string;
+      heroDescription: string;
+      requesterPrivacyTitle: string;
+      requesterPrivacyDescription: string;
+      wholePoland: string;
+      toBeAgreed: string;
+      notProvided: string;
+      budgetIndicative: string;
+      similarRequestsTitle: string;
+      similarRequestsDescription: string;
+      allRequests: string;
+      noSimilarRequests: string;
+    };
+    interest: {
+      title: string;
+      description: string;
+      submit: string;
+      submitting: string;
+      successTitle: string;
+      successDescription: string;
+      genericError: string;
     };
   };
   companiesList: {

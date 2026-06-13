@@ -208,6 +208,10 @@ const de: Dictionary = {
       title: "B2B-Produktionsanfragen",
       description:
         "Durchsuchen Sie öffentliche Produktionsanfragen von Unternehmen, die Auftragnehmer, Subunternehmer und freie Produktionskapazitäten suchen.",
+      detailTitleTemplate:
+        "{title} — Produktionsanfrage | WolneMoce",
+      detailDescriptionTemplate:
+        "{title}. Branche: {branch}. Leistung: {service}. Sehen Sie diese öffentliche Produktionsanfrage bei WolneMoce.",
     },
     list: {
       badge: "Öffentliche B2B-Anfragen",
@@ -260,6 +264,52 @@ const de: Dictionary = {
       toBeAgreed: "zu vereinbaren",
       notProvided: "Nicht angegeben",
       wholePoland: "Ganz Polen",
+    },
+    detail: {
+      backToRequests: "Zurück zu den Anfragen",
+      publicRequestBadge: "Produktionsanfrage",
+      active: "Aktive Anfrage",
+      featured: "Hervorgehoben",
+      technicalDocumentationAvailable: "Dokumentation verfügbar",
+      technicalDocumentationUnavailable: "Keine Dokumentation angegeben",
+      technicalDocumentation: "Technische Dokumentation",
+      industry: "Branche",
+      service: "Leistungsart",
+      location: "Standort",
+      volume: "Volumen",
+      deadline: "Termin",
+      budget: "Budget",
+      validUntil: "Gültig bis",
+      publishedAt: "Veröffentlicht",
+      parametersTitle: "Anfragedaten",
+      parametersDescription:
+        "Informationen, die nach der Moderation öffentlich sichtbar sind.",
+      descriptionTitle: "Beschreibung der Anfrage",
+      heroDescription:
+        "Das Unternehmen sucht einen Auftragnehmer oder Subunternehmer. Kontaktdaten des anfragenden Unternehmens bleiben öffentlich verborgen.",
+      requesterPrivacyTitle: "Kontaktdaten des Anfragenden sind verborgen",
+      requesterPrivacyDescription:
+        "Die öffentliche Ansicht zeigt weder Firmennamen, Steuer-ID, E-Mail, Telefonnummer noch Kontaktperson.",
+      wholePoland: "Ganz Polen",
+      toBeAgreed: "zu vereinbaren",
+      notProvided: "Nicht angegeben",
+      budgetIndicative: "Orientierungsbudget",
+      similarRequestsTitle: "Ähnliche Produktionsanfragen",
+      similarRequestsDescription: "Anfragen aus derselben Branche",
+      allRequests: "Alle Anfragen",
+      noSimilarRequests: "Keine ähnlichen aktiven Anfragen.",
+    },
+    interest: {
+      title: "Möchten Sie Interesse bekunden?",
+      description:
+        "Speichern Sie Ihr Interesse an der Umsetzung. Kontaktdaten des Anfragenden bleiben verborgen und werden nicht automatisch offengelegt.",
+      submit: "Interesse bekunden",
+      submitting: "Wird gespeichert...",
+      successTitle: "Interesse gespeichert",
+      successDescription:
+        "Ihr Interesse wurde gespeichert. Der Eigentümer der Anfrage sieht Ihr Unternehmen in seinem Dashboard. Kontaktdaten werden nicht automatisch offengelegt.",
+      genericError:
+        "Das Interesse konnte nicht gespeichert werden. Bitte versuchen Sie es gleich erneut.",
     },
   },
   companiesList: {

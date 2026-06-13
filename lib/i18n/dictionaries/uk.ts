@@ -207,6 +207,10 @@ const uk: Dictionary = {
       title: "B2B виробничі запити",
       description:
         "Переглядайте публічні виробничі запити компаній, які шукають виконавців, субпідрядників і доступні виробничі потужності.",
+      detailTitleTemplate:
+        "{title} — виробничий запит | WolneMoce",
+      detailDescriptionTemplate:
+        "{title}. Галузь: {branch}. Послуга: {service}. Перегляньте цей публічний виробничий запит на WolneMoce.",
     },
     list: {
       badge: "Публічні B2B-запити",
@@ -259,6 +263,52 @@ const uk: Dictionary = {
       toBeAgreed: "за домовленістю",
       notProvided: "Не вказано",
       wholePoland: "Уся Польща",
+    },
+    detail: {
+      backToRequests: "Повернутися до запитів",
+      publicRequestBadge: "Виробничий запит",
+      active: "Активний запит",
+      featured: "Рекомендований",
+      technicalDocumentationAvailable: "Документація доступна",
+      technicalDocumentationUnavailable: "Не заявлено документації",
+      technicalDocumentation: "Технічна документація",
+      industry: "Галузь",
+      service: "Тип послуги",
+      location: "Локація",
+      volume: "Обсяг",
+      deadline: "Термін",
+      budget: "Бюджет",
+      validUntil: "Дійсний до",
+      publishedAt: "Опубліковано",
+      parametersTitle: "Параметри запиту",
+      parametersDescription:
+        "Інформація, яка стає публічною після модерації.",
+      descriptionTitle: "Опис запиту",
+      heroDescription:
+        "Компанія шукає виконавця або субпідрядника. Контактні дані автора запиту приховані публічно.",
+      requesterPrivacyTitle: "Контактні дані автора приховані",
+      requesterPrivacyDescription:
+        "Публічний перегляд не показує назву компанії, NIP, email, номер телефону або контактну особу.",
+      wholePoland: "Уся Польща",
+      toBeAgreed: "за домовленістю",
+      notProvided: "Не вказано",
+      budgetIndicative: "Орієнтовний бюджет",
+      similarRequestsTitle: "Схожі виробничі запити",
+      similarRequestsDescription: "Запити з цієї ж галузі",
+      allRequests: "Усі запити",
+      noSimilarRequests: "Немає схожих активних запитів.",
+    },
+    interest: {
+      title: "Бажаєте висловити інтерес?",
+      description:
+        "Збережіть свій інтерес до виконання цього запиту. Контактні дані автора запиту залишаються прихованими і не розкриваються автоматично.",
+      submit: "Висловити інтерес",
+      submitting: "Збереження...",
+      successTitle: "Інтерес збережено",
+      successDescription:
+        "Вашу зацікавленість збережено. Власник запиту побачить вашу компанію у своїй панелі. Контактні дані не розкриваються автоматично.",
+      genericError:
+        "Не вдалося зберегти інтерес. Спробуйте ще раз за мить.",
     },
   },
   companiesList: {

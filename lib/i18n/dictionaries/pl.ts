@@ -202,6 +202,10 @@ const pl: Dictionary = {
       title: "Zapytania produkcyjne B2B",
       description:
         "Przeglądaj publiczne zapytania produkcyjne firm szukających wykonawców, podwykonawców i dostępnych mocy produkcyjnych.",
+      detailTitleTemplate:
+        "{title} — zapytanie produkcyjne | WolneMoce",
+      detailDescriptionTemplate:
+        "{title}. Branża: {branch}. Usługa: {service}. Zobacz publiczne zapytanie produkcyjne w WolneMoce.",
     },
     list: {
       badge: "Publiczne zapytania B2B",
@@ -254,6 +258,52 @@ const pl: Dictionary = {
       toBeAgreed: "do ustalenia",
       notProvided: "Nie podano",
       wholePoland: "Cała Polska",
+    },
+    detail: {
+      backToRequests: "Wróć do zapytań",
+      publicRequestBadge: "Zapytanie produkcyjne",
+      active: "Aktywne zapytanie",
+      featured: "Wyróżnione",
+      technicalDocumentationAvailable: "Dokumentacja dostępna",
+      technicalDocumentationUnavailable: "Nie zadeklarowano dokumentacji",
+      technicalDocumentation: "Dokumentacja techniczna",
+      industry: "Branża",
+      service: "Rodzaj usługi",
+      location: "Lokalizacja",
+      volume: "Wolumen",
+      deadline: "Termin",
+      budget: "Budżet",
+      validUntil: "Ważne do",
+      publishedAt: "Dodano",
+      parametersTitle: "Parametry zapytania",
+      parametersDescription:
+        "Informacje udostępnione publicznie po moderacji.",
+      descriptionTitle: "Opis zapytania",
+      heroDescription:
+        "Firma szuka wykonawcy lub podwykonawcy. Dane kontaktowe autora są ukryte publicznie.",
+      requesterPrivacyTitle: "Dane kontaktowe autora są ukryte",
+      requesterPrivacyDescription:
+        "Publiczny widok nie pokazuje nazwy firmy, NIP, emaila, telefonu ani osoby kontaktowej.",
+      wholePoland: "Cała Polska",
+      toBeAgreed: "do ustalenia",
+      notProvided: "Nie podano",
+      budgetIndicative: "Budżet orientacyjny",
+      similarRequestsTitle: "Podobne zapytania produkcyjne",
+      similarRequestsDescription: "Zapytania z tej samej branży",
+      allRequests: "Wszystkie zapytania",
+      noSimilarRequests: "Brak podobnych aktywnych zapytań.",
+    },
+    interest: {
+      title: "Chcesz zgłosić zainteresowanie?",
+      description:
+        "Zapisz zainteresowanie realizacją. Dane kontaktowe autora zapytania pozostają ukryte i nie są automatycznie ujawniane.",
+      submit: "Zgłoś zainteresowanie",
+      submitting: "Zapisywanie...",
+      successTitle: "Zainteresowanie zapisane",
+      successDescription:
+        "Twoje zainteresowanie zostało zapisane. Właściciel zapytania zobaczy Twoją firmę w swoim panelu. Dane kontaktowe nie są automatycznie ujawniane.",
+      genericError:
+        "Nie udało się zapisać zainteresowania. Spróbuj ponownie za chwilę.",
     },
   },
   companiesList: {

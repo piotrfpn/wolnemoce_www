@@ -207,6 +207,10 @@ const fr: Dictionary = {
       title: "Demandes de production B2B",
       description:
         "Parcourez les demandes de production publiques d’entreprises recherchant des prestataires, des sous-traitants et des capacités de production disponibles.",
+      detailTitleTemplate:
+        "{title} — demande de production | WolneMoce",
+      detailDescriptionTemplate:
+        "{title}. Secteur : {branch}. Service : {service}. Consultez cette demande de production publique sur WolneMoce.",
     },
     list: {
       badge: "Demandes B2B publiques",
@@ -259,6 +263,52 @@ const fr: Dictionary = {
       toBeAgreed: "à convenir",
       notProvided: "Non indiqué",
       wholePoland: "Toute la Pologne",
+    },
+    detail: {
+      backToRequests: "Retour aux demandes",
+      publicRequestBadge: "Demande de production",
+      active: "Demande active",
+      featured: "Mise en avant",
+      technicalDocumentationAvailable: "Documentation disponible",
+      technicalDocumentationUnavailable: "Documentation non déclarée",
+      technicalDocumentation: "Documentation technique",
+      industry: "Secteur",
+      service: "Type de service",
+      location: "Localisation",
+      volume: "Volume",
+      deadline: "Délai",
+      budget: "Budget",
+      validUntil: "Valable jusqu'au",
+      publishedAt: "Publié le",
+      parametersTitle: "Paramètres de la demande",
+      parametersDescription:
+        "Informations rendues publiques après modération.",
+      descriptionTitle: "Description de la demande",
+      heroDescription:
+        "L'entreprise recherche un prestataire ou un sous-traitant. Les coordonnées du demandeur restent masquées publiquement.",
+      requesterPrivacyTitle: "Les coordonnées du demandeur sont masquées",
+      requesterPrivacyDescription:
+        "La vue publique n'affiche pas le nom de l'entreprise, le numéro fiscal, l'email, le numéro de contact ni la personne de contact.",
+      wholePoland: "Toute la Pologne",
+      toBeAgreed: "à convenir",
+      notProvided: "Non indiqué",
+      budgetIndicative: "Budget indicatif",
+      similarRequestsTitle: "Demandes de production similaires",
+      similarRequestsDescription: "Demandes du même secteur",
+      allRequests: "Toutes les demandes",
+      noSimilarRequests: "Aucune demande active similaire.",
+    },
+    interest: {
+      title: "Vous souhaitez manifester votre intérêt ?",
+      description:
+        "Enregistrez votre intérêt pour réaliser cette demande. Les coordonnées du demandeur restent masquées et ne sont pas divulguées automatiquement.",
+      submit: "Manifester son intérêt",
+      submitting: "Enregistrement...",
+      successTitle: "Intérêt enregistré",
+      successDescription:
+        "Le propriétaire de la demande verra votre entreprise dans son tableau de bord. Les coordonnées ne sont pas divulguées automatiquement.",
+      genericError:
+        "Impossible d'enregistrer votre intérêt. Veuillez réessayer dans un instant.",
     },
   },
   companiesList: {
