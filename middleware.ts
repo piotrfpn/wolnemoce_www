@@ -64,9 +64,16 @@ export async function middleware(request: NextRequest) {
     );
   }
 
-  const marketingRoutes = ["/jak-to-dziala", "/cennik", "/kontakt"];
+  const localizedPublicRoutes = [
+    "/jak-to-dziala",
+    "/cennik",
+    "/kontakt",
+    "/regulamin",
+    "/polityka-prywatnosci",
+    "/polityka-cookies",
+  ];
 
-  const plMarketingRoute = marketingRoutes.find((route) => pathname === `/pl${route}`);
+  const plMarketingRoute = localizedPublicRoutes.find((route) => pathname === `/pl${route}`);
   if (plMarketingRoute) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = plMarketingRoute;
@@ -82,7 +89,7 @@ export async function middleware(request: NextRequest) {
     return copySupabaseResponse(response, NextResponse.rewrite(rewriteUrl));
   }
 
-  if (marketingRoutes.includes(pathname)) {
+  if (localizedPublicRoutes.includes(pathname)) {
     const rewriteUrl = request.nextUrl.clone();
     rewriteUrl.pathname = `/pl${pathname}`;
     return copySupabaseResponse(response, NextResponse.rewrite(rewriteUrl));

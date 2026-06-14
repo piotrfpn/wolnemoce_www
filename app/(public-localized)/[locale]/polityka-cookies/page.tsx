@@ -12,7 +12,7 @@ type LocaleLegalPageProps = {
 };
 
 function getLocale(locale: string) {
-  if (!isSupportedLocale(locale) || locale === "pl") {
+  if (!isSupportedLocale(locale)) {
     notFound();
   }
 
