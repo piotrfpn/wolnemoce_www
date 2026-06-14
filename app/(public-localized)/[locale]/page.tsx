@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import HomeView from "@/components/views/HomeView";
 import {
   isSupportedLocale,
-  prefixedLocales,
+  supportedLocales,
   type Locale,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
@@ -16,11 +16,11 @@ type LocalePageProps = {
 };
 
 export function generateStaticParams() {
-  return prefixedLocales.map((locale) => ({ locale }));
+  return supportedLocales.map((locale) => ({ locale }));
 }
 
 export function generateMetadata({ params }: LocalePageProps): Metadata {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 
@@ -36,9 +36,11 @@ export function generateMetadata({ params }: LocalePageProps): Metadata {
 }
 
 export default function LocalizedHomePage({ params }: LocalePageProps) {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 
-  return <HomeView locale={params.locale as Locale} />;
+  const locale: Locale = params.locale;
+
+  return <HomeView locale={locale} />;
 }

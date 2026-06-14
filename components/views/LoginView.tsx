@@ -1,6 +1,6 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import LoginFormClient from "@/app/logowanie/LoginFormClient";
+import LoginFormClient from "@/app/(legacy)/logowanie/LoginFormClient";
 import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getSafeNextPath } from "@/lib/safeNextPath";

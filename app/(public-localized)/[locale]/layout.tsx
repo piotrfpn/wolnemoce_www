@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import "./globals.css";
+import "../../globals.css";
+import { defaultLocale, isSupportedLocale } from "@/lib/i18n/config";
 import { getAbsoluteUrl, getSiteUrl } from "@/lib/seo";
 
 const inter = Inter({
@@ -47,13 +48,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
+type LocaleRootLayoutProps = {
   children: React.ReactNode;
-}) {
+  params: {
+    locale: string;
+  };
+};
+
+export default function LocaleRootLayout({
+  children,
+  params,
+}: LocaleRootLayoutProps) {
+  const locale = isSupportedLocale(params.locale)
+    ? params.locale
+    : defaultLocale;
+
   return (
-    <html lang="pl">
+    <html lang={locale}>
       <body className={inter.className}>{children}</body>
     </html>
   );

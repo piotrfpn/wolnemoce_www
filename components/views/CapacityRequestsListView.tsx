@@ -4,7 +4,7 @@ import CapacityRequestCard from "@/components/CapacityRequestCard";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import StructuredData from "@/components/StructuredData";
-import CapacityRequestsFiltersClient from "@/app/zapytania/CapacityRequestsFiltersClient";
+import CapacityRequestsFiltersClient from "@/app/(legacy)/zapytania/CapacityRequestsFiltersClient";
 import { categories, getServicesForIndustry } from "@/lib/mockData";
 import { getPublicCapacityRequests } from "@/lib/capacityRequests";
 import { getLocalizedPath, type Locale } from "@/lib/i18n/config";

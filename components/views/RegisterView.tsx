@@ -1,6 +1,6 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import RegisterFormClient from "@/app/rejestracja/RegisterFormClient";
+import RegisterFormClient from "@/app/(legacy)/rejestracja/RegisterFormClient";
 import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getSafeNextPath } from "@/lib/safeNextPath";

@@ -3,6 +3,37 @@ import { updateSession } from "@/lib/supabase/middleware";
 
 const protectedPrefixes = ["/panel", "/admin"];
 
+function copyResponseCookies(source: NextResponse, target: NextResponse) {
+  source.cookies.getAll().forEach((cookie) => {
+    target.cookies.set(cookie);
+  });
+}
+
+function copySafeResponseHeaders(source: NextResponse, target: NextResponse) {
+  source.headers.forEach((value, key) => {
+    const normalizedKey = key.toLowerCase();
+
+    if (
+      normalizedKey === "set-cookie" ||
+      normalizedKey === "content-length" ||
+      normalizedKey === "content-encoding" ||
+      normalizedKey === "transfer-encoding" ||
+      normalizedKey === "connection"
+    ) {
+      return;
+    }
+
+    target.headers.set(key, value);
+  });
+}
+
+function copySupabaseResponse(source: NextResponse, target: NextResponse) {
+  copyResponseCookies(source, target);
+  copySafeResponseHeaders(source, target);
+
+  return target;
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -21,7 +52,22 @@ export async function middleware(request: NextRequest) {
     const encodedNextPath = encodeURIComponent(nextPath);
     redirectUrl.pathname = "/logowanie";
     redirectUrl.search = `?next=${encodedNextPath}&return_to=${encodedNextPath}`;
-    return NextResponse.redirect(redirectUrl);
+    return copySupabaseResponse(response, NextResponse.redirect(redirectUrl));
+  }
+
+  if (pathname === "/pl" || pathname === "/pl/") {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/";
+    return copySupabaseResponse(
+      response,
+      NextResponse.redirect(redirectUrl, 308)
+    );
+  }
+
+  if (pathname === "/") {
+    const rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = "/pl";
+    return copySupabaseResponse(response, NextResponse.rewrite(rewriteUrl));
   }
 
   return response;

@@ -7,7 +7,7 @@ import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import CompanyDirectoryClient, {
   type DirectoryCompany,
-} from "@/app/firmy/CompanyDirectoryClient";
+} from "@/app/(legacy)/firmy/CompanyDirectoryClient";
 
 export const revalidate = 3600;
 

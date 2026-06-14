@@ -9,7 +9,7 @@ import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config"
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { categories, industryServiceTypes, provinces, services } from "@/lib/mockData";
 import { createClient } from "@/lib/supabase/server";
-import OffersFiltersClient from "@/app/oferty/OffersFiltersClient";
+import OffersFiltersClient from "@/app/(legacy)/oferty/OffersFiltersClient";
 
 type OffersPageProps = {
   searchParams?: Record<string, string | string[] | undefined>;

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { submitCapacityRequestInterest } from "@/app/zapytania/actions";
+import { submitCapacityRequestInterest } from "@/app/(legacy)/zapytania/actions";
 
 type CapacityRequestInterestClientProps = {
   capacityRequestId: string;

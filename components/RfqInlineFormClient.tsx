@@ -8,7 +8,7 @@ import {
   formatRfqAttachmentSize,
   validateRfqAttachmentFiles,
 } from "@/lib/rfqAttachments";
-import { submitInquiry } from "@/app/zapytanie-ofertowe/actions";
+import { submitInquiry } from "@/app/(legacy)/zapytanie-ofertowe/actions";
 import type { RfqBuyerData } from "@/lib/rfqBuyerData";
 
 type RfqInlineFormClientProps = {

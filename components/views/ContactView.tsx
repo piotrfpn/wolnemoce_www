@@ -5,7 +5,7 @@ import { defaultLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { contactInfo } from "@/lib/mockData";
 import { createClient } from "@/lib/supabase/server";
-import ContactFormClient from "@/app/kontakt/ContactFormClient";
+import ContactFormClient from "@/app/(legacy)/kontakt/ContactFormClient";
 
 type ContactPageProps = {
   searchParams?: Record<string, string | string[] | undefined>;
