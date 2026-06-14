@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CompaniesListView from "@/components/views/CompaniesListView";
-import {
-  isSupportedLocale,
-  prefixedLocales,
-} from "@/lib/i18n/config";
+import { isSupportedLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createPageMetadata } from "@/lib/seo";
 
@@ -17,12 +14,8 @@ type LocaleCompaniesPageProps = {
 
 export const revalidate = 3600;
 
-export function generateStaticParams() {
-  return prefixedLocales.map((locale) => ({ locale }));
-}
-
 export function generateMetadata({ params }: LocaleCompaniesPageProps): Metadata {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 
@@ -40,7 +33,7 @@ export default function LocalizedCompaniesPage({
   params,
   searchParams,
 }: LocaleCompaniesPageProps) {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 

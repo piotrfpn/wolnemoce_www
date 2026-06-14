@@ -72,6 +72,7 @@ export async function middleware(request: NextRequest) {
     "/polityka-prywatnosci",
     "/polityka-cookies",
     "/blog",
+    "/firmy",
   ];
 
   const plMarketingRoute = localizedPublicRoutes.find((route) => pathname === `/pl${route}`);
