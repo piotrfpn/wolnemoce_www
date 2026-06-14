@@ -64,9 +64,27 @@ export async function middleware(request: NextRequest) {
     );
   }
 
+  const marketingRoutes = ["/jak-to-dziala", "/cennik", "/kontakt"];
+
+  const plMarketingRoute = marketingRoutes.find((route) => pathname === `/pl${route}`);
+  if (plMarketingRoute) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = plMarketingRoute;
+    return copySupabaseResponse(
+      response,
+      NextResponse.redirect(redirectUrl, 308)
+    );
+  }
+
   if (pathname === "/") {
     const rewriteUrl = request.nextUrl.clone();
     rewriteUrl.pathname = "/pl";
+    return copySupabaseResponse(response, NextResponse.rewrite(rewriteUrl));
+  }
+
+  if (marketingRoutes.includes(pathname)) {
+    const rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = `/pl${pathname}`;
     return copySupabaseResponse(response, NextResponse.rewrite(rewriteUrl));
   }
 

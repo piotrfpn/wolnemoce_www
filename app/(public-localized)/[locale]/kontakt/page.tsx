@@ -20,7 +20,7 @@ export function generateStaticParams() {
 }
 
 export function generateMetadata({ params }: LocaleContactPageProps): Metadata {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 
@@ -38,7 +38,7 @@ export default function LocalizedContactPage({
   params,
   searchParams,
 }: LocaleContactPageProps) {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 

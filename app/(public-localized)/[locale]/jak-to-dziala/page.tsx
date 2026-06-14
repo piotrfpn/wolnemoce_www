@@ -19,7 +19,7 @@ export function generateStaticParams() {
 }
 
 export function generateMetadata({ params }: LocaleHowItWorksPageProps): Metadata {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 
@@ -36,7 +36,7 @@ export function generateMetadata({ params }: LocaleHowItWorksPageProps): Metadat
 export default function LocalizedHowItWorksPage({
   params,
 }: LocaleHowItWorksPageProps) {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 
