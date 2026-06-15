@@ -251,19 +251,24 @@ function getCompanyProjectReportHref(
   return getLocalizedHref("/kontakt", locale, params.toString());
 }
 
+function getCompanyDetailPath(slug: string, locale: Locale) {
+  return getLocalizedPath(`/firmy/${slug}`, locale);
+}
+
 export async function generateCompanyDetailMetadata({
   slug,
   locale,
 }: CompanyDetailViewProps): Promise<Metadata> {
   const t = getDictionary(locale).companyDetail;
   const company = await getCompanyBySlug(slug);
+  const canonicalPath = getCompanyDetailPath(slug, locale);
 
   if (!company) {
     return {
       title: t.notFoundTitle,
       description: t.notFoundDescription,
       alternates: {
-        canonical: `/firmy/${slug}`,
+        canonical: canonicalPath,
       },
     };
   }
@@ -285,12 +290,12 @@ export async function generateCompanyDetailMetadata({
     title,
     description: seoDescription,
     alternates: {
-      canonical: `/firmy/${slug}`,
+      canonical: canonicalPath,
     },
     openGraph: {
       title,
       description: seoDescription,
-      url: `/firmy/${slug}`,
+      url: canonicalPath,
       siteName: "WolneMoce",
       type: "profile",
       images: [
@@ -343,7 +348,11 @@ export default async function CompanyDetailView({
     locale,
     company.name ? `q=${encodeURIComponent(company.name)}` : ""
   );
-  const canonicalUrl = getAbsoluteUrl(`/firmy/${companySlug}`);
+  const homeUrl = getAbsoluteUrl(getLocalizedPath("/", locale));
+  const companiesUrl = getAbsoluteUrl(getLocalizedPath("/firmy", locale));
+  const canonicalUrl = getAbsoluteUrl(
+    getCompanyDetailPath(companySlug, locale)
+  );
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -369,13 +378,13 @@ export default async function CompanyDetailView({
             "@type": "ListItem",
             position: 1,
             name: "WolneMoce",
-            item: getAbsoluteUrl("/"),
+            item: homeUrl,
           },
           {
             "@type": "ListItem",
             position: 2,
             name: t.backToCompanies,
-            item: getAbsoluteUrl("/firmy"),
+            item: companiesUrl,
           },
           {
             "@type": "ListItem",
