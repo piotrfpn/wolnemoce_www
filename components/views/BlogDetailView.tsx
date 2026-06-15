@@ -141,6 +141,10 @@ function getBlogImageUrl(path: string | null) {
   return supabase.storage.from("blog-images").getPublicUrl(path).data.publicUrl;
 }
 
+function getBlogDetailPath(slug: string, locale: Locale) {
+  return getLocalizedPath(`/blog/${slug}`, locale);
+}
+
 function renderContent(content: string) {
   return content
     .split(/\n\s*\n/g)
@@ -159,13 +163,14 @@ export async function generateBlogDetailMetadata({
 }: BlogDetailViewProps): Promise<Metadata> {
   const t = getDictionary(locale).blogDetail;
   const post = await getPublishedPost(slug);
+  const canonicalPath = getBlogDetailPath(slug, locale);
 
   if (!post) {
     return {
       title: t.notFoundTitle,
       description: t.notFoundDescription,
       alternates: {
-        canonical: `/blog/${slug}`,
+        canonical: canonicalPath,
       },
     };
   }
@@ -180,12 +185,12 @@ export async function generateBlogDetailMetadata({
     title,
     description,
     alternates: {
-      canonical: `/blog/${slug}`,
+      canonical: canonicalPath,
     },
     openGraph: {
       title,
       description,
-      url: `/blog/${slug}`,
+      url: canonicalPath,
       siteName: "WolneMoce",
       type: "article",
       images: [
