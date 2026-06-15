@@ -87,6 +87,20 @@ export async function middleware(request: NextRequest) {
     );
   }
 
+  const localizedPublicPrefixes = [
+    "/blog/",
+  ];
+
+  const plMarketingPrefix = localizedPublicPrefixes.find((prefix) => pathname.startsWith(`/pl${prefix}`));
+  if (plMarketingPrefix) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = pathname.replace(/^\/pl/, "");
+    return copySupabaseResponse(
+      response,
+      NextResponse.redirect(redirectUrl, 308)
+    );
+  }
+
   if (pathname === "/") {
     const rewriteUrl = request.nextUrl.clone();
     rewriteUrl.pathname = "/pl";
@@ -94,6 +108,13 @@ export async function middleware(request: NextRequest) {
   }
 
   if (localizedPublicRoutes.includes(pathname)) {
+    const rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = `/pl${pathname}`;
+    return copySupabaseResponse(response, NextResponse.rewrite(rewriteUrl));
+  }
+
+  const marketingPrefix = localizedPublicPrefixes.find((prefix) => pathname.startsWith(prefix));
+  if (marketingPrefix) {
     const rewriteUrl = request.nextUrl.clone();
     rewriteUrl.pathname = `/pl${pathname}`;
     return copySupabaseResponse(response, NextResponse.rewrite(rewriteUrl));
