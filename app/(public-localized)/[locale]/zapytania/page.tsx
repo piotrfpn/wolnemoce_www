@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CapacityRequestsListView from "@/components/views/CapacityRequestsListView";
-import {
-  isSupportedLocale,
-  prefixedLocales,
-} from "@/lib/i18n/config";
+import { isSupportedLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createPageMetadata } from "@/lib/seo";
 
@@ -17,14 +14,10 @@ type LocalizedCapacityRequestsPageProps = {
 
 export const dynamic = "force-dynamic";
 
-export function generateStaticParams() {
-  return prefixedLocales.map((locale) => ({ locale }));
-}
-
 export function generateMetadata({
   params,
 }: LocalizedCapacityRequestsPageProps): Metadata {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 
@@ -42,7 +35,7 @@ export default function LocalizedCapacityRequestsPage({
   params,
   searchParams,
 }: LocalizedCapacityRequestsPageProps) {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 

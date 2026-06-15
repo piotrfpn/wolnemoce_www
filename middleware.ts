@@ -74,6 +74,7 @@ export async function middleware(request: NextRequest) {
     "/blog",
     "/firmy",
     "/oferty",
+    "/zapytania",
   ];
 
   const plMarketingRoute = localizedPublicRoutes.find((route) => pathname === `/pl${route}`);
