@@ -9,7 +9,7 @@ import {
   validateRfqAttachmentFiles,
 } from "@/lib/rfqAttachments";
 import type { RfqBuyerData } from "@/lib/rfqBuyerData";
-import { submitInquiry } from "./actions";
+import { submitInquiry } from "@/app/(legacy)/zapytanie-ofertowe/actions";
 
 export type RfqOffer = {
   id: string;
@@ -50,7 +50,7 @@ function getInitialFormValues(initialBuyerData?: RfqBuyerData): RfqDraftValues {
   };
 }
 
-export default function RfqRequestClient({
+export default function RfqRequestView({
   offer,
   requestedSlug,
   initialBuyerData,

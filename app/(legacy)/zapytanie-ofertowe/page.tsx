@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import { getInitialRfqBuyerData } from "@/lib/rfqBuyerData";
-import RfqRequestClient, { type RfqOffer } from "./RfqRequestClient";
+import RfqRequestView, { type RfqOffer } from "@/components/views/RfqRequestView";
 
 export const metadata: Metadata = {
   title: "Zapytanie ofertowe",
@@ -51,7 +51,7 @@ export default async function RfqRequestPage({
     <>
       <Navbar />
       <main className="bg-white">
-        <RfqRequestClient
+        <RfqRequestView
           offer={selectedOffer}
           requestedSlug={searchParams?.oferta ?? ""}
           initialBuyerData={initialBuyerData}
