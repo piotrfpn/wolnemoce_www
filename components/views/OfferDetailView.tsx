@@ -127,13 +127,14 @@ export async function generateOfferDetailMetadata({
 }: OfferDetailViewProps): Promise<Metadata> {
   const t = getDictionary(locale).offerDetail;
   const offer = await getPublicOfferBySlug(slug);
+  const localizedPath = getLocalizedPath(`/oferty/${slug}`, locale);
 
   if (!offer) {
     return {
       title: t.notFoundTitle,
       description: t.notFoundDescription,
       alternates: {
-        canonical: `/oferty/${slug}`,
+        canonical: localizedPath,
       },
     };
   }
@@ -153,12 +154,12 @@ export async function generateOfferDetailMetadata({
     title: `${offer.title} | ${companyName} | WolneMoce`,
     description: truncateSeoDescription(descriptionSource),
     alternates: {
-      canonical: `/oferty/${slug}`,
+      canonical: localizedPath,
     },
     openGraph: {
       title: `${offer.title} | ${companyName}`,
       description: truncateSeoDescription(descriptionSource),
-      url: `/oferty/${slug}`,
+      url: localizedPath,
       siteName: "WolneMoce",
       type: "article",
       images: [
@@ -208,7 +209,7 @@ export default async function OfferDetailView({
     ? mainImage?.alt ||
       `${offer.title ?? t.imageAltFallback} - ${offer.branch ?? t.capacityFallback}`
     : t.imagePlaceholderAlt;
-  const canonicalUrl = getAbsoluteUrl(`/oferty/${offer.slug}`);
+  const canonicalUrl = getAbsoluteUrl(getLocalizedPath(`/oferty/${offer.slug}`, locale));
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -217,13 +218,13 @@ export default async function OfferDetailView({
         "@type": "ListItem",
         position: 1,
         name: "WolneMoce",
-        item: getAbsoluteUrl("/"),
+        item: getAbsoluteUrl(getLocalizedPath("/", locale)),
       },
       {
         "@type": "ListItem",
         position: 2,
         name: t.offerFallback,
-        item: getAbsoluteUrl("/oferty"),
+        item: getAbsoluteUrl(getLocalizedPath("/oferty", locale)),
       },
       {
         "@type": "ListItem",
