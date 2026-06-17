@@ -569,6 +569,58 @@ const fr: Dictionary = {
     rfqHelper2: "spécifiez la quantité ou la portée des travaux,",
     rfqHelper3: "indiquez le délai prévu,",
     rfqHelper4: "ajoutez un dessin technique ou une spécification.",
+    trustedContactTitle: "Contact d’entreprise vérifié",
+    trustedContactDescription: "Nous vérifions les données d’immatriculation des entreprises",
+    freeInquiryBadge: "Demande gratuite",
+  },
+  rfqInlineForm: {
+    formSuccessTitle: "Demande envoyée",
+    formSuccessDescription: "Merci. La demande a été enregistrée et transmise à l'entreprise dans son panneau WolneMoce.",
+    formTitle: "Envoyer une demande concernant cette offre",
+    formDescription: "La demande sera enregistrée et transmise à l'entreprise dans le panneau WolneMoce.",
+    fieldName: "Prénom et nom",
+    fieldCompany: "Entreprise",
+    fieldEmail: "Email",
+    fieldPhone: "Téléphone",
+    fieldQuantityScope: "Quantité / périmètre de la commande",
+    fieldDeadline: "Délai de réalisation",
+    fieldBudget: "Budget indicatif",
+    fieldMessage: "Message",
+    fieldMessagePlaceholder: "Décrivez brièvement votre besoin, le matériau, la quantité et le délai attendu.",
+    attachmentsTitle: "Pièces jointes",
+    attachmentsDescription: "Ajoutez un dessin, une spécification, une photo de la pièce ou un fichier d'exigences.",
+    addAttachments: "Ajouter des pièces jointes",
+    attachmentsLimits: "Vous pouvez ajouter jusqu'à 3 fichiers : PDF, Word, Excel, JPG ou PNG.\nMaximum 10 Mo par fichier.\nLes fichiers seront envoyés avec la demande.",
+    attachmentsReady: "Les pièces jointes sont prêtes à être envoyées. Elles seront transmises après avoir cliqué sur « Envoyer la demande ».",
+    attachmentReadyBadge: "Prêt à envoyer",
+    attachmentRemove: "Supprimer",
+    formSubmitting: "Envoi de la demande et des pièces jointes...",
+    formSubmit: "Envoyer la demande",
+    openFullForm: "Ouvrir le formulaire de demande complet",
+    errorMissingActiveOffer:
+      "Cette demande n’est associée à aucune offre active.",
+    errorNameRequired: "Indiquez votre prénom et votre nom.",
+    errorCompanyRequired: "Indiquez le nom de votre entreprise.",
+    errorInvalidEmail: "Indiquez une adresse e-mail valide.",
+    errorInvalidPhone: "Indiquez un numéro de téléphone valide.",
+    errorMessageTooShort:
+      "Le message doit contenir au moins 10 caractères.",
+    errorTooManyAttachments:
+      "Vous pouvez ajouter jusqu’à 3 pièces jointes.",
+    errorAttachmentTooLarge:
+      "Chaque pièce jointe peut avoir une taille maximale de 10 Mo.",
+    errorAttachmentUnsupportedType:
+      "Formats autorisés : PDF, Word, Excel, JPG ou PNG.",
+    errorOfferUnavailable:
+      "Cette offre est indisponible ou n’est plus active.",
+    errorSubmitFailed:
+      "La demande n’a pas pu être envoyée. Veuillez réessayer dans quelques instants.",
+    partialAttachmentsUploadFailed:
+      "La demande a été envoyée, mais certaines pièces jointes n’ont pas pu être téléversées.",
+    unexpectedError:
+      "Une erreur s’est produite. Veuillez réessayer.",
+    partialSuccessFallback:
+      "La demande a été envoyée, mais une partie du processus n’a pas pu être finalisée.",
   },
   companyDetail: {
     ...en.companyDetail,

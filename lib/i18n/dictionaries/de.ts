@@ -576,6 +576,57 @@ const de: Dictionary = {
     rfqHelper2: "Geben Sie die Menge oder den Umfang der Arbeiten an,",
     rfqHelper3: "Geben Sie die erwartete Frist an,",
     rfqHelper4: "Fügen Sie eine technische Zeichnung oder Spezifikation hinzu.",
+    trustedContactTitle: "Verifizierter Unternehmenskontakt",
+    trustedContactDescription: "Wir prüfen Unternehmensregister",
+    freeInquiryBadge: "Kostenlose Anfrage",
+  },
+  rfqInlineForm: {
+    formSuccessTitle: "Anfrage gesendet",
+    formSuccessDescription: "Vielen Dank. Die Anfrage wurde gespeichert und an das Unternehmen in dessen WolneMoce-Panel weitergeleitet.",
+    formTitle: "Anfrage zu diesem Angebot senden",
+    formDescription: "Die Anfrage wird gespeichert und an das Unternehmen im WolneMoce-Panel weitergeleitet.",
+    fieldName: "Vor- und Nachname",
+    fieldCompany: "Unternehmen",
+    fieldEmail: "E-Mail",
+    fieldPhone: "Telefon",
+    fieldQuantityScope: "Menge / Auftragsumfang",
+    fieldDeadline: "Gewünschter Ausführungstermin",
+    fieldBudget: "Voraussichtliches Budget",
+    fieldMessage: "Nachricht",
+    fieldMessagePlaceholder: "Beschreiben Sie kurz Ihren Bedarf, Material, Menge und erwarteten Termin.",
+    attachmentsTitle: "Anhänge",
+    attachmentsDescription: "Fügen Sie eine Zeichnung, Spezifikation, Teilefoto oder Anforderungsdatei hinzu.",
+    addAttachments: "Anhänge hinzufügen",
+    attachmentsLimits: "Sie können bis zu 3 Dateien hinzufügen: PDF, Word, Excel, JPG oder PNG.\nMaximal 10 MB pro Datei.\nDateien werden zusammen mit der Anfrage gesendet.",
+    attachmentsReady: "Anhänge sind versandbereit. Sie werden gesendet, wenn Sie auf „Anfrage senden“ klicken.",
+    attachmentReadyBadge: "Versandbereit",
+    attachmentRemove: "Entfernen",
+    formSubmitting: "Senden der Anfrage und Anhänge...",
+    formSubmit: "Anfrage senden",
+    openFullForm: "Vollständiges Anfrageformular öffnen",
+    errorMissingActiveOffer:
+      "Diese Anfrage ist keinem aktiven Angebot zugeordnet.",
+    errorNameRequired: "Geben Sie Ihren Vor- und Nachnamen ein.",
+    errorCompanyRequired: "Geben Sie den Namen Ihres Unternehmens ein.",
+    errorInvalidEmail: "Geben Sie eine gültige E-Mail-Adresse ein.",
+    errorInvalidPhone: "Geben Sie eine gültige Telefonnummer ein.",
+    errorMessageTooShort:
+      "Die Nachricht muss mindestens 10 Zeichen enthalten.",
+    errorTooManyAttachments: "Sie können bis zu 3 Anhänge hinzufügen.",
+    errorAttachmentTooLarge:
+      "Jeder Anhang darf maximal 10 MB groß sein.",
+    errorAttachmentUnsupportedType:
+      "Zulässige Dateiformate: PDF, Word, Excel, JPG oder PNG.",
+    errorOfferUnavailable:
+      "Dieses Angebot ist nicht verfügbar oder nicht mehr aktiv.",
+    errorSubmitFailed:
+      "Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es in Kürze erneut.",
+    partialAttachmentsUploadFailed:
+      "Die Anfrage wurde gesendet, aber einige Anhänge konnten nicht hochgeladen werden.",
+    unexpectedError:
+      "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    partialSuccessFallback:
+      "Die Anfrage wurde gesendet, aber ein Teil des Vorgangs konnte nicht abgeschlossen werden.",
   },
   companyDetail: {
     ...en.companyDetail,

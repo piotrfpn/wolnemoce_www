@@ -10,6 +10,55 @@ import {
 } from "@/lib/rfqAttachments";
 import { submitInquiry } from "@/app/(legacy)/zapytanie-ofertowe/actions";
 import type { RfqBuyerData } from "@/lib/rfqBuyerData";
+import type { Dictionary } from "@/lib/i18n/types";
+
+type RfqRuntimeMessageKey =
+  | "errorMissingActiveOffer"
+  | "errorNameRequired"
+  | "errorCompanyRequired"
+  | "errorInvalidEmail"
+  | "errorInvalidPhone"
+  | "errorMessageTooShort"
+  | "errorTooManyAttachments"
+  | "errorAttachmentTooLarge"
+  | "errorAttachmentUnsupportedType"
+  | "errorOfferUnavailable"
+  | "errorSubmitFailed"
+  | "partialAttachmentsUploadFailed";
+
+const RFQ_RUNTIME_MESSAGE_KEYS: Record<string, RfqRuntimeMessageKey> = {
+  "Brak aktywnej oferty dla zapytania.": "errorMissingActiveOffer",
+  "Podaj imię i nazwisko.": "errorNameRequired",
+  "Podaj nazwę firmy.": "errorCompanyRequired",
+  "Podaj poprawny adres email.": "errorInvalidEmail",
+  "Podaj poprawny numer telefonu.": "errorInvalidPhone",
+  "Wiadomość musi mieć co najmniej 10 znaków.": "errorMessageTooShort",
+  "Możesz dodać maksymalnie 3 załączniki.": "errorTooManyAttachments",
+  "Pojedynczy załącznik może mieć maksymalnie 10 MB.":
+    "errorAttachmentTooLarge",
+  "Dozwolone formaty załączników to PDF, Word, Excel, JPG lub PNG.":
+    "errorAttachmentUnsupportedType",
+  "Oferta nie jest dostępna albo nie jest aktywna.":
+    "errorOfferUnavailable",
+  "Nie udało się wysłać zapytania. Spróbuj ponownie za chwilę.":
+    "errorSubmitFailed",
+  "Zapytanie zostało wysłane, ale nie wszystkie załączniki udało się wgrać.":
+    "partialAttachmentsUploadFailed",
+};
+
+function localizeRfqRuntimeMessage(
+  message: string,
+  t: Dictionary["rfqInlineForm"],
+  fallback: "unexpectedError" | "partialSuccessFallback" = "unexpectedError"
+) {
+  if (!message) {
+    return "";
+  }
+
+  const messageKey = RFQ_RUNTIME_MESSAGE_KEYS[message];
+
+  return messageKey ? t[messageKey] : t[fallback];
+}
 
 type RfqInlineFormClientProps = {
   offerId: string;
@@ -17,6 +66,7 @@ type RfqInlineFormClientProps = {
   offerTitle?: string | null;
   companyName?: string | null;
   initialBuyerData?: RfqBuyerData;
+  t: Dictionary["rfqInlineForm"];
 };
 
 type RfqDraftValues = RfqBuyerData & {
@@ -45,6 +95,7 @@ export default function RfqInlineFormClient({
   offerTitle,
   companyName,
   initialBuyerData,
+  t,
 }: RfqInlineFormClientProps) {
   const [error, setError] = useState("");
   const [partialSuccess, setPartialSuccess] = useState("");
@@ -101,7 +152,7 @@ export default function RfqInlineFormClient({
     setPartialSuccess("");
 
     if (validationError) {
-      setError(validationError);
+      setError(localizeRfqRuntimeMessage(validationError, t));
       return;
     }
 
@@ -113,7 +164,7 @@ export default function RfqInlineFormClient({
     const nextFiles = selectedFiles.filter((_, index) => index !== fileIndex);
     const validationError = validateRfqAttachmentFiles(nextFiles);
     setSelectedFiles(nextFiles);
-    setError(validationError);
+    setError(localizeRfqRuntimeMessage(validationError, t));
     setPartialSuccess("");
   }
 
@@ -148,7 +199,7 @@ export default function RfqInlineFormClient({
 
     const validationError = validateRfqAttachmentFiles(selectedFiles);
     if (validationError) {
-      setError(validationError);
+      setError(localizeRfqRuntimeMessage(validationError, t));
       return;
     }
 
@@ -161,12 +212,18 @@ export default function RfqInlineFormClient({
     startTransition(async () => {
       const result = await submitInquiry(formData);
       if (result?.error) {
-        setError(result.error);
+        setError(localizeRfqRuntimeMessage(result.error, t));
         return;
       }
 
       if (result?.partialSuccess) {
-        setPartialSuccess(result.partialSuccess);
+        setPartialSuccess(
+          localizeRfqRuntimeMessage(
+            result.partialSuccess,
+            t,
+            "partialSuccessFallback"
+          )
+        );
       }
 
       if (result?.success) {
@@ -184,11 +241,10 @@ export default function RfqInlineFormClient({
           <i className="fas fa-circle-check text-xl"></i>
         </div>
         <h2 className="text-2xl font-extrabold text-slate-900">
-          Zapytanie zostało wysłane
+          {t.formSuccessTitle}
         </h2>
         <p className="mt-3 text-sm leading-6 text-slate-600">
-          Dziękujemy. Zapytanie zostało zapisane i przekazane firmie w panelu
-          WolneMoce.
+          {t.formSuccessDescription}
         </p>
         {partialSuccess ? (
           <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
@@ -207,11 +263,10 @@ export default function RfqInlineFormClient({
 
       <div className="mb-6">
         <h2 className="text-2xl font-extrabold text-slate-900">
-          Zapytaj o ofertę
+          {t.formTitle}
         </h2>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          Zapytanie zostanie zapisane i przekazane do firmy w panelu
-          WolneMoce.
+          {t.formDescription}
         </p>
       </div>
 
@@ -229,21 +284,21 @@ export default function RfqInlineFormClient({
 
       <div className="space-y-4">
         <StaticFormField
-          label="Imię i nazwisko"
+          label={t.fieldName}
           name="buyer_name"
           icon="fas fa-user"
           value={formValues.buyer_name}
           onChange={handleFieldChange}
         />
         <StaticFormField
-          label="Firma"
+          label={t.fieldCompany}
           name="buyer_company"
           icon="fas fa-building"
           value={formValues.buyer_company}
           onChange={handleFieldChange}
         />
         <StaticFormField
-          label="Email"
+          label={t.fieldEmail}
           name="buyer_email"
           type="email"
           icon="fas fa-envelope"
@@ -251,7 +306,7 @@ export default function RfqInlineFormClient({
           onChange={handleFieldChange}
         />
         <StaticFormField
-          label="Telefon"
+          label={t.fieldPhone}
           name="buyer_phone"
           type="tel"
           icon="fas fa-phone"
@@ -259,32 +314,32 @@ export default function RfqInlineFormClient({
           onChange={handleFieldChange}
         />
         <StaticFormField
-          label="Ilość / zakres zamówienia"
+          label={t.fieldQuantityScope}
           name="quantity_scope"
           icon="fas fa-boxes-stacked"
           value={formValues.quantity_scope}
           onChange={handleFieldChange}
         />
         <StaticFormField
-          label="Termin realizacji"
+          label={t.fieldDeadline}
           name="expected_deadline"
           icon="fas fa-clock"
           value={formValues.expected_deadline}
           onChange={handleFieldChange}
         />
         <StaticFormField
-          label="Budżet orientacyjny"
+          label={t.fieldBudget}
           name="budget"
           icon="fas fa-wallet"
           value={formValues.budget}
           onChange={handleFieldChange}
         />
         <StaticFormField
-          label="Wiadomość"
+          label={t.fieldMessage}
           name="message"
           textarea
           rows={5}
-          placeholder="Opisz krótko zapotrzebowanie, materiał, ilość i oczekiwany termin."
+          placeholder={t.fieldMessagePlaceholder}
           icon="fas fa-message"
           value={formValues.message}
           onChange={handleFieldChange}
@@ -292,14 +347,14 @@ export default function RfqInlineFormClient({
       </div>
 
       <div className="mt-6 border-t border-slate-200 pt-6">
-        <h3 className="text-lg font-extrabold text-slate-900">Załączniki</h3>
+        <h3 className="text-lg font-extrabold text-slate-900">{t.attachmentsTitle}</h3>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          Dodaj rysunek, specyfikację, zdjęcie detalu lub plik z wymaganiami.
+          {t.attachmentsDescription}
         </p>
         <label className="mt-4 block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-paperclip text-[#1a5f3c]"></i>
-            Załączniki
+            {t.attachmentsTitle}
           </span>
           <input
             type="file"
@@ -311,21 +366,17 @@ export default function RfqInlineFormClient({
           />
           <span className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm font-bold text-[#1a5f3c] transition hover:border-[#1a5f3c] hover:bg-[#1a5f3c]/5">
             <i className="fas fa-paperclip"></i>
-            Dodaj załączniki
+            {t.addAttachments}
           </span>
         </label>
-        <p className="mt-2 text-xs leading-5 text-slate-500">
-          Możesz dodać maksymalnie 3 pliki: PDF, Word, Excel, JPG lub PNG.
-          Maksymalnie 10 MB na plik.
-          <br />
-          Pliki zostaną wysłane razem z zapytaniem.
+        <p className="mt-2 whitespace-pre-line text-xs leading-5 text-slate-500">
+          {t.attachmentsLimits}
         </p>
 
         {selectedFiles.length > 0 ? (
           <div className="mt-4 space-y-2">
             <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-              Załączniki są gotowe do wysłania. Zostaną przesłane po kliknięciu
-              „Wyślij zapytanie”.
+              {t.attachmentsReady}
             </div>
             {selectedFiles.map((file, index) => (
               <div
@@ -342,14 +393,14 @@ export default function RfqInlineFormClient({
                 </div>
                 <div className="flex shrink-0 flex-wrap items-center gap-2">
                   <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">
-                    Gotowy do wysłania
+                    {t.attachmentReadyBadge}
                   </span>
                   <button
                     type="button"
                     onClick={() => removeSelectedFile(index)}
                     className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-600 transition hover:border-red-200 hover:text-red-600"
                   >
-                    Usuń
+                    {t.attachmentRemove}
                   </button>
                 </div>
               </div>
@@ -366,10 +417,10 @@ export default function RfqInlineFormClient({
         {isPending ? (
           <>
             <i className="fas fa-spinner fa-spin"></i>
-            Wysyłanie zapytania i załączników...
+            {t.formSubmitting}
           </>
         ) : (
-          "Wyślij zapytanie"
+          t.formSubmit
         )}
       </button>
 
@@ -379,7 +430,7 @@ export default function RfqInlineFormClient({
           onClick={saveDraftToSession}
           className="mt-4 inline-flex w-full items-center justify-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
         >
-          Otwórz pełny formularz zapytania
+          {t.openFullForm}
           <i className="fas fa-arrow-right text-xs"></i>
         </Link>
       ) : null}

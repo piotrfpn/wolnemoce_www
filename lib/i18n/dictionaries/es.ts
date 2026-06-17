@@ -569,6 +569,57 @@ const es: Dictionary = {
     rfqHelper2: "indica la cantidad o el alcance del trabajo,",
     rfqHelper3: "indica el plazo esperado,",
     rfqHelper4: "añade un dibujo técnico o especificación.",
+    trustedContactTitle: "Contacto empresarial verificado",
+    trustedContactDescription: "Verificamos los datos registrales de la empresa",
+    freeInquiryBadge: "Consulta gratuita",
+  },
+  rfqInlineForm: {
+    formSuccessTitle: "Consulta enviada",
+    formSuccessDescription: "Gracias. La consulta se ha guardado y enviado a la empresa en su panel de WolneMoce.",
+    formTitle: "Enviar una consulta sobre esta oferta",
+    formDescription: "La consulta se guardará y se enviará a la empresa en el panel de WolneMoce.",
+    fieldName: "Nombre y apellidos",
+    fieldCompany: "Empresa",
+    fieldEmail: "Correo electrónico",
+    fieldPhone: "Teléfono",
+    fieldQuantityScope: "Cantidad / alcance del pedido",
+    fieldDeadline: "Plazo de realización",
+    fieldBudget: "Presupuesto orientativo",
+    fieldMessage: "Mensaje",
+    fieldMessagePlaceholder: "Describa brevemente su necesidad, material, cantidad y plazo esperado.",
+    attachmentsTitle: "Archivos adjuntos",
+    attachmentsDescription: "Añada un dibujo, especificación, foto de la pieza o archivo de requisitos.",
+    addAttachments: "Añadir archivos adjuntos",
+    attachmentsLimits: "Puede añadir hasta 3 archivos: PDF, Word, Excel, JPG o PNG.\nMáximo 10 MB por archivo.\nLos archivos se enviarán junto con la consulta.",
+    attachmentsReady: "Los archivos adjuntos están listos para enviar. Se enviarán al hacer clic en \"Enviar consulta\".",
+    attachmentReadyBadge: "Listo para enviar",
+    attachmentRemove: "Eliminar",
+    formSubmitting: "Enviando la consulta y los archivos adjuntos...",
+    formSubmit: "Enviar consulta",
+    openFullForm: "Abrir formulario de consulta completo",
+    errorMissingActiveOffer:
+      "Esta consulta no está vinculada a una oferta activa.",
+    errorNameRequired: "Introduzca su nombre y apellidos.",
+    errorCompanyRequired: "Introduzca el nombre de su empresa.",
+    errorInvalidEmail:
+      "Introduzca una dirección de correo electrónico válida.",
+    errorInvalidPhone: "Introduzca un número de teléfono válido.",
+    errorMessageTooShort:
+      "El mensaje debe contener al menos 10 caracteres.",
+    errorTooManyAttachments: "Puede añadir hasta 3 archivos adjuntos.",
+    errorAttachmentTooLarge:
+      "Cada archivo adjunto puede tener un máximo de 10 MB.",
+    errorAttachmentUnsupportedType:
+      "Formatos permitidos: PDF, Word, Excel, JPG o PNG.",
+    errorOfferUnavailable:
+      "Esta oferta no está disponible o ya no está activa.",
+    errorSubmitFailed:
+      "No se pudo enviar la consulta. Inténtelo de nuevo en unos instantes.",
+    partialAttachmentsUploadFailed:
+      "La consulta se envió, pero algunos archivos adjuntos no pudieron cargarse.",
+    unexpectedError: "Se produjo un error. Inténtelo de nuevo.",
+    partialSuccessFallback:
+      "La consulta se envió, pero no se pudo completar una parte del proceso.",
   },
   companyDetail: {
     ...en.companyDetail,

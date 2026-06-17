@@ -569,6 +569,56 @@ const uk: Dictionary = {
     rfqHelper2: "вкажіть кількість або обсяг робіт,",
     rfqHelper3: "вкажіть очікуваний термін,",
     rfqHelper4: "додайте технічне креслення або специфікацію.",
+    trustedContactTitle: "Перевірений контакт компанії",
+    trustedContactDescription: "Ми перевіряємо реєстраційні дані компаній",
+    freeInquiryBadge: "Безкоштовний запит",
+  },
+  rfqInlineForm: {
+    formSuccessTitle: "Запит надіслано",
+    formSuccessDescription: "Дякуємо. Запит збережено та передано компанії в її панелі WolneMoce.",
+    formTitle: "Надіслати запит щодо цієї пропозиції",
+    formDescription: "Запит буде збережено та передано компанії в панелі WolneMoce.",
+    fieldName: "Ім'я та прізвище",
+    fieldCompany: "Компанія",
+    fieldEmail: "Електронна пошта",
+    fieldPhone: "Телефон",
+    fieldQuantityScope: "Кількість / обсяг замовлення",
+    fieldDeadline: "Термін реалізації",
+    fieldBudget: "Орієнтовний бюджет",
+    fieldMessage: "Повідомлення",
+    fieldMessagePlaceholder: "Коротко опишіть потребу, матеріал, кількість та очікуваний термін.",
+    attachmentsTitle: "Вкладення",
+    attachmentsDescription: "Додайте креслення, специфікацію, фотографію деталі або файл з вимогами.",
+    addAttachments: "Додати вкладення",
+    attachmentsLimits: "Можна додати до 3 файлів: PDF, Word, Excel, JPG або PNG.\nМаксимум 10 МБ на файл.\nФайли будуть надіслані разом із запитом.",
+    attachmentsReady: "Вкладення готові до відправки. Вони будуть надіслані після натискання «Надіслати запит».",
+    attachmentReadyBadge: "Готово до відправки",
+    attachmentRemove: "Видалити",
+    formSubmitting: "Надсилання запиту та вкладень...",
+    formSubmit: "Надіслати запит",
+    openFullForm: "Відкрити повну форму запиту",
+    errorMissingActiveOffer:
+      "Цей запит не пов’язаний з активною пропозицією.",
+    errorNameRequired: "Вкажіть ім’я та прізвище.",
+    errorCompanyRequired: "Вкажіть назву компанії.",
+    errorInvalidEmail: "Вкажіть коректну адресу електронної пошти.",
+    errorInvalidPhone: "Вкажіть коректний номер телефону.",
+    errorMessageTooShort:
+      "Повідомлення має містити щонайменше 10 символів.",
+    errorTooManyAttachments: "Можна додати не більше 3 вкладень.",
+    errorAttachmentTooLarge:
+      "Розмір кожного вкладення не може перевищувати 10 МБ.",
+    errorAttachmentUnsupportedType:
+      "Дозволені формати вкладень: PDF, Word, Excel, JPG або PNG.",
+    errorOfferUnavailable:
+      "Ця пропозиція недоступна або більше не активна.",
+    errorSubmitFailed:
+      "Не вдалося надіслати запит. Спробуйте ще раз за кілька хвилин.",
+    partialAttachmentsUploadFailed:
+      "Запит надіслано, але не всі вкладення вдалося завантажити.",
+    unexpectedError: "Сталася помилка. Спробуйте ще раз.",
+    partialSuccessFallback:
+      "Запит надіслано, але частину операції не вдалося завершити.",
   },
   companyDetail: {
     ...en.companyDetail,
