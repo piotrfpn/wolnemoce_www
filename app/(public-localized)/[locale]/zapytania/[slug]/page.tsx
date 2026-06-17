@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 export function generateMetadata({
   params,
 }: LocalizedCapacityRequestDetailsPageProps): Promise<Metadata> {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 
@@ -30,7 +30,7 @@ export function generateMetadata({
 export default function LocalizedCapacityRequestDetailsPage({
   params,
 }: LocalizedCapacityRequestDetailsPageProps) {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 

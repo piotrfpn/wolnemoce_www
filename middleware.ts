@@ -91,6 +91,7 @@ export async function middleware(request: NextRequest) {
     "/blog/",
     "/firmy/",
     "/oferty/",
+    "/zapytania/",
   ];
 
   const plMarketingPrefix = localizedPublicPrefixes.find((prefix) => pathname.startsWith(`/pl${prefix}`));
