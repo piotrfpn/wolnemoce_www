@@ -1379,6 +1379,16 @@ const es: Dictionary = {
       allAnswered: "Todas las consultas tienen el estado 'Respondido'. ¡Bien hecho!",
       noReadInquiries: "No tienes consultas leídas.",
     },
+  },
+  rfqSuccess: {
+    metadataTitle: "Consulta enviada",
+    metadataDescription: "Confirmación de que su consulta se ha enviado a través de WolneMoce.",
+    heroTitle: "Gracias. Su consulta ha sido enviada a la empresa.",
+    heroDescription: "La empresa la verá en su panel de WolneMoce.",
+    nextStepsTitle: "¿Qué puede hacer ahora?",
+    nextStepsDescription: "Vuelva a la lista de ofertas o acceda a la página principal de WolneMoce.",
+    backToOffers: "Volver a las ofertas",
+    homePage: "Página principal",
   }
 };
 

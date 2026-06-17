@@ -1536,6 +1536,16 @@ const pl: Dictionary = {
       allAnswered: "Wszystkie zapytania mają status 'Odpowiedziano'. Świetna robota!",
       noReadInquiries: "Nie masz żadnych przeczytanych zapytań.",
     },
+  },
+  rfqSuccess: {
+    metadataTitle: "Zapytanie wysłane",
+    metadataDescription: "Potwierdzenie wysłania zapytania ofertowego w WolneMoce.",
+    heroTitle: "Dziękujemy. Zapytanie zostało wysłane do firmy.",
+    heroDescription: "Firma zobaczy je w swoim panelu WolneMoce.",
+    nextStepsTitle: "Co możesz zrobić dalej?",
+    nextStepsDescription: "Wróć do listy ofert albo przejdź na stronę główną WolneMoce.",
+    backToOffers: "Wróć do ofert",
+    homePage: "Strona główna",
   }
 };
 

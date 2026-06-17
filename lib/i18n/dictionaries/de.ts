@@ -1395,6 +1395,16 @@ const de: Dictionary = {
       allAnswered: "Alle Anfragen haben den Status 'Beantwortet'. Gut gemacht!",
       noReadInquiries: "Sie haben keine gelesenen Anfragen.",
     },
+  },
+  rfqSuccess: {
+    metadataTitle: "Anfrage gesendet",
+    metadataDescription: "Bestätigung, dass Ihre Anfrage über WolneMoce gesendet wurde.",
+    heroTitle: "Vielen Dank. Ihre Anfrage wurde an das Unternehmen gesendet.",
+    heroDescription: "Das Unternehmen sieht sie in seinem WolneMoce-Dashboard.",
+    nextStepsTitle: "Wie geht es weiter?",
+    nextStepsDescription: "Kehren Sie zur Angebotsübersicht zurück oder öffnen Sie die WolneMoce-Startseite.",
+    backToOffers: "Zurück zu den Angeboten",
+    homePage: "Startseite",
   }
 };
 

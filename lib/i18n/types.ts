@@ -1259,6 +1259,16 @@ export type Dictionary = {
       contactEmailInvalid: string;
     };
   };
+  rfqSuccess: {
+    metadataTitle: string;
+    metadataDescription: string;
+    heroTitle: string;
+    heroDescription: string;
+    nextStepsTitle: string;
+    nextStepsDescription: string;
+    backToOffers: string;
+    homePage: string;
+  };
 };
 
 export type PanelDictionary = Dictionary["panel"];

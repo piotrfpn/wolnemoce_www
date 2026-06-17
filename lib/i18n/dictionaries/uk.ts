@@ -1375,6 +1375,16 @@ const uk: Dictionary = {
       allAnswered: "Усі запити мають статус 'Відповідь надана'. Чудово!",
       noReadInquiries: "У вас немає прочитаних запитів.",
     },
+  },
+  rfqSuccess: {
+    metadataTitle: "Запит надіслано",
+    metadataDescription: "Підтвердження надсилання запиту через WolneMoce.",
+    heroTitle: "Дякуємо. Ваш запит надіслано компанії.",
+    heroDescription: "Компанія побачить його у своїй панелі WolneMoce.",
+    nextStepsTitle: "Що можна зробити далі?",
+    nextStepsDescription: "Поверніться до списку пропозицій або перейдіть на головну сторінку WolneMoce.",
+    backToOffers: "Повернутися до пропозицій",
+    homePage: "Головна сторінка",
   }
 };
 

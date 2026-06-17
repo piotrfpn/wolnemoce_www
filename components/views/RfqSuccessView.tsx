@@ -2,8 +2,15 @@ import Link from "next/link";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/types";
 
-export default function RfqSuccessView({ locale }: { locale: Locale }) {
+export default function RfqSuccessView({
+  locale,
+  t,
+}: {
+  locale: Locale;
+  t: Dictionary["rfqSuccess"];
+}) {
   return (
     <>
       <Navbar />
@@ -16,10 +23,10 @@ export default function RfqSuccessView({ locale }: { locale: Locale }) {
               <i className="fas fa-check-circle text-4xl"></i>
             </div>
             <h1 className="text-3xl font-black leading-tight tracking-[-1px] md:text-5xl">
-              Dziękujemy. Zapytanie zostało wysłane do firmy.
+              {t.heroTitle}
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/85">
-              Firma zobaczy je w panelu WolneMoce.
+              {t.heroDescription}
             </p>
           </div>
         </section>
@@ -27,19 +34,18 @@ export default function RfqSuccessView({ locale }: { locale: Locale }) {
         <section className="px-6 py-16">
           <div className="mx-auto max-w-[900px] rounded-[24px] border border-slate-200 bg-white p-6 text-center shadow-sm md:p-10">
             <h2 className="text-2xl font-extrabold text-slate-900">
-              Co możesz zrobić dalej?
+              {t.nextStepsTitle}
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-500">
-              Wróć do listy ofert, dodaj własną ofertę wolnych mocy albo
-              skontaktuj się z zespołem WolneMoce.
+              {t.nextStepsDescription}
             </p>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:justify-center">
               <Link href={getLocalizedPath("/oferty", locale)} className="btn btn-primary">
-                Wróć do ofert
+                {t.backToOffers}
               </Link>
               <Link href={getLocalizedPath("/", locale)} className="btn btn-outline">
-                Strona główna
+                {t.homePage}
               </Link>
             </div>
           </div>

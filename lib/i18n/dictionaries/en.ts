@@ -1512,6 +1512,16 @@ const en: Dictionary = {
       allAnswered: "All inquiries have 'Answered' status. Great job!",
       noReadInquiries: "You don't have any read inquiries.",
     },
+  },
+  rfqSuccess: {
+    metadataTitle: "Inquiry sent",
+    metadataDescription: "Confirmation that your inquiry has been sent through WolneMoce.",
+    heroTitle: "Thank you. Your inquiry has been sent to the company.",
+    heroDescription: "The company will see it in its WolneMoce dashboard.",
+    nextStepsTitle: "What can you do next?",
+    nextStepsDescription: "Return to the offer listings or go to the WolneMoce homepage.",
+    backToOffers: "Back to offers",
+    homePage: "Homepage",
   }
 };
 

@@ -1380,6 +1380,16 @@ const fr: Dictionary = {
       allAnswered: "Toutes les demandes ont le statut 'Répondu'. Bien joué !",
       noReadInquiries: "Vous n'avez aucune demande lue.",
     },
+  },
+  rfqSuccess: {
+    metadataTitle: "Demande envoyée",
+    metadataDescription: "Confirmation de l’envoi de votre demande via WolneMoce.",
+    heroTitle: "Merci. Votre demande a été envoyée à l’entreprise.",
+    heroDescription: "L’entreprise la verra dans son tableau de bord WolneMoce.",
+    nextStepsTitle: "Que pouvez-vous faire maintenant ?",
+    nextStepsDescription: "Retournez à la liste des offres ou accédez à la page d’accueil WolneMoce.",
+    backToOffers: "Retour aux offres",
+    homePage: "Page d’accueil",
   }
 };
 
