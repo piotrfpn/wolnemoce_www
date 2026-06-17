@@ -51,7 +51,7 @@ export default function RfqSuccessView({
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer locale={locale} />
     </>
   );
 }
