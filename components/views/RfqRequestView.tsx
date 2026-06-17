@@ -12,6 +12,8 @@ import {
 } from "@/lib/rfqAttachments";
 import type { RfqBuyerData } from "@/lib/rfqBuyerData";
 import { submitInquiry } from "@/app/(legacy)/zapytanie-ofertowe/actions";
+import type { Dictionary } from "@/lib/i18n/types";
+import { localizeRfqRuntimeMessage } from "@/lib/i18n/localizeRfqRuntimeMessage";
 
 export type RfqOffer = {
   id: string;
@@ -57,11 +59,13 @@ export default function RfqRequestView({
   requestedSlug,
   initialBuyerData,
   locale = "pl",
+  copy,
 }: {
   offer: RfqOffer | null;
   requestedSlug: string;
   initialBuyerData?: RfqBuyerData;
   locale?: Locale;
+  copy: Dictionary["rfqRequest"];
 }) {
   const [error, setError] = useState("");
   const [partialSuccess, setPartialSuccess] = useState("");
@@ -126,7 +130,7 @@ export default function RfqRequestView({
     setPartialSuccess("");
 
     if (validationError) {
-      setError(validationError);
+      setError(localizeRfqRuntimeMessage(validationError, copy.runtime));
       return;
     }
 
@@ -138,7 +142,7 @@ export default function RfqRequestView({
     const nextFiles = selectedFiles.filter((_, index) => index !== fileIndex);
     const validationError = validateRfqAttachmentFiles(nextFiles);
     setSelectedFiles(nextFiles);
-    setError(validationError);
+    setError(localizeRfqRuntimeMessage(validationError, copy.runtime));
     setPartialSuccess("");
   }
 
@@ -165,7 +169,7 @@ export default function RfqRequestView({
 
     const validationError = validateRfqAttachmentFiles(selectedFiles);
     if (validationError) {
-      setError(validationError);
+      setError(localizeRfqRuntimeMessage(validationError, copy.runtime));
       return;
     }
 
@@ -178,12 +182,12 @@ export default function RfqRequestView({
     startTransition(async () => {
       const result = await submitInquiry(formData);
       if (result?.error) {
-        setError(result.error);
+        setError(localizeRfqRuntimeMessage(result.error, copy.runtime));
         return;
       }
 
       if (result?.partialSuccess) {
-        setPartialSuccess(result.partialSuccess);
+        setPartialSuccess(localizeRfqRuntimeMessage(result.partialSuccess, copy.runtime, "partialSuccessFallback"));
       }
 
       if (result?.success) {
@@ -204,11 +208,10 @@ export default function RfqRequestView({
           <i className="fas fa-circle-check text-2xl"></i>
         </div>
         <h2 className="text-2xl font-extrabold text-slate-900">
-          Zapytanie zostało wysłane
+          {copy.success.title}
         </h2>
         <p className="mt-3 text-sm leading-7 text-slate-600">
-          Dziękujemy. Zapytanie zostało zapisane i przekazane firmie w panelu
-          WolneMoce. Odpowiedź zależy od firmy obsługującej ofertę.
+          {copy.success.description}
         </p>
         {partialSuccess ? (
           <p className="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
@@ -216,7 +219,7 @@ export default function RfqRequestView({
           </p>
         ) : null}
         <Link href={getLocalizedPath("/oferty", locale)} className="mt-6 inline-flex text-sm font-bold text-[#1a5f3c]">
-          Wróć do ofert
+          {copy.success.backToOffers}
         </Link>
       </div>
     );
@@ -230,15 +233,14 @@ export default function RfqRequestView({
         <div className="relative z-10 mx-auto max-w-[1400px] min-w-0">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-5 py-2 text-sm font-medium backdrop-blur">
             <i className="fas fa-file-signature text-[#fbbf24]"></i>
-            Zapytanie ofertowe RFQ
+            {copy.hero.badge}
           </div>
 
           <h1 className="max-w-4xl text-3xl font-black leading-tight tracking-[-1px] md:text-5xl">
-            Wyślij zapytanie do firmy
+            {copy.hero.title}
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-white/85">
-            Zapytanie zostanie zapisane i przekazane do firmy w panelu
-            WolneMoce.
+            {copy.hero.description}
           </p>
         </div>
       </section>
@@ -249,12 +251,12 @@ export default function RfqRequestView({
             <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
               <div className="mb-4 flex flex-wrap gap-2">
                 <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                  Aktywna oferta
+                  {copy.offer.activeBadge}
                 </span>
                 {company?.is_verified ? (
                   <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
                     <i className="fas fa-check-circle mr-1"></i>
-                    Zweryfikowana firma
+                    {copy.offer.verifiedBadge}
                   </span>
                 ) : null}
               </div>
@@ -263,21 +265,21 @@ export default function RfqRequestView({
                 {offer.title}
               </h2>
               <p className="mt-2 text-sm font-semibold text-slate-500">
-                {company?.name ?? "Firma"}
+                {company?.name ?? copy.offer.companyFallback}
               </p>
 
               <div className="mt-6 grid gap-3 text-sm text-slate-600">
                 <span className="flex min-w-0 items-center gap-2">
                   <i className="fas fa-location-dot text-[#1a5f3c]"></i>
-                  {location || "Polska"}
+                  {location || copy.offer.locationFallback}
                 </span>
                 <span className="flex min-w-0 items-center gap-2">
                   <i className="fas fa-industry text-[#1a5f3c]"></i>
-                  {offer.branch ?? "Branża"}
+                  {offer.branch ?? copy.offer.branchFallback}
                 </span>
                 <span className="flex min-w-0 items-center gap-2">
                   <i className="fas fa-cogs text-[#1a5f3c]"></i>
-                  {offer.service_type ?? "Usługa"}
+                  {offer.service_type ?? copy.offer.serviceFallback}
                 </span>
                 {offer.power_available ? (
                   <span className="flex min-w-0 items-center gap-2">
@@ -298,7 +300,7 @@ export default function RfqRequestView({
                   href={getLocalizedPath(`/oferty/${offer.slug}`, locale)}
                   className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
                 >
-                  Wróć do oferty
+                  {copy.offer.backToOffer}
                   <i className="fas fa-arrow-right text-xs"></i>
                 </Link>
               ) : null}
@@ -309,15 +311,13 @@ export default function RfqRequestView({
                 <i className="fas fa-circle-info text-xl"></i>
               </div>
               <h2 className="text-2xl font-extrabold text-slate-900">
-                Oferta nie jest dostępna
+                {copy.emptyState.title}
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                {requestedSlug
-                  ? "Nie znaleziono aktywnej oferty dla podanego adresu."
-                  : "Wybierz aktywną ofertę, aby wysłać zapytanie do firmy."}
+                {requestedSlug ? copy.emptyState.description : copy.unavailable.description}
               </p>
               <Link href={getLocalizedPath("/oferty", locale)} className="mt-6 inline-flex text-sm font-bold text-[#1a5f3c]">
-                Przeglądaj oferty
+                {copy.emptyState.viewOffers}
               </Link>
             </div>
           )}
@@ -334,11 +334,10 @@ export default function RfqRequestView({
               <input type="hidden" name="offer_id" value={offer.id} />
               <div className="mb-8">
                 <h2 className="text-2xl font-extrabold text-slate-900">
-                  Formularz zapytania
+                  {copy.hero.title}
                 </h2>
                 <p className="mt-2 text-sm leading-6 text-slate-500">
-                  Zapytanie zostanie zapisane i przekazane do firmy w panelu
-                  WolneMoce.
+                  {copy.hero.description}
                 </p>
               </div>
 
@@ -356,11 +355,11 @@ export default function RfqRequestView({
 
               <div className="mb-6">
                 <h3 className="mb-5 text-xl font-extrabold text-slate-900">
-                  1. Dane kontaktowe
+                  {copy.sections.contact.title}
                 </h3>
                 <div className="grid min-w-0 gap-5 md:grid-cols-2">
                   <StaticFormField
-                    label="Imię i nazwisko"
+                    label={copy.sections.contact.name}
                     name="buyer_name"
                     icon="fas fa-user"
                     value={formValues.buyer_name}
@@ -368,7 +367,7 @@ export default function RfqRequestView({
                     required
                   />
                   <StaticFormField
-                    label="Firma"
+                    label={copy.sections.contact.company}
                     name="buyer_company"
                     icon="fas fa-building"
                     value={formValues.buyer_company}
@@ -376,21 +375,21 @@ export default function RfqRequestView({
                     required
                   />
                   <StaticFormField
-                    label="Email"
+                    label={copy.sections.contact.email}
                     name="buyer_email"
                     type="email"
                     icon="fas fa-envelope"
-                    placeholder="jan.kowalski@firma.pl"
+                    placeholder={copy.sections.contact.emailPlaceholder}
                     value={formValues.buyer_email}
                     onChange={handleFieldChange}
                     required
                   />
                   <StaticFormField
-                    label="Telefon"
+                    label={copy.sections.contact.phone}
                     name="buyer_phone"
                     type="tel"
                     icon="fas fa-phone"
-                    placeholder="np. 500 123 456"
+                    placeholder={copy.sections.contact.phonePlaceholder}
                     value={formValues.buyer_phone}
                     onChange={handleFieldChange}
                     required
@@ -400,16 +399,16 @@ export default function RfqRequestView({
 
               <div className="mt-10 border-t border-slate-200 pt-8">
                 <h3 className="mb-5 text-xl font-extrabold text-slate-900">
-                  2. Szczegóły zapytania
+                  {copy.sections.details.title}
                 </h3>
                 <div className="grid min-w-0 gap-5 md:grid-cols-2">
                   <div className="md:col-span-2">
                     <StaticFormField
-                      label="Wiadomość / opis zapotrzebowania"
+                      label={copy.sections.details.message}
                       name="message"
                       textarea
                       rows={6}
-                      placeholder="Przykład: Szukamy wykonawcy 200 szt. detalu CNC z aluminium (stop 7075), termin do końca miesiąca. Rysunek techniczny przesyłam w załączniku."
+                      placeholder={copy.sections.details.messagePlaceholder}
                       icon="fas fa-message"
                       value={formValues.message}
                       onChange={handleFieldChange}
@@ -418,13 +417,13 @@ export default function RfqRequestView({
                     <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-4">
                       <h4 className="flex items-center gap-2 text-sm font-bold text-blue-900">
                         <i className="fas fa-lightbulb text-blue-500"></i>
-                        Co warto dopisać w zapytaniu?
+                        {copy.sections.details.helperTitle}
                       </h4>
                       <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-blue-800">
-                        <li>materiał / technologia,</li>
-                        <li>oczekiwana ilość lub zakres prac,</li>
-                        <li>wymagania jakościowe (np. tolerancje),</li>
-                        <li>informacje o załącznikach (np. rysunek techniczny).</li>
+                        <li>{copy.sections.details.helperMaterial}</li>
+                        <li>{copy.sections.details.helperQuantity}</li>
+                        <li>{copy.sections.details.helperQuality}</li>
+                        <li>{copy.sections.details.helperAttachments}</li>
                       </ul>
                     </div>
                   </div>
@@ -433,32 +432,32 @@ export default function RfqRequestView({
 
               <div className="mt-10 border-t border-slate-200 pt-8">
                 <h3 className="mb-5 text-xl font-extrabold text-slate-900">
-                  3. Termin / ilość / budżet
+                  {copy.sections.schedule.title}
                 </h3>
                 <div className="grid min-w-0 gap-5 md:grid-cols-2">
                   <StaticFormField
-                    label="Ilość / zakres zamówienia"
+                    label={copy.sections.schedule.quantity}
                     name="quantity_scope"
                     icon="fas fa-boxes-stacked"
-                    placeholder="np. 200 sztuk, 500h"
+                    placeholder={copy.sections.schedule.quantityPlaceholder}
                     value={formValues.quantity_scope}
                     onChange={handleFieldChange}
                     optional
                   />
                   <StaticFormField
-                    label="Termin realizacji"
+                    label={copy.sections.schedule.deadline}
                     name="expected_deadline"
                     icon="fas fa-clock"
-                    placeholder="np. do końca miesiąca"
+                    placeholder={copy.sections.schedule.deadlinePlaceholder}
                     value={formValues.expected_deadline}
                     onChange={handleFieldChange}
                     optional
                   />
                   <StaticFormField
-                    label="Budżet orientacyjny"
+                    label={copy.sections.schedule.budget}
                     name="budget"
                     icon="fas fa-wallet"
-                    placeholder="np. 5000 PLN, do negocjacji"
+                    placeholder={copy.sections.schedule.budgetPlaceholder}
                     value={formValues.budget}
                     onChange={handleFieldChange}
                     optional
@@ -468,15 +467,15 @@ export default function RfqRequestView({
 
               <div className="mt-10 border-t border-slate-200 pt-8">
                 <h3 className="text-xl font-extrabold text-slate-900">
-                  4. Załączniki techniczne <span className="ml-1 text-sm font-normal lowercase text-slate-400">(opcjonalnie)</span>
+                  {copy.sections.attachments.title} <span className="ml-1 text-sm font-normal lowercase text-slate-400">{copy.sections.attachments.optionalText}</span>
                 </h3>
                 <p className="mt-2 text-sm leading-6 text-slate-500">
-                  Załącz rysunek techniczny, specyfikację lub zdjęcie detalu, jeśli pomoże to firmie szybciej przygotować odpowiedź.
+                  {copy.sections.attachments.description}
                 </p>
                 <label className="mt-5 block min-w-0">
                   <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                     <i className="fas fa-paperclip text-[#1a5f3c]"></i>
-                    Załączniki
+                    {copy.sections.attachments.badge}
                   </span>
                   <input
                     type="file"
@@ -488,21 +487,17 @@ export default function RfqRequestView({
                   />
                   <span className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm font-bold text-[#1a5f3c] transition hover:border-[#1a5f3c] hover:bg-[#1a5f3c]/5">
                     <i className="fas fa-paperclip"></i>
-                    Dodaj załączniki
+                    {copy.sections.attachments.addFiles}
                   </span>
                 </label>
                 <p className="mt-2 text-xs leading-5 text-slate-500">
-                  Możesz dodać maksymalnie 3 pliki: PDF, Word, Excel, JPG lub PNG.
-                  Maksymalnie 10 MB na plik.
-                  <br />
-                  Pliki zostaną wysłane razem z zapytaniem.
+                  {copy.sections.attachments.limits}
                 </p>
 
                 {selectedFiles.length > 0 ? (
                   <div className="mt-4 space-y-2">
                     <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-                      Załączniki są gotowe do wysłania. Zostaną przesłane po kliknięciu
-                      „Wyślij zapytanie”.
+                      {copy.sections.attachments.readyMessage}
                     </div>
                     {selectedFiles.map((file, index) => (
                       <div
@@ -519,14 +514,14 @@ export default function RfqRequestView({
                         </div>
                         <div className="flex shrink-0 flex-wrap items-center gap-2">
                           <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">
-                            Gotowy do wysłania
+                            {copy.sections.attachments.readyBadge}
                           </span>
                           <button
                             type="button"
                             onClick={() => removeSelectedFile(index)}
                             className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-600 transition hover:border-red-200 hover:text-red-600"
                           >
-                            Usuń
+                            {copy.sections.attachments.remove}
                           </button>
                         </div>
                       </div>
@@ -537,7 +532,7 @@ export default function RfqRequestView({
 
               <div className="mt-10 border-t border-slate-200 pt-8">
                 <h3 className="mb-5 text-xl font-extrabold text-slate-900">
-                  5. Podsumowanie i wysyłka
+                  {copy.sections.submit.title}
                 </h3>
                 <button
                   type="submit"
@@ -547,10 +542,10 @@ export default function RfqRequestView({
                   {isPending ? (
                     <>
                       <i className="fas fa-spinner fa-spin"></i>
-                      Wysyłanie zapytania i załączników...
+                      {copy.sections.submit.submitting}
                     </>
                   ) : (
-                    "Wyślij zapytanie"
+                    copy.sections.submit.button
                   )}
                 </button>
               </div>
@@ -559,13 +554,13 @@ export default function RfqRequestView({
         ) : (
           <div className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">
             <h2 className="text-2xl font-extrabold text-slate-900">
-              Formularz niedostępny
+              {copy.unavailable.title}
             </h2>
             <p className="mt-3 text-sm leading-7 text-slate-600">
-              Zapytania można wysyłać tylko do aktywnych ofert.
+              {copy.unavailable.description}
             </p>
             <Link href={getLocalizedPath("/oferty", locale)} className="mt-6 btn btn-primary">
-              Przeglądaj oferty
+              {copy.emptyState.viewOffers}
             </Link>
           </div>
         )}

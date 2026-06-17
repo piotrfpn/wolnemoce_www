@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import RfqRequestView, { type RfqOffer } from "@/components/views/RfqRequestView";
 import type { Locale } from "@/lib/i18n/config";
 
+import { getDictionary } from "@/lib/i18n/getDictionary";
+
 async function getActiveOffer(slug?: string) {
   if (!slug) {
     return null;
@@ -42,12 +44,15 @@ export default async function RfqRequestPageView({
     getInitialRfqBuyerData(),
   ]);
 
+  const dictionary = getDictionary(locale);
+
   return (
     <RfqRequestView
       locale={locale}
       offer={selectedOffer}
       requestedSlug={requestedSlug}
       initialBuyerData={initialBuyerData}
+      copy={dictionary.rfqRequest}
     />
   );
 }

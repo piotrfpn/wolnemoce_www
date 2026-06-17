@@ -1269,6 +1269,99 @@ export type Dictionary = {
     backToOffers: string;
     homePage: string;
   };
+  rfqRequest: {
+    hero: {
+      badge: string;
+      title: string;
+      description: string;
+    };
+    success: {
+      title: string;
+      description: string;
+      backToOffers: string;
+    };
+    offer: {
+      activeBadge: string;
+      verifiedBadge: string;
+      companyFallback: string;
+      locationFallback: string;
+      branchFallback: string;
+      serviceFallback: string;
+      backToOffer: string;
+    };
+    emptyState: {
+      title: string;
+      description: string;
+      viewOffers: string;
+    };
+    sections: {
+      contact: {
+        title: string;
+        name: string;
+        company: string;
+        email: string;
+        phone: string;
+        emailPlaceholder: string;
+        phonePlaceholder: string;
+      };
+      details: {
+        title: string;
+        message: string;
+        messagePlaceholder: string;
+        helperTitle: string;
+        helperMaterial: string;
+        helperQuantity: string;
+        helperQuality: string;
+        helperAttachments: string;
+      };
+      schedule: {
+        title: string;
+        quantity: string;
+        quantityPlaceholder: string;
+        deadline: string;
+        deadlinePlaceholder: string;
+        budget: string;
+        budgetPlaceholder: string;
+      };
+      attachments: {
+        title: string;
+        optionalText: string;
+        description: string;
+        badge: string;
+        addFiles: string;
+        limits: string;
+        readyMessage: string;
+        readyBadge: string;
+        remove: string;
+      };
+      submit: {
+        title: string;
+        button: string;
+        submitting: string;
+      };
+    };
+    unavailable: {
+      title: string;
+      description: string;
+      viewOffers: string;
+    };
+    runtime: {
+      errorMissingActiveOffer: string;
+      errorNameRequired: string;
+      errorCompanyRequired: string;
+      errorInvalidEmail: string;
+      errorInvalidPhone: string;
+      errorMessageTooShort: string;
+      errorTooManyAttachments: string;
+      errorAttachmentTooLarge: string;
+      errorAttachmentUnsupportedType: string;
+      errorOfferUnavailable: string;
+      errorSubmitFailed: string;
+      partialAttachmentsUploadFailed: string;
+      unexpectedError: string;
+      partialSuccessFallback: string;
+    };
+  };
 };
 
 export type PanelDictionary = Dictionary["panel"];

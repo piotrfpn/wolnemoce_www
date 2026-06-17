@@ -21,6 +21,8 @@ type StaticFormFieldProps = {
   rows?: number;
   required?: boolean;
   optional?: boolean;
+  optionalLabel?: string;
+  requiredLabel?: string;
 };
 
 export default function StaticFormField({
@@ -37,6 +39,8 @@ export default function StaticFormField({
   rows = 4,
   required = false,
   optional = false,
+  optionalLabel = "(opcjonalnie)",
+  requiredLabel = "Pole wymagane",
 }: StaticFormFieldProps) {
   const baseClass =
     "min-w-0 max-w-full w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10";
@@ -46,8 +50,8 @@ export default function StaticFormField({
       <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
         <i className={`${icon} text-[#1a5f3c]`}></i>
         {label}
-        {required && <span className="text-red-500" title="Pole wymagane">*</span>}
-        {optional && <span className="text-slate-400 font-normal lowercase">(opcjonalnie)</span>}
+        {required && <span className="text-red-500" title={requiredLabel}>*</span>}
+        {optional && <span className="text-slate-400 font-normal lowercase">{optionalLabel}</span>}
       </span>
 
       {textarea ? (
