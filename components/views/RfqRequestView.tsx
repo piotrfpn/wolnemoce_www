@@ -3,6 +3,8 @@
 import type { ChangeEvent, FormEvent } from "react";
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
+import { getLocalizedPath } from "@/lib/i18n/config";
+import type { Locale } from "@/lib/i18n/config";
 import StaticFormField from "@/components/StaticFormField";
 import {
   formatRfqAttachmentSize,
@@ -54,10 +56,12 @@ export default function RfqRequestView({
   offer,
   requestedSlug,
   initialBuyerData,
+  locale = "pl",
 }: {
   offer: RfqOffer | null;
   requestedSlug: string;
   initialBuyerData?: RfqBuyerData;
+  locale?: Locale;
 }) {
   const [error, setError] = useState("");
   const [partialSuccess, setPartialSuccess] = useState("");
@@ -211,7 +215,7 @@ export default function RfqRequestView({
             {partialSuccess}
           </p>
         ) : null}
-        <Link href="/oferty" className="mt-6 inline-flex text-sm font-bold text-[#1a5f3c]">
+        <Link href={getLocalizedPath("/oferty", locale)} className="mt-6 inline-flex text-sm font-bold text-[#1a5f3c]">
           Wróć do ofert
         </Link>
       </div>
@@ -291,7 +295,7 @@ export default function RfqRequestView({
 
               {offer.slug ? (
                 <Link
-                  href={`/oferty/${offer.slug}`}
+                  href={getLocalizedPath(`/oferty/${offer.slug}`, locale)}
                   className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#1a5f3c] no-underline"
                 >
                   Wróć do oferty
@@ -312,7 +316,7 @@ export default function RfqRequestView({
                   ? "Nie znaleziono aktywnej oferty dla podanego adresu."
                   : "Wybierz aktywną ofertę, aby wysłać zapytanie do firmy."}
               </p>
-              <Link href="/oferty" className="mt-6 inline-flex text-sm font-bold text-[#1a5f3c]">
+              <Link href={getLocalizedPath("/oferty", locale)} className="mt-6 inline-flex text-sm font-bold text-[#1a5f3c]">
                 Przeglądaj oferty
               </Link>
             </div>
@@ -560,7 +564,7 @@ export default function RfqRequestView({
             <p className="mt-3 text-sm leading-7 text-slate-600">
               Zapytania można wysyłać tylko do aktywnych ofert.
             </p>
-            <Link href="/oferty" className="mt-6 btn btn-primary">
+            <Link href={getLocalizedPath("/oferty", locale)} className="mt-6 btn btn-primary">
               Przeglądaj oferty
             </Link>
           </div>
