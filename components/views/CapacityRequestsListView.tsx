@@ -90,6 +90,7 @@ export default async function CapacityRequestsListView({
   const requestsPath = getLocalizedPath("/zapytania", locale);
   const homePath = getLocalizedPath("/", locale);
   const addOfferPath = getLocalizedPath("/dodaj-oferte", locale);
+  const addRequestPath = getLocalizedPath("/dodaj-zapytanie", locale);
   const filterLabels = {
     searchLabel: copy.searchLabel,
     searchPlaceholder: copy.searchPlaceholder,
@@ -139,7 +140,7 @@ export default async function CapacityRequestsListView({
                 {copy.description}
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
-                <Link href="/dodaj-zapytanie" className="btn btn-accent">
+                <Link href={addRequestPath} className="btn btn-accent">
                   <i className="fas fa-plus"></i>
                   {copy.addRequest}
                 </Link>
@@ -204,7 +205,7 @@ export default async function CapacityRequestsListView({
                 {copy.contractorCtaDescription}
               </p>
               <Link
-                href="/dodaj-zapytanie"
+                href={addRequestPath}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#1a5f3c]"
               >
                 {copy.addRequest}
@@ -247,7 +248,7 @@ export default async function CapacityRequestsListView({
                 <p className="mx-auto mb-6 max-w-2xl text-sm leading-6 text-slate-500">
                   {copy.emptyDescription}
                 </p>
-                <Link href="/dodaj-zapytanie" className="btn btn-primary">
+                <Link href={addRequestPath} className="btn btn-primary">
                   {copy.addRequest}
                 </Link>
               </div>

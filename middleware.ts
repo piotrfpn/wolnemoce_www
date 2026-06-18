@@ -75,6 +75,7 @@ export async function middleware(request: NextRequest) {
     "/firmy",
     "/oferty",
     "/zapytania",
+    "/dodaj-zapytanie",
     "/zapytanie-wyslane",
     "/zapytanie-ofertowe",
   ];
