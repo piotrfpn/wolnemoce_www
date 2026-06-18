@@ -17,5 +17,14 @@ type RegisterPageProps = {
 };
 
 export default function RegisterPage({ searchParams }: RegisterPageProps) {
-  return <RegisterView locale="pl" nextPath={searchParams?.next ?? searchParams?.return_to} />;
+  const redirectParamName =
+    searchParams?.next !== undefined ? "next" : "return_to";
+
+  return (
+    <RegisterView
+      locale="pl"
+      nextPath={searchParams?.next ?? searchParams?.return_to}
+      redirectParamName={redirectParamName}
+    />
+  );
 }

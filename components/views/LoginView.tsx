@@ -9,22 +9,31 @@ type LoginViewProps = {
   locale?: Locale;
   nextPath?: string;
   oauthError?: boolean;
+  redirectParamName?: "next" | "return_to";
 };
 
-function withNextParam(href: string, nextPath: string) {
-  return nextPath ? `${href}?next=${encodeURIComponent(nextPath)}` : href;
+function withRedirectParam(
+  href: string,
+  nextPath: string,
+  paramName: "next" | "return_to"
+) {
+  return nextPath
+    ? `${href}?${paramName}=${encodeURIComponent(nextPath)}`
+    : href;
 }
 
 export default function LoginView({
   locale = defaultLocale,
   nextPath,
   oauthError = false,
+  redirectParamName = "next",
 }: LoginViewProps) {
   const dictionary = getDictionary(locale);
   const safeNextPath = getSafeNextPath(nextPath);
-  const registerHref = withNextParam(
+  const registerHref = withRedirectParam(
     getLocalizedPath("/rejestracja", locale),
-    safeNextPath
+    safeNextPath,
+    redirectParamName
   );
 
   return (

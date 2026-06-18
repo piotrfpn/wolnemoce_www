@@ -10,6 +10,7 @@ type LocaleRegisterPageProps = {
   };
   searchParams?: {
     next?: string;
+    return_to?: string;
   };
 };
 
@@ -40,6 +41,14 @@ export default function LocaleRegisterPage({
   searchParams,
 }: LocaleRegisterPageProps) {
   const locale = getLocale(params.locale);
+  const redirectParamName =
+    searchParams?.next !== undefined ? "next" : "return_to";
 
-  return <RegisterView locale={locale} nextPath={searchParams?.next} />;
+  return (
+    <RegisterView
+      locale={locale}
+      nextPath={searchParams?.next ?? searchParams?.return_to}
+      redirectParamName={redirectParamName}
+    />
+  );
 }

@@ -11,6 +11,7 @@ type LocaleLoginPageProps = {
   searchParams?: {
     error?: string;
     next?: string;
+    return_to?: string;
   };
 };
 
@@ -41,12 +42,15 @@ export default function LocaleLoginPage({
   searchParams,
 }: LocaleLoginPageProps) {
   const locale = getLocale(params.locale);
+  const redirectParamName =
+    searchParams?.next !== undefined ? "next" : "return_to";
 
   return (
     <LoginView
       locale={locale}
-      nextPath={searchParams?.next}
+      nextPath={searchParams?.next ?? searchParams?.return_to}
       oauthError={searchParams?.error === "oauth"}
+      redirectParamName={redirectParamName}
     />
   );
 }

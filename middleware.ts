@@ -80,10 +80,13 @@ export async function middleware(request: NextRequest) {
     "/zapytanie-ofertowe",
   ];
 
-  const plMarketingRoute = localizedPublicRoutes.find((route) => pathname === `/pl${route}`);
-  if (plMarketingRoute) {
+  const localizedAuthRoutes = ["/logowanie", "/rejestracja"];
+  const plLocalizedRoute = [...localizedPublicRoutes, ...localizedAuthRoutes].find(
+    (route) => pathname === `/pl${route}`
+  );
+  if (plLocalizedRoute) {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = plMarketingRoute;
+    redirectUrl.pathname = plLocalizedRoute;
     return copySupabaseResponse(
       response,
       NextResponse.redirect(redirectUrl, 308)

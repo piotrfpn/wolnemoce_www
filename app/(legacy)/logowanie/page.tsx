@@ -18,11 +18,15 @@ type LoginPageProps = {
 };
 
 export default function LoginPage({ searchParams }: LoginPageProps) {
+  const redirectParamName =
+    searchParams?.next !== undefined ? "next" : "return_to";
+
   return (
     <LoginView
       locale="pl"
       nextPath={searchParams?.next ?? searchParams?.return_to}
       oauthError={searchParams?.error === "oauth"}
+      redirectParamName={redirectParamName}
     />
   );
 }
