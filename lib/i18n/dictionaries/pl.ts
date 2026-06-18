@@ -782,6 +782,29 @@ const pl: Dictionary = {
       success: "Konto zostało utworzone. Możesz się zalogować.",
       continue: "Przejdź dalej",
     },
+    passwordRecovery: {
+      reset: {
+        title: "Reset hasła",
+        subtitle: "Podaj email konta, a wyślemy link do ustawienia nowego hasła.",
+        email: "Email",
+        submit: "Wyślij link resetujący",
+        submitting: "Wysyłanie...",
+        success: "Jeżeli konto istnieje, wysłaliśmy link do resetu hasła.",
+        rememberPassword: "Pamiętasz hasło?",
+        loginLink: "Zaloguj się",
+      },
+      update: {
+        title: "Ustaw nowe hasło",
+        subtitle: "Wprowadź nowe hasło dla konta WolneMoce.",
+        password: "Nowe hasło",
+        confirmPassword: "Powtórz hasło",
+        submit: "Ustaw nowe hasło",
+        submitting: "Zapisywanie...",
+        mismatchError: "Hasła muszą być takie same.",
+        missingSessionError:
+          "Brak aktywnej sesji resetu hasła. Użyj linku z wiadomości email.",
+      },
+    },
   },
   legal: {
     label: "Dokument prawny",

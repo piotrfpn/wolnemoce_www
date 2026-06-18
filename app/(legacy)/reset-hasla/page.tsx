@@ -1,27 +1,36 @@
 import type { Metadata } from "next";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import ResetPasswordClient from "./ResetPasswordClient";
+import ResetPasswordView from "@/components/views/ResetPasswordView";
+import { getDictionary } from "@/lib/i18n/getDictionary";
+
+const dictionary = getDictionary("pl");
 
 export const metadata: Metadata = {
-  title: "Reset hasła",
-  description: "Wyślij link resetujący hasło do konta WolneMoce.",
+  title: dictionary.auth.passwordRecovery.reset.title,
+  description: dictionary.auth.passwordRecovery.reset.subtitle,
   robots: {
     index: false,
     follow: false,
   },
 };
 
-export default function ResetPasswordPage() {
+type ResetPasswordPageProps = {
+  searchParams?: {
+    next?: string;
+    return_to?: string;
+  };
+};
+
+export default function ResetPasswordPage({
+  searchParams,
+}: ResetPasswordPageProps) {
+  const redirectParamName =
+    searchParams?.next !== undefined ? "next" : "return_to";
+
   return (
-    <>
-      <Navbar />
-      <main className="bg-slate-50 pt-[72px]">
-        <section className="mx-auto flex min-h-[calc(100vh-72px)] max-w-[560px] items-center px-6 py-16">
-          <ResetPasswordClient />
-        </section>
-      </main>
-      <Footer />
-    </>
+    <ResetPasswordView
+      locale="pl"
+      nextPath={searchParams?.next ?? searchParams?.return_to}
+      redirectParamName={redirectParamName}
+    />
   );
 }

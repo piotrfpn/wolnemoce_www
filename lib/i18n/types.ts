@@ -684,6 +684,28 @@ export type Dictionary = {
       success: string;
       continue: string;
     };
+    passwordRecovery: {
+      reset: {
+        title: string;
+        subtitle: string;
+        email: string;
+        submit: string;
+        submitting: string;
+        success: string;
+        rememberPassword: string;
+        loginLink: string;
+      };
+      update: {
+        title: string;
+        subtitle: string;
+        password: string;
+        confirmPassword: string;
+        submit: string;
+        submitting: string;
+        mismatchError: string;
+        missingSessionError: string;
+      };
+    };
   };
   legal: {
     label: string;

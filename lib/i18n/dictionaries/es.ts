@@ -737,6 +737,29 @@ const es: Dictionary = {
       success: "La cuenta ha sido creada. Puedes iniciar sesión.",
       continue: "Continuar",
     },
+    passwordRecovery: {
+      reset: {
+        title: "Restablecer contraseña",
+        subtitle: "Introduce el email de tu cuenta y te enviaremos un enlace para establecer una nueva contraseña.",
+        email: "Email",
+        submit: "Enviar enlace de restablecimiento",
+        submitting: "Enviando...",
+        success: "Si la cuenta existe, hemos enviado un enlace para restablecer la contraseña.",
+        rememberPassword: "¿Recuerdas tu contraseña?",
+        loginLink: "Iniciar sesión",
+      },
+      update: {
+        title: "Establecer una nueva contraseña",
+        subtitle: "Introduce una nueva contraseña para tu cuenta de WolneMoce.",
+        password: "Nueva contraseña",
+        confirmPassword: "Confirmar contraseña",
+        submit: "Establecer nueva contraseña",
+        submitting: "Guardando...",
+        mismatchError: "Las contraseñas deben coincidir.",
+        missingSessionError:
+          "No hay una sesión activa de recuperación de contraseña. Usa el enlace del correo electrónico.",
+      },
+    },
   },
   legal: {
     label: "Documento legal",

@@ -738,6 +738,29 @@ const fr: Dictionary = {
       success: "Le compte a été créé. Vous pouvez vous connecter.",
       continue: "Continuer",
     },
+    passwordRecovery: {
+      reset: {
+        title: "Réinitialiser le mot de passe",
+        subtitle: "Saisissez l’adresse e-mail de votre compte et nous vous enverrons un lien pour définir un nouveau mot de passe.",
+        email: "Email",
+        submit: "Envoyer le lien de réinitialisation",
+        submitting: "Envoi...",
+        success: "Si le compte existe, nous avons envoyé un lien de réinitialisation du mot de passe.",
+        rememberPassword: "Vous vous souvenez de votre mot de passe ?",
+        loginLink: "Se connecter",
+      },
+      update: {
+        title: "Définir un nouveau mot de passe",
+        subtitle: "Saisissez un nouveau mot de passe pour votre compte WolneMoce.",
+        password: "Nouveau mot de passe",
+        confirmPassword: "Confirmer le mot de passe",
+        submit: "Définir le nouveau mot de passe",
+        submitting: "Enregistrement...",
+        mismatchError: "Les mots de passe doivent être identiques.",
+        missingSessionError:
+          "Aucune session de récupération de mot de passe n’est active. Utilisez le lien reçu par e-mail.",
+      },
+    },
   },
   legal: {
     label: "Document juridique",

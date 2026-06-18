@@ -80,7 +80,12 @@ export async function middleware(request: NextRequest) {
     "/zapytanie-ofertowe",
   ];
 
-  const localizedAuthRoutes = ["/logowanie", "/rejestracja"];
+  const localizedAuthRoutes = [
+    "/logowanie",
+    "/rejestracja",
+    "/reset-hasla",
+    "/ustaw-nowe-haslo",
+  ];
   const plLocalizedRoute = [...localizedPublicRoutes, ...localizedAuthRoutes].find(
     (route) => pathname === `/pl${route}`
   );

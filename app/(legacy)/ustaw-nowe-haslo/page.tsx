@@ -1,27 +1,36 @@
 import type { Metadata } from "next";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import UpdatePasswordClient from "./UpdatePasswordClient";
+import UpdatePasswordView from "@/components/views/UpdatePasswordView";
+import { getDictionary } from "@/lib/i18n/getDictionary";
+
+const dictionary = getDictionary("pl");
 
 export const metadata: Metadata = {
-  title: "Ustaw nowe hasło",
-  description: "Ustaw nowe hasło do konta WolneMoce.",
+  title: dictionary.auth.passwordRecovery.update.title,
+  description: dictionary.auth.passwordRecovery.update.subtitle,
   robots: {
     index: false,
     follow: false,
   },
 };
 
-export default function UpdatePasswordPage() {
+type UpdatePasswordPageProps = {
+  searchParams?: {
+    next?: string;
+    return_to?: string;
+  };
+};
+
+export default function UpdatePasswordPage({
+  searchParams,
+}: UpdatePasswordPageProps) {
+  const redirectParamName =
+    searchParams?.next !== undefined ? "next" : "return_to";
+
   return (
-    <>
-      <Navbar />
-      <main className="bg-slate-50 pt-[72px]">
-        <section className="mx-auto flex min-h-[calc(100vh-72px)] max-w-[560px] items-center px-6 py-16">
-          <UpdatePasswordClient />
-        </section>
-      </main>
-      <Footer />
-    </>
+    <UpdatePasswordView
+      locale="pl"
+      nextPath={searchParams?.next ?? searchParams?.return_to}
+      redirectParamName={redirectParamName}
+    />
   );
 }

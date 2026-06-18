@@ -2,9 +2,19 @@
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
+import type { Dictionary } from "@/lib/i18n/types";
+import { getSafeNextPath } from "@/lib/safeNextPath";
 import { createClient } from "@/lib/supabase/client";
 
-export default function UpdatePasswordClient() {
+type UpdatePasswordClientProps = {
+  labels: Dictionary["auth"]["passwordRecovery"]["update"];
+  loginHref: string;
+};
+
+export default function UpdatePasswordClient({
+  labels,
+  loginHref,
+}: UpdatePasswordClientProps) {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -16,7 +26,7 @@ export default function UpdatePasswordClient() {
     setError("");
 
     if (password !== confirmPassword) {
-      setError("Hasła muszą być takie same.");
+      setError(labels.mismatchError);
       return;
     }
 
@@ -29,7 +39,7 @@ export default function UpdatePasswordClient() {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      setError("Brak aktywnej sesji resetu hasła. Użyj linku z wiadomości email.");
+      setError(labels.missingSessionError);
       setIsSubmitting(false);
       return;
     }
@@ -42,7 +52,7 @@ export default function UpdatePasswordClient() {
       return;
     }
 
-    router.push("/logowanie");
+    router.push(getSafeNextPath(loginHref, "/logowanie"));
     router.refresh();
   }
 
@@ -56,10 +66,10 @@ export default function UpdatePasswordClient() {
           <i className="fas fa-shield-halved text-xl"></i>
         </div>
         <h1 className="text-2xl font-extrabold text-slate-900">
-          Ustaw nowe hasło
+          {labels.title}
         </h1>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          Wprowadź nowe hasło dla konta WolneMoce.
+          {labels.subtitle}
         </p>
       </div>
 
@@ -73,7 +83,7 @@ export default function UpdatePasswordClient() {
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-lock text-[#1a5f3c]"></i>
-            Nowe hasło
+            {labels.password}
           </span>
           <input
             type="password"
@@ -88,7 +98,7 @@ export default function UpdatePasswordClient() {
         <label className="block min-w-0">
           <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
             <i className="fas fa-lock text-[#1a5f3c]"></i>
-            Powtórz hasło
+            {labels.confirmPassword}
           </span>
           <input
             type="password"
@@ -106,7 +116,7 @@ export default function UpdatePasswordClient() {
         disabled={isSubmitting}
         className="mt-6 btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isSubmitting ? "Zapisywanie..." : "Ustaw nowe hasło"}
+        {isSubmitting ? labels.submitting : labels.submit}
       </button>
     </form>
   );

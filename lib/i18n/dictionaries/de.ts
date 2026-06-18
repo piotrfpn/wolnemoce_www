@@ -747,6 +747,29 @@ const de: Dictionary = {
       success: "Das Konto wurde erstellt. Sie können sich anmelden.",
       continue: "Weiter",
     },
+    passwordRecovery: {
+      reset: {
+        title: "Passwort zurücksetzen",
+        subtitle: "Geben Sie die E-Mail-Adresse Ihres Kontos ein. Wir senden Ihnen einen Link zum Festlegen eines neuen Passworts.",
+        email: "E-Mail",
+        submit: "Link zum Zurücksetzen senden",
+        submitting: "Wird gesendet...",
+        success: "Falls das Konto existiert, haben wir einen Link zum Zurücksetzen des Passworts gesendet.",
+        rememberPassword: "Passwort wieder eingefallen?",
+        loginLink: "Anmelden",
+      },
+      update: {
+        title: "Neues Passwort festlegen",
+        subtitle: "Geben Sie ein neues Passwort für Ihr WolneMoce-Konto ein.",
+        password: "Neues Passwort",
+        confirmPassword: "Passwort bestätigen",
+        submit: "Neues Passwort festlegen",
+        submitting: "Wird gespeichert...",
+        mismatchError: "Die Passwörter müssen übereinstimmen.",
+        missingSessionError:
+          "Es gibt keine aktive Sitzung zum Zurücksetzen des Passworts. Verwenden Sie den Link aus der E-Mail.",
+      },
+    },
   },
   legal: {
     label: "Rechtsdokument",

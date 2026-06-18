@@ -769,6 +769,29 @@ const en: Dictionary = {
       success: "The account has been created. You can log in.",
       continue: "Continue",
     },
+    passwordRecovery: {
+      reset: {
+        title: "Reset password",
+        subtitle: "Enter your account email and we will send you a link to set a new password.",
+        email: "Email",
+        submit: "Send reset link",
+        submitting: "Sending...",
+        success: "If the account exists, we have sent a password reset link.",
+        rememberPassword: "Remember your password?",
+        loginLink: "Log in",
+      },
+      update: {
+        title: "Set a new password",
+        subtitle: "Enter a new password for your WolneMoce account.",
+        password: "New password",
+        confirmPassword: "Confirm password",
+        submit: "Set new password",
+        submitting: "Saving...",
+        mismatchError: "The passwords must match.",
+        missingSessionError:
+          "There is no active password recovery session. Use the link from the email.",
+      },
+    },
   },
   legal: {
     label: "Legal document",

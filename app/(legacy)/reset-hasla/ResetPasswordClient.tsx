@@ -2,9 +2,21 @@
 
 import Link from "next/link";
 import { type FormEvent, useState } from "react";
+import type { Dictionary } from "@/lib/i18n/types";
+import { getSafeNextPath } from "@/lib/safeNextPath";
 import { createClient } from "@/lib/supabase/client";
 
-export default function ResetPasswordClient() {
+type ResetPasswordClientProps = {
+  labels: Dictionary["auth"]["passwordRecovery"]["reset"];
+  loginHref: string;
+  updatePasswordPath: string;
+};
+
+export default function ResetPasswordClient({
+  labels,
+  loginHref,
+  updatePasswordPath,
+}: ResetPasswordClientProps) {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -16,9 +28,14 @@ export default function ResetPasswordClient() {
     setMessage("");
     setIsSubmitting(true);
     const supabase = createClient();
+    const callbackUrl = new URL("/auth/callback", window.location.origin);
+    callbackUrl.searchParams.set(
+      "next",
+      getSafeNextPath(updatePasswordPath, "/ustaw-nowe-haslo")
+    );
 
     const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/callback?next=/ustaw-nowe-haslo`,
+      redirectTo: callbackUrl.toString(),
     });
 
     if (resetError) {
@@ -27,7 +44,7 @@ export default function ResetPasswordClient() {
       return;
     }
 
-    setMessage("Jeżeli konto istnieje, wysłaliśmy link do resetu hasła.");
+    setMessage(labels.success);
     setIsSubmitting(false);
   }
 
@@ -40,9 +57,9 @@ export default function ResetPasswordClient() {
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
           <i className="fas fa-key text-xl"></i>
         </div>
-        <h1 className="text-2xl font-extrabold text-slate-900">Reset hasła</h1>
+        <h1 className="text-2xl font-extrabold text-slate-900">{labels.title}</h1>
         <p className="mt-2 text-sm leading-6 text-slate-500">
-          Podaj email konta, a wyślemy link do ustawienia nowego hasła.
+          {labels.subtitle}
         </p>
       </div>
 
@@ -61,7 +78,7 @@ export default function ResetPasswordClient() {
       <label className="block min-w-0">
         <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
           <i className="fas fa-envelope text-[#1a5f3c]"></i>
-          Email
+          {labels.email}
         </span>
         <input
           type="email"
@@ -77,13 +94,13 @@ export default function ResetPasswordClient() {
         disabled={isSubmitting}
         className="mt-6 btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isSubmitting ? "Wysyłanie..." : "Wyślij link resetujący"}
+        {isSubmitting ? labels.submitting : labels.submit}
       </button>
 
       <p className="mt-6 text-center text-sm text-slate-500">
-        Pamiętasz hasło?{" "}
-        <Link href="/logowanie" className="font-semibold text-[#1a5f3c] no-underline">
-          Zaloguj się
+        {labels.rememberPassword}{" "}
+        <Link href={loginHref} className="font-semibold text-[#1a5f3c] no-underline">
+          {labels.loginLink}
         </Link>
       </p>
     </form>
