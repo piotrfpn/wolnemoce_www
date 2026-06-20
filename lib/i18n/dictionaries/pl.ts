@@ -1068,6 +1068,7 @@ const pl: Dictionary = {
       projects: "Realizacje",
       inquiries: "Zapytania",
       receivedInquiries: "Otrzymane zapytania",
+      sentInquiries: "Wysłane zapytania",
       myRequests: "Moje zapytania produkcyjne",
       settings: "Ustawienia",
     },

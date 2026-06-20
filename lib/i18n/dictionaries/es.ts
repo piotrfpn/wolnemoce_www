@@ -966,6 +966,7 @@ const es: Dictionary = {
       projects: "Realizaciones",
       inquiries: "Consultas",
       receivedInquiries: "Consultas recibidas",
+      sentInquiries: "Consultas enviadas",
       myRequests: "Mis solicitudes de producción",
       settings: "Ajustes",
     },

@@ -14,6 +14,7 @@ type PanelNavLinksProps = {
     offers: string;
     projects: string;
     inquiries: string;
+    sentInquiries: string;
     myRequests: string;
     settings: string;
   };
@@ -33,6 +34,7 @@ export default function PanelNavLinks({
     { href: "/panel/oferty", label: labels.offers, exact: false, icon: "fas fa-list-check" },
     { href: "/panel/realizacje", label: labels.projects, exact: false, icon: "fas fa-briefcase" },
     { href: "/panel/zapytania", label: labels.inquiries, exact: false, icon: "fas fa-inbox", showBadge: true },
+    { href: "/panel/wyslane-zapytania", label: labels.sentInquiries, exact: false, icon: "fas fa-paper-plane" },
     {
       href: "/panel/moje-zapytania",
       label: labels.myRequests,

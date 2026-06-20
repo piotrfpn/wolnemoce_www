@@ -964,6 +964,7 @@ const uk: Dictionary = {
       projects: "Проєкти",
       inquiries: "Запити",
       receivedInquiries: "Отримані запити",
+      sentInquiries: "Надіслані запити",
       myRequests: "Мої виробничі запити",
       settings: "Налаштування",
     },

@@ -1044,6 +1044,7 @@ const en: Dictionary = {
       projects: "Projects",
       inquiries: "Inquiries",
       receivedInquiries: "Received inquiries",
+      sentInquiries: "Sent inquiries",
       myRequests: "My production requests",
       settings: "Settings",
     },

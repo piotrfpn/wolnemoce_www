@@ -886,6 +886,7 @@ export type Dictionary = {
       projects: string;
       inquiries: string;
       receivedInquiries: string;
+      sentInquiries: string;
       myRequests: string;
       settings: string;
     };
