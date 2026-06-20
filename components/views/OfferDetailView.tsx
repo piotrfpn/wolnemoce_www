@@ -151,7 +151,7 @@ export async function generateOfferDetailMetadata({
     : t.imagePlaceholderAlt;
 
   return {
-    title: `${offer.title} | ${companyName} | WolneMoce`,
+    title: `${offer.title} | ${companyName}`,
     description: truncateSeoDescription(descriptionSource),
     alternates: {
       canonical: localizedPath,

@@ -20,13 +20,26 @@ export function generateMetadata({ params }: LocaleCompaniesPageProps): Metadata
   }
 
   const dictionary = getDictionary(params.locale);
-
-  return createPageMetadata({
-    title: dictionary.seo.companies.title,
+  const socialTitle = dictionary.seo.companies.title;
+  const title = socialTitle.replace(/\s*\|\s*WolneMoce$/, "");
+  const pageMetadata = createPageMetadata({
+    title,
     description: dictionary.seo.companies.description,
     path: "/firmy",
     locale: params.locale,
   });
+
+  return {
+    ...pageMetadata,
+    openGraph: {
+      ...pageMetadata.openGraph,
+      title: socialTitle,
+    },
+    twitter: {
+      ...pageMetadata.twitter,
+      title: socialTitle,
+    },
+  };
 }
 
 export default function LocalizedCompaniesPage({

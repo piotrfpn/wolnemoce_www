@@ -603,7 +603,7 @@ const pl: Dictionary = {
     ctaDescription: "Dodaj ofertę w panelu firmy i wyślij ją do zatwierdzenia.",
     addOffer: "Dodaj ofertę",
     contact: "Kontakt",
-    notFoundTitle: "Nie znaleziono oferty | WolneMoce",
+    notFoundTitle: "Nie znaleziono oferty",
     notFoundDescription: "Oferta nie istnieje albo nie jest aktywna publicznie.",
     rfqCta: "Wyślij zapytanie o tę ofertę",
     rfqCtaMicrocopy: "Zapytanie jest bezpłatne. Opisz zakres, ilość, termin i dodaj załącznik techniczny, jeśli go posiadasz.",
@@ -719,7 +719,7 @@ const pl: Dictionary = {
     downloadCertificate: "Pobierz certyfikat",
     noCertificates: "Firma nie dodała jeszcze publicznych certyfikatów.",
     publicProfile: "Profil firmy",
-    notFoundTitle: "Nie znaleziono firmy | WolneMoce",
+    notFoundTitle: "Nie znaleziono firmy",
     notFoundDescription: "Nie znaleziono profilu firmy w serwisie WolneMoce.",
   },
   blogDetail: {
@@ -738,7 +738,7 @@ const pl: Dictionary = {
       "Sprawdź aktualne oferty wolnych mocy albo dodaj własną ofertę swojej firmy.",
     browseOffers: "Przeglądaj oferty",
     addOffer: "Dodaj ofertę",
-    notFoundTitle: "Artykuł nie znaleziony | Blog WolneMoce",
+    notFoundTitle: "Artykuł nie znaleziony",
     notFoundDescription: "Nie znaleziono opublikowanego artykułu blogowego.",
   },
   auth: {

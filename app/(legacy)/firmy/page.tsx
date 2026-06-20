@@ -4,12 +4,25 @@ import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createPageMetadata } from "@/lib/seo";
 
 const dictionary = getDictionary("pl");
-
-export const metadata: Metadata = createPageMetadata({
-  title: dictionary.seo.companies.title,
+const socialTitle = dictionary.seo.companies.title;
+const title = socialTitle.replace(/\s*\|\s*WolneMoce$/, "");
+const pageMetadata = createPageMetadata({
+  title,
   description: dictionary.seo.companies.description,
   path: "/firmy",
 });
+
+export const metadata: Metadata = {
+  ...pageMetadata,
+  openGraph: {
+    ...pageMetadata.openGraph,
+    title: socialTitle,
+  },
+  twitter: {
+    ...pageMetadata.twitter,
+    title: socialTitle,
+  },
+};
 
 export const revalidate = 3600;
 

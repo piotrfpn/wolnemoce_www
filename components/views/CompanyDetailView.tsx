@@ -283,7 +283,8 @@ export async function generateCompanyDetailMetadata({
   const description =
     company.description ||
     [industries, location, t.publicProfile].filter(Boolean).join(" - ");
-  const title = `${company.name} | ${t.publicProfile} | WolneMoce`;
+  const title = `${company.name} | ${t.publicProfile}`;
+  const socialTitle = `${title} | WolneMoce`;
   const seoDescription = truncateSeoDescription(description);
 
   return {
@@ -293,7 +294,7 @@ export async function generateCompanyDetailMetadata({
       canonical: canonicalPath,
     },
     openGraph: {
-      title,
+      title: socialTitle,
       description: seoDescription,
       url: canonicalPath,
       siteName: "WolneMoce",
@@ -309,7 +310,7 @@ export async function generateCompanyDetailMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: socialTitle,
       description: seoDescription,
       images: [getAbsoluteUrl("/images/offers/automation.jpg")],
     },

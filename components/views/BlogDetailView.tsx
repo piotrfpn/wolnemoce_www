@@ -175,7 +175,10 @@ export async function generateBlogDetailMetadata({
     };
   }
 
-  const title = post.meta_title || `${post.title} | Blog WolneMoce`;
+  const socialTitle = post.meta_title || `${post.title} | Blog WolneMoce`;
+  const title = socialTitle
+    .replace(/\s*\|\s*(?:Blog\s+WolneMoce|WolneMoce\s+blog)$/i, "")
+    .replace(/\s*\|\s*WolneMoce$/i, "");
   const description = truncateSeoDescription(
     post.meta_description || post.excerpt || post.content
   );
@@ -188,7 +191,7 @@ export async function generateBlogDetailMetadata({
       canonical: canonicalPath,
     },
     openGraph: {
-      title,
+      title: socialTitle,
       description,
       url: canonicalPath,
       siteName: "WolneMoce",
@@ -204,7 +207,7 @@ export async function generateBlogDetailMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: socialTitle,
       description,
       images: [imageUrl],
     },

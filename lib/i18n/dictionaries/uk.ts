@@ -559,7 +559,7 @@ const uk: Dictionary = {
       "Додайте пропозицію в панелі компанії та надішліть її на затвердження.",
     addOffer: "Додати пропозицію",
     contact: "Контакт",
-    notFoundTitle: "Пропозицію не знайдено | WolneMoce",
+    notFoundTitle: "Пропозицію не знайдено",
     notFoundDescription:
       "Пропозиція не існує або не є публічно активною.",
     rfqCta: "Надіслати запит щодо цієї пропозиції",
@@ -671,7 +671,7 @@ const uk: Dictionary = {
     downloadCertificate: "Завантажити сертифікат",
     noCertificates: "Компанія ще не додала публічних сертифікатів.",
     publicProfile: "Профіль компанії",
-    notFoundTitle: "Компанію не знайдено | WolneMoce",
+    notFoundTitle: "Компанію не знайдено",
     notFoundDescription:
       "Профіль компанії не знайдено на WolneMoce.",
   },
@@ -692,7 +692,7 @@ const uk: Dictionary = {
       "Перегляньте актуальні пропозиції вільних потужностей або додайте власну пропозицію компанії.",
     browseOffers: "Переглянути пропозиції",
     addOffer: "Додати пропозицію",
-    notFoundTitle: "Статтю не знайдено | Блог WolneMoce",
+    notFoundTitle: "Статтю не знайдено",
     notFoundDescription: "Опубліковану статтю блогу не знайдено.",
   },
   auth: {

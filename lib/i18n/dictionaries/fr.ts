@@ -559,7 +559,7 @@ const fr: Dictionary = {
       "Ajoutez une offre dans le panneau entreprise et envoyez-la pour approbation.",
     addOffer: "Ajouter une offre",
     contact: "Contact",
-    notFoundTitle: "Offre introuvable | WolneMoce",
+    notFoundTitle: "Offre introuvable",
     notFoundDescription:
       "L’offre n’existe pas ou n’est pas active publiquement.",
     rfqCta: "Envoyer une demande pour cette offre",
@@ -673,7 +673,7 @@ const fr: Dictionary = {
     downloadCertificate: "Télécharger le certificat",
     noCertificates: "L’entreprise n’a pas encore ajouté de certificats publics.",
     publicProfile: "Profil de l’entreprise",
-    notFoundTitle: "Entreprise introuvable | WolneMoce",
+    notFoundTitle: "Entreprise introuvable",
     notFoundDescription:
       "Le profil d’entreprise est introuvable sur WolneMoce.",
   },
@@ -694,7 +694,7 @@ const fr: Dictionary = {
       "Consultez les offres actuelles de capacités disponibles ou ajoutez l’offre de votre entreprise.",
     browseOffers: "Voir les offres",
     addOffer: "Ajouter une offre",
-    notFoundTitle: "Article introuvable | Blog WolneMoce",
+    notFoundTitle: "Article introuvable",
     notFoundDescription: "L’article de blog publié est introuvable.",
   },
   auth: {

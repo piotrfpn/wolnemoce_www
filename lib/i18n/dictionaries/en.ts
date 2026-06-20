@@ -589,7 +589,7 @@ const en: Dictionary = {
     ctaDescription: "Add an offer in the company panel and submit it for approval.",
     addOffer: "Add offer",
     contact: "Contact",
-    notFoundTitle: "Offer not found | WolneMoce",
+    notFoundTitle: "Offer not found",
     notFoundDescription: "The offer does not exist or is not publicly active.",
     rfqCta: "Send inquiry about this offer",
     rfqCtaMicrocopy: "The inquiry is free. Describe the scope, quantity, deadline, and add a technical attachment if you have one.",
@@ -708,7 +708,7 @@ const en: Dictionary = {
     downloadCertificate: "Download certificate",
     noCertificates: "The company has not added public certificates yet.",
     publicProfile: "Company profile",
-    notFoundTitle: "Company not found | WolneMoce",
+    notFoundTitle: "Company not found",
     notFoundDescription: "The company profile was not found on WolneMoce.",
   },
   blogDetail: {
@@ -727,7 +727,7 @@ const en: Dictionary = {
       "Browse current available-capacity offers or add your company's own offer.",
     browseOffers: "Browse offers",
     addOffer: "Add offer",
-    notFoundTitle: "Article not found | WolneMoce blog",
+    notFoundTitle: "Article not found",
     notFoundDescription: "The published blog article was not found.",
   },
   auth: {

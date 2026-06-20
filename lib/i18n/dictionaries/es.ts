@@ -559,7 +559,7 @@ const es: Dictionary = {
       "Añade una oferta en el panel de empresa y envíala para aprobación.",
     addOffer: "Añadir oferta",
     contact: "Contacto",
-    notFoundTitle: "Oferta no encontrada | WolneMoce",
+    notFoundTitle: "Oferta no encontrada",
     notFoundDescription:
       "La oferta no existe o no está activa públicamente.",
     rfqCta: "Enviar consulta sobre esta oferta",
@@ -672,7 +672,7 @@ const es: Dictionary = {
     downloadCertificate: "Descargar certificado",
     noCertificates: "La empresa aún no ha añadido certificados públicos.",
     publicProfile: "Perfil de empresa",
-    notFoundTitle: "Empresa no encontrada | WolneMoce",
+    notFoundTitle: "Empresa no encontrada",
     notFoundDescription:
       "No se ha encontrado el perfil de empresa en WolneMoce.",
   },
@@ -693,7 +693,7 @@ const es: Dictionary = {
       "Consulta ofertas actuales de capacidad disponible o añade la oferta de tu empresa.",
     browseOffers: "Ver ofertas",
     addOffer: "Añadir oferta",
-    notFoundTitle: "Artículo no encontrado | Blog WolneMoce",
+    notFoundTitle: "Artículo no encontrado",
     notFoundDescription: "No se ha encontrado el artículo publicado del blog.",
   },
   auth: {
