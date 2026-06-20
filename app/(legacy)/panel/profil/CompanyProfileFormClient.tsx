@@ -47,6 +47,10 @@ type CompanyData = {
   presentation_mime_type: string | null;
   presentation_size_bytes: number | null;
   presentation_uploaded_at: string | null;
+  country_code: string | null;
+  tax_id: string | null;
+  registration_number: string | null;
+  registered_address: string | null;
 };
 
 type CompanyProfileFormClientProps = {
@@ -257,10 +261,36 @@ type CompanySaveData = {
   presentation_mime_type: string | null;
   presentation_size_bytes: number | null;
   presentation_uploaded_at: string | null;
+  country_code?: string | null;
+  tax_id?: string | null;
+  registration_number?: string | null;
+  registered_address?: string | null;
 };
 
+const SUPPORTED_COUNTRIES = new Set([
+  "PL",
+  "DE",
+  "CZ",
+  "SK",
+  "UA",
+  "FR",
+  "ES",
+  "IT",
+  "NL",
+  "BE",
+  "AT",
+  "GB",
+  "XX",
+]);
+
+function getSupportedCountryCode(code: string | null | undefined): string {
+  if (!code) return "PL";
+  const upper = code.toUpperCase();
+  return SUPPORTED_COUNTRIES.has(upper) ? upper : "PL";
+}
+
 const companyProfileSelect =
-  "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, location_postal_code, location_street, location_full_address, regon, krs, legal_form, business_status, primary_pkd, pkd_codes, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at, company_contact_settings(contact_email)";
+  "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, location_postal_code, location_street, location_full_address, regon, krs, legal_form, business_status, primary_pkd, pkd_codes, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at, country_code, tax_id, registration_number, registered_address, company_contact_settings(contact_email)";
 
 export default function CompanyProfileFormClient({
   userId,
@@ -307,6 +337,10 @@ export default function CompanyProfileFormClient({
   const [description, setDescription] = useState(company?.description ?? "");
   const [websiteUrl, setWebsiteUrl] = useState(company?.website_url ?? "");
   const [contactEmail, setContactEmail] = useState(company?.contact_email ?? "");
+  const [countryCode, setCountryCode] = useState(getSupportedCountryCode(company?.country_code));
+  const [taxId, setTaxId] = useState(company?.tax_id ?? "");
+  const [registrationNumber, setRegistrationNumber] = useState(company?.registration_number ?? "");
+  const [registeredAddress, setRegisteredAddress] = useState(company?.registered_address ?? "");
   const [presentationPath, setPresentationPath] = useState(
     company?.presentation_path ?? ""
   );
@@ -403,8 +437,15 @@ export default function CompanyProfileFormClient({
     const normalizedNip = normalizeNip(nip);
     const normalizedWebsite = normalizeWebsiteUrl(websiteUrl);
 
-    if (!/^\d{10}$/.test(normalizedNip)) {
-      return "Podaj poprawny NIP. NIP powinien mieć 10 cyfr.";
+    if (countryCode === "PL") {
+      const canUseMockNip = canUseDevelopmentMockNip(normalizedNip);
+      if (!isValidNip(normalizedNip) && !canUseMockNip) {
+        return "Podaj poprawny NIP z prawidłową sumą kontrolną.";
+      }
+    } else {
+      if (!taxId.trim()) {
+        return "Podaj VAT ID / Tax ID.";
+      }
     }
 
     if (!name.trim()) {
@@ -423,8 +464,14 @@ export default function CompanyProfileFormClient({
       return "Wybierz co najmniej jeden rodzaj usługi.";
     }
 
-    if (!voivodeship) {
-      return "Wybierz województwo.";
+    if (countryCode === "PL") {
+      if (!voivodeship) {
+        return "Wybierz województwo.";
+      }
+    } else {
+      if (!voivodeship.trim()) {
+        return "Podaj region / stan / województwo.";
+      }
     }
 
     if (!city.trim()) {
@@ -471,6 +518,10 @@ export default function CompanyProfileFormClient({
     setPrimaryPkd(data.primary_pkd ?? "");
     setPkdCodes(data.pkd_codes ?? []);
     setWebsiteUrl(data.website_url ?? "");
+    setCountryCode(getSupportedCountryCode(data.country_code));
+    setTaxId(data.tax_id ?? "");
+    setRegistrationNumber(data.registration_number ?? "");
+    setRegisteredAddress(data.registered_address ?? "");
     const email = Array.isArray((data as any).company_contact_settings)
       ? (data as any).company_contact_settings[0]?.contact_email
       : ((data as any).company_contact_settings?.contact_email ?? data.contact_email);
@@ -491,6 +542,19 @@ export default function CompanyProfileFormClient({
       .from("companies")
       .select(`user_id, ${companyProfileSelect}`)
       .eq("nip", normalizedNip)
+      .maybeSingle();
+  }
+
+  async function findCompanyByTaxId(
+    supabase: ReturnType<typeof createClient>,
+    cCode: string,
+    tId: string
+  ) {
+    return supabase
+      .from("companies")
+      .select(`user_id, ${companyProfileSelect}`)
+      .eq("country_code", cCode)
+      .ilike("tax_id", tId.trim())
       .maybeSingle();
   }
 
@@ -517,50 +581,83 @@ export default function CompanyProfileFormClient({
     }
 
     const nextCompanySlug = companySlug || createCompanySlug(name.trim(), companyId);
-    const payload = {
-      nip: normalizedNip,
+    const isPl = countryCode === "PL";
+
+    const payload: any = {
+      country_code: countryCode.toUpperCase(),
       name: name.trim(),
       slug: nextCompanySlug,
       description: description.trim() || null,
       industry: mainIndustry,
       industries: selectedIndustries,
       service_types: selectedServiceTypes,
-      location_voivodeship: voivodeship,
+      location_voivodeship: voivodeship.trim() || null,
       location_city: normalizeCityName(city),
       location_postal_code: postalCode.trim() || null,
       location_street: streetAddress.trim() || null,
       location_full_address: fullAddress.trim() || null,
-      regon: regon.trim() || null,
-      krs: krs.trim() || null,
-      legal_form: legalForm.trim() || null,
-      business_status: businessStatus.trim() || null,
-      primary_pkd: primaryPkd.trim() || null,
-      pkd_codes: pkdCodes,
       website_url: normalizedWebsite.value,
     };
 
-    const existingCompanyResult = await findCompanyByNip(supabase, normalizedNip);
-
-    if (existingCompanyResult.error) {
-      setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
-      setIsSubmitting(false);
-      return;
+    if (isPl) {
+      payload.nip = normalizedNip;
+      payload.tax_id = null;
+      payload.registration_number = null;
+      payload.registered_address = null;
+      payload.regon = regon.trim() || null;
+      payload.krs = krs.trim() || null;
+      payload.primary_pkd = primaryPkd.trim() || null;
+      payload.pkd_codes = pkdCodes;
+    } else {
+      payload.nip = null;
+      payload.regon = null;
+      payload.krs = null;
+      payload.primary_pkd = null;
+      payload.pkd_codes = null;
+      payload.tax_id = taxId.trim();
+      payload.registration_number = registrationNumber.trim() || null;
+      payload.registered_address = registeredAddress.trim() || null;
     }
 
-    const existingCompany = existingCompanyResult.data as unknown as
-      | (CompanySaveData & { user_id: string | null })
-      | null;
+    let existingCompany = null;
+    if (isPl) {
+      if (normalizedNip) {
+        const existingCompanyResult = await findCompanyByNip(supabase, normalizedNip);
+        if (existingCompanyResult.error) {
+          setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
+          setIsSubmitting(false);
+          return;
+        }
+        existingCompany = existingCompanyResult.data;
+      }
+    } else {
+      if (taxId.trim()) {
+        const existingCompanyResult = await findCompanyByTaxId(supabase, countryCode.toUpperCase(), taxId.trim());
+        if (existingCompanyResult.error) {
+          setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
+          setIsSubmitting(false);
+          return;
+        }
+        existingCompany = existingCompanyResult.data;
+      }
+    }
 
     if (existingCompany && existingCompany.user_id !== userId) {
-      setError("Firma z tym NIP jest już zarejestrowana w systemie.");
+      setError(
+        isPl
+          ? "Firma z tym NIP jest już zarejestrowana w systemie."
+          : "Firma z tym VAT ID / Tax ID dla wybranego kraju jest już zarejestrowana w systemie."
+      );
       setIsSubmitting(false);
       return;
     }
 
     if (existingCompany && !companyId) {
-      applySavedCompany(existingCompany);
+      applySavedCompany(existingCompany as any);
       setMessage(
-        "Firma z tym NIP jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
+        isPl
+          ? "Firma z tym NIP jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
+          : "Firma z tym VAT ID / Tax ID dla wybranego kraju jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
       );
       setIsSubmitting(false);
       router.refresh();
@@ -568,8 +665,12 @@ export default function CompanyProfileFormClient({
     }
 
     if (existingCompany && companyId && existingCompany.id !== companyId) {
-      setError("Firma z tym NIP jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty.");
-      applySavedCompany(existingCompany);
+      setError(
+        isPl
+          ? "Firma z tym NIP jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
+          : "Firma z tym VAT ID / Tax ID dla wybranego kraju jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
+      );
+      applySavedCompany(existingCompany as any);
       setIsSubmitting(false);
       router.refresh();
       return;
@@ -595,7 +696,9 @@ export default function CompanyProfileFormClient({
 
     if (saveError) {
       if (saveError.code === "23505") {
-        const retryCompanyResult = await findCompanyByNip(supabase, normalizedNip);
+        const retryCompanyResult = isPl
+          ? await findCompanyByNip(supabase, normalizedNip)
+          : await findCompanyByTaxId(supabase, countryCode.toUpperCase(), taxId.trim());
         const retryCompany = retryCompanyResult.data as unknown as
           | (CompanySaveData & { user_id: string | null })
           | null;
@@ -603,14 +706,20 @@ export default function CompanyProfileFormClient({
         if (retryCompany?.user_id === userId) {
           applySavedCompany(retryCompany);
           setMessage(
-            "Firma z tym NIP jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
+            isPl
+              ? "Firma z tym NIP jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
+              : "Firma z tym VAT ID / Tax ID dla wybranego kraju jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
           );
           setIsSubmitting(false);
           router.refresh();
           return;
         }
 
-        setError("Firma z tym NIP jest już zarejestrowana w systemie.");
+        setError(
+          isPl
+            ? "Firma z tym NIP jest już zarejestrowana w systemie."
+            : "Firma z tym VAT ID / Tax ID dla wybranego kraju jest już zarejestrowana w systemie."
+        );
         setIsSubmitting(false);
         return;
       }
@@ -1074,57 +1183,105 @@ export default function CompanyProfileFormClient({
             </div>
           ) : null}
 
-          <div className="grid min-w-0 gap-5 md:grid-cols-2">
-            <div className="block min-w-0">
-              <label
-                htmlFor="company-nip"
-                className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500"
-              >
-                <i className="fas fa-id-card text-[#1a5f3c]"></i>
-                {dict.nipLabel}
-              </label>
-              <input
-                id="company-nip"
-                value={nip}
-                onChange={(event) => {
-                  setNip(event.target.value);
+          {/* Country Selection */}
+          <div className="mb-5 block min-w-0">
+            <label
+              htmlFor="company-country"
+              className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500"
+            >
+              <i className="fas fa-globe text-[#1a5f3c]"></i>
+              {dict.companyCountryLabel}
+            </label>
+            <select
+              id="company-country"
+              value={countryCode}
+              onChange={(event) => {
+                const val = event.target.value;
+                setCountryCode(val);
+                if (val !== "PL") {
+                  setNip("");
                   setGusError("");
                   setGusMessage("");
-                }}
-                placeholder="Np. 1234567890"
-                className={inputClass}
-              />
-              <button
-                type="button"
-                onClick={handleGusLookup}
-                disabled={isGusLoading}
-                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
-              >
-                <i
-                  className={
-                    isGusLoading ? "fas fa-spinner fa-spin" : "fas fa-download"
-                  }
-                ></i>
-                {isGusLoading
-                  ? dict.gusFetching
-                  : dict.gusFetch}
-              </button>
-              {isGusLoading ? (
-                <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-5 text-slate-600">
-                  {dict.gusFetching}
-                </div>
-              ) : null}
-              {gusError ? (
-                <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs leading-5 text-red-700">
-                  {gusError}
-                </div>
-              ) : null}
-              {gusMessage ? (
-                <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-5 text-emerald-700">
-                  {gusMessage}
-                </div>
-              ) : null}
+                }
+              }}
+              className={inputClass}
+            >
+              <option value="PL">{dict.countryPL}</option>
+              <option value="DE">{dict.countryDE}</option>
+              <option value="CZ">{dict.countryCZ}</option>
+              <option value="SK">{dict.countrySK}</option>
+              <option value="UA">{dict.countryUA}</option>
+              <option value="FR">{dict.countryFR}</option>
+              <option value="ES">{dict.countryES}</option>
+              <option value="IT">{dict.countryIT}</option>
+              <option value="NL">{dict.countryNL}</option>
+              <option value="BE">{dict.countryBE}</option>
+              <option value="AT">{dict.countryAT}</option>
+              <option value="GB">{dict.countryGB}</option>
+              <option value="XX">{dict.countryXX}</option>
+            </select>
+          </div>
+
+          {countryCode !== "PL" ? (
+            <div className="mb-5 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700">
+              <i className="fas fa-info-circle mr-2"></i>
+              {dict.foreignVerificationNotice}
             </div>
+          ) : null}
+
+          <div className="grid min-w-0 gap-5 md:grid-cols-2">
+            {countryCode === "PL" && (
+              <div className="block min-w-0">
+                <label
+                  htmlFor="company-nip"
+                  className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500"
+                >
+                  <i className="fas fa-id-card text-[#1a5f3c]"></i>
+                  {dict.nipLabel}
+                </label>
+                <input
+                  id="company-nip"
+                  value={nip}
+                  onChange={(event) => {
+                    setNip(event.target.value);
+                    setGusError("");
+                    setGusMessage("");
+                  }}
+                  placeholder="Np. 1234567890"
+                  className={inputClass}
+                />
+                <button
+                  type="button"
+                  onClick={handleGusLookup}
+                  disabled={isGusLoading}
+                  className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                >
+                  <i
+                    className={
+                      isGusLoading ? "fas fa-spinner fa-spin" : "fas fa-download"
+                    }
+                  ></i>
+                  {isGusLoading
+                    ? dict.gusFetching
+                    : dict.gusFetch}
+                </button>
+                {isGusLoading ? (
+                  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-5 text-slate-600">
+                    {dict.gusFetching}
+                  </div>
+                ) : null}
+                {gusError ? (
+                  <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs leading-5 text-red-700">
+                    {gusError}
+                  </div>
+                ) : null}
+                {gusMessage ? (
+                  <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-5 text-emerald-700">
+                    {gusMessage}
+                  </div>
+                ) : null}
+              </div>
+            )}
 
             <label className="block min-w-0">
               <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
@@ -1283,20 +1440,30 @@ export default function CompanyProfileFormClient({
             <label className="block min-w-0">
               <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                 <i className="fas fa-map text-[#1a5f3c]"></i>
-                Województwo
+                {countryCode === "PL" ? "Województwo" : dict.voivodeshipForeignLabel}
               </span>
-              <select
-                value={voivodeship}
-                onChange={(event) => setVoivodeship(event.target.value)}
-                className={inputClass}
-              >
-                <option value="">Wybierz województwo</option>
-                {provinces.map((province) => (
-                  <option key={province} value={province}>
-                    {province}
-                  </option>
-                ))}
-              </select>
+              {countryCode === "PL" ? (
+                <select
+                  value={voivodeship}
+                  onChange={(event) => setVoivodeship(event.target.value)}
+                  className={inputClass}
+                >
+                  <option value="">Wybierz województwo</option>
+                  {provinces.map((province) => (
+                    <option key={province} value={province}>
+                      {province}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  value={voivodeship}
+                  onChange={(event) => setVoivodeship(event.target.value)}
+                  placeholder={dict.voivodeshipForeignPlaceholder}
+                  className={inputClass}
+                />
+              )}
             </label>
 
             <label className="block min-w-0">
@@ -1318,134 +1485,189 @@ export default function CompanyProfileFormClient({
               </datalist>
             </label>
 
-            <div className="min-w-0 md:col-span-2">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                <div className="mb-5">
-                  <h3 className="flex items-center gap-2 text-sm font-extrabold text-slate-900">
-                    <i className="fas fa-file-contract text-[#1a5f3c]"></i>
-                    {dict.registrationData}
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-500">
-                    Dane pobrane z rejestru GUS są zapisywane dopiero po
-                    zapisaniu profilu firmy.
-                  </p>
-                </div>
+            {countryCode === "PL" ? (
+              <div className="min-w-0 md:col-span-2">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                  <div className="mb-5">
+                    <h3 className="flex items-center gap-2 text-sm font-extrabold text-slate-900">
+                      <i className="fas fa-file-contract text-[#1a5f3c]"></i>
+                      {dict.registrationData}
+                    </h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-500">
+                      Dane pobrane z rejestru GUS są zapisywane dopiero po
+                      zapisaniu profilu firmy.
+                    </p>
+                  </div>
 
-                <div className="grid min-w-0 gap-5 md:grid-cols-2">
-                  <label className="block min-w-0">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                      <i className="fas fa-hashtag text-[#1a5f3c]"></i>
-                      REGON
-                    </span>
-                    <input
-                      value={regon}
-                      onChange={(event) => setRegon(event.target.value)}
-                      className={inputClass}
-                    />
-                  </label>
+                  <div className="grid min-w-0 gap-5 md:grid-cols-2">
+                    <label className="block min-w-0">
+                      <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        <i className="fas fa-hashtag text-[#1a5f3c]"></i>
+                        REGON
+                      </span>
+                      <input
+                        value={regon}
+                        onChange={(event) => setRegon(event.target.value)}
+                        className={inputClass}
+                      />
+                    </label>
 
-                  <label className="block min-w-0">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                      <i className="fas fa-scale-balanced text-[#1a5f3c]"></i>
-                      KRS
-                    </span>
-                    <input
-                      value={krs}
-                      onChange={(event) => setKrs(event.target.value)}
-                      className={inputClass}
-                    />
-                  </label>
+                    <label className="block min-w-0">
+                      <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        <i className="fas fa-scale-balanced text-[#1a5f3c]"></i>
+                        KRS
+                      </span>
+                      <input
+                        value={krs}
+                        onChange={(event) => setKrs(event.target.value)}
+                        className={inputClass}
+                      />
+                    </label>
 
-                  <label className="block min-w-0">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                      <i className="fas fa-envelope-open-text text-[#1a5f3c]"></i>
-                      Kod pocztowy
-                    </span>
-                    <input
-                      value={postalCode}
-                      onChange={(event) => setPostalCode(event.target.value)}
-                      placeholder="Np. 00-000"
-                      className={inputClass}
-                    />
-                  </label>
+                    <label className="block min-w-0">
+                      <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        <i className="fas fa-envelope-open-text text-[#1a5f3c]"></i>
+                        Kod pocztowy
+                      </span>
+                      <input
+                        value={postalCode}
+                        onChange={(event) => setPostalCode(event.target.value)}
+                        placeholder="Np. 00-000"
+                        className={inputClass}
+                      />
+                    </label>
 
-                  <label className="block min-w-0">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                      <i className="fas fa-road text-[#1a5f3c]"></i>
-                      Ulica / adres
-                    </span>
-                    <input
-                      value={streetAddress}
-                      onChange={(event) => setStreetAddress(event.target.value)}
-                      placeholder="Np. ul. Testowa 1/2"
-                      className={inputClass}
-                    />
-                  </label>
+                    <label className="block min-w-0">
+                      <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        <i className="fas fa-road text-[#1a5f3c]"></i>
+                        Ulica / adres
+                      </span>
+                      <input
+                        value={streetAddress}
+                        onChange={(event) => setStreetAddress(event.target.value)}
+                        placeholder="Np. ul. Testowa 1/2"
+                        className={inputClass}
+                      />
+                    </label>
 
-                  <label className="block min-w-0 md:col-span-2">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                      <i className="fas fa-map-location-dot text-[#1a5f3c]"></i>
-                      Pełny adres siedziby
-                    </span>
-                    <input
-                      value={fullAddress}
-                      onChange={(event) => setFullAddress(event.target.value)}
-                      placeholder="Np. ul. Testowa 1/2, 00-000 Warszawa"
-                      className={inputClass}
-                    />
-                  </label>
+                    <label className="block min-w-0 md:col-span-2">
+                      <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        <i className="fas fa-map-location-dot text-[#1a5f3c]"></i>
+                        Pełny adres siedziby
+                      </span>
+                      <input
+                        value={fullAddress}
+                        onChange={(event) => setFullAddress(event.target.value)}
+                        placeholder="Np. ul. Testowa 1/2, 00-000 Warszawa"
+                        className={inputClass}
+                      />
+                    </label>
 
-                  <label className="block min-w-0">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                      <i className="fas fa-briefcase text-[#1a5f3c]"></i>
-                      Forma prawna
-                    </span>
-                    <input
-                      value={legalForm}
-                      onChange={(event) => setLegalForm(event.target.value)}
-                      className={inputClass}
-                    />
-                  </label>
+                    <label className="block min-w-0">
+                      <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        <i className="fas fa-briefcase text-[#1a5f3c]"></i>
+                        Forma prawna
+                      </span>
+                      <input
+                        value={legalForm}
+                        onChange={(event) => setLegalForm(event.target.value)}
+                        className={inputClass}
+                      />
+                    </label>
 
-                  <label className="block min-w-0">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                      <i className="fas fa-circle-info text-[#1a5f3c]"></i>
-                      Status działalności
-                    </span>
-                    <input
-                      value={businessStatus}
-                      onChange={(event) => setBusinessStatus(event.target.value)}
-                      className={inputClass}
-                    />
-                  </label>
+                    <label className="block min-w-0">
+                      <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        <i className="fas fa-circle-info text-[#1a5f3c]"></i>
+                        Status działalności
+                      </span>
+                      <input
+                        value={businessStatus}
+                        onChange={(event) => setBusinessStatus(event.target.value)}
+                        className={inputClass}
+                      />
+                    </label>
 
-                  <label className="block min-w-0 md:col-span-2">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                      <i className="fas fa-list-check text-[#1a5f3c]"></i>
-                      PKD przeważające
-                    </span>
-                    <input
-                      value={primaryPkd}
-                      onChange={(event) => setPrimaryPkd(event.target.value)}
-                      className={inputClass}
-                    />
-                  </label>
+                    <label className="block min-w-0 md:col-span-2">
+                      <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        <i className="fas fa-list-check text-[#1a5f3c]"></i>
+                        PKD przeważające
+                      </span>
+                      <input
+                        value={primaryPkd}
+                        onChange={(event) => setPrimaryPkd(event.target.value)}
+                        className={inputClass}
+                      />
+                    </label>
 
-                  <label className="block min-w-0 md:col-span-2">
-                    <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                      <i className="fas fa-list-ul text-[#1a5f3c]"></i>
-                      PKD
-                    </span>
-                    <textarea
-                      value={formatPkdCodes(pkdCodes)}
-                      readOnly
-                      rows={Math.min(Math.max(pkdCodes.length, 3), 8)}
-                      className={`${inputClass} resize-y`}
-                    />
-                  </label>
+                    <label className="block min-w-0 md:col-span-2">
+                      <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        <i className="fas fa-list-ul text-[#1a5f3c]"></i>
+                        PKD
+                      </span>
+                      <textarea
+                        value={formatPkdCodes(pkdCodes)}
+                        readOnly
+                        rows={Math.min(Math.max(pkdCodes.length, 3), 8)}
+                        className={`${inputClass} resize-y`}
+                      />
+                    </label>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="min-w-0 md:col-span-2">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                  <div className="mb-5">
+                    <h3 className="flex items-center gap-2 text-sm font-extrabold text-slate-900">
+                      <i className="fas fa-file-contract text-[#1a5f3c]"></i>
+                      {dict.registrationData}
+                    </h3>
+                  </div>
+
+                  <div className="grid min-w-0 gap-5 md:grid-cols-2">
+                    <label className="block min-w-0">
+                      <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        <i className="fas fa-hashtag text-[#1a5f3c]"></i>
+                        {dict.taxIdLabel} *
+                      </span>
+                      <input
+                        value={taxId}
+                        onChange={(event) => setTaxId(event.target.value)}
+                        placeholder="Np. DE123456789"
+                        className={inputClass}
+                      />
+                    </label>
+
+                    <label className="block min-w-0">
+                      <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        <i className="fas fa-scale-balanced text-[#1a5f3c]"></i>
+                        {dict.registrationNumberLabel}
+                      </span>
+                      <input
+                        value={registrationNumber}
+                        onChange={(event) => setRegistrationNumber(event.target.value)}
+                        placeholder="Np. HRB 12345"
+                        className={inputClass}
+                      />
+                    </label>
+
+                    <label className="block min-w-0 md:col-span-2">
+                      <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                        <i className="fas fa-map-location-dot text-[#1a5f3c]"></i>
+                        {dict.registeredAddressLabel}
+                      </span>
+                      <textarea
+                        value={registeredAddress}
+                        onChange={(event) => setRegisteredAddress(event.target.value)}
+                        placeholder="Np. Musterstraße 1, 12345 Berlin"
+                        rows={3}
+                        className={`${inputClass} resize-y`}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <label className="block min-w-0 md:col-span-2">
               <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
