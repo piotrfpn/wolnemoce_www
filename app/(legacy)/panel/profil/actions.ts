@@ -697,3 +697,175 @@ export async function lookupCompanyInGus(nipInput: string): Promise<GusLookupRes
     return { error: gusFallbackMessage };
   }
 }
+
+export type SavePresentationMetadataInput = {
+  companyId: string;
+  presentationPath: string;
+  presentationFileName: string;
+  presentationMimeType: string;
+  presentationSizeBytes: number;
+};
+
+export type SavePresentationMetadataResult =
+  | { success: true; data: { uploadedAt: string } }
+  | { success: false; errorKey: "profileSaveError" | "presentationInvalidFormat" };
+
+async function persistCompanyPresentationMetadata(
+  input: SavePresentationMetadataInput
+): Promise<SavePresentationMetadataResult> {
+  const supabase = createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return { success: false, errorKey: "profileSaveError" };
+  }
+
+  const {
+    companyId,
+    presentationPath,
+    presentationFileName,
+    presentationMimeType,
+    presentationSizeBytes,
+  } = input;
+
+  const trimmedPath = presentationPath.trim();
+  if (!trimmedPath || trimmedPath.includes("..")) {
+    return { success: false, errorKey: "profileSaveError" };
+  }
+
+  if (!trimmedPath.startsWith(`companies/${companyId}/presentation/`)) {
+    return { success: false, errorKey: "profileSaveError" };
+  }
+
+  const trimmedFileName = presentationFileName.trim();
+  if (
+    !trimmedFileName ||
+    !trimmedFileName.toLowerCase().endsWith(".pdf") ||
+    /<[^>]*>/g.test(trimmedFileName)
+  ) {
+    return { success: false, errorKey: "presentationInvalidFormat" };
+  }
+
+  if (presentationMimeType.trim() !== "application/pdf") {
+    return { success: false, errorKey: "presentationInvalidFormat" };
+  }
+
+  if (presentationSizeBytes <= 0 || presentationSizeBytes > 10 * 1024 * 1024) {
+    return { success: false, errorKey: "profileSaveError" };
+  }
+
+  const { data: company, error: companyError } = await supabase
+    .from("companies")
+    .select("id, user_id")
+    .eq("id", companyId)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (companyError || !company) {
+    return { success: false, errorKey: "profileSaveError" };
+  }
+
+  const uploadedAt = new Date().toISOString();
+
+  const { error: updateError } = await supabase
+    .from("companies")
+    .update({
+      presentation_path: trimmedPath,
+      presentation_file_name: trimmedFileName,
+      presentation_mime_type: "application/pdf",
+      presentation_size_bytes: presentationSizeBytes,
+      presentation_uploaded_at: uploadedAt,
+    })
+    .eq("id", companyId)
+    .eq("user_id", user.id);
+
+  if (updateError) {
+    return { success: false, errorKey: "profileSaveError" };
+  }
+
+  return { success: true, data: { uploadedAt } };
+}
+
+export async function saveCompanyPresentationMetadataAction(
+  input: SavePresentationMetadataInput
+): Promise<SavePresentationMetadataResult> {
+  let outcome: SavePresentationMetadataResult;
+  try {
+    outcome = await persistCompanyPresentationMetadata(input);
+  } catch (error) {
+    console.warn("Save presentation metadata Server Action failed", {
+      name: error instanceof Error ? error.name : "UnknownError",
+    });
+    return { success: false, errorKey: "profileSaveError" };
+  }
+
+  revalidatePath("/panel/profil");
+  revalidatePath("/panel", "layout");
+
+  return outcome;
+}
+
+async function persistRemoveCompanyPresentationMetadata(
+  companyId: string
+): Promise<{ success: boolean; errorKey?: "profileSaveError" }> {
+  const supabase = createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return { success: false, errorKey: "profileSaveError" };
+  }
+
+  const { data: company, error: companyError } = await supabase
+    .from("companies")
+    .select("id, user_id")
+    .eq("id", companyId)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (companyError || !company) {
+    return { success: false, errorKey: "profileSaveError" };
+  }
+
+  const { error: updateError } = await supabase
+    .from("companies")
+    .update({
+      presentation_path: null,
+      presentation_file_name: null,
+      presentation_mime_type: null,
+      presentation_size_bytes: null,
+      presentation_uploaded_at: null,
+    })
+    .eq("id", companyId)
+    .eq("user_id", user.id);
+
+  if (updateError) {
+    return { success: false, errorKey: "profileSaveError" };
+  }
+
+  return { success: true };
+}
+
+export async function removeCompanyPresentationMetadataAction(
+  companyId: string
+): Promise<{ success: boolean; errorKey?: "profileSaveError" }> {
+  let outcome: { success: boolean; errorKey?: "profileSaveError" };
+  try {
+    outcome = await persistRemoveCompanyPresentationMetadata(companyId);
+  } catch (error) {
+    console.warn("Remove presentation metadata Server Action failed", {
+      name: error instanceof Error ? error.name : "UnknownError",
+    });
+    return { success: false, errorKey: "profileSaveError" };
+  }
+
+  revalidatePath("/panel/profil");
+  revalidatePath("/panel", "layout");
+
+  return outcome;
+}

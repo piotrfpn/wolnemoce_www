@@ -17,6 +17,8 @@ import { isValidNip, normalizeNip } from "@/lib/validators/nip";
 import {
   lookupCompanyInGus,
   saveCompanyProfileAction,
+  saveCompanyPresentationMetadataAction,
+  removeCompanyPresentationMetadataAction,
   type CompanyProfileInput,
   type SavedCompanyProfile,
 } from "./actions";
@@ -86,10 +88,8 @@ const presentationBucket = "company-presentations";
 const maxPresentationSize = 10 * 1024 * 1024;
 const allowedPresentationMimeTypes = new Set([
   "application/pdf",
-  "application/vnd.ms-powerpoint",
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 ]);
-const allowedPresentationExtensions = new Set(["pdf", "ppt", "pptx"]);
+const allowedPresentationExtensions = new Set(["pdf"]);
 
 const sortedIndustries = Object.keys(industryServiceTypes).sort((first, second) =>
   first.localeCompare(second, "pl")
@@ -335,6 +335,7 @@ export default function CompanyProfileFormClient({
   const [presentationMessage, setPresentationMessage] = useState("");
   const [isPresentationSubmitting, setIsPresentationSubmitting] =
     useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [isSavePending, startSaveTransition] = useTransition();
@@ -782,26 +783,33 @@ export default function CompanyProfileFormClient({
       return;
     }
 
-    const uploadedAt = new Date().toISOString();
-    const { error: updateError } = await supabase
-      .from("companies")
-      .update({
-        presentation_path: nextPresentationPath,
-        presentation_file_name: presentationFile.name,
-        presentation_mime_type:
-          presentationFile.type || getPresentationExtension(presentationFile.name),
-        presentation_size_bytes: presentationFile.size,
-        presentation_uploaded_at: uploadedAt,
-      })
-      .eq("id", companyId);
+    const actionResult = await saveCompanyPresentationMetadataAction({
+      companyId,
+      presentationPath: nextPresentationPath,
+      presentationFileName: presentationFile.name,
+      presentationMimeType: presentationFile.type || "application/pdf",
+      presentationSizeBytes: presentationFile.size,
+    });
 
-    if (updateError) {
-      await supabase.storage.from(presentationBucket).remove([nextPresentationPath]);
-      setPresentationError(dict.presentationUpdateError);
+    if (!actionResult.success) {
+      try {
+        await supabase.storage
+          .from(presentationBucket)
+          .remove([nextPresentationPath]);
+      } catch (rollbackErr) {
+        console.error("Rollback of presentation file from storage failed:", rollbackErr);
+      }
+
+      setPresentationError(
+        actionResult.errorKey === "presentationInvalidFormat"
+          ? dict.presentationInvalidFormat
+          : dict.presentationUpdateError
+      );
       setIsPresentationSubmitting(false);
       return;
     }
 
+    const uploadedAt = actionResult.data.uploadedAt;
     const previousPresentationPath = presentationPath;
     if (
       previousPresentationPath &&
@@ -814,12 +822,13 @@ export default function CompanyProfileFormClient({
 
     setPresentationPath(nextPresentationPath);
     setPresentationFileName(presentationFile.name);
-    setPresentationMimeType(
-      presentationFile.type || getPresentationExtension(presentationFile.name)
-    );
+    setPresentationMimeType("application/pdf");
     setPresentationSizeBytes(presentationFile.size);
     setPresentationUploadedAt(uploadedAt);
     setPresentationFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
     setPresentationMessage(dict.presentationUploadedSuccess);
     setIsPresentationSubmitting(false);
     router.refresh();
@@ -839,32 +848,22 @@ export default function CompanyProfileFormClient({
     }
 
     setIsPresentationSubmitting(true);
+
+    const actionResult = await removeCompanyPresentationMetadataAction(companyId);
+
+    if (!actionResult.success) {
+      setPresentationError(dict.presentationDeleteError);
+      setIsPresentationSubmitting(false);
+      return;
+    }
+
     const supabase = createClient();
     const removeResult = await supabase.storage
       .from(presentationBucket)
       .remove([presentationPath]);
 
     if (removeResult.error) {
-      setPresentationError(dict.presentationDeleteError);
-      setIsPresentationSubmitting(false);
-      return;
-    }
-
-    const { error: updateError } = await supabase
-      .from("companies")
-      .update({
-        presentation_path: null,
-        presentation_file_name: null,
-        presentation_mime_type: null,
-        presentation_size_bytes: null,
-        presentation_uploaded_at: null,
-      })
-      .eq("id", companyId);
-
-    if (updateError) {
-      setPresentationError(dict.presentationUpdateError);
-      setIsPresentationSubmitting(false);
-      return;
+      console.warn("Storage presentation file removal failed after metadata deletion", removeResult.error);
     }
 
     setPresentationPath("");
@@ -873,6 +872,9 @@ export default function CompanyProfileFormClient({
     setPresentationSizeBytes(null);
     setPresentationUploadedAt("");
     setPresentationFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
     setPresentationMessage(dict.presentationDeletedSuccess);
     setIsPresentationSubmitting(false);
     router.refresh();
@@ -1554,8 +1556,9 @@ export default function CompanyProfileFormClient({
                     {dict.presentationFileLabel}
                   </span>
                   <input
+                    ref={fileInputRef}
                     type="file"
-                    accept=".pdf,.ppt,.pptx,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                    accept=".pdf,application/pdf"
                     onChange={(event) =>
                       handlePresentationFileChange(event.target.files?.[0] ?? null)
                     }
