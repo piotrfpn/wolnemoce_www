@@ -1,13 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import {
-  isCapacityRequestEmailNotificationEnabled,
-  sendCapacityRequestEmail,
-} from "@/lib/email/capacityRequestEmailDelivery";
-import { buildCapacityRequestInterestCreatedEmail } from "@/lib/email/capacityRequestEmails";
-import { resolveCapacityRequestInterestEmailContext } from "@/lib/email/resolveCapacityRequestEmailContext";
-import { getAppBaseUrl } from "@/lib/email/sendEmail";
+import { logCapacityRequestInterestNotification } from "@/lib/email/capacityRequestEmails";
+import { resolveCapacityRequestRecipientUserId } from "@/lib/email/resolveCapacityRequestEmailContext";
 import { createClient } from "@/lib/supabase/server";
 
 export type CapacityRequestInterestResult = {
@@ -21,105 +16,32 @@ function loginRedirect(returnTo: string) {
   return `/logowanie?next=${encoded}&return_to=${encoded}`;
 }
 
-const capacityRequestInterestCreatedEventKey = "capacity_request.interest.created";
+async function logCapacityRequestOwnerInterestIntent(
+  capacityRequestId: string
+): Promise<void> {
+  let recipientUserId: string | null = null;
 
-type CapacityRequestEmailLogParams = {
-  interestId: string;
-  outcome: "sent" | "skipped" | "failed";
-  reason?:
-    | "disabled"
-    | "log_only"
-    | "invalid_recipient"
-    | "recipient_unavailable"
-    | "domain_not_allowed"
-    | "missing_config"
-    | "provider_error"
-    | "unexpected_error";
-};
-
-function logCapacityRequestInterestEmail(params: CapacityRequestEmailLogParams) {
-  const logPayload: {
-    eventKey: string;
-    interestId: string;
-    outcome: CapacityRequestEmailLogParams["outcome"];
-    reason?: NonNullable<CapacityRequestEmailLogParams["reason"]>;
-  } = {
-    eventKey: capacityRequestInterestCreatedEventKey,
-    interestId: params.interestId,
-    outcome: params.outcome,
-  };
-
-  if (params.reason) {
-    logPayload.reason = params.reason;
+  try {
+    recipientUserId = await resolveCapacityRequestRecipientUserId(
+      capacityRequestId
+    );
+  } catch (error) {
+    console.warn("Capacity request recipient resolver failed", {
+      capacity_request_id: capacityRequestId,
+      error: error instanceof Error ? error.message : "Unknown resolver error",
+    });
   }
 
-  console.info(logPayload);
-}
-
-async function notifyCapacityRequestOwnerAboutInterest(
-  interestId: string
-): Promise<void> {
   try {
-    if (!isCapacityRequestEmailNotificationEnabled()) {
-      logCapacityRequestInterestEmail({
-        interestId,
-        outcome: "skipped",
-        reason: "disabled",
-      });
-      return;
-    }
-
-    const context = await resolveCapacityRequestInterestEmailContext(interestId);
-
-    if (!context) {
-      logCapacityRequestInterestEmail({
-        interestId,
-        outcome: "skipped",
-        reason: "recipient_unavailable",
-      });
-      return;
-    }
-
-    const email = buildCapacityRequestInterestCreatedEmail({
-      appBaseUrl: getAppBaseUrl(),
-      requestTitle: context.requestTitle,
-      interestedCompanyName: context.interestedCompanyName,
+    logCapacityRequestInterestNotification({
+      capacityRequestId,
+      recipientUserId,
     });
-    const emailResult = await sendCapacityRequestEmail({
-      to: context.recipientEmail,
-      ...email,
-      idempotencyKey: `capacity-request-interest:${interestId}:owner`,
+  } catch (error) {
+    console.warn("Capacity request email intent logging failed", {
+      capacity_request_id: capacityRequestId,
+      error: error instanceof Error ? error.message : "Unknown logging error",
     });
-
-    if (emailResult.ok) {
-      logCapacityRequestInterestEmail({
-        interestId,
-        outcome: "sent",
-      });
-      return;
-    }
-
-    if ("skipped" in emailResult) {
-      logCapacityRequestInterestEmail({
-        interestId,
-        outcome: "skipped",
-        reason: emailResult.reason,
-      });
-      return;
-    }
-
-    logCapacityRequestInterestEmail({
-      interestId,
-      outcome: "failed",
-      reason: "provider_error",
-    });
-  } catch {
-    logCapacityRequestInterestEmail({
-      interestId,
-      outcome: "failed",
-      reason: "unexpected_error",
-    });
-    return;
   }
 }
 
@@ -196,7 +118,7 @@ export async function submitCapacityRequestInterest(
 
   revalidatePath("/zapytania");
   revalidatePath(safeReturnTo);
-  await notifyCapacityRequestOwnerAboutInterest(interestId);
+  await logCapacityRequestOwnerInterestIntent(capacityRequestId);
 
   return {
     success:

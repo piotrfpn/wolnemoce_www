@@ -76,60 +76,27 @@ Jeżeli `company_contact_settings.contact_email` jest puste albo niepoprawne, e-
 
 ## Capacity Request Notifications
 
-### EVENT 1: `capacity_request.interest.created`
+### EVENT 1: `capacity_request_interest_created`
 
-Pierwsze powiadomienie dla modułu zapytań produkcyjnych jest uruchamiane w `submitCapacityRequestInterest()` po skutecznym zapisie rekordu w `capacity_request_interests`. Punkt wywołania jest best-effort: błąd resolvera, szablonu, konfiguracji albo transportu nie cofa zapisanego zainteresowania i nie zwraca błędu e-maila do klienta.
+Sprint 13D.1 obsługuje to zdarzenie wyłącznie w trybie `LOG_ONLY`. Po skutecznym utworzeniu rekordu w `capacity_request_interests` funkcja `submitCapacityRequestInterest()` uruchamia server-only resolver właściciela i zapisuje zamiar przyszłego powiadomienia przez `console.info`.
 
-Adres odbiorcy pochodzi wyłącznie z `public.company_contact_settings.contact_email` firmy będącej właścicielem zapytania. Resolver nie używa `companies.contact_email`, `profiles.contact_email`, `auth.users.email`, adresu przekazanego z przeglądarki ani danych z mocków. Brak adresu albo niepoprawny adres oznacza kontrolowane pominięcie wysyłki bez fallbacku.
+Ten flow nie buduje wiadomości, nie odczytuje adresu e-mail, nie importuje transportu e-mail i nie może wykonać requestu do Resend niezależnie od konfiguracji środowiska. RFQ nadal korzysta ze swojego oddzielnego mechanizmu.
 
-Resolver działa w `lib/email/resolveCapacityRequestEmailContext.ts` jako `server-only` i używa `createAdminClient()` z `service_role` wyłącznie po stronie serwera. Resolver przyjmuje tylko `interestId`, wykonuje minimalne SELECT-y na `capacity_request_interests`, `capacity_requests`, `companies` i `company_contact_settings`, a wynik nie wraca do UI.
+Resolver w `lib/email/resolveCapacityRequestEmailContext.ts` używa admin clienta wyłącznie po stronie serwera. Na podstawie `capacity_request_id` odczytuje `capacity_requests.company_id`, a następnie `companies.user_id`. Identyfikator właściciela nie wraca do UI ani response payload. Gdy resolver nie może bezpiecznie ustalić właściciela, log zawiera `recipient_user_id: null`.
 
-### Safe mode
+Log zawiera wyłącznie:
 
-Nowe zmienne env:
-
-```env
-CAPACITY_REQUEST_EMAIL_NOTIFICATIONS_ENABLED=false
-CAPACITY_REQUEST_EMAIL_LOG_ONLY=true
-CAPACITY_REQUEST_EMAIL_TEST_RECIPIENT=
-CAPACITY_REQUEST_EMAIL_ALLOWED_RECIPIENT_DOMAIN=
+```ts
+{
+  mode: "LOG_ONLY",
+  event_type: "capacity_request_interest_created",
+  capacity_request_id: string,
+  recipient_user_id: string | null,
+  recipient_locale: "pl" | "en" | "de" | "uk" | "es" | "fr",
+  created_at: string
+}
 ```
 
-Bezpieczne wartości domyślne:
+Obecny model danych nie przechowuje preferencji językowej właściciela zapytania, dlatego `recipient_locale` ma jawny fallback `"pl"`. W przyszłości wartość powinna pochodzić z trwałej preferencji locale w profilu odbiorcy, a nie z locale firmy zgłaszającej zainteresowanie.
 
-- `CAPACITY_REQUEST_EMAIL_NOTIFICATIONS_ENABLED` włącza moduł wyłącznie przy wartości `true`. Brak zmiennej oznacza `disabled`.
-- `CAPACITY_REQUEST_EMAIL_LOG_ONLY` blokuje realną wysyłkę dla każdej wartości innej niż `false`. Brak zmiennej oznacza `log_only`.
-- Przy domyślnej konfiguracji nie jest odczytywany prywatny adres odbiorcy i nie jest wykonywany request do Resend.
-- Przy `CAPACITY_REQUEST_EMAIL_NOTIFICATIONS_ENABLED=true` oraz `CAPACITY_REQUEST_EMAIL_LOG_ONLY=true` resolver i szablon mogą się wykonać, ale transport kończy się `log_only` bez requestu HTTP do Resend.
-- Request do Resend może nastąpić tylko przy `CAPACITY_REQUEST_EMAIL_NOTIFICATIONS_ENABLED=true` oraz `CAPACITY_REQUEST_EMAIL_LOG_ONLY=false`.
-
-Transport nadal używa wspólnych zmiennych `RESEND_API_KEY`, `RESEND_FROM_EMAIL` i `APP_BASE_URL`. W tym sprincie nie aktywujemy rzeczywistej wysyłki produkcyjnej.
-
-### Transport i idempotency
-
-Wspólny helper transportu przyjmuje jawnie konfigurację modułu, a stary `sendEmail()` pozostaje wrapperem RFQ opartym o `RFQ_EMAIL_*`. Dla eventu `capacity_request.interest.created` używany jest klucz idempotency:
-
-```text
-capacity-request-interest:{interestId}:owner
-```
-
-Nie ma automatycznego retry, outboxa, kolejki, crona ani trwałego rejestru zdarzeń. E-mail jest próbą best-effort po zapisie operacji biznesowej.
-
-### Zasady treści i logów
-
-Wiadomość zawiera wyłącznie minimalne dane: nazwę firmy zainteresowanej, tytuł zapytania, informację o obsłudze w panelu i link do `/panel/moje-zapytania`. Dane dynamiczne w HTML są escapowane.
-
-W e-mailu nie wolno umieszczać adresu e-mail zainteresowanej firmy, telefonu, `user_id`, `company_id`, `capacity_request_id`, `interest_id`, opisu zapytania, budżetu, wiadomości prywatnej, załączników, `admin_note` ani `rejection_reason`.
-
-Log eventu może zawierać wyłącznie:
-
-- `eventKey`,
-- `interestId`,
-- `outcome`,
-- `reason`.
-
-Dozwolone wyniki to `sent`, `skipped` i `failed`. Log nie może zawierać adresów e-mail, nazw firm, tytułów zapytań, treści HTML/text, danych kontaktowych, surowych odpowiedzi Resend, pełnych błędów Supabase ani obiektu kontekstu resolvera.
-
-### Error isolation
-
-Helper powiadomienia ma własny `try/catch`. `catch` nie wykonuje `throw`, nie zwraca `Promise.reject()` i nie wpływa na wynik `submitCapacityRequestInterest()`. Po skutecznym zapisie zainteresowania Server Action nadal zwraca dotychczasowy sukces nawet wtedy, gdy resolver nie znajdzie odbiorcy, brakuje konfiguracji admina, builder albo transport zgłosi błąd, Resend jest niedostępny albo transport zwróci błąd dostawcy.
+Resolver i logger są objęte osobnymi blokami `try/catch`. Błąd resolvera daje `recipient_user_id: null`, a błąd loggera zapisuje wyłącznie ostrzeżenie serwerowe; żaden z nich nie zmienia sukcesu operacji biznesowej. Przy duplikacie (`23505`) funkcja kończy się przed wywołaniem LOG_ONLY, więc nowy intent nie jest logowany.
