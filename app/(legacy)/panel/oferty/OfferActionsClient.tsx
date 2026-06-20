@@ -1,9 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { OFFER_IMAGES_BUCKET } from "@/lib/offerImageUploads";
 import { createClient } from "@/lib/supabase/client";
+import { deleteOfferWithImagesAction } from "./actions";
 
 import type { PanelCommonDictionary } from "@/lib/i18n/types";
 
@@ -19,6 +20,7 @@ export default function OfferActionsClient({
   dict,
 }: OfferActionsClientProps) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
   const [isArchiving, setIsArchiving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -63,46 +65,22 @@ export default function OfferActionsClient({
     setError("");
     setIsDeleting(true);
 
-    const supabase = createClient();
-    const { data: images, error: imagesError } = await supabase
-      .from("offer_images")
-      .select("path")
-      .eq("offer_id", offerId);
+    const result = await deleteOfferWithImagesAction({ offerId });
 
-    if (imagesError) {
-      setError(imagesError.message);
-      setIsDeleting(false);
-      return;
-    }
-
-    const imagePaths = (images ?? [])
-      .map((image) => image.path as string | null)
-      .filter((path): path is string => Boolean(path));
-
-    if (imagePaths.length > 0) {
-      const { error: storageError } = await supabase.storage
-        .from(OFFER_IMAGES_BUCKET)
-        .remove(imagePaths);
-
-      if (storageError) {
-        setError("Nie udało się usunąć zdjęć oferty ze Storage.");
-        setIsDeleting(false);
-        return;
+    if (!result.success) {
+      if (result.errorKey === "offerDeleteBlockedHasInquiries") {
+        setError("Nie można usunąć oferty, do której wysłano zapytania RFQ.");
+      } else {
+        setError("Nie udało się usunąć oferty.");
       }
-    }
-
-    const { error: deleteError } = await supabase
-      .from("offers")
-      .delete()
-      .eq("id", offerId);
-
-    if (deleteError) {
-      setError(deleteError.message);
       setIsDeleting(false);
       return;
     }
 
-    router.refresh();
+    startTransition(() => {
+      router.push("/panel/oferty");
+      router.refresh();
+    });
   }
 
   return (
@@ -112,7 +90,7 @@ export default function OfferActionsClient({
           <button
             type="button"
             onClick={handleArchive}
-            disabled={isArchiving || isDeleting}
+            disabled={isArchiving || isDeleting || isPending}
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
             <i className="fas fa-box-archive"></i>
@@ -122,11 +100,11 @@ export default function OfferActionsClient({
         <button
           type="button"
           onClick={handleDelete}
-          disabled={isDeleting || isArchiving}
+          disabled={isDeleting || isArchiving || isPending}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-red-200 px-4 py-2.5 text-sm font-bold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
         >
           <i className="fas fa-trash"></i>
-          {isDeleting ? "Usuwanie..." : dict.delete}
+          {isDeleting || isPending ? "Usuwanie..." : dict.delete}
         </button>
       </div>
       {error ? <p className="mt-2 text-sm text-red-600">{error}</p> : null}

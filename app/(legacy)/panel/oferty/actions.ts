@@ -239,3 +239,168 @@ export async function deleteOfferImageMetadataAction(
 
   return outcome;
 }
+
+export type DeleteOfferWithImagesInput = {
+  offerId: string;
+};
+
+export type DeleteOfferWithImagesResult =
+  | { success: true }
+  | {
+      success: false;
+      errorKey:
+        | "unauthorized"
+        | "offerNotFound"
+        | "offerDeleteBlockedHasInquiries"
+        | "storageDeleteError"
+        | "offerDeleteError"
+        | "offerDeleteErrorAfterStorageCleanup";
+    };
+
+async function persistDeleteOfferWithImages(
+  input: DeleteOfferWithImagesInput
+): Promise<DeleteOfferWithImagesResult> {
+  const supabase = createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return { success: false, errorKey: "unauthorized" };
+  }
+
+  const { offerId } = input;
+
+  // Validate UUID for offerId
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!offerId || !uuidRegex.test(offerId)) {
+    return { success: false, errorKey: "offerNotFound" };
+  }
+
+  // 1. Ownership check
+  const { data: offer, error: offerError } = await supabase
+    .from("offers")
+    .select("company_id")
+    .eq("id", offerId)
+    .maybeSingle();
+
+  if (offerError || !offer) {
+    return { success: false, errorKey: "offerNotFound" };
+  }
+
+  const { data: company, error: companyError } = await supabase
+    .from("companies")
+    .select("user_id")
+    .eq("id", offer.company_id)
+    .maybeSingle();
+
+  if (companyError || !company || company.user_id !== user.id) {
+    return { success: false, errorKey: "unauthorized" };
+  }
+
+  // 2. Business pre-flight check: inquiries
+  // Protect buyer RFQ inquiries history from being cascaded.
+  const { count: inquiriesCount, error: inquiriesCountError } = await supabase
+    .from("inquiries")
+    .select("id", { count: "exact", head: true })
+    .eq("offer_id", offerId);
+
+  if (inquiriesCountError) {
+    return { success: false, errorKey: "offerDeleteError" };
+  }
+
+  if (inquiriesCount !== null && inquiriesCount > 0) {
+    return { success: false, errorKey: "offerDeleteBlockedHasInquiries" };
+  }
+
+  // 3. Fetch image paths from DB
+  const { data: images, error: imagesError } = await supabase
+    .from("offer_images")
+    .select("path")
+    .eq("offer_id", offerId);
+
+  if (imagesError) {
+    return { success: false, errorKey: "offerDeleteError" };
+  }
+
+  const paths = (images ?? [])
+    .map((img) => img.path)
+    .filter((path): path is string => Boolean(path));
+
+  // 4. Storage cleanup
+  if (paths.length > 0) {
+    const { data: storageData, error: storageError } = await supabase.storage
+      .from("offer-images")
+      .remove(paths);
+
+    if (storageError) {
+      return { success: false, errorKey: "storageDeleteError" };
+    }
+
+    if (!storageData || !Array.isArray(storageData)) {
+      return { success: false, errorKey: "storageDeleteError" };
+    }
+
+    // Granular storage error check
+    const hasGranularError = storageData.some((item) => {
+      if (!item || typeof item !== "object") return true;
+      const obj = item as unknown as { error?: string; errorKey?: string; errorMessage?: string; status?: string };
+      return (
+        Boolean(obj.error) ||
+        Boolean(obj.errorKey) ||
+        Boolean(obj.errorMessage) ||
+        (typeof obj.status === "string" && obj.status.toLowerCase().includes("fail"))
+      );
+    });
+
+    if (hasGranularError) {
+      return { success: false, errorKey: "storageDeleteError" };
+    }
+
+    const deletedNames = Array.from(new Set(
+      storageData.map((item) => (item as unknown as { name?: string }).name)
+    ));
+
+    for (const name of deletedNames) {
+      if (typeof name !== "string") {
+        return { success: false, errorKey: "storageDeleteError" };
+      }
+      const isMatched = paths.some((p) => p === name || p.endsWith("/" + name));
+      if (!isMatched) {
+        return { success: false, errorKey: "storageDeleteError" };
+      }
+    }
+  }
+
+  // 5. DB delete offer
+  const { error: deleteError } = await supabase
+    .from("offers")
+    .delete()
+    .eq("id", offerId);
+
+  if (deleteError) {
+    return { success: false, errorKey: "offerDeleteErrorAfterStorageCleanup" };
+  }
+
+  return { success: true };
+}
+
+export async function deleteOfferWithImagesAction(
+  input: DeleteOfferWithImagesInput
+): Promise<DeleteOfferWithImagesResult> {
+  let outcome: DeleteOfferWithImagesResult;
+  try {
+    outcome = await persistDeleteOfferWithImages(input);
+  } catch (error) {
+    console.error("deleteOfferWithImagesAction Server Action failed", {
+      name: error instanceof Error ? error.name : "UnknownError",
+    });
+    return { success: false, errorKey: "offerDeleteError" };
+  }
+
+  revalidatePath("/panel/oferty");
+  revalidatePath("/oferty");
+
+  return outcome;
+}
