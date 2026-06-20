@@ -19,6 +19,10 @@ import {
   validateOfferImageFiles,
 } from "@/lib/offerImageUploads";
 import { createClient } from "@/lib/supabase/client";
+import {
+  saveOfferImageMetadataAction,
+  deleteOfferImageMetadataAction,
+} from "./actions";
 import type {
   PanelCommonDictionary,
   PanelOfferFormDictionary,
@@ -302,18 +306,18 @@ export default function OfferFormClient({
         continue;
       }
 
-      const { error: metadataError } = await params.supabase
-        .from("offer_images")
-        .insert({
-          offer_id: params.offerId,
-          user_id: params.userId,
-          path,
-          alt: title.trim() || dict.images.altFallback,
-          sort_order: params.startOrder + index,
-        });
+      const actionResult = await saveOfferImageMetadataAction({
+        offerId: params.offerId,
+        path,
+        alt: title.trim() || dict.images.altFallback,
+      });
 
-      if (metadataError) {
-        await params.supabase.storage.from(OFFER_IMAGES_BUCKET).remove([path]);
+      if (!actionResult.success) {
+        try {
+          await params.supabase.storage.from(OFFER_IMAGES_BUCKET).remove([path]);
+        } catch (rollbackErr) {
+          console.error("Rollback of offer image file from storage failed:", rollbackErr);
+        }
         failedUploads += 1;
       }
     }
@@ -331,28 +335,35 @@ export default function OfferFormClient({
     setError("");
     setPartialSuccess("");
     setDeletingImageId(image.id);
-    const supabase = createClient();
 
-    const { error: storageError } = await supabase.storage
-      .from(OFFER_IMAGES_BUCKET)
-      .remove([image.path]);
-
-    if (storageError) {
-      setError(dict.images.storageDeleteError);
+    const offerId = offer?.id ?? "";
+    if (!offerId) {
       setDeletingImageId("");
       return;
     }
 
-    const { error: deleteError } = await supabase
-      .from("offer_images")
-      .delete()
-      .eq("id", image.id)
-      .eq("offer_id", offer?.id ?? "");
+    const actionResult = await deleteOfferImageMetadataAction({
+      offerId,
+      imageId: image.id,
+    });
 
-    if (deleteError) {
-      setError(deleteError.message);
+    if (!actionResult.success) {
+      setError(
+        actionResult.errorKey === "unauthorized"
+          ? "Brak uprawnień do usunięcia zdjęcia."
+          : "Nie udało się usunąć metadanych zdjęcia."
+      );
       setDeletingImageId("");
       return;
+    }
+
+    const supabase = createClient();
+    const { error: storageError } = await supabase.storage
+      .from(OFFER_IMAGES_BUCKET)
+      .remove([actionResult.path]);
+
+    if (storageError) {
+      console.warn("Storage offer image file removal failed after metadata deletion", storageError);
     }
 
     setExistingImages((current) =>
