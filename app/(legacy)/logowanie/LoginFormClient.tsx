@@ -1,9 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import GoogleOAuthButton from "@/components/auth/GoogleOAuthButton";
+import {
+  defaultLocale,
+  getLocalizedPath,
+  isSupportedLocale,
+} from "@/lib/i18n/config";
 import { getSafeNextPath } from "@/lib/safeNextPath";
 import { createClient } from "@/lib/supabase/client";
 import type { Dictionary } from "@/lib/i18n/types";
@@ -21,7 +26,14 @@ export default function LoginFormClient({
   oauthError = false,
   registerHref,
 }: LoginFormClientProps) {
+  const params = useParams();
   const router = useRouter();
+  const localeParam = params?.locale;
+  const locale =
+    typeof localeParam === "string" && isSupportedLocale(localeParam)
+      ? localeParam
+      : defaultLocale;
+  const resetPasswordHref = getLocalizedPath("/reset-hasla", locale);
   const safeNextPath = getSafeNextPath(nextPath);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -122,7 +134,7 @@ export default function LoginFormClient({
       </button>
 
       <div className="mt-6 flex flex-col gap-2 text-center text-sm text-slate-500">
-        <Link href="/reset-hasla" className="font-semibold text-[#1a5f3c] no-underline">
+        <Link href={resetPasswordHref} className="font-semibold text-[#1a5f3c] no-underline">
           {labels.forgotPassword}
         </Link>
         <span>

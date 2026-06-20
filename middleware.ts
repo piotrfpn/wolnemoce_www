@@ -75,6 +75,7 @@ export async function middleware(request: NextRequest) {
     "/firmy",
     "/oferty",
     "/zapytania",
+    "/dodaj-oferte",
     "/dodaj-zapytanie",
     "/zapytanie-wyslane",
     "/zapytanie-ofertowe",
@@ -139,6 +140,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+    "/((?!_next/static|_next/image|_next/webpack-hmr|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|webp|gif|ico|css|js|map|txt|xml|webmanifest|woff|woff2|ttf|otf|pdf)$).*)",
   ],
 };

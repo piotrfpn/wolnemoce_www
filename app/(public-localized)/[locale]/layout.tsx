@@ -17,11 +17,11 @@ export const metadata: Metadata = {
     template: "%s | WolneMoce",
   },
   description:
-    "Marketplace B2B ��cz�cy firmy szukaj�ce podwykonawc�w z firmami posiadaj�cymi wolne moce produkcyjne, magazynowe, logistyczne i techniczne.",
+    "WolneMoce to B2B marketplace dla firm szukających kooperantów, podwykonawców i wolnych mocy produkcyjnych.",
   openGraph: {
     title: "WolneMoce - Portal wolnych mocy produkcyjnych",
     description:
-      "Znajd� podwykonawc� albo poka� wolne moce produkcyjne swojej firmy.",
+      "Znajdź podwykonawcę albo pokaż wolne moce produkcyjne swojej firmy.",
     url: getSiteUrl(),
     siteName: "WolneMoce",
     locale: "pl_PL",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "WolneMoce - Portal wolnych mocy produkcyjnych",
     description:
-      "Marketplace B2B dla firm szukaj�cych podwykonawc�w i wolnych mocy produkcyjnych.",
+      "Marketplace B2B dla firm szukających podwykonawców i wolnych mocy produkcyjnych.",
     images: [getAbsoluteUrl("/og/wolnemoce-og.png")],
   },
   robots: {
