@@ -665,7 +665,12 @@ export type Database = {
           location_street: string | null
           location_voivodeship: string | null
           name: string
-          nip: string
+          nip: string | null
+          country_code: string
+          tax_id: string | null
+          registration_number: string | null
+          registered_address: string | null
+          verification_method: string
           pkd_codes: Json | null
           plan: string
           presentation_file_name: string | null
@@ -698,7 +703,12 @@ export type Database = {
           location_street?: string | null
           location_voivodeship?: string | null
           name: string
-          nip: string
+          nip?: string | null
+          country_code?: string
+          tax_id?: string | null
+          registration_number?: string | null
+          registered_address?: string | null
+          verification_method?: string
           pkd_codes?: Json | null
           plan?: string
           presentation_file_name?: string | null
@@ -731,7 +741,12 @@ export type Database = {
           location_street?: string | null
           location_voivodeship?: string | null
           name?: string
-          nip?: string
+          nip?: string | null
+          country_code?: string
+          tax_id?: string | null
+          registration_number?: string | null
+          registered_address?: string | null
+          verification_method?: string
           pkd_codes?: Json | null
           plan?: string
           presentation_file_name?: string | null
