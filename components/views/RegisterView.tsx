@@ -1,6 +1,6 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import RegisterFormClient from "@/app/rejestracja/RegisterFormClient";
+import RegisterFormClient from "@/app/(legacy)/rejestracja/RegisterFormClient";
 import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getSafeNextPath } from "@/lib/safeNextPath";
@@ -8,21 +8,30 @@ import { getSafeNextPath } from "@/lib/safeNextPath";
 type RegisterViewProps = {
   locale?: Locale;
   nextPath?: string;
+  redirectParamName?: "next" | "return_to";
 };
 
-function withNextParam(href: string, nextPath: string) {
-  return nextPath ? `${href}?next=${encodeURIComponent(nextPath)}` : href;
+function withRedirectParam(
+  href: string,
+  nextPath: string,
+  paramName: "next" | "return_to"
+) {
+  return nextPath
+    ? `${href}?${paramName}=${encodeURIComponent(nextPath)}`
+    : href;
 }
 
 export default function RegisterView({
   locale = defaultLocale,
   nextPath,
+  redirectParamName = "next",
 }: RegisterViewProps) {
   const dictionary = getDictionary(locale);
   const safeNextPath = getSafeNextPath(nextPath);
-  const loginHref = withNextParam(
+  const loginHref = withRedirectParam(
     getLocalizedPath("/logowanie", locale),
-    safeNextPath
+    safeNextPath,
+    redirectParamName
   );
 
   return (

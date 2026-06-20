@@ -129,7 +129,11 @@ export async function generateCapacityRequestMetadata({
     branch: request.branch,
     service: request.service_type,
   };
-  const title = formatTemplate(seoCopy.detailTitleTemplate, templateValues);
+  const socialTitle = formatTemplate(
+    seoCopy.detailTitleTemplate,
+    templateValues
+  );
+  const title = socialTitle.replace(/\s*\|\s*WolneMoce$/, "");
   const description = formatTemplate(
     seoCopy.detailDescriptionTemplate,
     templateValues
@@ -145,7 +149,7 @@ export async function generateCapacityRequestMetadata({
       languages: getLanguageAlternates(request.slug),
     },
     openGraph: {
-      title,
+      title: socialTitle,
       description,
       url: requestPath,
       siteName: "WolneMoce",
@@ -156,13 +160,13 @@ export async function generateCapacityRequestMetadata({
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: title,
+          alt: socialTitle,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: socialTitle,
       description,
       images: [imageUrl],
     },

@@ -141,6 +141,10 @@ function getBlogImageUrl(path: string | null) {
   return supabase.storage.from("blog-images").getPublicUrl(path).data.publicUrl;
 }
 
+function getBlogDetailPath(slug: string, locale: Locale) {
+  return getLocalizedPath(`/blog/${slug}`, locale);
+}
+
 function renderContent(content: string) {
   return content
     .split(/\n\s*\n/g)
@@ -159,18 +163,22 @@ export async function generateBlogDetailMetadata({
 }: BlogDetailViewProps): Promise<Metadata> {
   const t = getDictionary(locale).blogDetail;
   const post = await getPublishedPost(slug);
+  const canonicalPath = getBlogDetailPath(slug, locale);
 
   if (!post) {
     return {
       title: t.notFoundTitle,
       description: t.notFoundDescription,
       alternates: {
-        canonical: `/blog/${slug}`,
+        canonical: canonicalPath,
       },
     };
   }
 
-  const title = post.meta_title || `${post.title} | Blog WolneMoce`;
+  const socialTitle = post.meta_title || `${post.title} | Blog WolneMoce`;
+  const title = socialTitle
+    .replace(/\s*\|\s*(?:Blog\s+WolneMoce|WolneMoce\s+blog)$/i, "")
+    .replace(/\s*\|\s*WolneMoce$/i, "");
   const description = truncateSeoDescription(
     post.meta_description || post.excerpt || post.content
   );
@@ -180,12 +188,12 @@ export async function generateBlogDetailMetadata({
     title,
     description,
     alternates: {
-      canonical: `/blog/${slug}`,
+      canonical: canonicalPath,
     },
     openGraph: {
-      title,
+      title: socialTitle,
       description,
-      url: `/blog/${slug}`,
+      url: canonicalPath,
       siteName: "WolneMoce",
       type: "article",
       images: [
@@ -199,7 +207,7 @@ export async function generateBlogDetailMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: socialTitle,
       description,
       images: [imageUrl],
     },
@@ -221,7 +229,7 @@ export default async function BlogDetailView({
   const date = formatDate(post.published_at ?? post.created_at, locale);
   const imageUrl = getBlogImageUrl(post.featured_image_path);
   const imageAlt = post.featured_image_alt || post.title;
-  const canonicalUrl = getAbsoluteUrl(`/blog/${post.slug}`);
+  const canonicalUrl = getAbsoluteUrl(getBlogDetailPath(post.slug, locale));
   const description = truncateSeoDescription(
     post.meta_description || post.excerpt || post.content
   );
@@ -251,13 +259,13 @@ export default async function BlogDetailView({
             "@type": "ListItem",
             position: 1,
             name: "WolneMoce",
-            item: getAbsoluteUrl("/"),
+            item: getAbsoluteUrl(getLocalizedPath("/", locale)),
           },
           {
             "@type": "ListItem",
             position: 2,
             name: t.relatedArticles,
-            item: getAbsoluteUrl("/blog"),
+            item: getAbsoluteUrl(getLocalizedPath("/blog", locale)),
           },
           {
             "@type": "ListItem",

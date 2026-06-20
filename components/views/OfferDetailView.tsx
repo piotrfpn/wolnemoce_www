@@ -127,13 +127,14 @@ export async function generateOfferDetailMetadata({
 }: OfferDetailViewProps): Promise<Metadata> {
   const t = getDictionary(locale).offerDetail;
   const offer = await getPublicOfferBySlug(slug);
+  const localizedPath = getLocalizedPath(`/oferty/${slug}`, locale);
 
   if (!offer) {
     return {
       title: t.notFoundTitle,
       description: t.notFoundDescription,
       alternates: {
-        canonical: `/oferty/${slug}`,
+        canonical: localizedPath,
       },
     };
   }
@@ -150,15 +151,15 @@ export async function generateOfferDetailMetadata({
     : t.imagePlaceholderAlt;
 
   return {
-    title: `${offer.title} | ${companyName} | WolneMoce`,
+    title: `${offer.title} | ${companyName}`,
     description: truncateSeoDescription(descriptionSource),
     alternates: {
-      canonical: `/oferty/${slug}`,
+      canonical: localizedPath,
     },
     openGraph: {
       title: `${offer.title} | ${companyName}`,
       description: truncateSeoDescription(descriptionSource),
-      url: `/oferty/${slug}`,
+      url: localizedPath,
       siteName: "WolneMoce",
       type: "article",
       images: [
@@ -208,7 +209,7 @@ export default async function OfferDetailView({
     ? mainImage?.alt ||
       `${offer.title ?? t.imageAltFallback} - ${offer.branch ?? t.capacityFallback}`
     : t.imagePlaceholderAlt;
-  const canonicalUrl = getAbsoluteUrl(`/oferty/${offer.slug}`);
+  const canonicalUrl = getAbsoluteUrl(getLocalizedPath(`/oferty/${offer.slug}`, locale));
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -217,13 +218,13 @@ export default async function OfferDetailView({
         "@type": "ListItem",
         position: 1,
         name: "WolneMoce",
-        item: getAbsoluteUrl("/"),
+        item: getAbsoluteUrl(getLocalizedPath("/", locale)),
       },
       {
         "@type": "ListItem",
         position: 2,
         name: t.offerFallback,
-        item: getAbsoluteUrl("/oferty"),
+        item: getAbsoluteUrl(getLocalizedPath("/oferty", locale)),
       },
       {
         "@type": "ListItem",
@@ -488,8 +489,8 @@ export default async function OfferDetailView({
                     <i className="fas fa-shield-check text-lg"></i>
                   </div>
                   <div>
-                    <h3 className="font-extrabold text-emerald-900">Zaufany kontakt</h3>
-                    <p className="text-xs font-medium text-emerald-700">Weryfikujemy rejestry firm</p>
+                    <h3 className="font-extrabold text-emerald-900">{t.trustedContactTitle}</h3>
+                    <p className="text-xs font-medium text-emerald-700">{t.trustedContactDescription}</p>
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
@@ -511,6 +512,7 @@ export default async function OfferDetailView({
                   offerTitle={offer.title}
                   companyName={companyName}
                   initialBuyerData={initialBuyerData}
+                  t={getDictionary(locale).rfqInlineForm}
                 />
               </div>
 
@@ -598,7 +600,7 @@ export default async function OfferDetailView({
       <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white p-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] shadow-[0_-8px_16px_-4px_rgba(0,0,0,0.05)] lg:hidden">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4">
           <div className="hidden flex-col sm:flex">
-            <span className="text-xs font-bold uppercase text-slate-500">Zapytanie bezpłatne</span>
+            <span className="text-xs font-bold uppercase text-slate-500">{t.freeInquiryBadge}</span>
             <span className="truncate max-w-[200px] text-sm font-semibold text-slate-900">
               {companyName}
             </span>

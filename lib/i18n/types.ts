@@ -528,6 +528,48 @@ export type Dictionary = {
     rfqHelper2: string;
     rfqHelper3: string;
     rfqHelper4: string;
+    trustedContactTitle: string;
+    trustedContactDescription: string;
+    freeInquiryBadge: string;
+  };
+  rfqInlineForm: {
+    formSuccessTitle: string;
+    formSuccessDescription: string;
+    formTitle: string;
+    formDescription: string;
+    fieldName: string;
+    fieldCompany: string;
+    fieldEmail: string;
+    fieldPhone: string;
+    fieldQuantityScope: string;
+    fieldDeadline: string;
+    fieldBudget: string;
+    fieldMessage: string;
+    fieldMessagePlaceholder: string;
+    attachmentsTitle: string;
+    attachmentsDescription: string;
+    addAttachments: string;
+    attachmentsLimits: string;
+    attachmentsReady: string;
+    attachmentReadyBadge: string;
+    attachmentRemove: string;
+    formSubmitting: string;
+    formSubmit: string;
+    openFullForm: string;
+    errorMissingActiveOffer: string;
+    errorNameRequired: string;
+    errorCompanyRequired: string;
+    errorInvalidEmail: string;
+    errorInvalidPhone: string;
+    errorMessageTooShort: string;
+    errorTooManyAttachments: string;
+    errorAttachmentTooLarge: string;
+    errorAttachmentUnsupportedType: string;
+    errorOfferUnavailable: string;
+    errorSubmitFailed: string;
+    partialAttachmentsUploadFailed: string;
+    unexpectedError: string;
+    partialSuccessFallback: string;
   };
   companyDetail: {
     backToCompanies: string;
@@ -641,6 +683,28 @@ export type Dictionary = {
       termsRequired: string;
       success: string;
       continue: string;
+    };
+    passwordRecovery: {
+      reset: {
+        title: string;
+        subtitle: string;
+        email: string;
+        submit: string;
+        submitting: string;
+        success: string;
+        rememberPassword: string;
+        loginLink: string;
+      };
+      update: {
+        title: string;
+        subtitle: string;
+        password: string;
+        confirmPassword: string;
+        submit: string;
+        submitting: string;
+        mismatchError: string;
+        missingSessionError: string;
+      };
     };
   };
   legal: {
@@ -1215,6 +1279,109 @@ export type Dictionary = {
       contactEmailDescription: string;
       contactEmailPlaceholder: string;
       contactEmailInvalid: string;
+    };
+  };
+  rfqSuccess: {
+    metadataTitle: string;
+    metadataDescription: string;
+    heroTitle: string;
+    heroDescription: string;
+    nextStepsTitle: string;
+    nextStepsDescription: string;
+    backToOffers: string;
+    homePage: string;
+  };
+  rfqRequest: {
+    hero: {
+      badge: string;
+      title: string;
+      description: string;
+    };
+    success: {
+      title: string;
+      description: string;
+      backToOffers: string;
+    };
+    offer: {
+      activeBadge: string;
+      verifiedBadge: string;
+      companyFallback: string;
+      locationFallback: string;
+      branchFallback: string;
+      serviceFallback: string;
+      backToOffer: string;
+    };
+    emptyState: {
+      title: string;
+      description: string;
+      viewOffers: string;
+    };
+    sections: {
+      contact: {
+        title: string;
+        name: string;
+        company: string;
+        email: string;
+        phone: string;
+        emailPlaceholder: string;
+        phonePlaceholder: string;
+      };
+      details: {
+        title: string;
+        message: string;
+        messagePlaceholder: string;
+        helperTitle: string;
+        helperMaterial: string;
+        helperQuantity: string;
+        helperQuality: string;
+        helperAttachments: string;
+      };
+      schedule: {
+        title: string;
+        quantity: string;
+        quantityPlaceholder: string;
+        deadline: string;
+        deadlinePlaceholder: string;
+        budget: string;
+        budgetPlaceholder: string;
+      };
+      attachments: {
+        title: string;
+        optionalText: string;
+        description: string;
+        badge: string;
+        addFiles: string;
+        limits: string;
+        readyMessage: string;
+        readyBadge: string;
+        remove: string;
+      };
+      submit: {
+        title: string;
+        button: string;
+        submitting: string;
+      };
+    };
+    unavailable: {
+      title: string;
+      description: string;
+      viewOffers: string;
+    };
+    runtime: {
+      errorMissingActiveOffer: string;
+      errorNameRequired: string;
+      errorCompanyRequired: string;
+      errorInvalidEmail: string;
+      errorInvalidPhone: string;
+      errorMessageTooShort: string;
+      errorTooManyAttachments: string;
+      errorAttachmentTooLarge: string;
+      errorAttachmentUnsupportedType: string;
+      errorOfferUnavailable: string;
+      errorSubmitFailed: string;
+      partialAttachmentsUploadFailed: string;
+      unexpectedError: string;
+      partialSuccessFallback: string;
     };
   };
 };

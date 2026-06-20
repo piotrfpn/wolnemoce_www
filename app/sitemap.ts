@@ -1,6 +1,10 @@
 import type { MetadataRoute } from "next";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import { getLocalizedPath, supportedLocales } from "@/lib/i18n/config";
+import {
+  getLocalizedPath,
+  prefixedLocales,
+  supportedLocales,
+} from "@/lib/i18n/config";
 import { getSiteUrl } from "@/lib/seo";
 
 const baseUrl = getSiteUrl();
@@ -8,6 +12,15 @@ const dynamicRouteLimit = 1000;
 
 function createAbsoluteSitemapUrl(route: string) {
   return new URL(route, baseUrl).toString();
+}
+
+function createLocalizedDetailRoutes(routes: string[]) {
+  return [
+    ...routes,
+    ...prefixedLocales.flatMap((locale) =>
+      routes.map((route) => getLocalizedPath(route, locale))
+    ),
+  ];
 }
 
 function createSitemapSupabaseClient() {
@@ -155,14 +168,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const companyRoutes = await getPublicCompanyRoutes();
   const blogRoutes = await getPublishedBlogRoutes();
   const capacityRequestRoutes = await getActiveCapacityRequestRoutes();
+  const localizedDetailRoutes = createLocalizedDetailRoutes([
+    ...offerRoutes,
+    ...companyRoutes,
+    ...blogRoutes,
+    ...capacityRequestRoutes,
+  ]);
 
   return Array.from(
     new Set([
       ...localizedStaticRoutes,
-      ...offerRoutes,
-      ...companyRoutes,
-      ...blogRoutes,
-      ...capacityRequestRoutes,
+      ...localizedDetailRoutes,
     ])
   ).map((route) => ({
     url: createAbsoluteSitemapUrl(route),

@@ -18,10 +18,11 @@ function getOAuthOrigin() {
   }
 
   if (
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
+    process.env.NODE_ENV !== "production" &&
+    (window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1")
   ) {
-    return "http://localhost:3000";
+    return window.location.origin;
   }
 
   return getSiteUrl();
