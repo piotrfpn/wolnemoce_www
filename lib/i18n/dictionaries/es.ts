@@ -1306,7 +1306,7 @@ const es: Dictionary = {
       countryAT: "Austria",
       countryGB: "Reino Unido",
       countryCN: "China",
-      countryXX: "Otro país",
+      countryXX: "Otros países",
       taxIdLabel: "NIF-IVA / Identificación fiscal",
       taxIdPlaceholder: "Ej. DE123456789",
       registrationNumberLabel: "Número de registro de la empresa",

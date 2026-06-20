@@ -1302,7 +1302,7 @@ const uk: Dictionary = {
       countryAT: "Австрія",
       countryGB: "Великобританія",
       countryCN: "Китай",
-      countryXX: "Інша країна",
+      countryXX: "Інші країни",
       taxIdLabel: "ІПН / Податковий номер",
       taxIdPlaceholder: "Напр. DE123456789",
       registrationNumberLabel: "Реєстраційний номер компанії",

@@ -1322,7 +1322,7 @@ const de: Dictionary = {
       countryAT: "Österreich",
       countryGB: "Vereinigtes Königreich",
       countryCN: "China",
-      countryXX: "Anderes Land",
+      countryXX: "Weitere Länder",
       taxIdLabel: "USt-IdNr. / Steuernummer",
       taxIdPlaceholder: "Z.B. DE123456789",
       registrationNumberLabel: "Handelsregisternummer",

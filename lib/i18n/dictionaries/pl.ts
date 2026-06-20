@@ -1404,7 +1404,7 @@ const pl: Dictionary = {
       countryAT: "Austria",
       countryGB: "Wielka Brytania",
       countryCN: "Chiny",
-      countryXX: "Inny kraj",
+      countryXX: "Pozostałe kraje",
       taxIdLabel: "VAT ID / Tax ID",
       taxIdPlaceholder: "Np. DE123456789",
       registrationNumberLabel: "Numer rejestrowy firmy",

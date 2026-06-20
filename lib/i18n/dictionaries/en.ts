@@ -1380,7 +1380,7 @@ const en: Dictionary = {
       countryAT: "Austria",
       countryGB: "United Kingdom",
       countryCN: "China",
-      countryXX: "Other country",
+      countryXX: "Other countries",
       taxIdLabel: "VAT ID / Tax ID",
       taxIdPlaceholder: "E.g. DE123456789",
       registrationNumberLabel: "Company registration number",

@@ -299,6 +299,37 @@ export default function CompanyProfileFormClient({
   dictCommon,
 }: CompanyProfileFormClientProps) {
   const router = useRouter();
+  const sortedCountryOptions = useMemo(() => {
+    const countryLabels: Record<string, string> = {
+      PL: dict.countryPL,
+      DE: dict.countryDE,
+      CZ: dict.countryCZ,
+      SK: dict.countrySK,
+      UA: dict.countryUA,
+      FR: dict.countryFR,
+      ES: dict.countryES,
+      IT: dict.countryIT,
+      NL: dict.countryNL,
+      BE: dict.countryBE,
+      AT: dict.countryAT,
+      GB: dict.countryGB,
+      CN: dict.countryCN,
+      XX: dict.countryXX,
+    };
+    const countryOptions = Array.from(SUPPORTED_COUNTRIES, (code) => ({
+      code,
+      label: countryLabels[code],
+    }));
+
+    return [
+      ...countryOptions
+        .filter((option) => option.code !== "XX")
+        .sort((a, b) =>
+          a.label.localeCompare(b.label, undefined, { sensitivity: "base" })
+        ),
+      ...countryOptions.filter((option) => option.code === "XX"),
+    ];
+  }, [dict]);
   const initialIndustries = getInitialIndustries(company);
   const [companyId, setCompanyId] = useState(company?.id ?? "");
   const [companySlug, setCompanySlug] = useState(company?.slug ?? "");
@@ -1205,20 +1236,11 @@ export default function CompanyProfileFormClient({
                 }}
                 className={inputClass}
               >
-                <option value="PL">{dict.countryPL}</option>
-                <option value="DE">{dict.countryDE}</option>
-                <option value="CZ">{dict.countryCZ}</option>
-                <option value="SK">{dict.countrySK}</option>
-                <option value="UA">{dict.countryUA}</option>
-                <option value="FR">{dict.countryFR}</option>
-                <option value="ES">{dict.countryES}</option>
-                <option value="IT">{dict.countryIT}</option>
-                <option value="NL">{dict.countryNL}</option>
-                <option value="BE">{dict.countryBE}</option>
-                <option value="AT">{dict.countryAT}</option>
-                <option value="GB">{dict.countryGB}</option>
-                <option value="CN">{dict.countryCN}</option>
-                <option value="XX">{dict.countryXX}</option>
+                {sortedCountryOptions.map((option) => (
+                  <option key={option.code} value={option.code}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </div>
 
