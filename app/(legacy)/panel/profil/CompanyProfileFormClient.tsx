@@ -71,9 +71,6 @@ type PkdCode = {
 const inputClass =
   "min-w-0 max-w-full w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400";
 
-const invalidNipMessage = "Podaj prawidłowy NIP składający się z 10 cyfr.";
-const gusSuccessMessage = "Dane z GUS zostały pobrane. Sprawdź je przed zapisem.";
-
 const presentationBucket = "company-presentations";
 const maxPresentationSize = 10 * 1024 * 1024;
 const allowedPresentationMimeTypes = new Set([
@@ -91,7 +88,7 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-function normalizeWebsiteUrl(value: string) {
+function normalizeWebsiteUrl(value: string, invalidMessage: string) {
   const trimmedValue = value.trim();
 
   if (!trimmedValue) {
@@ -106,7 +103,7 @@ function normalizeWebsiteUrl(value: string) {
     const parsedUrl = new URL(withProtocol);
 
     if (!parsedUrl.hostname || !parsedUrl.hostname.includes(".")) {
-      return { value: null, error: "Podaj poprawny adres strony internetowej." };
+      return { value: null, error: invalidMessage };
     }
 
     const normalizedUrl =
@@ -116,7 +113,7 @@ function normalizeWebsiteUrl(value: string) {
 
     return { value: normalizedUrl, error: "" };
   } catch {
-    return { value: null, error: "Podaj poprawny adres strony internetowej." };
+    return { value: null, error: invalidMessage };
   }
 }
 
@@ -180,9 +177,9 @@ function getSafeFileName(fileName: string) {
   return extension ? `${safeBaseName}.${extension}` : safeBaseName;
 }
 
-function formatPresentationSize(size: number | null) {
+function formatPresentationSize(size: number | null, missingValue: string) {
   if (!size) {
-    return "Brak danych";
+    return missingValue;
   }
 
   return `${(size / 1024 / 1024).toFixed(2)} MB`;
@@ -280,6 +277,7 @@ const SUPPORTED_COUNTRIES = new Set([
   "BE",
   "AT",
   "GB",
+  "CN",
   "XX",
 ]);
 
@@ -435,47 +433,47 @@ export default function CompanyProfileFormClient({
 
   function validateForm() {
     const normalizedNip = normalizeNip(nip);
-    const normalizedWebsite = normalizeWebsiteUrl(websiteUrl);
+    const normalizedWebsite = normalizeWebsiteUrl(websiteUrl, dict.websiteInvalid);
 
     if (countryCode === "PL") {
       const canUseMockNip = canUseDevelopmentMockNip(normalizedNip);
       if (!isValidNip(normalizedNip) && !canUseMockNip) {
-        return "Podaj poprawny NIP z prawidłową sumą kontrolną.";
+        return dict.nipInvalidChecksum;
       }
     } else {
       if (!taxId.trim()) {
-        return "Podaj VAT ID / Tax ID.";
+        return dict.taxIdRequired;
       }
     }
 
     if (!name.trim()) {
-      return "Podaj nazwę firmy.";
+      return dict.companyNameRequired;
     }
 
     if (selectedIndustries.length === 0) {
-      return "Wybierz co najmniej jedną branżę działalności.";
+      return dict.industryRequired;
     }
 
     if (!mainIndustry || !selectedIndustries.includes(mainIndustry)) {
-      return "Branża główna musi być jedną z wybranych branż działalności.";
+      return dict.mainIndustryInvalid;
     }
 
     if (selectedServiceTypes.length === 0) {
-      return "Wybierz co najmniej jeden rodzaj usługi.";
+      return dict.serviceTypeRequired;
     }
 
     if (countryCode === "PL") {
       if (!voivodeship) {
-        return "Wybierz województwo.";
+        return dict.voivodeshipRequired;
       }
     } else {
       if (!voivodeship.trim()) {
-        return "Podaj region / stan / województwo.";
+        return dict.foreignRegionRequired;
       }
     }
 
     if (!city.trim()) {
-      return "Podaj miasto.";
+      return dict.cityRequired;
     }
 
     if (normalizedWebsite.error) {
@@ -483,7 +481,7 @@ export default function CompanyProfileFormClient({
     }
 
     if (contactEmail.trim() && !isValidEmail(contactEmail.trim())) {
-      return "Podaj poprawny adres e-mail do zapytań ofertowych albo pozostaw pole puste.";
+      return dict.rfqEmailInvalid;
     }
 
     return "";
@@ -572,7 +570,7 @@ export default function CompanyProfileFormClient({
     setIsSubmitting(true);
     const supabase = createClient();
     const normalizedNip = normalizeNip(nip);
-    const normalizedWebsite = normalizeWebsiteUrl(websiteUrl);
+    const normalizedWebsite = normalizeWebsiteUrl(websiteUrl, dict.websiteInvalid);
 
     if (normalizedWebsite.error) {
       setError(normalizedWebsite.error);
@@ -624,7 +622,7 @@ export default function CompanyProfileFormClient({
       if (normalizedNip) {
         const existingCompanyResult = await findCompanyByNip(supabase, normalizedNip);
         if (existingCompanyResult.error) {
-          setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
+          setError(dict.profileSaveError);
           setIsSubmitting(false);
           return;
         }
@@ -634,7 +632,7 @@ export default function CompanyProfileFormClient({
       if (taxId.trim()) {
         const existingCompanyResult = await findCompanyByTaxId(supabase, countryCode.toUpperCase(), taxId.trim());
         if (existingCompanyResult.error) {
-          setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
+          setError(dict.profileSaveError);
           setIsSubmitting(false);
           return;
         }
@@ -645,8 +643,8 @@ export default function CompanyProfileFormClient({
     if (existingCompany && existingCompany.user_id !== userId) {
       setError(
         isPl
-          ? "Firma z tym NIP jest już zarejestrowana w systemie."
-          : "Firma z tym VAT ID / Tax ID dla wybranego kraju jest już zarejestrowana w systemie."
+          ? dict.nipAlreadyRegistered
+          : dict.taxIdAlreadyRegistered
       );
       setIsSubmitting(false);
       return;
@@ -656,8 +654,8 @@ export default function CompanyProfileFormClient({
       applySavedCompany(existingCompany as any);
       setMessage(
         isPl
-          ? "Firma z tym NIP jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
-          : "Firma z tym VAT ID / Tax ID dla wybranego kraju jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
+          ? dict.nipAlreadyAssigned
+          : dict.taxIdAlreadyAssigned
       );
       setIsSubmitting(false);
       router.refresh();
@@ -667,8 +665,8 @@ export default function CompanyProfileFormClient({
     if (existingCompany && companyId && existingCompany.id !== companyId) {
       setError(
         isPl
-          ? "Firma z tym NIP jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
-          : "Firma z tym VAT ID / Tax ID dla wybranego kraju jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
+          ? dict.nipAlreadyAssigned
+          : dict.taxIdAlreadyAssigned
       );
       applySavedCompany(existingCompany as any);
       setIsSubmitting(false);
@@ -707,8 +705,8 @@ export default function CompanyProfileFormClient({
           applySavedCompany(retryCompany);
           setMessage(
             isPl
-              ? "Firma z tym NIP jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
-              : "Firma z tym VAT ID / Tax ID dla wybranego kraju jest już przypisana do Twojego konta. Użyjemy jej do dodania oferty."
+              ? dict.nipAlreadyAssigned
+              : dict.taxIdAlreadyAssigned
           );
           setIsSubmitting(false);
           router.refresh();
@@ -717,14 +715,14 @@ export default function CompanyProfileFormClient({
 
         setError(
           isPl
-            ? "Firma z tym NIP jest już zarejestrowana w systemie."
-            : "Firma z tym VAT ID / Tax ID dla wybranego kraju jest już zarejestrowana w systemie."
+            ? dict.nipAlreadyRegistered
+            : dict.taxIdAlreadyRegistered
         );
         setIsSubmitting(false);
         return;
       }
 
-      setError("Nie udało się zapisać danych. Sprawdź formularz i spróbuj ponownie.");
+      setError(dict.profileSaveError);
       setIsSubmitting(false);
       return;
     }
@@ -748,7 +746,7 @@ export default function CompanyProfileFormClient({
       if (freshCompany) {
         applySavedCompany(freshCompany as unknown as CompanySaveData);
         if (data.is_verified === true && freshCompany.is_verified === false) {
-          setMessage("Dane firmy zostały zapisane. Zmiana danych publicznych wymaga ponownej weryfikacji.");
+          setMessage(dict.profileSavedReverificationRequired);
           setIsSubmitting(false);
           router.refresh();
           return;
@@ -759,7 +757,7 @@ export default function CompanyProfileFormClient({
 
       if (emailSaveError) {
         console.error("Failed to save contact email", emailSaveError);
-        setError("Dane firmy zapisano, ale nie udało się zapisać e-maila kontaktowego. Spróbuj ponownie.");
+        setError(dict.contactEmailSaveError);
         setIsSubmitting(false);
         router.refresh();
         return;
@@ -783,7 +781,7 @@ export default function CompanyProfileFormClient({
     const canUseMockNip = canUseDevelopmentMockNip(normalizedNip);
 
     if (!isValidNip(normalizedNip) && !canUseMockNip) {
-      setGusError(invalidNipMessage);
+      setGusError(dict.gusLookupInvalidNip);
       return;
     }
 
@@ -793,12 +791,12 @@ export default function CompanyProfileFormClient({
       const result = await lookupCompanyInGus(normalizedNip);
 
       if (result.error) {
-        setGusError(result.error);
+        setGusError(dict.gusError);
         return;
       }
 
       if (!result.company) {
-        setGusError("Nie udało się pobrać danych z GUS. Możesz uzupełnić dane ręcznie.");
+        setGusError(dict.gusNoData);
         return;
       }
 
@@ -863,15 +861,15 @@ export default function CompanyProfileFormClient({
         }
       }
 
-      const details = [gusSuccessMessage];
+      const details = [dict.gusSuccess];
 
       if (updatedFields === 0) {
-        details.push("Formularz nie wymagał automatycznego uzupełnienia pól.");
+        details.push(dict.gusNoChanges);
       }
 
       if (skippedExistingFields) {
         details.push(
-          "Część pól była już uzupełniona, dlatego nie została automatycznie nadpisana."
+          dict.gusExistingFieldsPreserved
         );
       }
 
@@ -893,12 +891,12 @@ export default function CompanyProfileFormClient({
     }
 
     if (!requestIndustry) {
-      setRequestError("Wybierz branżę, której dotyczy zgłoszenie.");
+      setRequestError(dict.serviceRequestIndustryRequired);
       return;
     }
 
     if (proposedService.trim().length < 3) {
-      setRequestError("Proponowana nazwa usługi musi mieć co najmniej 3 znaki.");
+      setRequestError(dict.serviceRequestNameTooShort);
       return;
     }
 
@@ -916,7 +914,7 @@ export default function CompanyProfileFormClient({
       });
 
     if (requestInsertError) {
-      setRequestError(requestInsertError.message);
+      setRequestError(dict.serviceRequestError);
       setIsRequestSubmitting(false);
       return;
     }
@@ -937,14 +935,14 @@ export default function CompanyProfileFormClient({
     const extension = getPresentationExtension(file.name);
 
     if (file.size > maxPresentationSize) {
-      return "Plik jest za duży. Maksymalny rozmiar to 10 MB.";
+      return dict.presentationFileTooLarge;
     }
 
     if (
       !allowedPresentationExtensions.has(extension) ||
       (file.type && !allowedPresentationMimeTypes.has(file.type))
     ) {
-      return "Dozwolone formaty to PDF, PPT lub PPTX.";
+      return dict.presentationInvalidFormat;
     }
 
     return "";
@@ -961,7 +959,7 @@ export default function CompanyProfileFormClient({
     }
 
     if (!presentationFile) {
-      setPresentationError("Wybierz plik prezentacji firmy.");
+      setPresentationError(dict.presentationFileRequired);
       return;
     }
 
@@ -980,7 +978,7 @@ export default function CompanyProfileFormClient({
       .upload(nextPresentationPath, presentationFile);
 
     if (uploadResult.error) {
-      setPresentationError(uploadResult.error.message);
+      setPresentationError(dict.presentationUploadError);
       setIsPresentationSubmitting(false);
       return;
     }
@@ -1000,7 +998,7 @@ export default function CompanyProfileFormClient({
 
     if (updateError) {
       await supabase.storage.from(presentationBucket).remove([nextPresentationPath]);
-      setPresentationError(updateError.message);
+      setPresentationError(dict.presentationUpdateError);
       setIsPresentationSubmitting(false);
       return;
     }
@@ -1048,7 +1046,7 @@ export default function CompanyProfileFormClient({
       .remove([presentationPath]);
 
     if (removeResult.error) {
-      setPresentationError(removeResult.error.message);
+      setPresentationError(dict.presentationDeleteError);
       setIsPresentationSubmitting(false);
       return;
     }
@@ -1065,7 +1063,7 @@ export default function CompanyProfileFormClient({
       .eq("id", companyId);
 
     if (updateError) {
-      setPresentationError(updateError.message);
+      setPresentationError(dict.presentationUpdateError);
       setIsPresentationSubmitting(false);
       return;
     }
@@ -1094,7 +1092,7 @@ export default function CompanyProfileFormClient({
           <div className="mt-5 space-y-3 text-sm text-slate-600">
             <p className="min-w-0 break-words">
               <strong className="text-slate-900">{dict.emailLabel}</strong>{" "}
-              {userEmail ?? "Brak emaila"}
+              {userEmail ?? dict.accountEmailMissing}
             </p>
             <p>
               <strong className="text-slate-900">{dict.roleLabel}</strong>{" "}
@@ -1140,7 +1138,7 @@ export default function CompanyProfileFormClient({
                 </Link>
               </>
             ) : (
-              "Publiczny profil firmy zostanie utworzony po zapisaniu profilu."
+              dict.publicProfileFallback
             )}
           </div>
         </div>
@@ -1184,148 +1182,106 @@ export default function CompanyProfileFormClient({
           ) : null}
 
           {/* Country Selection */}
-          <div className="mb-5 block min-w-0">
-            <label
-              htmlFor="company-country"
-              className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500"
-            >
-              <i className="fas fa-globe text-[#1a5f3c]"></i>
-              {dict.companyCountryLabel}
-            </label>
-            <select
-              id="company-country"
-              value={countryCode}
-              onChange={(event) => {
-                const val = event.target.value;
-                setCountryCode(val);
-                if (val !== "PL") {
-                  setNip("");
-                  setGusError("");
-                  setGusMessage("");
-                }
-              }}
-              className={inputClass}
-            >
-              <option value="PL">{dict.countryPL}</option>
-              <option value="DE">{dict.countryDE}</option>
-              <option value="CZ">{dict.countryCZ}</option>
-              <option value="SK">{dict.countrySK}</option>
-              <option value="UA">{dict.countryUA}</option>
-              <option value="FR">{dict.countryFR}</option>
-              <option value="ES">{dict.countryES}</option>
-              <option value="IT">{dict.countryIT}</option>
-              <option value="NL">{dict.countryNL}</option>
-              <option value="BE">{dict.countryBE}</option>
-              <option value="AT">{dict.countryAT}</option>
-              <option value="GB">{dict.countryGB}</option>
-              <option value="XX">{dict.countryXX}</option>
-            </select>
-          </div>
-
-          {countryCode !== "PL" ? (
-            <div className="mb-5 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700">
-              <i className="fas fa-info-circle mr-2"></i>
-              {dict.foreignVerificationNotice}
-            </div>
-          ) : null}
-
           <div className="grid min-w-0 gap-5 md:grid-cols-2">
-            {countryCode === "PL" && (
-              <div className="block min-w-0">
-                <label
-                  htmlFor="company-nip"
-                  className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500"
-                >
-                  <i className="fas fa-id-card text-[#1a5f3c]"></i>
-                  {dict.nipLabel}
-                </label>
-                <input
-                  id="company-nip"
-                  value={nip}
-                  onChange={(event) => {
-                    setNip(event.target.value);
+            <div className="block min-w-0 md:col-span-2">
+              <label
+                htmlFor="company-country"
+                className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500"
+              >
+                <i className="fas fa-globe text-[#1a5f3c]"></i>
+                {dict.companyCountryLabel}
+              </label>
+              <select
+                id="company-country"
+                value={countryCode}
+                onChange={(event) => {
+                  const val = event.target.value;
+                  setCountryCode(val);
+                  if (val !== "PL") {
+                    setNip("");
                     setGusError("");
                     setGusMessage("");
-                  }}
-                  placeholder="Np. 1234567890"
+                  }
+                }}
+                className={inputClass}
+              >
+                <option value="PL">{dict.countryPL}</option>
+                <option value="DE">{dict.countryDE}</option>
+                <option value="CZ">{dict.countryCZ}</option>
+                <option value="SK">{dict.countrySK}</option>
+                <option value="UA">{dict.countryUA}</option>
+                <option value="FR">{dict.countryFR}</option>
+                <option value="ES">{dict.countryES}</option>
+                <option value="IT">{dict.countryIT}</option>
+                <option value="NL">{dict.countryNL}</option>
+                <option value="BE">{dict.countryBE}</option>
+                <option value="AT">{dict.countryAT}</option>
+                <option value="GB">{dict.countryGB}</option>
+                <option value="CN">{dict.countryCN}</option>
+                <option value="XX">{dict.countryXX}</option>
+              </select>
+            </div>
+
+            {countryCode !== "PL" ? (
+              <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700 md:col-span-2">
+                <i className="fas fa-info-circle mr-2"></i>
+                {dict.foreignVerificationNotice}
+              </div>
+            ) : null}
+
+            {/* Company Name */}
+            <div className="block min-w-0 md:col-span-2">
+              <label className="block min-w-0">
+                <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                  <i className="fas fa-building text-[#1a5f3c]"></i>
+                  {dict.companyNameLabel}
+                </span>
+                <input
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  placeholder={dict.companyNamePlaceholder}
                   className={inputClass}
                 />
-                <button
-                  type="button"
-                  onClick={handleGusLookup}
-                  disabled={isGusLoading}
-                  className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
-                >
-                  <i
-                    className={
-                      isGusLoading ? "fas fa-spinner fa-spin" : "fas fa-download"
-                    }
-                  ></i>
-                  {isGusLoading
-                    ? dict.gusFetching
-                    : dict.gusFetch}
-                </button>
-                {isGusLoading ? (
-                  <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-5 text-slate-600">
-                    {dict.gusFetching}
-                  </div>
-                ) : null}
-                {gusError ? (
-                  <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs leading-5 text-red-700">
-                    {gusError}
-                  </div>
-                ) : null}
-                {gusMessage ? (
-                  <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-5 text-emerald-700">
-                    {gusMessage}
-                  </div>
-                ) : null}
-              </div>
-            )}
+              </label>
+            </div>
 
-            <label className="block min-w-0">
-              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                <i className="fas fa-building text-[#1a5f3c]"></i>
-                {dict.companyNameLabel}
-              </span>
-              <input
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-                placeholder="Np. MetalPol Sp. z o.o."
-                className={inputClass}
-              />
-            </label>
+            {/* Website URL */}
+            <div className="block min-w-0 md:col-span-2">
+              <label className="block min-w-0">
+                <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                  <i className="fas fa-globe text-[#1a5f3c]"></i>
+                  {dict.websiteLabel}
+                </span>
+                <input
+                  value={websiteUrl}
+                  onChange={(event) => setWebsiteUrl(event.target.value)}
+                  placeholder={dict.websitePlaceholder}
+                  className={inputClass}
+                />
+              </label>
+            </div>
 
-            <label className="block min-w-0 md:col-span-2">
-              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                <i className="fas fa-globe text-[#1a5f3c]"></i>
-                {dict.websiteLabel}
-              </span>
-              <input
-                value={websiteUrl}
-                onChange={(event) => setWebsiteUrl(event.target.value)}
-                placeholder="https://twojafirma.pl"
-                className={inputClass}
-              />
-            </label>
+            {/* RFQ contact email */}
+            <div className="block min-w-0 md:col-span-2">
+              <label className="block min-w-0">
+                <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                  <i className="fas fa-envelope text-[#1a5f3c]"></i>
+                  {dict.rfqEmailLabel}
+                </span>
+                <input
+                  type="email"
+                  value={contactEmail}
+                  onChange={(event) => setContactEmail(event.target.value)}
+                  placeholder={dict.rfqEmailPlaceholder}
+                  className={inputClass}
+                />
+                <p className="mt-2 text-xs leading-5 text-slate-500">
+                  {dict.rfqEmailInfo}
+                </p>
+              </label>
+            </div>
 
-            <label className="block min-w-0 md:col-span-2">
-              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                <i className="fas fa-envelope text-[#1a5f3c]"></i>
-                {dict.rfqEmailLabel}
-              </span>
-              <input
-                type="email"
-                value={contactEmail}
-                onChange={(event) => setContactEmail(event.target.value)}
-                placeholder="oferty@twojafirma.pl"
-                className={inputClass}
-              />
-              <p className="mt-2 text-xs leading-5 text-slate-500">
-                {dict.rfqEmailInfo}
-              </p>
-            </label>
-
+            {/* Business industries */}
             <div className="min-w-0 md:col-span-2">
               <h3 className="mb-2 flex items-center gap-2 text-sm font-extrabold text-slate-900">
                 <i className="fas fa-layer-group text-[#1a5f3c]"></i>
@@ -1360,42 +1316,41 @@ export default function CompanyProfileFormClient({
               </div>
             </div>
 
-            <label className="block min-w-0 md:col-span-2">
-              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
-                <i className="fas fa-industry text-[#1a5f3c]"></i>
-                Branża główna
-              </span>
-              <select
-                value={mainIndustry}
-                onChange={(event) => setMainIndustry(event.target.value)}
-                className={inputClass}
-                disabled={selectedIndustries.length === 0}
-              >
-                <option value="">Wybierz branżę główną</option>
-                {selectedIndustries.map((industryName) => (
-                  <option key={industryName} value={industryName}>
-                    {industryName}
-                  </option>
-                ))}
-              </select>
-            </label>
-
+            {/* Services / capabilities */}
             <div className="min-w-0 md:col-span-2">
+              <label className="block min-w-0 mb-5">
+                <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+                  <i className="fas fa-industry text-[#1a5f3c]"></i>
+                  {dict.mainIndustryLabel}
+                </span>
+                <select
+                  value={mainIndustry}
+                  onChange={(event) => setMainIndustry(event.target.value)}
+                  className={inputClass}
+                  disabled={selectedIndustries.length === 0}
+                >
+                  <option value="">{dict.mainIndustryPlaceholder}</option>
+                  {selectedIndustries.map((industryName) => (
+                    <option key={industryName} value={industryName}>
+                      {industryName}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
               <div className="mb-3">
                 <h3 className="flex items-center gap-2 text-sm font-extrabold text-slate-900">
                   <i className="fas fa-screwdriver-wrench text-[#1a5f3c]"></i>
-                  Rodzaje usług
+                  {dict.servicesSectionTitle}
                 </h3>
                 <p className="mt-2 text-sm leading-6 text-slate-500">
-                  Wybierz usługi, które najlepiej opisują możliwości Twojej
-                  firmy. Możesz zaznaczyć kilka pozycji z wielu branż.
+                  {dict.servicesSectionDescription}
                 </p>
               </div>
 
               {selectedIndustries.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm text-slate-500">
-                  Najpierw wybierz branże działalności, aby zobaczyć dostępne
-                  rodzaje usług.
+                  {dict.servicesEmptyIndustries}
                 </div>
               ) : (
                 <div className="space-y-5">
@@ -1437,10 +1392,11 @@ export default function CompanyProfileFormClient({
               )}
             </div>
 
+            {/* Region / State / Voivodeship */}
             <label className="block min-w-0">
               <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                 <i className="fas fa-map text-[#1a5f3c]"></i>
-                {countryCode === "PL" ? "Województwo" : dict.voivodeshipForeignLabel}
+                {countryCode === "PL" ? dict.voivodeshipPlLabel : dict.voivodeshipForeignLabel}
               </span>
               {countryCode === "PL" ? (
                 <select
@@ -1448,7 +1404,7 @@ export default function CompanyProfileFormClient({
                   onChange={(event) => setVoivodeship(event.target.value)}
                   className={inputClass}
                 >
-                  <option value="">Wybierz województwo</option>
+                  <option value="">{dict.voivodeshipSelectPlaceholder}</option>
                   {provinces.map((province) => (
                     <option key={province} value={province}>
                       {province}
@@ -1466,16 +1422,17 @@ export default function CompanyProfileFormClient({
               )}
             </label>
 
+            {/* City */}
             <label className="block min-w-0">
               <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                 <i className="fas fa-location-dot text-[#1a5f3c]"></i>
-                Miasto
+                {dict.cityLabel}
               </span>
               <input
                 value={city}
                 onChange={(event) => setCity(event.target.value)}
                 list="company-city-options"
-                placeholder="Np. Poznań, Kalisz, Leszno"
+                placeholder={dict.cityPlaceholder}
                 className={inputClass}
               />
               <datalist id="company-city-options">
@@ -1485,6 +1442,7 @@ export default function CompanyProfileFormClient({
               </datalist>
             </label>
 
+            {/* Registration Data */}
             {countryCode === "PL" ? (
               <div className="min-w-0 md:col-span-2">
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
@@ -1494,16 +1452,67 @@ export default function CompanyProfileFormClient({
                       {dict.registrationData}
                     </h3>
                     <p className="mt-2 text-sm leading-6 text-slate-500">
-                      Dane pobrane z rejestru GUS są zapisywane dopiero po
-                      zapisaniu profilu firmy.
+                      {dict.gusNotice}
                     </p>
                   </div>
 
                   <div className="grid min-w-0 gap-5 md:grid-cols-2">
+                    {/* NIP Input & GUS Lookup inside Registration Data */}
+                    <div className="block min-w-0 md:col-span-2">
+                      <label
+                        htmlFor="company-nip"
+                        className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500"
+                      >
+                        <i className="fas fa-id-card text-[#1a5f3c]"></i>
+                        {dict.nipLabel}
+                      </label>
+                      <input
+                        id="company-nip"
+                        value={nip}
+                        onChange={(event) => {
+                          setNip(event.target.value);
+                          setGusError("");
+                          setGusMessage("");
+                        }}
+                        placeholder={dict.nipPlaceholder}
+                        className={inputClass}
+                      />
+                      <button
+                        type="button"
+                        onClick={handleGusLookup}
+                        disabled={isGusLoading}
+                        className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#1a5f3c] px-4 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-[#1a5f3c] hover:text-white disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                      >
+                        <i
+                          className={
+                            isGusLoading ? "fas fa-spinner fa-spin" : "fas fa-download"
+                          }
+                        ></i>
+                        {isGusLoading
+                          ? dict.gusFetching
+                          : dict.gusFetch}
+                      </button>
+                      {isGusLoading ? (
+                        <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs leading-5 text-slate-600">
+                          {dict.gusFetching}
+                        </div>
+                      ) : null}
+                      {gusError ? (
+                        <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs leading-5 text-red-700">
+                          {gusError}
+                        </div>
+                      ) : null}
+                      {gusMessage ? (
+                        <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-5 text-emerald-700">
+                          {gusMessage}
+                        </div>
+                      ) : null}
+                    </div>
+
                     <label className="block min-w-0">
                       <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                         <i className="fas fa-hashtag text-[#1a5f3c]"></i>
-                        REGON
+                        {dict.regonLabel}
                       </span>
                       <input
                         value={regon}
@@ -1515,7 +1524,7 @@ export default function CompanyProfileFormClient({
                     <label className="block min-w-0">
                       <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                         <i className="fas fa-scale-balanced text-[#1a5f3c]"></i>
-                        KRS
+                        {dict.krsLabel}
                       </span>
                       <input
                         value={krs}
@@ -1527,12 +1536,12 @@ export default function CompanyProfileFormClient({
                     <label className="block min-w-0">
                       <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                         <i className="fas fa-envelope-open-text text-[#1a5f3c]"></i>
-                        Kod pocztowy
+                        {dict.postalCodeLabel}
                       </span>
                       <input
                         value={postalCode}
                         onChange={(event) => setPostalCode(event.target.value)}
-                        placeholder="Np. 00-000"
+                        placeholder={dict.postalCodePlaceholder}
                         className={inputClass}
                       />
                     </label>
@@ -1540,12 +1549,12 @@ export default function CompanyProfileFormClient({
                     <label className="block min-w-0">
                       <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                         <i className="fas fa-road text-[#1a5f3c]"></i>
-                        Ulica / adres
+                        {dict.streetAddressLabel}
                       </span>
                       <input
                         value={streetAddress}
                         onChange={(event) => setStreetAddress(event.target.value)}
-                        placeholder="Np. ul. Testowa 1/2"
+                        placeholder={dict.streetAddressPlaceholder}
                         className={inputClass}
                       />
                     </label>
@@ -1553,12 +1562,12 @@ export default function CompanyProfileFormClient({
                     <label className="block min-w-0 md:col-span-2">
                       <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                         <i className="fas fa-map-location-dot text-[#1a5f3c]"></i>
-                        Pełny adres siedziby
+                        {dict.fullAddressLabel}
                       </span>
                       <input
                         value={fullAddress}
                         onChange={(event) => setFullAddress(event.target.value)}
-                        placeholder="Np. ul. Testowa 1/2, 00-000 Warszawa"
+                        placeholder={dict.fullAddressPlaceholder}
                         className={inputClass}
                       />
                     </label>
@@ -1566,7 +1575,7 @@ export default function CompanyProfileFormClient({
                     <label className="block min-w-0">
                       <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                         <i className="fas fa-briefcase text-[#1a5f3c]"></i>
-                        Forma prawna
+                        {dict.legalFormLabel}
                       </span>
                       <input
                         value={legalForm}
@@ -1578,7 +1587,7 @@ export default function CompanyProfileFormClient({
                     <label className="block min-w-0">
                       <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                         <i className="fas fa-circle-info text-[#1a5f3c]"></i>
-                        Status działalności
+                        {dict.businessStatusLabel}
                       </span>
                       <input
                         value={businessStatus}
@@ -1590,7 +1599,7 @@ export default function CompanyProfileFormClient({
                     <label className="block min-w-0 md:col-span-2">
                       <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                         <i className="fas fa-list-check text-[#1a5f3c]"></i>
-                        PKD przeważające
+                        {dict.primaryPkdLabel}
                       </span>
                       <input
                         value={primaryPkd}
@@ -1602,7 +1611,7 @@ export default function CompanyProfileFormClient({
                     <label className="block min-w-0 md:col-span-2">
                       <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                         <i className="fas fa-list-ul text-[#1a5f3c]"></i>
-                        PKD
+                        {dict.pkdCodesLabel}
                       </span>
                       <textarea
                         value={formatPkdCodes(pkdCodes)}
@@ -1633,7 +1642,7 @@ export default function CompanyProfileFormClient({
                       <input
                         value={taxId}
                         onChange={(event) => setTaxId(event.target.value)}
-                        placeholder="Np. DE123456789"
+                        placeholder={dict.taxIdPlaceholder}
                         className={inputClass}
                       />
                     </label>
@@ -1646,7 +1655,7 @@ export default function CompanyProfileFormClient({
                       <input
                         value={registrationNumber}
                         onChange={(event) => setRegistrationNumber(event.target.value)}
-                        placeholder="Np. HRB 12345"
+                        placeholder={dict.registrationNumberPlaceholder}
                         className={inputClass}
                       />
                     </label>
@@ -1659,7 +1668,7 @@ export default function CompanyProfileFormClient({
                       <textarea
                         value={registeredAddress}
                         onChange={(event) => setRegisteredAddress(event.target.value)}
-                        placeholder="Np. Musterstraße 1, 12345 Berlin"
+                        placeholder={dict.registeredAddressPlaceholder}
                         rows={3}
                         className={`${inputClass} resize-y`}
                       />
@@ -1669,16 +1678,17 @@ export default function CompanyProfileFormClient({
               </div>
             )}
 
+            {/* Company Description */}
             <label className="block min-w-0 md:col-span-2">
               <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
                 <i className="fas fa-align-left text-[#1a5f3c]"></i>
-                Opis firmy
+                {dict.descriptionLabel}
               </span>
               <textarea
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
                 rows={6}
-                placeholder="Opisz specjalizację, park maszynowy, doświadczenie lub typ klientów."
+                placeholder={dict.descriptionPlaceholder}
                 className={inputClass}
               />
             </label>
@@ -1733,7 +1743,10 @@ export default function CompanyProfileFormClient({
                         {presentationFileName || dict.presentationTitle}
                       </p>
                       <p className="mt-1 text-xs leading-5 text-slate-500">
-                        {formatPresentationSize(presentationSizeBytes)}
+                        {formatPresentationSize(
+                          presentationSizeBytes,
+                          dict.presentationSizeMissing
+                        )}
                         {presentationMimeType ? ` · ${presentationMimeType}` : ""}
                         {formatPresentationDate(presentationUploadedAt)
                           ? ` · ${formatPresentationDate(presentationUploadedAt)}`
