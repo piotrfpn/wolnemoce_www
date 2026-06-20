@@ -2,13 +2,24 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useMemo, useRef, useState } from "react";
+import {
+  type FormEvent,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { isGusMockNip } from "@/lib/gus/mockNips";
 import { normalizeCityName, POLISH_CITY_OPTIONS } from "@/lib/location";
 import { industryServiceTypes, provinces } from "@/lib/mockData";
 import { createClient } from "@/lib/supabase/client";
 import { isValidNip, normalizeNip } from "@/lib/validators/nip";
-import { lookupCompanyInGus } from "./actions";
+import {
+  lookupCompanyInGus,
+  saveCompanyProfileAction,
+  type CompanyProfileInput,
+  type SavedCompanyProfile,
+} from "./actions";
 import type {
   PanelCommonDictionary,
   PanelProfileDictionary,
@@ -117,35 +128,6 @@ function normalizeWebsiteUrl(value: string, invalidMessage: string) {
   }
 }
 
-function slugifyCompanyName(value: string) {
-  return (
-    value
-      .toLowerCase()
-      .replace(/[ąćęłńóśźż]/g, (match) => {
-        const replacements: Record<string, string> = {
-          ą: "a",
-          ć: "c",
-          ę: "e",
-          ł: "l",
-          ń: "n",
-          ó: "o",
-          ś: "s",
-          ź: "z",
-          ż: "z",
-        };
-
-        return replacements[match] ?? match;
-      })
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "") || "firma"
-  );
-}
-
-function createCompanySlug(companyName: string, stableSuffix?: string) {
-  const suffix = stableSuffix?.slice(0, 8) || Date.now().toString(36);
-  return `${slugifyCompanyName(companyName)}-${suffix}`;
-}
-
 function getInitialIndustries(company: CompanyData | null) {
   if (company?.industries && company.industries.length > 0) {
     return company.industries;
@@ -230,40 +212,6 @@ function formatPkdCodes(codes: PkdCode[]) {
     .join("\n");
 }
 
-type CompanySaveData = {
-  id: string;
-  slug: string | null;
-  nip: string | null;
-  name: string | null;
-  description: string | null;
-  industry: string | null;
-  industries: string[] | null;
-  service_types: string[] | null;
-  location_voivodeship: string | null;
-  location_city: string | null;
-  location_postal_code: string | null;
-  location_street: string | null;
-  location_full_address: string | null;
-  regon: string | null;
-  krs: string | null;
-  legal_form: string | null;
-  business_status: string | null;
-  primary_pkd: string | null;
-  pkd_codes: PkdCode[] | null;
-  is_verified: boolean | null;
-  website_url: string | null;
-  contact_email?: string | null;
-  presentation_path: string | null;
-  presentation_file_name: string | null;
-  presentation_mime_type: string | null;
-  presentation_size_bytes: number | null;
-  presentation_uploaded_at: string | null;
-  country_code?: string | null;
-  tax_id?: string | null;
-  registration_number?: string | null;
-  registered_address?: string | null;
-};
-
 const SUPPORTED_COUNTRIES = new Set([
   "PL",
   "DE",
@@ -286,9 +234,6 @@ function getSupportedCountryCode(code: string | null | undefined): string {
   const upper = code.toUpperCase();
   return SUPPORTED_COUNTRIES.has(upper) ? upper : "PL";
 }
-
-const companyProfileSelect =
-  "id, slug, nip, name, description, industry, industries, service_types, location_voivodeship, location_city, location_postal_code, location_street, location_full_address, regon, krs, legal_form, business_status, primary_pkd, pkd_codes, is_verified, website_url, presentation_path, presentation_file_name, presentation_mime_type, presentation_size_bytes, presentation_uploaded_at, country_code, tax_id, registration_number, registered_address, company_contact_settings(contact_email)";
 
 export default function CompanyProfileFormClient({
   userId,
@@ -392,7 +337,7 @@ export default function CompanyProfileFormClient({
     useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSavePending, startSaveTransition] = useTransition();
   const [gusError, setGusError] = useState("");
   const [gusMessage, setGusMessage] = useState("");
   const [isGusLoading, setIsGusLoading] = useState(false);
@@ -518,7 +463,7 @@ export default function CompanyProfileFormClient({
     return "";
   }
 
-  function applySavedCompany(data: CompanySaveData) {
+  function applySavedCompany(data: SavedCompanyProfile) {
     const savedIndustries =
       data.industries && data.industries.length > 0
         ? data.industries
@@ -528,7 +473,6 @@ export default function CompanyProfileFormClient({
 
     setCompanyId(data.id);
     setCompanySlug(data.slug ?? "");
-    setIsVerified(Boolean(data.is_verified));
     setNip(data.nip ?? "");
     setName(data.name ?? "");
     setDescription(data.description ?? "");
@@ -551,43 +495,13 @@ export default function CompanyProfileFormClient({
     setTaxId(data.tax_id ?? "");
     setRegistrationNumber(data.registration_number ?? "");
     setRegisteredAddress(data.registered_address ?? "");
-    const email = Array.isArray((data as any).company_contact_settings)
-      ? (data as any).company_contact_settings[0]?.contact_email
-      : ((data as any).company_contact_settings?.contact_email ?? data.contact_email);
-    setContactEmail(email ?? "");
-    setPresentationPath(data.presentation_path ?? "");
-    setPresentationFileName(data.presentation_file_name ?? "");
-    setPresentationMimeType(data.presentation_mime_type ?? "");
-    setPresentationSizeBytes(data.presentation_size_bytes ?? null);
-    setPresentationUploadedAt(data.presentation_uploaded_at ?? "");
+    if (data.contact_email !== undefined) {
+      setContactEmail(data.contact_email ?? "");
+    }
     setRequestIndustry(savedIndustries[0] ?? "");
   }
 
-  async function findCompanyByNip(
-    supabase: ReturnType<typeof createClient>,
-    normalizedNip: string
-  ) {
-    return supabase
-      .from("companies")
-      .select(`user_id, ${companyProfileSelect}`)
-      .eq("nip", normalizedNip)
-      .maybeSingle();
-  }
-
-  async function findCompanyByTaxId(
-    supabase: ReturnType<typeof createClient>,
-    cCode: string,
-    tId: string
-  ) {
-    return supabase
-      .from("companies")
-      .select(`user_id, ${companyProfileSelect}`)
-      .eq("country_code", cCode)
-      .ilike("tax_id", tId.trim())
-      .maybeSingle();
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
     setMessage("");
@@ -598,206 +512,60 @@ export default function CompanyProfileFormClient({
       return;
     }
 
-    setIsSubmitting(true);
-    const supabase = createClient();
-    const normalizedNip = normalizeNip(nip);
-    const normalizedWebsite = normalizeWebsiteUrl(websiteUrl, dict.websiteInvalid);
-
-    if (normalizedWebsite.error) {
-      setError(normalizedWebsite.error);
-      setIsSubmitting(false);
-      return;
-    }
-
-    const nextCompanySlug = companySlug || createCompanySlug(name.trim(), companyId);
-    const isPl = countryCode === "PL";
-
-    const payload: any = {
-      country_code: countryCode.toUpperCase(),
-      name: name.trim(),
-      slug: nextCompanySlug,
-      description: description.trim() || null,
+    const input: CompanyProfileInput = {
+      name,
+      description,
       industry: mainIndustry,
       industries: selectedIndustries,
-      service_types: selectedServiceTypes,
-      location_voivodeship: voivodeship.trim() || null,
-      location_city: normalizeCityName(city),
-      location_postal_code: postalCode.trim() || null,
-      location_street: streetAddress.trim() || null,
-      location_full_address: fullAddress.trim() || null,
-      website_url: normalizedWebsite.value,
+      serviceTypes: selectedServiceTypes,
+      locationVoivodeship: voivodeship,
+      locationCity: city,
+      locationPostalCode: postalCode,
+      locationStreet: streetAddress,
+      locationFullAddress: fullAddress,
+      websiteUrl,
+      contactEmail,
+      countryCode,
+      nip,
+      regon,
+      krs,
+      legalForm,
+      businessStatus,
+      primaryPkd,
+      pkdCodes,
+      taxId,
+      registrationNumber,
+      registeredAddress,
     };
 
-    if (isPl) {
-      payload.nip = normalizedNip;
-      payload.tax_id = null;
-      payload.registration_number = null;
-      payload.registered_address = null;
-      payload.regon = regon.trim() || null;
-      payload.krs = krs.trim() || null;
-      payload.primary_pkd = primaryPkd.trim() || null;
-      payload.pkd_codes = pkdCodes;
-    } else {
-      payload.nip = null;
-      payload.regon = null;
-      payload.krs = null;
-      payload.primary_pkd = null;
-      payload.pkd_codes = null;
-      payload.tax_id = taxId.trim();
-      payload.registration_number = registrationNumber.trim() || null;
-      payload.registered_address = registeredAddress.trim() || null;
-    }
+    startSaveTransition(async () => {
+      try {
+        const result = await saveCompanyProfileAction(input);
 
-    let existingCompany = null;
-    if (isPl) {
-      if (normalizedNip) {
-        const existingCompanyResult = await findCompanyByNip(supabase, normalizedNip);
-        if (existingCompanyResult.error) {
-          setError(dict.profileSaveError);
-          setIsSubmitting(false);
-          return;
-        }
-        existingCompany = existingCompanyResult.data;
-      }
-    } else {
-      if (taxId.trim()) {
-        const existingCompanyResult = await findCompanyByTaxId(supabase, countryCode.toUpperCase(), taxId.trim());
-        if (existingCompanyResult.error) {
-          setError(dict.profileSaveError);
-          setIsSubmitting(false);
-          return;
-        }
-        existingCompany = existingCompanyResult.data;
-      }
-    }
-
-    if (existingCompany && existingCompany.user_id !== userId) {
-      setError(
-        isPl
-          ? dict.nipAlreadyRegistered
-          : dict.taxIdAlreadyRegistered
-      );
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (existingCompany && !companyId) {
-      applySavedCompany(existingCompany as any);
-      setMessage(
-        isPl
-          ? dict.nipAlreadyAssigned
-          : dict.taxIdAlreadyAssigned
-      );
-      setIsSubmitting(false);
-      router.refresh();
-      return;
-    }
-
-    if (existingCompany && companyId && existingCompany.id !== companyId) {
-      setError(
-        isPl
-          ? dict.nipAlreadyAssigned
-          : dict.taxIdAlreadyAssigned
-      );
-      applySavedCompany(existingCompany as any);
-      setIsSubmitting(false);
-      router.refresh();
-      return;
-    }
-
-    const query = companyId
-      ? supabase
-          .from("companies")
-          .update(payload)
-          .eq("id", companyId)
-          .select(companyProfileSelect)
-          .single()
-      : supabase
-          .from("companies")
-          .insert({
-            ...payload,
-            user_id: userId,
-          })
-          .select(companyProfileSelect)
-          .single();
-
-    const { data, error: saveError } = await query;
-
-    if (saveError) {
-      if (saveError.code === "23505") {
-        const retryCompanyResult = isPl
-          ? await findCompanyByNip(supabase, normalizedNip)
-          : await findCompanyByTaxId(supabase, countryCode.toUpperCase(), taxId.trim());
-        const retryCompany = retryCompanyResult.data as unknown as
-          | (CompanySaveData & { user_id: string | null })
-          | null;
-
-        if (retryCompany?.user_id === userId) {
-          applySavedCompany(retryCompany);
-          setMessage(
-            isPl
-              ? dict.nipAlreadyAssigned
-              : dict.taxIdAlreadyAssigned
-          );
-          setIsSubmitting(false);
-          router.refresh();
+        if (!result.success) {
+          if (result.data) {
+            applySavedCompany(result.data);
+          }
+          if (result.reverificationRequired) {
+            setIsVerified(false);
+          }
+          setError(dict[result.errorKey]);
+          if (result.data) {
+            router.refresh();
+          }
           return;
         }
 
-        setError(
-          isPl
-            ? dict.nipAlreadyRegistered
-            : dict.taxIdAlreadyRegistered
-        );
-        setIsSubmitting(false);
-        return;
-      }
-
-      setError(dict.profileSaveError);
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (data) {
-      const savedCompanyId = data.id;
-
-      const { error: emailSaveError } = await supabase
-        .from("company_contact_settings")
-        .upsert({
-          company_id: savedCompanyId,
-          contact_email: contactEmail.trim() || null,
-        });
-
-      const { data: freshCompany } = await supabase
-        .from("companies")
-        .select(companyProfileSelect)
-        .eq("id", savedCompanyId)
-        .single();
-
-      if (freshCompany) {
-        applySavedCompany(freshCompany as unknown as CompanySaveData);
-        if (data.is_verified === true && freshCompany.is_verified === false) {
-          setMessage(dict.profileSavedReverificationRequired);
-          setIsSubmitting(false);
-          router.refresh();
-          return;
+        applySavedCompany(result.data);
+        if (result.reverificationRequired) {
+          setIsVerified(false);
         }
-      } else {
-        applySavedCompany(data as unknown as CompanySaveData);
-      }
-
-      if (emailSaveError) {
-        console.error("Failed to save contact email", emailSaveError);
-        setError(dict.contactEmailSaveError);
-        setIsSubmitting(false);
+        setMessage(dict[result.messageKey]);
         router.refresh();
-        return;
+      } catch {
+        setError(dict.profileSaveError);
       }
-    }
-
-    setMessage(dict.profileSaved);
-    setIsSubmitting(false);
-    router.refresh();
+    });
   }
 
   async function handleGusLookup() {
@@ -1718,10 +1486,10 @@ export default function CompanyProfileFormClient({
 
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSavePending}
             className="mt-8 btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isSubmitting ? dictCommon.saving : dict.saveChanges}
+            {isSavePending ? dictCommon.saving : dict.saveChanges}
           </button>
         </form>
 
