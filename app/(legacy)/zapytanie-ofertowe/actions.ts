@@ -234,6 +234,10 @@ export async function submitInquiry(
 
   const offerId = getValue(formData, "offer_id");
   const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { data: offer, error: offerError } = await supabase
     .from("offers")
     .select(
@@ -257,6 +261,7 @@ export async function submitInquiry(
 
   const { error: insertError } = await supabase.from("inquiries").insert({
     id: inquiryId,
+    sender_id: user?.id || null,
     offer_id: activeOffer.id,
     company_id: activeOffer.company_id,
     branch: activeOffer.branch,
