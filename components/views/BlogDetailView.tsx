@@ -229,7 +229,7 @@ export default async function BlogDetailView({
   const date = formatDate(post.published_at ?? post.created_at, locale);
   const imageUrl = getBlogImageUrl(post.featured_image_path);
   const imageAlt = post.featured_image_alt || post.title;
-  const canonicalUrl = getAbsoluteUrl(`/blog/${post.slug}`);
+  const canonicalUrl = getAbsoluteUrl(getBlogDetailPath(post.slug, locale));
   const description = truncateSeoDescription(
     post.meta_description || post.excerpt || post.content
   );
@@ -259,13 +259,13 @@ export default async function BlogDetailView({
             "@type": "ListItem",
             position: 1,
             name: "WolneMoce",
-            item: getAbsoluteUrl("/"),
+            item: getAbsoluteUrl(getLocalizedPath("/", locale)),
           },
           {
             "@type": "ListItem",
             position: 2,
             name: t.relatedArticles,
-            item: getAbsoluteUrl("/blog"),
+            item: getAbsoluteUrl(getLocalizedPath("/blog", locale)),
           },
           {
             "@type": "ListItem",
