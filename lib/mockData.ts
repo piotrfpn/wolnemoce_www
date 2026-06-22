@@ -692,7 +692,7 @@ export const faqs = [
 ];
 
 export const contactInfo = {
-  email: "piotr.fiszer@pfconsulting.pl",
+  email: "kontakt@wolnemoce.com",
   phone: "+48 604 904 150",
   city: "Poznań",
   hours: "Pon.-pt. 9:00-17:00",

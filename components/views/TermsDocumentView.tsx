@@ -83,8 +83,8 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
                   <li>Pełne dane firmy: PFConsulting Piotr Fiszer</li>
                   <li>NIP: 7792017326</li>
                   <li>Adres: ul. Promienista 114, 60-142 Poznań, Polska</li>
-                  <li>Email kontaktowy: piotr.fiszer@pfconsulting.pl</li>
-                  <li>Email reklamacje: piotr.fiszer@pfconsulting.pl</li>
+                  <li>Email kontaktowy: kontakt@wolnemoce.com</li>
+                  <li>Email reklamacje: kontakt@wolnemoce.com</li>
                   <li>Telefon: +48 604 904 150</li>
                 </ul>
               </Section>
@@ -605,7 +605,7 @@ export default function TermsDocumentView({ locale = defaultLocale }: LegalPageP
               <Section number={31} title="Reklamacje">
                 <p>
                   Reklamacje dotyczące działania Serwisu można kierować na adres
-                  piotr.fiszer@pfconsulting.pl. Reklamacja powinna zawierać opis
+                  kontakt@wolnemoce.com. Reklamacja powinna zawierać opis
                   problemu, dane zgłaszającego, identyfikację konta lub treści oraz
                   oczekiwany sposób rozpatrzenia.
                 </p>

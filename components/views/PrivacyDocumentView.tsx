@@ -70,7 +70,7 @@ export default function PrivacyDocumentView({ locale = defaultLocale }: LegalPag
               <Section number={2} title="Kontakt w sprawach RODO">
                 <p>
                   W sprawach dotyczących ochrony danych osobowych można
-                  kontaktować się pod adresem e-mail: piotr.fiszer@pfconsulting.pl lub telefonem: +48 604 904 150.
+                  kontaktować się pod adresem e-mail: kontakt@wolnemoce.com lub telefonem: +48 604 904 150.
                 </p>
               </Section>
 
