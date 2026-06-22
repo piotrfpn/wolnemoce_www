@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { sendContactNotification } from "@/lib/email/contactNotifications";
 
 export type ContactMessageResult = {
   error?: string;
@@ -104,6 +105,24 @@ export async function submitContactMessage(
     return {
       error: "Nie udało się wysłać wiadomości. Spróbuj ponownie.",
     };
+  }
+
+  const notificationTimestamp = new Date();
+
+  try {
+    await sendContactNotification({
+      name,
+      companyName: companyName || null,
+      topic: topic || null,
+      source,
+      createdAt: notificationTimestamp,
+    });
+  } catch {
+    console.error("Contact email notification failed", {
+      event: "contact_email_notification_failed",
+      timestamp: notificationTimestamp.toISOString(),
+      source,
+    });
   }
 
   return { success: SUCCESS_MESSAGE };
