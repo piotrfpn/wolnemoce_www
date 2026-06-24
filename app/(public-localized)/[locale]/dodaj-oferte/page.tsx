@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import AddOfferPublicView from "@/components/views/AddOfferPublicView";
 import {
   getLocalizedPath,
   isSupportedLocale,
   prefixedLocales,
   supportedLocales,
+  type Locale,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createClient } from "@/lib/supabase/server";
@@ -59,5 +59,9 @@ export default async function LocalizedAddOfferPage({
     redirect("/panel/oferty/nowa");
   }
 
-  return <AddOfferPublicView locale={params.locale} />;
+  const loginHref = `${getLocalizedPath(
+    "/logowanie",
+    params.locale as Locale
+  )}?next=${encodeURIComponent("/panel/oferty/nowa")}`;
+  redirect(loginHref);
 }

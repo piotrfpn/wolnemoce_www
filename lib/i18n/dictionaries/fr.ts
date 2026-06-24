@@ -61,8 +61,8 @@ const fr: Dictionary = {
     statCompaniesLabel: "Base d’entreprises B2B",
     statRequestsValue: "RFQ",
     statRequestsLabel: "Demandes d’offre",
-    ctaPrimary: "Voir les offres",
-    ctaSecondary: "Ajouter votre offre",
+    ctaPrimary: "Ajouter une offre",
+    ctaSecondary: "Ajouter une demande",
     ctaHelper: "Voir les offres disponibles",
     trustBar: "Offres et demandes modérées · Profils d'entreprises · Coopération B2B · Contact via la plateforme",
     previewCompany: "MetalPol Sp. z o.o.",
@@ -1615,7 +1615,7 @@ const fr: Dictionary = {
   softLaunch: {
     title: "Nous développons WolneMoce en collaboration avec les premières entreprises",
     description: "Le portail est développé par étapes, en mettant l'accent sur la qualité des données, la sécurité et les besoins réels des entreprises de production. À ce stade, nous acceptons les premiers profils, offres et demandes pour affiner le processus de coopération B2B avant une promotion plus large.",
-    cta: "Ajouter une entreprise à WolneMoce",
+    cta: "Ajouter une offre",
   }
 };
 export default fr;

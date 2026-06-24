@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import AddOfferPublicView from "@/components/views/AddOfferPublicView";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { createClient } from "@/lib/supabase/server";
 
@@ -21,5 +20,5 @@ export default async function AddOfferPage() {
     redirect("/panel/oferty/nowa");
   }
 
-  return <AddOfferPublicView locale="pl" />;
+  redirect(`/logowanie?next=${encodeURIComponent("/panel/oferty/nowa")}`);
 }

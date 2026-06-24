@@ -1758,7 +1758,7 @@ const pl: Dictionary = {
   softLaunch: {
     title: "Rozwijamy WolneMoce razem z pierwszymi firmami",
     description: "Portal jest rozwijany etapami, z naciskiem na jakość danych, bezpieczeństwo i realne potrzeby firm produkcyjnych. Na obecnym etapie przyjmujemy pierwsze profile, oferty i zapytania, aby dopracować proces kooperacji B2B przed szerszą promocją.",
-    cta: "Dodaj firmę do WolneMoce",
+    cta: "Dodaj ofertę",
   },
 };
 export default pl;

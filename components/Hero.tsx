@@ -60,12 +60,12 @@ export default function Hero({ locale = defaultLocale }: { locale?: Locale }) {
 
           <div className="flex flex-col items-start gap-4">
             <div className="flex flex-wrap gap-4">
-              <Link
-                href={getLocalizedPath("/dodaj-oferte", locale)}
+              <AddOfferLinkClient
+                locale={locale}
                 className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-[#f59e0b] to-[#fbbf24] px-8 py-4 text-base font-bold text-white no-underline shadow-lg shadow-[#f59e0b]/30 transition hover:-translate-y-0.5 hover:shadow-xl"
               >
                 {t.ctaPrimary}
-              </Link>
+              </AddOfferLinkClient>
               <Link
                 href={getLocalizedPath("/dodaj-zapytanie", locale)}
                 className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/15 px-8 py-4 text-base font-bold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/20"

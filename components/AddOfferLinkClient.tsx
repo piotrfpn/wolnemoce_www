@@ -26,11 +26,11 @@ export default function AddOfferLinkClient({
   onNavigate,
   locale,
 }: AddOfferLinkClientProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() || "/";
   const router = useRouter();
   const resolvedLocale = locale ?? getLocaleFromPathname(pathname);
-  const publicHref = getLocalizedPath("/dodaj-oferte", resolvedLocale);
-  const [href, setHref] = useState(publicHref);
+  const loginHref = `${getLocalizedPath("/logowanie", resolvedLocale)}?next=${encodeURIComponent("/panel/oferty/nowa")}`;
+  const [href, setHref] = useState(loginHref);
 
   useEffect(() => {
     const supabase = createClient();
@@ -41,20 +41,20 @@ export default function AddOfferLinkClient({
         return;
       }
 
-      setHref(data.user ? "/panel/oferty/nowa" : publicHref);
+      setHref(data.user ? "/panel/oferty/nowa" : loginHref);
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setHref(session?.user ? "/panel/oferty/nowa" : publicHref);
+      setHref(session?.user ? "/panel/oferty/nowa" : loginHref);
     });
 
     return () => {
       isMounted = false;
       subscription.unsubscribe();
     };
-  }, [publicHref]);
+  }, [loginHref]);
 
   const isPanel = href === "/panel/oferty/nowa";
 

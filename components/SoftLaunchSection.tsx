@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
+import AddOfferLinkClient from "./AddOfferLinkClient";
 
 export default function SoftLaunchSection({ locale = defaultLocale }: { locale?: Locale }) {
   const t = getDictionary(locale).softLaunch;
@@ -17,12 +17,12 @@ export default function SoftLaunchSection({ locale = defaultLocale }: { locale?:
         <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-slate-600">
           {t.description}
         </p>
-        <Link
-          href={getLocalizedPath("/dodaj-oferte", locale)}
+        <AddOfferLinkClient
+          locale={locale}
           className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-8 py-4 text-[15px] font-bold text-white no-underline transition hover:bg-slate-800 shadow-md"
         >
           {t.cta}
-        </Link>
+        </AddOfferLinkClient>
       </div>
     </section>
   );
