@@ -11,6 +11,7 @@ import Navbar from "@/components/Navbar";
 import PartnerServices from "@/components/PartnerServices";
 import Pricing from "@/components/Pricing";
 import SearchBar from "@/components/SearchBar";
+import SoftLaunchSection from "@/components/SoftLaunchSection";
 import StructuredData from "@/components/StructuredData";
 import Testimonials from "@/components/Testimonials";
 import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
@@ -89,6 +90,7 @@ export default function HomeView({
         </div>
       </section>
       <Categories locale={locale} />
+      <SoftLaunchSection locale={locale} />
       <FeaturedOffers locale={locale} />
       <HowItWorks locale={locale} />
       <Pricing locale={locale} />

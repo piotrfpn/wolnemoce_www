@@ -31,11 +31,10 @@ export default function CtaSection({ locale = defaultLocale }: { locale?: Locale
             </AddOfferLinkClient>
 
             <Link
-              href={getLocalizedPath("/oferty", locale)}
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/10 px-10 py-4 text-base font-bold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/15"
+              href={getLocalizedPath("/dodaj-zapytanie", locale)}
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/10 px-8 py-4 text-base font-bold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/15"
             >
-              <i className="fas fa-search"></i>
-              {t.browseOffers}
+              {t.addRequest}
             </Link>
           </div>
         </div>

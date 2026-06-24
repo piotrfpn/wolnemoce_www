@@ -63,6 +63,8 @@ const es: Dictionary = {
     statRequestsLabel: "Solicitudes de oferta",
     ctaPrimary: "Ver ofertas",
     ctaSecondary: "Añadir tu oferta",
+    ctaHelper: "Ver ofertas disponibles",
+    trustBar: "Ofertas y solicitudes moderadas · Perfiles de empresa · Cooperación B2B · Contacto a través de la plataforma",
     previewCompany: "MetalPol Sp. z o.o.",
     previewMeta: "Mecanizado CNC · Varsovia",
     previewTitle: "Mecanizado CNC - capacidad 500 uds./mes",
@@ -428,6 +430,7 @@ const es: Dictionary = {
     heroTitle: "Hablemos de capacidades productivas disponibles",
     heroDescription: "Escribe si buscas contratista o quieres mostrar la capacidad disponible de tu empresa.",
     labels: { email: "Email", phone: "Teléfono", location: "Ubicación", hours: "Horario" },
+    formNote: "Para cuestiones operativas y administrativas, también puede utilizar el formulario de contacto. Los mensajes llegan al equipo que gestiona el portal.",
     partnerTopics: {
       credos: {
         ...en.contactPage.partnerTopics.credos,
@@ -807,7 +810,8 @@ const es: Dictionary = {
     plans: [
       {
         name: "Plan FREE",
-        subtitle: "Para empresas que empiezan a publicar ofertas",
+        subtitle: "Para empresas que desean comprobar si WolneMoce puede ser un canal útil para presentar servicios, capacidades disponibles o solicitudes de cooperación.",
+        description: "Una buena opción para empezar: complete su perfil, añada información básica y compruebe cómo el portal apoya la visibilidad de su empresa en el contexto de la cooperación B2B.",
         price: "0 PLN",
         priceSuffix: "/ mes",
         features: [
@@ -822,7 +826,8 @@ const es: Dictionary = {
       },
       {
         name: "Plan PRO",
-        subtitle: "Para fabricantes activos",
+        subtitle: "Para empresas que desean presentar activamente sus capacidades y aumentar la visibilidad de sus ofertas o solicitudes.",
+        description: "Para empresas que tratan a WolneMoce como un canal adicional para contactos B2B, presentación de servicios y fomento de la visibilidad entre posibles socios.",
         price: "199 PLN",
         priceSuffix: "neto + IVA / mes",
         priceNote:
@@ -884,6 +889,31 @@ const es: Dictionary = {
       { icon: "fas fa-lock", value: "Transparente", label: "Modelos de cooperación sin costes ocultos" },
     ],
   },
+  testimonials: {
+    label: "Grupos objetivo",
+    title: "¿Para quién es WolneMoce?",
+    description: "WolneMoce ayuda a las empresas a organizar los primeros pasos en la cooperación de producción B2B.",
+    items: [
+      {
+        text: "Describa lo que necesita: mecanizado, ensamblaje, producción en serie, servicios técnicos, logística u otro apoyo. Su solicitud puede llegar a empresas con las competencias adecuadas y capacidades de producción libres.",
+        author: "Para empresas que buscan subcontratistas",
+        role: "",
+        initials: "B2B"
+      },
+      {
+        text: "Muestre las tecnologías, servicios, industrias y capacidades de producción disponibles. Añada una oferta, complete el perfil de su empresa y aumente la visibilidad de su empresa en el contexto de la cooperación B2B.",
+        author: "Para empresas con capacidades libres",
+        role: "",
+        initials: "RFQ"
+      },
+      {
+        text: "Busque fuentes de suministro alternativas, socios de cooperación, proveedores de servicios y socios de producción sin tener que navegar por directorios aleatorios.",
+        author: "Para departamentos de compras y operaciones",
+        role: "",
+        initials: "SEO"
+      }
+    ]
+  },
   partners: {
     ...en.partners,
     label: "Partners",
@@ -899,17 +929,6 @@ const es: Dictionary = {
       cta: item.name === "Credos" ? "Consultar soporte" : "Consultar asesoría",
     })),
   },
-  testimonials: {
-    label: "Soft-launch",
-    title: "Construimos una base creíble de capacidades productivas",
-    description:
-      "En el lanzamiento nos centramos en la calidad de los perfiles, ofertas reales y contacto B2B seguro, no en declarar escala.",
-    items: [
-      { text: "Únete a las primeras empresas que presentan capacidad productiva disponible en un directorio B2B público.", author: "Para fabricantes", role: "Perfil de empresa, ofertas y certificados tras moderación", initials: "B2B" },
-      { text: "Los compradores pueden ver ofertas activas y enviar RFQ sin prometer leads inmediatos.", author: "Para compradores", role: "RFQ y contacto con empresas desde la plataforma", initials: "RFQ", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
-      { text: "Desarrollamos el directorio con cautela: solo ofertas activas y perfiles públicos verificados se promueven en SEO.", author: "Para el mercado", role: "Sin estadísticas falsas, ratings ni trackers", initials: "SEO", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
-    ],
-  },
   blogPreview: {
     label: "Conocimiento",
     title: "Desde una perspectiva experta",
@@ -920,9 +939,9 @@ const es: Dictionary = {
   cta: {
     title: "¿Listo para optimizar la producción?",
     description:
-      "Encuentra capacidad disponible o añade hoy la oferta de tu empresa.",
+      "Encuentre capacidades disponibles o añada la oferta de su empresa hoy mismo.",
     addOffer: "Añadir oferta gratis",
-    browseOffers: "Ver ofertas",
+    addRequest: "Añadir una solicitud",
   },
   seo: {
     ...en.seo,
@@ -1592,6 +1611,11 @@ const es: Dictionary = {
       unexpectedError: "Ocurrió un error. Por favor, inténtelo de nuevo.",
       partialSuccessFallback: "La solicitud fue enviada, pero algunas operaciones no pudieron completarse.",
     },
+  },
+  softLaunch: {
+    title: "Desarrollamos WolneMoce junto con las primeras empresas",
+    description: "El portal se está desarrollando por etapas, centrándose en la calidad de los datos, la seguridad y las necesidades reales de las empresas de producción. En esta etapa, aceptamos los primeros perfiles, ofertas y solicitudes para refinar el proceso de cooperación B2B antes de una promoción más amplia.",
+    cta: "Añadir una empresa a WolneMoce",
   }
 };
 export default es;

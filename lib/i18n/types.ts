@@ -108,6 +108,8 @@ export type Dictionary = {
     statRequestsLabel: string;
     ctaPrimary: string;
     ctaSecondary: string;
+    ctaHelper: string;
+    trustBar: string;
     previewCompany: string;
     previewMeta: string;
     previewTitle: string;
@@ -411,6 +413,7 @@ export type Dictionary = {
       location: string;
       hours: string;
     };
+    formNote?: string;
     partnerTopics: {
       credos: {
         label: string;
@@ -753,6 +756,7 @@ export type Dictionary = {
     plans: Array<{
       name: string;
       subtitle: string;
+      description?: string;
       price: string;
       priceSuffix: string;
       priceNote?: string;
@@ -825,7 +829,7 @@ export type Dictionary = {
     title: string;
     description: string;
     addOffer: string;
-    browseOffers: string;
+    addRequest: string;
   };
   seo: {
     home: {
@@ -1470,6 +1474,11 @@ export type Dictionary = {
       unexpectedError: string;
       partialSuccessFallback: string;
     };
+  };
+  softLaunch: {
+    title: string;
+    description: string;
+    cta: string;
   };
 };
 

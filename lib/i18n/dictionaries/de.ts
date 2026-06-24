@@ -63,6 +63,8 @@ const de: Dictionary = {
     statRequestsLabel: "Anfragen",
     ctaPrimary: "Angebote ansehen",
     ctaSecondary: "Eigenes Angebot hinzufügen",
+    ctaHelper: "Verfügbare Angebote ansehen",
+    trustBar: "Moderierte Angebote und Anfragen · Firmenprofile · B2B-Kooperation · Kontakt über die Plattform",
     previewCompany: "MetalPol GmbH",
     previewMeta: "CNC-Bearbeitung · Warschau",
     previewTitle: "CNC-Bearbeitung - Kapazität 500 Stk./Monat",
@@ -434,6 +436,7 @@ const de: Dictionary = {
     heroDescription:
       "Schreiben Sie, wenn Sie einen Auftragnehmer suchen oder verfügbare Kapazitäten Ihrer Firma zeigen möchten.",
     labels: { email: "E-Mail", phone: "Telefon", location: "Standort", hours: "Öffnungszeiten" },
+    formNote: "Für operative und administrative Anliegen können Sie auch das Kontaktformular nutzen. Die Nachrichten gehen an das Team, das das Portal betreut.",
     partnerTopics: {
       credos: {
         ...en.contactPage.partnerTopics.credos,
@@ -817,7 +820,8 @@ const de: Dictionary = {
     plans: [
       {
         name: "Plan FREE",
-        subtitle: "Für Firmen, die erste Angebote veröffentlichen",
+        subtitle: "Für Unternehmen, die prüfen möchten, ob WolneMoce ein geeigneter Kanal zur Präsentation von Dienstleistungen, freien Kapazitäten oder Kooperationsanfragen sein kann.",
+        description: "Ein guter Einstieg: Vervollständigen Sie Ihr Profil, ergänzen Sie grundlegende Informationen und prüfen Sie, wie das Portal die Sichtbarkeit Ihres Unternehmens im B2B-Kooperationskontext unterstützt.",
         price: "0 PLN",
         priceSuffix: "/ Monat",
         features: [
@@ -832,7 +836,8 @@ const de: Dictionary = {
       },
       {
         name: "Plan PRO",
-        subtitle: "Für aktive Hersteller",
+        subtitle: "Für Unternehmen, die ihre Möglichkeiten aktiv präsentieren und die Sichtbarkeit von Angeboten oder Anfragen erhöhen möchten.",
+        description: "Für Unternehmen, die WolneMoce als zusätzlichen Kanal für B2B-Kontakte, die Präsentation von Dienstleistungen und den Aufbau von Sichtbarkeit bei potenziellen Geschäftspartnern nutzen möchten.",
         price: "199 PLN",
         priceSuffix: "netto + MwSt. / Monat",
         priceNote:
@@ -916,15 +921,29 @@ const de: Dictionary = {
     })),
   },
   testimonials: {
-    label: "Soft-Launch",
-    title: "Wir bauen eine glaubwürdige Basis von Produktionskapazitäten auf",
-    description:
-      "Zum Start konzentrieren wir uns auf Profilqualität, reale Angebote und sicheren B2B-Kontakt statt auf Skalierungsversprechen.",
+    label: "Zielgruppen",
+    title: "Für wen ist WolneMoce?",
+    description: "WolneMoce unterstützt Unternehmen dabei, die ersten Schritte in der B2B-Produktionskooperation geordnet anzugehen.",
     items: [
-      { text: "Schließen Sie sich den ersten Firmen an, die freie Produktionskapazitäten in einem öffentlichen B2B-Katalog zeigen.", author: "Für Hersteller", role: "Firmenprofil, Angebote und Zertifikate nach Moderation", initials: "B2B" },
-      { text: "Käufer können aktive Angebote ansehen und RFQs senden, ohne dass sofortige Leads versprochen werden.", author: "Für Käufer", role: "RFQ und Firmenkontakt über die Plattform", initials: "RFQ", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
-      { text: "Wir entwickeln den Katalog vorsichtig: Nur aktive Angebote und verifizierte öffentliche Firmenprofile werden im SEO gefördert.", author: "Für den Markt", role: "Keine fiktiven Statistiken, Ratings oder Tracker", initials: "SEO", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
-    ],
+      {
+        text: "Beschreiben Sie, was Sie benötigen: mechanische Bearbeitung, Montage, Serienfertigung, technische Dienstleistungen, Logistik oder andere Unterstützung. Ihre Anfrage kann Unternehmen erreichen, die über passende Kompetenzen und freie Produktionskapazitäten verfügen.",
+        author: "Für Unternehmen, die Subunternehmer suchen",
+        role: "",
+        initials: "B2B"
+      },
+      {
+        text: "Zeigen Sie verfügbare Technologien, Dienstleistungen, Branchen und Produktionsmöglichkeiten. Fügen Sie ein Angebot hinzu, vervollständigen Sie Ihr Firmenprofil und erhöhen Sie die Sichtbarkeit Ihres Unternehmens im Kontext der B2B-Kooperation.",
+        author: "Für Unternehmen mit freien Kapazitäten",
+        role: "",
+        initials: "RFQ"
+      },
+      {
+        text: "Suchen Sie nach alternativen Bezugsquellen, Kooperationspartnern, Dienstleistern und Produktionspartnern, ohne zufällige Verzeichnisse durchsuchen zu müssen.",
+        author: "Für Einkaufs- und Betriebsabteilungen",
+        role: "",
+        initials: "SEO"
+      }
+    ]
   },
   blogPreview: {
     label: "Wissen",
@@ -934,11 +953,11 @@ const de: Dictionary = {
     empty: "Noch keine veröffentlichten Blogbeiträge.",
   },
   cta: {
-    title: "Bereit, Produktion zu optimieren?",
+    title: "Haben Sie freie Kapazitäten oder suchen Sie einen Kooperationspartner?",
     description:
-      "Finden Sie freie Kapazitäten oder fügen Sie noch heute das Angebot Ihres Unternehmens hinzu.",
-    addOffer: "Angebot kostenlos hinzufügen",
-    browseOffers: "Angebote ansehen",
+      "Fügen Sie ein Angebot hinzu, veröffentlichen Sie eine Anfrage oder vervollständigen Sie Ihr Firmenprofil. WolneMoce hilft dabei, die ersten Schritte in der B2B-Produktionskooperation zu ordnen.",
+    addOffer: "Angebot hinzufügen",
+    addRequest: "Anfrage hinzufügen",
   },
   seo: {
     ...en.seo,
@@ -1608,6 +1627,11 @@ const de: Dictionary = {
       unexpectedError: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
       partialSuccessFallback: "Die Anfrage wurde gesendet, aber einige Operationen konnten nicht abgeschlossen werden.",
     },
+  },
+  softLaunch: {
+    title: "Wir entwickeln WolneMoce gemeinsam mit den ersten Unternehmen",
+    description: "Das Portal wird schrittweise entwickelt – mit Fokus auf Datenqualität, Sicherheit und die realen Bedürfnisse von Produktionsunternehmen. In dieser Phase nehmen wir die ersten Profile, Angebote und Anfragen auf, um den B2B-Kooperationsprozess vor einer breiteren Einführung weiter zu verbessern.",
+    cta: "Unternehmen bei WolneMoce hinzufügen",
   }
 };
 export default de;

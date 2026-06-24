@@ -58,20 +58,31 @@ export default function Hero({ locale = defaultLocale }: { locale?: Locale }) {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href={offersHref}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-[#f59e0b] to-[#fbbf24] px-8 py-4 text-base font-bold text-white no-underline shadow-lg shadow-[#f59e0b]/30 transition hover:-translate-y-0.5 hover:shadow-xl"
-            >
-              {t.ctaPrimary}
-            </Link>
-            <AddOfferLinkClient
-              locale={locale}
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/15 px-8 py-4 text-base font-bold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/20"
-            >
-              <i className="fas fa-plus"></i>
-              {t.ctaSecondary}
-            </AddOfferLinkClient>
+          <div className="flex flex-col items-start gap-4">
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href={getLocalizedPath("/dodaj-oferte", locale)}
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-[#f59e0b] to-[#fbbf24] px-8 py-4 text-base font-bold text-white no-underline shadow-lg shadow-[#f59e0b]/30 transition hover:-translate-y-0.5 hover:shadow-xl"
+              >
+                {t.ctaPrimary}
+              </Link>
+              <Link
+                href={getLocalizedPath("/dodaj-zapytanie", locale)}
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/15 px-8 py-4 text-base font-bold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/20"
+              >
+                {t.ctaSecondary}
+              </Link>
+            </div>
+
+            <div className="mt-2 flex flex-col gap-2">
+              <Link href={offersHref} className="text-sm font-medium text-[#fbbf24] hover:underline">
+                {t.ctaHelper} &rarr;
+              </Link>
+              <p className="text-xs text-white/60">
+                <i className="fas fa-shield-alt mr-1.5 opacity-70"></i>
+                {t.trustBar}
+              </p>
+            </div>
           </div>
         </div>
 

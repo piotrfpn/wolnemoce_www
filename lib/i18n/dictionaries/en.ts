@@ -63,7 +63,9 @@ const en: Dictionary = {
     statRequestsLabel: "Offer inquiries",
     ctaPrimary: "Browse offers",
     ctaSecondary: "Add your offer",
-    previewCompany: "MetalPol Ltd.",
+    ctaHelper: "View available offers",
+    trustBar: "Moderated offers and requests · Company profiles · B2B cooperation · Contact via platform",
+    previewCompany: "MetalPol Sp. z o.o.",
     previewMeta: "CNC machining · Warsaw",
     previewTitle: "CNC machining - 500 pcs/month capacity",
     previewAsk: "Ask about offer",
@@ -442,6 +444,7 @@ const en: Dictionary = {
       location: "Location",
       hours: "Hours",
     },
+    formNote: "For operational and administrative matters, you can also use the contact form. Messages go to the team operating the portal.",
     partnerTopics: {
       credos: {
         label: "Service partner",
@@ -858,7 +861,8 @@ const en: Dictionary = {
     plans: [
       {
         name: "FREE plan",
-        subtitle: "For companies starting to publish offers",
+        subtitle: "For companies that want to check whether WolneMoce can be a useful channel for presenting services, available capacity or cooperation requests.",
+        description: "A good choice to start: complete your profile, add basic information and see how the portal supports your company’s visibility in B2B cooperation.",
         price: "PLN 0",
         priceSuffix: "/ mo.",
         features: [
@@ -873,7 +877,8 @@ const en: Dictionary = {
       },
       {
         name: "PRO plan",
-        subtitle: "For active manufacturers",
+        subtitle: "For companies that want to actively present their capabilities and increase the visibility of offers or requests.",
+        description: "For companies treating WolneMoce as an additional channel for B2B contacts, service presentation and visibility among potential contractors.",
         price: "199 PLN",
         priceSuffix: "net + VAT / month",
         priceNote:
@@ -955,14 +960,28 @@ const en: Dictionary = {
     })),
   },
   testimonials: {
-    label: "Soft-launch",
-    title: "Building a credible base of production capabilities",
-    description:
-      "At launch, we focus on profile quality, real offers and safe B2B contact instead of declaring market scale.",
+    label: "Audience",
+    title: "Who is WolneMoce for?",
+    description: "WolneMoce helps companies organize the first steps in B2B production cooperation.",
     items: [
-      { text: "Join the first companies presenting available production capacity in a public B2B directory.", author: "For manufacturers", role: "Company profile, offers and certificates after moderation", initials: "B2B" },
-      { text: "Buyers can browse active offers and send RFQs without a promise of instant leads.", author: "For buyers", role: "RFQ and company contact through the platform", initials: "RFQ", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
-      { text: "We grow the directory carefully: only active offers and verified public company profiles are promoted in SEO.", author: "For the market", role: "No fake statistics, ratings or trackers", initials: "SEO", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
+      {
+        text: "Describe what you need: machining, assembly, serial production, technical services, logistics or other support. Your request can reach companies with the right competencies and available production capacity.",
+        author: "For companies looking for subcontractors",
+        role: "",
+        initials: "B2B"
+      },
+      {
+        text: "Show available technologies, services, industries and production capabilities. Add an offer, complete your company profile and increase your visibility in the context of B2B cooperation.",
+        author: "For companies with available capacity",
+        role: "",
+        initials: "RFQ"
+      },
+      {
+        text: "Search for alternative sources of supply, cooperation partners, service providers and production partners without browsing random directories.",
+        author: "For purchasing and operations teams",
+        role: "",
+        initials: "SEO"
+      }
     ],
   },
   blogPreview: {
@@ -977,7 +996,7 @@ const en: Dictionary = {
     description:
       "Find available capacity or add your company’s offer today.",
     addOffer: "Add offer for free",
-    browseOffers: "Browse offers",
+    addRequest: "Add a request",
   },
   seo: {
     home: {
@@ -1725,6 +1744,11 @@ const en: Dictionary = {
       unexpectedError: "An error occurred. Please try again.",
       partialSuccessFallback: "Inquiry sent, but some operations could not be completed.",
     },
-  }
+  },
+  softLaunch: {
+    title: "We are developing WolneMoce together with the first companies",
+    description: "The portal is being developed in stages, with a focus on data quality, security and the real needs of manufacturing companies. At this stage, we are accepting the first profiles, offers and requests to refine the B2B cooperation process before broader promotion.",
+    cta: "Add your company to WolneMoce",
+  },
 };
 export default en;

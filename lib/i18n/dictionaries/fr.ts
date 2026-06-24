@@ -63,6 +63,8 @@ const fr: Dictionary = {
     statRequestsLabel: "Demandes d’offre",
     ctaPrimary: "Voir les offres",
     ctaSecondary: "Ajouter votre offre",
+    ctaHelper: "Voir les offres disponibles",
+    trustBar: "Offres et demandes modérées · Profils d'entreprises · Coopération B2B · Contact via la plateforme",
     previewCompany: "MetalPol Sp. z o.o.",
     previewMeta: "Usinage CNC · Varsovie",
     previewTitle: "Usinage CNC - capacité 500 pcs/mois",
@@ -428,6 +430,7 @@ const fr: Dictionary = {
     heroTitle: "Parlons des capacités de production disponibles",
     heroDescription: "Écrivez si vous cherchez un prestataire ou souhaitez présenter les capacités disponibles de votre entreprise.",
     labels: { email: "Email", phone: "Téléphone", location: "Localisation", hours: "Horaires" },
+    formNote: "Pour les questions opérationnelles et administratives, vous pouvez également utiliser le formulaire de contact. Les messages parviennent à l'équipe gérant le portail.",
     partnerTopics: {
       credos: {
         ...en.contactPage.partnerTopics.credos,
@@ -808,7 +811,8 @@ const fr: Dictionary = {
     plans: [
       {
         name: "Plan FREE",
-        subtitle: "Pour les entreprises qui commencent à publier des offres",
+        subtitle: "Pour les entreprises qui souhaitent vérifier si WolneMoce peut être un canal utile pour présenter des services, des capacités disponibles ou des demandes de coopération.",
+        description: "Un bon choix pour commencer : complétez votre profil, ajoutez les informations de base et vérifiez comment le portail soutient la visibilité de votre entreprise dans le contexte de la coopération B2B.",
         price: "0 PLN",
         priceSuffix: "/ mois",
         features: [
@@ -823,7 +827,8 @@ const fr: Dictionary = {
       },
       {
         name: "Plan PRO",
-        subtitle: "Pour les fabricants actifs",
+        subtitle: "Pour les entreprises qui souhaitent présenter activement leurs capacités et augmenter la visibilité de leurs offres ou demandes.",
+        description: "Pour les entreprises qui considèrent WolneMoce comme un canal supplémentaire de contacts B2B, de présentation de services et de renforcement de la visibilité auprès de partenaires potentiels.",
         price: "199 PLN",
         priceSuffix: "HT + TVA / mois",
         priceNote:
@@ -901,15 +906,29 @@ const fr: Dictionary = {
     })),
   },
   testimonials: {
-    label: "Soft-launch",
-    title: "Nous construisons une base crédible de capacités de production",
-    description:
-      "Au lancement, nous privilégions la qualité des profils, les offres réelles et le contact B2B sécurisé plutôt que les promesses d'échelle.",
+    label: "Groupes cibles",
+    title: "Pour qui est WolneMoce ?",
+    description: "WolneMoce aide les entreprises à organiser les premières étapes de la coopération B2B.",
     items: [
-      { text: "Rejoignez les premières entreprises qui présentent leurs capacités de production disponibles dans un annuaire B2B public.", author: "Pour les fabricants", role: "Profil d'entreprise, offres et certificats après modération", initials: "B2B" },
-      { text: "Les acheteurs peuvent consulter les offres actives et envoyer des RFQ sans promesse de leads immédiats.", author: "Pour les acheteurs", role: "RFQ et contact entreprise via la plateforme", initials: "RFQ", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
-      { text: "Nous développons l'annuaire avec prudence : seules les offres actives et les profils publics vérifiés sont promus en SEO.", author: "Pour le marché", role: "Pas de fausses statistiques, notes ou trackers", initials: "SEO", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
-    ],
+      {
+        text: "Décrivez ce dont vous avez besoin : usinage, assemblage, production en série, services techniques, logistique ou autre soutien. Votre demande peut atteindre des entreprises disposant des compétences appropriées et de capacités de production libres.",
+        author: "Pour les entreprises cherchant des sous-traitants",
+        role: "",
+        initials: "B2B"
+      },
+      {
+        text: "Montrez les technologies, services, industries et capacités de production disponibles. Ajoutez une offre, complétez le profil de votre entreprise et augmentez la visibilité de votre entreprise dans le contexte de la coopération B2B.",
+        author: "Pour les entreprises avec des capacités libres",
+        role: "",
+        initials: "RFQ"
+      },
+      {
+        text: "Recherchez des sources d'approvisionnement alternatives, des partenaires de coopération, des prestataires de services et des partenaires de production sans avoir à parcourir des annuaires aléatoires.",
+        author: "Pour les services achats et opérations",
+        role: "",
+        initials: "SEO"
+      }
+    ]
   },
   blogPreview: {
     label: "Connaissance",
@@ -920,10 +939,9 @@ const fr: Dictionary = {
   },
   cta: {
     title: "Prêt à optimiser la production ?",
-    description:
-      "Trouvez des capacités disponibles ou ajoutez l'offre de votre entreprise dès aujourd'hui.",
+    description: "Trouvez des capacités disponibles ou ajoutez l'offre de votre entreprise dès aujourd'hui.",
     addOffer: "Ajouter une offre gratuitement",
-    browseOffers: "Voir les offres",
+    addRequest: "Ajouter une demande",
   },
   seo: {
     ...en.seo,
@@ -1593,6 +1611,11 @@ const fr: Dictionary = {
       unexpectedError: "Une erreur s'est produite. Veuillez réessayer.",
       partialSuccessFallback: "Demande envoyée, mais certaines opérations n'ont pas pu être terminées.",
     },
+  },
+  softLaunch: {
+    title: "Nous développons WolneMoce en collaboration avec les premières entreprises",
+    description: "Le portail est développé par étapes, en mettant l'accent sur la qualité des données, la sécurité et les besoins réels des entreprises de production. À ce stade, nous acceptons les premiers profils, offres et demandes pour affiner le processus de coopération B2B avant une promotion plus large.",
+    cta: "Ajouter une entreprise à WolneMoce",
   }
 };
 export default fr;

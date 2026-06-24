@@ -131,7 +131,16 @@ export default async function ContactView({
                 </div>
                 <p>{partnerTopic.description}</p>
               </div>
-            ) : null}
+            ) : (
+              t.formNote && (
+                <div className="mb-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-600">
+                  <div className="flex gap-3">
+                    <i className="fas fa-info-circle mt-1 shrink-0 text-emerald-600"></i>
+                    <p>{t.formNote}</p>
+                  </div>
+                </div>
+              )
+            )}
 
             <ContactFormClient
               initialTopic={partnerTopic?.subject ?? ""}

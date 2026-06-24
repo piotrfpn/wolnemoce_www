@@ -29,6 +29,11 @@ export default function Pricing({ locale = defaultLocale }: { locale?: Locale })
 
             <h3>{plan.name}</h3>
             <p className="subtitle">{plan.subtitle}</p>
+            {plan.description && (
+              <div className="mb-6 rounded-xl bg-slate-50 p-4 text-[13px] leading-relaxed text-slate-600 border border-slate-100 text-left">
+                {plan.description}
+              </div>
+            )}
 
             <div className="price">
               {plan.price} <span>{plan.priceSuffix}</span>

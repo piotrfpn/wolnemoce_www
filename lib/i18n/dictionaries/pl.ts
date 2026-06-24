@@ -49,18 +49,20 @@ const pl: Dictionary = {
   hero: {
     badge: "#1 Portal wolnych mocy produkcyjnych w Polsce",
     headlineBefore: "Znajdź",
-    headlineHighlight: "wolne moce",
-    headlineAfter: "produkcyjne dla swojej firmy",
+    headlineHighlight: "podwykonawcę",
+    headlineAfter: "albo pokaż wolne moce produkcyjne",
     subtitle:
-      "Łączymy firmy poszukujące możliwości produkcyjnych z zakładami, które dysponują wolnymi zdolnościami. Szybko, bezpiecznie i efektywnie.",
+      "WolneMoce pomaga firmom produkcyjnym, zakupowym i technologicznym szybciej dotrzeć do kooperantów, podwykonawców oraz dostępnych mocy produkcyjnych. Dodaj ofertę, opublikuj zapytanie albo sprawdź, które firmy mogą wesprzeć Twój projekt.",
     statOffersValue: "Start",
     statOffersLabel: "Pierwsze publiczne oferty",
     statCompaniesValue: "Budujemy",
     statCompaniesLabel: "Bazę firm B2B",
     statRequestsValue: "RFQ",
     statRequestsLabel: "Zapytania ofertowe",
-    ctaPrimary: "Przeglądaj oferty",
-    ctaSecondary: "Dodaj swoją ofertę",
+    ctaPrimary: "Dodaj ofertę",
+    ctaSecondary: "Dodaj zapytanie",
+    ctaHelper: "Zobacz dostępne oferty",
+    trustBar: "Moderowane oferty i zapytania · Profile firm · Kooperacja B2B · Kontakt przez platformę",
     previewCompany: "MetalPol Sp. z o.o.",
     previewMeta: "Obróbka CNC · Warszawa",
     previewTitle: "Obróbka CNC - wolne moce 500 szt/mies.",
@@ -446,15 +448,16 @@ const pl: Dictionary = {
   },
   contactPage: {
     heroLabel: "Kontakt",
-    heroTitle: "Porozmawiajmy o wolnych mocach produkcyjnych",
+    heroTitle: "Skontaktuj się z zespołem WolneMoce",
     heroDescription:
-      "Napisz, jeśli szukasz wykonawcy albo chcesz pokazać dostępne moce swojej firmy.",
+      "Masz pytanie dotyczące dodania firmy, publikacji oferty, zgłoszenia zapytania lub współpracy przy rozwoju portalu? Napisz do nas — odpowiemy możliwie konkretnie i pomożemy wybrać właściwą ścieżkę.",
     labels: {
       email: "Email",
       phone: "Telefon",
       location: "Lokalizacja",
       hours: "Godziny",
     },
+    formNote: "W sprawach operacyjnych i administracyjnych możesz też skorzystać z formularza kontaktowego. Wiadomości trafiają do zespołu obsługującego portal.",
     partnerTopics: {
       credos: {
         label: "Partner usługowy",
@@ -852,10 +855,10 @@ const pl: Dictionary = {
     description:
       "Prosty i przejrzysty proces łączący firmy poszukujące z producentami dysponującymi wolnymi możliwościami.",
     steps: [
-      { title: "Zarejestruj firmę", description: "Utwórz konto i załóż bezpłatny profil swojej firmy. To zajmuje tylko 5 minut." },
-      { title: "Dodaj ofertę", description: "Opisz swoje wolne moce produkcyjne, maszyny, certyfikaty i dostępność." },
-      { title: "Otrzymuj zapytania", description: "Firmy zainteresowane Twoimi możliwościami wysyłają zapytania ofertowe." },
-      { title: "Realizuj zlecenia", description: "Negocjuj warunki, podpisuj umowy i realizuj zlecenia przez portal." },
+      { title: "Uzupełnij profil firmy", description: "Dodaj podstawowe informacje o firmie, branży, lokalizacji i zakresie działalności." },
+      { title: "Dodaj ofertę albo zapytanie", description: "Możesz pokazać wolne moce produkcyjne lub opisać, jakiego kooperanta szukasz." },
+      { title: "Moderacja i publikacja", description: "Zgłoszenia są sprawdzane przed publikacją, aby ograniczać spam, niepełne ogłoszenia i treści niezwiązane z kooperacją B2B." },
+      { title: "Kontakt i dalsze rozmowy", description: "Zainteresowane firmy mogą zgłosić chęć kontaktu. Dalsze warunki współpracy ustalacie już bezpośrednio między firmami." },
     ],
   },
   pricing: {
@@ -871,7 +874,8 @@ const pl: Dictionary = {
     plans: [
       {
         name: "Plan FREE",
-        subtitle: "Dla firm rozpoczynających publikację ofert",
+        subtitle: "Dla firm, które chcą sprawdzić, czy WolneMoce może być dobrym kanałem prezentacji usług, wolnych mocy lub zapytań kooperacyjnych.",
+        description: "Dobry wybór na start: uzupełnij profil, dodaj podstawowe informacje i sprawdź, jak portal wspiera widoczność Twojej firmy w kontekście kooperacji B2B.",
         price: "0 zł",
         priceSuffix: "/ mies.",
         features: [
@@ -886,7 +890,8 @@ const pl: Dictionary = {
       },
       {
         name: "Plan PRO",
-        subtitle: "Dla aktywnych producentów",
+        subtitle: "Dla firm, które chcą aktywnie prezentować swoje możliwości i zwiększyć widoczność ofert lub zapytań.",
+        description: "Plan dla firm traktujących WolneMoce jako dodatkowy kanał pozyskiwania kontaktów B2B, prezentacji usług i budowania widoczności wśród potencjalnych kontrahentów.",
         price: "199 zł",
         priceSuffix: "netto + VAT / mies.",
         priceNote:
@@ -931,15 +936,15 @@ const pl: Dictionary = {
     ],
   },
   expert: {
-    label: "Z perspektywy eksperta",
-    title: "Dlaczego warto korzystać z WolneMoce?",
+    label: "Bezpieczeństwo",
+    title: "Zaufanie i bezpieczeństwo",
     description:
-      "Jako eksperci z 20-letnim doświadczeniem w branży produkcyjnej widzimy potencjał w lepszym wykorzystaniu mocy produkcyjnych w polskim przemyśle.",
+      "Zależy nam na transparentności na każdym etapie procesu.",
     features: [
-      { icon: "fas fa-shield-alt", title: "Weryfikacja i bezpieczeństwo", description: "Dane firmy i profil publiczny pomagają budować zaufanie między stronami." },
-      { icon: "fas fa-chart-line", title: "Optymalizacja kosztów", description: "Wykorzystaj wolne moce produkcyjne i ogranicz niewykorzystany czas maszyn." },
-      { icon: "fas fa-handshake", title: "Bezpośredni kontakt B2B", description: "Rozpoczynaj rozmowy bezpośrednio z producentami i zleceniodawcami." },
-      { icon: "fas fa-file-contract", title: "Wsparcie partnerskie", description: "Opcjonalne usługi prawne, księgowe i procesowe mogą być ustalone osobno." },
+      { icon: "fas fa-shield-alt", title: "Profesjonalny kontekst B2B", description: "WolneMoce koncentruje się na produkcji, usługach przemysłowych, kooperacji, zakupach i wolnych mocach produkcyjnych." },
+      { icon: "fas fa-check-circle", title: "Moderacja treści", description: "Oferty, zapytania i profile mogą być sprawdzane przed publikacją. Celem jest utrzymanie jakości ogłoszeń i ograniczenie przypadkowych treści." },
+      { icon: "fas fa-ban", title: "Bez obietnic bez pokrycia", description: "WolneMoce nie gwarantuje liczby zapytań ani zawarcia kontraktu. Platforma zapewnia infrastrukturę do prezentacji ofert, publikacji zapytań i nawiązywania kontaktu B2B." },
+      { icon: "fas fa-lock", title: "Kontrola danych kontaktowych", description: "Dane firmowe i kontaktowe są prezentowane tylko w zakresie potrzebnym do obsługi portalu i kontaktu między stronami." },
     ],
     stats: [
       { icon: "fas fa-industry", value: "12", label: "Branż produkcyjnych" },
@@ -979,14 +984,14 @@ const pl: Dictionary = {
     ],
   },
   testimonials: {
-    label: "Soft-launch",
-    title: "Budujemy wiarygodną bazę możliwości produkcyjnych",
+    label: "Odbiorcy",
+    title: "Dla kogo jest WolneMoce",
     description:
-      "Na starcie koncentrujemy się na jakości profili, realnych ofertach i bezpiecznym kontakcie B2B zamiast na deklarowaniu skali.",
+      "WolneMoce pomaga uporządkować pierwsze kroki w kooperacji produkcyjnej B2B.",
     items: [
-      { text: "Dołącz do pierwszych firm prezentujących wolne moce produkcyjne w publicznym katalogu B2B.", author: "Dla producentów", role: "Profil firmy, oferty i certyfikaty po moderacji", initials: "B2B" },
-      { text: "Kupujący mogą przeglądać aktywne oferty i wysyłać zapytania bez obietnicy natychmiastowych leadów.", author: "Dla kupujących", role: "RFQ i kontakt z firmą po stronie platformy", initials: "RFQ", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
-      { text: "Rozwijamy katalog ostrożnie: tylko aktywne oferty i zweryfikowane publiczne profile firm są promowane w SEO.", author: "Dla rynku", role: "Bez fikcyjnych statystyk, ratingów i trackerów", initials: "SEO", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
+      { text: "Opisz, czego potrzebujesz: obróbki, montażu, produkcji seryjnej, usług technicznych, logistyki lub innego wsparcia. Twoje zapytanie może trafić do firm, które mają odpowiednie kompetencje i wolne moce.", author: "Dla firm szukających podwykonawców", role: "", initials: "B2B" },
+      { text: "Pokaż dostępne technologie, usługi, branże i możliwości produkcyjne. Dodaj ofertę, uzupełnij profil firmy i zwiększ widoczność swojej firmy w kontekście kooperacji B2B.", author: "Dla firm posiadających wolne moce", role: "", initials: "RFQ", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
+      { text: "Szukaj alternatywnych źródeł dostaw, kooperantów, firm usługowych i partnerów produkcyjnych bez przeglądania przypadkowych katalogów.", author: "Dla działów zakupów i operacji", role: "", initials: "SEO", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
     ],
   },
   blogPreview: {
@@ -997,11 +1002,11 @@ const pl: Dictionary = {
     empty: "Materiały eksperckie są w przygotowaniu. Wkrótce opublikujemy praktyczne treści dla firm produkcyjnych i usługowych.",
   },
   cta: {
-    title: "Gotowy na optymalizację produkcji?",
+    title: "Masz wolne moce albo szukasz kooperanta?",
     description:
-      "Dołącz do firm, które już korzystają z WolneMoce. Znajdź wolne moce lub dodaj swoją ofertę już dziś.",
-    addOffer: "Dodaj ofertę za darmo",
-    browseOffers: "Przeglądaj oferty",
+      "Dodaj ofertę, opublikuj zapytanie albo uzupełnij profil firmy. WolneMoce pomaga uporządkować pierwsze kroki w kooperacji produkcyjnej B2B.",
+    addOffer: "Dodaj ofertę",
+    addRequest: "Dodaj zapytanie",
   },
   seo: {
     home: {
@@ -1749,6 +1754,11 @@ const pl: Dictionary = {
       unexpectedError: "Wystąpił błąd. Spróbuj ponownie.",
       partialSuccessFallback: "Zapytanie zostało wysłane, ale nie udało się ukończyć części operacji.",
     },
-  }
+  },
+  softLaunch: {
+    title: "Rozwijamy WolneMoce razem z pierwszymi firmami",
+    description: "Portal jest rozwijany etapami, z naciskiem na jakość danych, bezpieczeństwo i realne potrzeby firm produkcyjnych. Na obecnym etapie przyjmujemy pierwsze profile, oferty i zapytania, aby dopracować proces kooperacji B2B przed szerszą promocją.",
+    cta: "Dodaj firmę do WolneMoce",
+  },
 };
 export default pl;
