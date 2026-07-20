@@ -56,7 +56,7 @@ async function getVerifiedCompanies() {
   const { data, error } = await supabase
     .from("companies")
     .select(
-      "id, slug, name, description, industry, industries, service_types, location_voivodeship, location_city, website_url, is_verified, created_at"
+      "id, slug, name, description, industry, industries, service_types, location_voivodeship, location_city, website_url, is_verified, created_at, country_code"
     )
     .eq("is_verified", true)
     .not("slug", "is", null)
@@ -119,6 +119,7 @@ export default async function CompaniesListView({
 }: CompaniesListViewProps) {
   const t = getDictionary(locale).companiesList;
   const certificatesFilter = getCertificatesFilter(searchParams);
+  const countryFilter = getSingleParam(searchParams, "country");
   const companies = await getVerifiedCompanies();
 
   return (
@@ -153,6 +154,7 @@ export default async function CompaniesListView({
         <CompanyDirectoryClient
           companies={companies}
           initialCertificatesFilter={certificatesFilter}
+          initialCountryFilter={countryFilter}
           locale={locale}
         />
       </main>

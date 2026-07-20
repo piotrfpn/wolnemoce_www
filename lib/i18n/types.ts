@@ -333,8 +333,12 @@ export type Dictionary = {
     filtersDescription: string;
     searchCompany: string;
     searchPlaceholder: string;
+    country: string;
+    allCountries: string;
     voivodeship: string;
     allVoivodeships: string;
+    region: string;
+    allRegions: string;
     city: string;
     allCities: string;
     industry: string;

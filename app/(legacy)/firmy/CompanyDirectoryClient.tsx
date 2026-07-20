@@ -23,6 +23,7 @@ export type DirectoryCompany = {
   created_at: string | null;
   has_public_certificates?: boolean;
   has_admin_verified_certificate?: boolean;
+  country_code?: string | null;
 };
 
 type CertificatesFilter = "all" | "yes" | "no";
@@ -80,15 +81,20 @@ function truncateDescription(
 export default function CompanyDirectoryClient({
   companies,
   initialCertificatesFilter = "all",
+  initialCountryFilter = "",
   locale = defaultLocale,
 }: {
   companies: DirectoryCompany[];
   initialCertificatesFilter?: CertificatesFilter;
+  initialCountryFilter?: string;
   locale?: Locale;
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const labels = getDictionary(locale).companiesList;
+  const dictionary = getDictionary(locale);
+  const labels = dictionary.companiesList;
+  const profileFormLabels = dictionary.panel.profile;
+  const [country, setCountry] = useState(initialCountryFilter || "");
   const [query, setQuery] = useState("");
   const [voivodeship, setVoivodeship] = useState("");
   const [city, setCity] = useState("");
@@ -99,18 +105,35 @@ export default function CompanyDirectoryClient({
     initialCertificatesFilter
   );
 
+  const getCountryLabel = (code: string) => {
+    const key = `country${code}` as keyof typeof profileFormLabels;
+    return (profileFormLabels[key] as string) || code;
+  };
+
   const options = useMemo(
-    () => ({
-      voivodeships: uniqueSorted(
-        companies.map((company) => company.location_voivodeship)
-      ),
-      cities: uniqueSorted(companies.map((company) => company.location_city)),
-      industries: uniqueSorted(companies.flatMap(getCompanyIndustries)),
-      services: uniqueSorted(
-        companies.flatMap((company) => company.service_types ?? [])
-      ),
-    }),
-    [companies]
+    () => {
+      const countryCompanies = country ? companies.filter(c => c.country_code === country) : companies;
+      const voivodeshipCompanies = voivodeship ? countryCompanies.filter(c => c.location_voivodeship === voivodeship) : countryCompanies;
+
+      const uniqueCountries = uniqueSorted(companies.map((company) => company.country_code));
+      const sortedCountryOptions = uniqueCountries.map(code => ({ code, label: getCountryLabel(code) }))
+        .sort((a, b) => {
+          if (a.code === "XX") return 1;
+          if (b.code === "XX") return -1;
+          return a.label.localeCompare(b.label, locale);
+        });
+
+      return {
+        countries: sortedCountryOptions,
+        voivodeships: uniqueSorted(countryCompanies.map((company) => company.location_voivodeship)),
+        cities: uniqueSorted(voivodeshipCompanies.map((company) => company.location_city)),
+        industries: uniqueSorted(companies.flatMap(getCompanyIndustries)),
+        services: uniqueSorted(
+          companies.flatMap((company) => company.service_types ?? [])
+        ),
+      };
+    },
+    [companies, country, voivodeship, locale]
   );
 
   const filteredCompanies = useMemo(() => {
@@ -124,6 +147,7 @@ export default function CompanyDirectoryClient({
           !normalizedQuery ||
           normalize(company.name).includes(normalizedQuery) ||
           normalize(company.description).includes(normalizedQuery);
+        const matchesCountry = !country || company.country_code === country;
         const matchesVoivodeship =
           !voivodeship || company.location_voivodeship === voivodeship;
         const matchesCity = !city || company.location_city === city;
@@ -137,6 +161,7 @@ export default function CompanyDirectoryClient({
 
         return (
           matchesQuery &&
+          matchesCountry &&
           matchesVoivodeship &&
           matchesCity &&
           matchesIndustry &&
@@ -158,12 +183,62 @@ export default function CompanyDirectoryClient({
     certificates,
     companies,
     query,
+    country,
     voivodeship,
     city,
     industry,
     serviceType,
     sort,
   ]);
+
+  function handleCountryChange(newCountry: string) {
+    setCountry(newCountry);
+
+    const validVoivodeships = uniqueSorted(
+      (newCountry ? companies.filter(c => c.country_code === newCountry) : companies)
+      .map(c => c.location_voivodeship)
+    );
+    let newVoivodeship = voivodeship;
+    if (voivodeship && !validVoivodeships.includes(voivodeship)) {
+      setVoivodeship("");
+      newVoivodeship = "";
+    }
+
+    const validCities = uniqueSorted(
+      (newCountry ? companies.filter(c => c.country_code === newCountry) : companies)
+      .filter(c => !newVoivodeship || c.location_voivodeship === newVoivodeship)
+      .map(c => c.location_city)
+    );
+    if (city && !validCities.includes(city)) {
+      setCity("");
+    }
+
+    const params = new URLSearchParams(
+      typeof window === "undefined" ? "" : window.location.search
+    );
+    if (newCountry) {
+      params.set("country", newCountry);
+    } else {
+      params.delete("country");
+    }
+    const queryString = params.toString();
+    router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
+      scroll: false,
+    });
+  }
+
+  function handleVoivodeshipChange(newVoivodeship: string) {
+    setVoivodeship(newVoivodeship);
+
+    const validCities = uniqueSorted(
+      (country ? companies.filter(c => c.country_code === country) : companies)
+      .filter(c => !newVoivodeship || c.location_voivodeship === newVoivodeship)
+      .map(c => c.location_city)
+    );
+    if (city && !validCities.includes(city)) {
+      setCity("");
+    }
+  }
 
   function updateCertificatesFilter(value: CertificatesFilter) {
     setCertificates(value);
@@ -186,12 +261,23 @@ export default function CompanyDirectoryClient({
 
   function clearFilters() {
     setQuery("");
+    setCountry("");
     setVoivodeship("");
     setCity("");
     setIndustry("");
     setServiceType("");
-    updateCertificatesFilter("all");
+    setCertificates("all");
     setSort("az");
+
+    const params = new URLSearchParams(
+      typeof window === "undefined" ? "" : window.location.search
+    );
+    params.delete("certificates");
+    params.delete("country");
+    const queryString = params.toString();
+    router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
+      scroll: false,
+    });
   }
 
   return (
@@ -231,14 +317,32 @@ export default function CompanyDirectoryClient({
 
           <label className="block min-w-0">
             <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
-              {labels.voivodeship}
+              {labels.country || "Kraj"}
+            </span>
+            <select
+              value={country}
+              onChange={(event) => handleCountryChange(event.target.value)}
+              className={inputClass}
+            >
+              <option value="">{labels.allCountries || "Wszystkie kraje"}</option>
+              {options.countries.map((item) => (
+                <option key={item.code} value={item.code}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block min-w-0">
+            <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-500">
+              {labels.region || labels.voivodeship}
             </span>
             <select
               value={voivodeship}
-              onChange={(event) => setVoivodeship(event.target.value)}
+              onChange={(event) => handleVoivodeshipChange(event.target.value)}
               className={inputClass}
             >
-              <option value="">{labels.allVoivodeships}</option>
+              <option value="">{labels.allRegions || labels.allVoivodeships}</option>
               {options.voivodeships.map((item) => (
                 <option key={item} value={item}>
                   {item}
