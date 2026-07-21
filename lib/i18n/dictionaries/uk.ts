@@ -682,6 +682,47 @@ const uk: Dictionary = {
     notFoundDescription:
       "Профіль компанії не знайдено на WolneMoce.",
   },
+  companyInquiry: {
+    ...en.companyInquiry,
+    trigger: "Зв'язатися з компанією",
+    title: "Надіслати повідомлення компанії",
+    description:
+      "Надішліть інформацію щодо співпраці, запиту пропозицій або вільних виробничих потужностей.",
+    companyContext: "Отримувач: {companyName}",
+    senderNameLabel: "Ім'я та прізвище",
+    senderNamePlaceholder: "напр. Іван Петренко",
+    senderCompanyNameLabel: "Компанія відправника",
+    senderCompanyNamePlaceholder: "напр. ТОВ Акме",
+    senderEmailLabel: "E-mail",
+    senderEmailPlaceholder: "ivan.petrenko@company.ua",
+    senderPhoneLabel: "Телефон",
+    senderPhoneOptional: "(необов'язково)",
+    senderPhonePlaceholder: "напр. +380 44 123 4567",
+    subjectLabel: "Тема",
+    subjectPlaceholder: "напр. Запит щодо співпраці / вільних потужностей",
+    messageLabel: "Повідомлення",
+    messagePlaceholder:
+      "Коротко опишіть ваш запит, вимоги або вільні потужності...",
+    submit: "Надіслати повідомлення",
+    submitting: "Надсилання...",
+    cancel: "Скасувати",
+    close: "Закрити",
+    successTitle: "Повідомлення прийнято",
+    successMessage: "Повідомлення прийнято до відправлення.",
+    validationError: "Перевірте коректність та повноту даних у формі.",
+    invalidEmail: "Введіть коректну адресу електронної пошти.",
+    rateLimitError:
+      "Надіслано занадто багато повідомлень за короткий час. Спробуйте пізніше.",
+    temporaryError:
+      "Надсилання повідомлень тимчасово недоступне. Спробуйте пізніше.",
+    networkError:
+      "Не вдалося з'єднатися зі службою надсилання. Перевірте з'єднання та спробуйте знову.",
+    genericError: "Сталася помилка під час обробки форми. Спробуйте знову.",
+    requiredField: "Поле є обов'язковим.",
+    characterLimit: "Перевищено ліміт символів.",
+    privacyNote:
+      "Вашу адресу електронної пошти буде передано компанії для відповіді на повідомлення.",
+  },
   blogDetail: {
     ...en.blogDetail,
     backToBlog: "Повернутися до блогу",

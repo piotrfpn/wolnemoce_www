@@ -729,6 +729,47 @@ const pl: Dictionary = {
     notFoundTitle: "Nie znaleziono firmy",
     notFoundDescription: "Nie znaleziono profilu firmy w serwisie WolneMoce.",
   },
+  companyInquiry: {
+    trigger: "Skontaktuj się z firmą",
+    title: "Wyślij wiadomość do firmy",
+    description:
+      "Przekaż informacje dotyczące współpracy, zapytania ofertowego lub dostępnych mocy produkcyjnych.",
+    companyContext: "Odbiorca: {companyName}",
+    senderNameLabel: "Imię i nazwisko",
+    senderNamePlaceholder: "np. Jan Kowalski",
+    senderCompanyNameLabel: "Firma nadawcy",
+    senderCompanyNamePlaceholder: "np. Acme Sp. z o.o.",
+    senderEmailLabel: "E-mail",
+    senderEmailPlaceholder: "jan.kowalski@firma.pl",
+    senderPhoneLabel: "Telefon",
+    senderPhoneOptional: "(opcjonalnie)",
+    senderPhonePlaceholder: "np. +48 600 000 000",
+    subjectLabel: "Temat",
+    subjectPlaceholder: "np. Zapytanie o współpracę / wolne moce",
+    messageLabel: "Wiadomość",
+    messagePlaceholder:
+      "Opisz krótko swoje zapytanie, wymagania lub wolne moce...",
+    submit: "Wyślij wiadomość",
+    submitting: "Wysyłanie...",
+    cancel: "Anuluj",
+    close: "Zamknij",
+    successTitle: "Wiadomość przyjęta",
+    successMessage: "Wiadomość została przyjęta do wysłania.",
+    validationError: "Sprawdź poprawność i kompletność danych formularza.",
+    invalidEmail: "Wprowadź poprawny adres e-mail.",
+    rateLimitError:
+      "Wysłano zbyt wiele wiadomości w krótkim czasie. Spróbuj ponownie później.",
+    temporaryError:
+      "Wysyłanie wiadomości jest chwilowo niedostępne. Spróbuj ponownie później.",
+    networkError:
+      "Nie udało się połączyć z usługą wysyłania. Sprawdź połączenie i spróbuj ponownie.",
+    genericError:
+      "Wystąpił błąd podczas przetwarzania formularza. Spróbuj ponownie.",
+    requiredField: "Pole jest wymagane.",
+    characterLimit: "Przekroczono limit znaków.",
+    privacyNote:
+      "Twój adres e-mail zostanie przekazany firmie, aby mogła odpowiedzieć na wiadomość.",
+  },
   blogDetail: {
     backToBlog: "Wróć do bloga",
     category: "Kategoria",

@@ -11,6 +11,7 @@ import { getLocalizedHref, getLocalizedPath, type Locale } from "@/lib/i18n/conf
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getAbsoluteUrl, truncateSeoDescription } from "@/lib/seo";
 import { createClient } from "@/lib/supabase/server";
+import CompanyInquiryModalClient from "@/components/company-inquiry/CompanyInquiryModalClient";
 
 type CompanyDetailViewProps = {
   slug: string;
@@ -321,7 +322,8 @@ export default async function CompanyDetailView({
   slug,
   locale,
 }: CompanyDetailViewProps) {
-  const t = getDictionary(locale).companyDetail;
+  const dict = getDictionary(locale);
+  const t = dict.companyDetail;
   const company = await getCompanyBySlug(slug);
 
   if (!company) {
@@ -503,6 +505,12 @@ export default async function CompanyDetailView({
                   {t.verifiedNotice}
                 </p>
                 <div className="flex flex-col gap-3">
+                  <CompanyInquiryModalClient
+                    companyId={company.id}
+                    companyName={company.name || ""}
+                    locale={locale}
+                    translations={dict.companyInquiry}
+                  />
                   <a
                     href="#company-offers"
                     className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-[#1a5f3c] transition hover:bg-emerald-50"

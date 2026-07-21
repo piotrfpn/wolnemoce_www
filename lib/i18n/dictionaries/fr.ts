@@ -684,6 +684,50 @@ const fr: Dictionary = {
     notFoundDescription:
       "Le profil d’entreprise est introuvable sur WolneMoce.",
   },
+  companyInquiry: {
+    ...en.companyInquiry,
+    trigger: "Contacter l'entreprise",
+    title: "Envoyer un message à l'entreprise",
+    description:
+      "Transmettez des informations concernant une collaboration, un devis ou des capacités disponibles.",
+    companyContext: "Destinataire : {companyName}",
+    senderNameLabel: "Nom et prénom",
+    senderNamePlaceholder: "ex. Jean Dupont",
+    senderCompanyNameLabel: "Entreprise de l'expéditeur",
+    senderCompanyNamePlaceholder: "ex. Acme SAS",
+    senderEmailLabel: "E-mail",
+    senderEmailPlaceholder: "jean.dupont@entreprise.fr",
+    senderPhoneLabel: "Téléphone",
+    senderPhoneOptional: "(optionnel)",
+    senderPhonePlaceholder: "ex. +33 1 23 45 67 89",
+    subjectLabel: "Sujet",
+    subjectPlaceholder:
+      "ex. Demande de collaboration / capacités disponibles",
+    messageLabel: "Message",
+    messagePlaceholder:
+      "Décrivez brièvement votre demande, vos besoins ou vos capacités disponibles...",
+    submit: "Envoyer le message",
+    submitting: "Envoi en cours...",
+    cancel: "Annuler",
+    close: "Fermer",
+    successTitle: "Message accepté",
+    successMessage: "Le message a été accepté pour envoi.",
+    validationError:
+      "Veuillez vérifier l'exactitude et l'exhaustivité des données du formulaire.",
+    invalidEmail: "Veuillez entrer une adresse e-mail valide.",
+    rateLimitError:
+      "Trop de messages envoyés dans un court intervalle. Veuillez réessayer plus tard.",
+    temporaryError:
+      "L'envoi de messages est temporairement indisponible. Veuillez réessayer plus tard.",
+    networkError:
+      "Impossible de se connecter au service d'envoi. Veuillez vérifier votre connexion.",
+    genericError:
+      "Une erreur est survenue lors du traitement du formulaire. Veuillez réessayer.",
+    requiredField: "Ce champ est obligatoire.",
+    characterLimit: "Limite de caractères dépassée.",
+    privacyNote:
+      "Votre adresse e-mail sera transmise à l'entreprise afin qu'elle puisse répondre à votre message.",
+  },
   blogDetail: {
     ...en.blogDetail,
     backToBlog: "Retour au blog",

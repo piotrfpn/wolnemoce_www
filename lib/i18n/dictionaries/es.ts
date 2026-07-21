@@ -683,6 +683,49 @@ const es: Dictionary = {
     notFoundDescription:
       "No se ha encontrado el perfil de empresa en WolneMoce.",
   },
+  companyInquiry: {
+    ...en.companyInquiry,
+    trigger: "Contactar con la empresa",
+    title: "Enviar mensaje a la empresa",
+    description:
+      "Envíe información sobre colaboración, solicitud de oferta o capacidades disponibles.",
+    companyContext: "Destinatario: {companyName}",
+    senderNameLabel: "Nombre y apellidos",
+    senderNamePlaceholder: "ej. Juan Pérez",
+    senderCompanyNameLabel: "Empresa remitente",
+    senderCompanyNamePlaceholder: "ej. Acme S.L.",
+    senderEmailLabel: "Correo electrónico",
+    senderEmailPlaceholder: "juan.perez@empresa.es",
+    senderPhoneLabel: "Teléfono",
+    senderPhoneOptional: "(opcional)",
+    senderPhonePlaceholder: "ej. +34 600 000 000",
+    subjectLabel: "Asunto",
+    subjectPlaceholder: "ej. Consulta sobre colaboración / capacidad disponible",
+    messageLabel: "Mensaje",
+    messagePlaceholder:
+      "Describa brevemente su consulta, requisitos o capacidad disponible...",
+    submit: "Enviar mensaje",
+    submitting: "Enviando...",
+    cancel: "Cancelar",
+    close: "Cerrar",
+    successTitle: "Mensaje aceptado",
+    successMessage: "El mensaje ha sido aceptado para su envío.",
+    validationError:
+      "Compruebe la exactitud y corrección de los datos del formulario.",
+    invalidEmail: "Introduzca una dirección de correo electrónico válida.",
+    rateLimitError:
+      "Se han enviado demasiados mensajes en poco tiempo. Inténtelo más tarde.",
+    temporaryError:
+      "El envío de mensajes no está disponible temporalmente. Inténtelo más tarde.",
+    networkError:
+      "Error de conexión con el servicio de envío. Compruebe su conexión e inténtelo de nuevo.",
+    genericError:
+      "Ocurrió un error al procesar el formulario. Inténtelo de nuevo.",
+    requiredField: "Este campo es obligatorio.",
+    characterLimit: "Límite de caracteres superado.",
+    privacyNote:
+      "Su dirección de correo electrónico se facilitará a la empresa para que pueda responder a su mensaje.",
+  },
   blogDetail: {
     ...en.blogDetail,
     backToBlog: "Volver al blog",

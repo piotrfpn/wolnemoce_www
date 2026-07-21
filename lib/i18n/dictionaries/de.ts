@@ -691,6 +691,49 @@ const de: Dictionary = {
     notFoundDescription:
       "Das Firmenprofil wurde auf WolneMoce nicht gefunden.",
   },
+  companyInquiry: {
+    ...en.companyInquiry,
+    trigger: "Firma kontaktieren",
+    title: "Nachricht an Firma senden",
+    description:
+      "Senden Sie Informationen zu Zusammenarbeit, Angeboten oder verfügbaren Kapazitäten.",
+    companyContext: "Empfänger: {companyName}",
+    senderNameLabel: "Vor- und Nachname",
+    senderNamePlaceholder: "z. B. Max Mustermann",
+    senderCompanyNameLabel: "Firma des Absenders",
+    senderCompanyNamePlaceholder: "z. B. Acme GmbH",
+    senderEmailLabel: "E-Mail",
+    senderEmailPlaceholder: "max.mustermann@firma.de",
+    senderPhoneLabel: "Telefon",
+    senderPhoneOptional: "(optional)",
+    senderPhonePlaceholder: "z. B. +49 30 123456",
+    subjectLabel: "Betreff",
+    subjectPlaceholder: "z. B. Anfrage zu Zusammenarbeit / freien Kapazitäten",
+    messageLabel: "Nachricht",
+    messagePlaceholder:
+      "Beschreiben Sie kurz Ihre Anfrage, Anforderungen oder freien Kapazitäten...",
+    submit: "Nachricht senden",
+    submitting: "Wird gesendet...",
+    cancel: "Abbrechen",
+    close: "Schließen",
+    successTitle: "Nachricht angenommen",
+    successMessage: "Die Nachricht wurde zum Versand angenommen.",
+    validationError:
+      "Bitte überprüfen Sie die Formulardaten auf Vollständigkeit und Richtigkeit.",
+    invalidEmail: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+    rateLimitError:
+      "Zu viele Nachrichten in kurzer Zeit gesendet. Bitte versuchen Sie es später erneut.",
+    temporaryError:
+      "Das Senden von Nachrichten ist vorübergehend nicht verfügbar. Bitte versuchen Sie es später erneut.",
+    networkError:
+      "Verbindung zum Sendedienst fehlgeschlagen. Bitte überprüfen Sie Ihre Verbindung.",
+    genericError:
+      "Beim Verarbeiten des Formulars ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+    requiredField: "Feld ist erforderlich.",
+    characterLimit: "Zeichenlimit überschritten.",
+    privacyNote:
+      "Ihre E-Mail-Adresse wird an die Firma weitergeleitet, damit diese auf Ihre Nachricht antworten kann.",
+  },
   blogDetail: {
     ...en.blogDetail,
     backToBlog: "Zurück zum Blog",

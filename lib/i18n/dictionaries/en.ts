@@ -718,6 +718,49 @@ const en: Dictionary = {
     notFoundTitle: "Company not found",
     notFoundDescription: "The company profile was not found on WolneMoce.",
   },
+  companyInquiry: {
+    trigger: "Contact company",
+    title: "Send a message to company",
+    description:
+      "Send details regarding business cooperation, RFQ, or available production capacity.",
+    companyContext: "Recipient: {companyName}",
+    senderNameLabel: "Full name",
+    senderNamePlaceholder: "e.g. John Smith",
+    senderCompanyNameLabel: "Sender company",
+    senderCompanyNamePlaceholder: "e.g. Acme Corp",
+    senderEmailLabel: "Email",
+    senderEmailPlaceholder: "john.smith@company.com",
+    senderPhoneLabel: "Phone",
+    senderPhoneOptional: "(optional)",
+    senderPhonePlaceholder: "e.g. +44 20 7946 0912",
+    subjectLabel: "Subject",
+    subjectPlaceholder:
+      "e.g. Inquiry regarding cooperation / available capacity",
+    messageLabel: "Message",
+    messagePlaceholder:
+      "Briefly describe your inquiry, requirements, or available capacity...",
+    submit: "Send message",
+    submitting: "Sending...",
+    cancel: "Cancel",
+    close: "Close",
+    successTitle: "Message accepted",
+    successMessage: "The message has been accepted for delivery.",
+    validationError:
+      "Please check the form data for completeness and accuracy.",
+    invalidEmail: "Please enter a valid email address.",
+    rateLimitError:
+      "Too many messages sent in a short time. Please try again later.",
+    temporaryError:
+      "Message sending is temporarily unavailable. Please try again later.",
+    networkError:
+      "Failed to connect to the sending service. Please check your connection and try again.",
+    genericError:
+      "An error occurred while processing the form. Please try again.",
+    requiredField: "This field is required.",
+    characterLimit: "Character limit exceeded.",
+    privacyNote:
+      "Your email address will be passed to the company so they can respond to your message.",
+  },
   blogDetail: {
     backToBlog: "Back to blog",
     category: "Category",
