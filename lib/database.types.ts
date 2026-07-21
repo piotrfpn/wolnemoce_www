@@ -997,6 +997,93 @@ export type Database = {
           },
         ]
       }
+      company_contact_messages: {
+        Row: {
+          admin_template_key: string | null
+          company_id: string
+          company_name_snapshot: string
+          created_at: string
+          created_by_user_id: string | null
+          delivery_status: string
+          failed_at: string | null
+          failure_code: string | null
+          id: string
+          message: string
+          message_type: string
+          provider_message_id: string | null
+          request_fingerprint: string | null
+          sender_company_name: string | null
+          sender_email: string | null
+          sender_name: string | null
+          sender_phone: string | null
+          sent_at: string | null
+          source_locale: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          admin_template_key?: string | null
+          company_id: string
+          company_name_snapshot: string
+          created_at?: string
+          created_by_user_id?: string | null
+          delivery_status?: string
+          failed_at?: string | null
+          failure_code?: string | null
+          id?: string
+          message: string
+          message_type?: string
+          provider_message_id?: string | null
+          request_fingerprint?: string | null
+          sender_company_name?: string | null
+          sender_email?: string | null
+          sender_name?: string | null
+          sender_phone?: string | null
+          sent_at?: string | null
+          source_locale?: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          admin_template_key?: string | null
+          company_id?: string
+          company_name_snapshot?: string
+          created_at?: string
+          created_by_user_id?: string | null
+          delivery_status?: string
+          failed_at?: string | null
+          failure_code?: string | null
+          id?: string
+          message?: string
+          message_type?: string
+          provider_message_id?: string | null
+          request_fingerprint?: string | null
+          sender_company_name?: string | null
+          sender_email?: string | null
+          sender_name?: string | null
+          sender_phone?: string | null
+          sent_at?: string | null
+          source_locale?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_contact_messages_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_contact_messages_created_by_user_id_fkey"
+            columns: ["created_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       company_contact_settings: {
         Row: {
           company_id: string
