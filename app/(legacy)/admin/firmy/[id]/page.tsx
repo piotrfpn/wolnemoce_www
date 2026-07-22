@@ -8,6 +8,7 @@ import type { Database } from "@/lib/database.types";
 import AdminCompanyVerificationClient from "./AdminCompanyVerificationClient";
 import AdminCompanyPlanClient from "./AdminCompanyPlanClient";
 import AdminCompanyOfferLimitClient from "./AdminCompanyOfferLimitClient";
+import AdminCompanyContactClient from "./AdminCompanyContactClient";
 
 export const metadata: Metadata = {
   title: "Szczegóły firmy - Admin",
@@ -96,6 +97,16 @@ export default async function AdminCompanyDetailsPage({
     .eq("field_name", "custom_active_pending_offer_limit")
     .order("created_at", { ascending: false })
     .limit(10);
+
+  const { data: contactSettings, error: contactSettingsError } = await supabase
+    .from("company_contact_settings")
+    .select("contact_email")
+    .eq("company_id", company.id)
+    .maybeSingle();
+
+  const initialLoadError = contactSettingsError
+    ? "Nie udało się pobrać ustawień kontaktu. Odśwież stronę i spróbuj ponownie."
+    : null;
 
   return (
     <>
@@ -228,6 +239,12 @@ export default async function AdminCompanyDetailsPage({
                 companyId={company.id}
                 customLimit={company.custom_active_pending_offer_limit}
                 limitHistory={limitHistory || []}
+              />
+
+              <AdminCompanyContactClient
+                companyId={company.id}
+                initialContactEmail={contactSettings?.contact_email ?? null}
+                initialLoadError={initialLoadError}
               />
             </div>
           </div>
