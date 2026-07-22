@@ -86,6 +86,32 @@ export default async function AdminCompaniesPage({
 
   const { data: companies, error } = await query.limit(100);
 
+  const companyIds = (companies || []).map((c) => c.id);
+  const configuredContactSet = new Set<string>();
+  let isContactFetchError = false;
+
+  if (companyIds.length > 0) {
+    const { data: contactSettings, error: contactSettingsError } =
+      await supabase
+        .from("company_contact_settings")
+        .select("company_id, contact_email")
+        .in("company_id", companyIds);
+
+    if (contactSettingsError) {
+      console.error("Failed to fetch company contact settings for list.");
+      isContactFetchError = true;
+    } else if (contactSettings) {
+      for (const item of contactSettings) {
+        if (
+          typeof item.contact_email === "string" &&
+          item.contact_email.trim() !== ""
+        ) {
+          configuredContactSet.add(item.company_id);
+        }
+      }
+    }
+  }
+
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "—";
     const d = new Date(dateString);
@@ -194,12 +220,35 @@ export default async function AdminCompaniesPage({
                           )}
                         </td>
                         <td className="py-4 text-right">
-                          <Link
-                            href={`/admin/firmy/${company.id}`}
-                            className="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-200"
-                          >
-                            <i className="fas fa-eye"></i> Szczegóły
-                          </Link>
+                          <div className="flex items-center justify-end gap-2 flex-wrap sm:flex-nowrap">
+                            {isContactFetchError ? (
+                              <span className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-slate-600">
+                                <i className="fas fa-circle-question"></i> Status niedostępny
+                              </span>
+                            ) : configuredContactSet.has(company.id) ? (
+                              <span className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 rounded-full bg-[#1a5f3c]/10 px-2.5 py-1 text-xs font-bold text-[#1a5f3c]">
+                                <i className="fas fa-envelope-circle-check"></i> Kontakt ustawiony
+                              </span>
+                            ) : (
+                              <span className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-800">
+                                <i className="fas fa-envelope-open"></i> Brak kontaktu
+                              </span>
+                            )}
+
+                            <Link
+                              href={`/admin/firmy/${company.id}#kontakt-do-zapytan`}
+                              className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 rounded-lg bg-emerald-50 px-3 py-2 text-xs font-bold text-[#1a5f3c] transition hover:bg-emerald-100"
+                            >
+                              <i className="fas fa-paper-plane"></i> Kontakt
+                            </Link>
+
+                            <Link
+                              href={`/admin/firmy/${company.id}`}
+                              className="inline-flex shrink-0 whitespace-nowrap items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-2 text-xs font-bold text-slate-700 transition hover:bg-slate-200"
+                            >
+                              <i className="fas fa-eye"></i> Szczegóły
+                            </Link>
+                          </div>
                         </td>
                       </tr>
                     ))}

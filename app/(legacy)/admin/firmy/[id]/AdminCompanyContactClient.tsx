@@ -96,7 +96,10 @@ export default function AdminCompanyContactClient({
   }
 
   return (
-    <div className="rounded-[24px] border-2 border-slate-200 bg-white p-6 shadow-sm">
+    <div
+      id="kontakt-do-zapytan"
+      className="scroll-mt-24 rounded-[24px] border-2 border-slate-200 bg-white p-6 shadow-sm"
+    >
       <h2 className="mb-2 text-xl font-extrabold text-slate-900 border-b border-slate-100 pb-3">
         <i className="fas fa-envelope text-slate-400 mr-2"></i>
         Kontakt do zapytań publicznych
