@@ -8,9 +8,19 @@ export type BlogPostFormState = {
   error?: string;
 };
 
+export type BlogContentImageUploadResult = {
+  error?: string;
+  path?: string;
+};
+
 const allowedStatuses = new Set(["draft", "published", "archived"]);
 const allowedImageMimeTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 const allowedImageExtensions = new Set(["jpg", "jpeg", "png", "webp"]);
+const allowedExtensionsByMimeType: Record<string, ReadonlySet<string>> = {
+  "image/jpeg": new Set(["jpg", "jpeg"]),
+  "image/png": new Set(["png"]),
+  "image/webp": new Set(["webp"]),
+};
 const BLOG_IMAGES_BUCKET = "blog-images";
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 
@@ -112,17 +122,30 @@ function getImageFile(formData: FormData) {
   return null;
 }
 
+function getContentImageFile(formData: FormData) {
+  const file = formData.get("content_image");
+
+  if (file instanceof File && file.size > 0) {
+    return file;
+  }
+
+  return null;
+}
+
 function validateImageFile(file: File) {
   if (file.size > MAX_IMAGE_SIZE_BYTES) {
-    return "Zdjęcie przewodnie jest za duże. Maksymalny rozmiar to 5 MB.";
+    return "Zdjęcie jest za duże. Maksymalny rozmiar to 5 MB.";
   }
 
   const extension = getFileExtension(file.name);
   const mimeTypeAllowed = file.type ? allowedImageMimeTypes.has(file.type) : false;
   const extensionAllowed = allowedImageExtensions.has(extension);
+  const mimeMatchesExtension = Boolean(
+    file.type && allowedExtensionsByMimeType[file.type]?.has(extension)
+  );
 
-  if (!mimeTypeAllowed && !extensionAllowed) {
-    return "Dozwolone formaty zdjęcia przewodniego to JPG, PNG lub WebP.";
+  if (!mimeTypeAllowed || !extensionAllowed || !mimeMatchesExtension) {
+    return "Dozwolone formaty zdjęć to JPG, PNG lub WebP.";
   }
 
   return null;
@@ -139,7 +162,7 @@ function safeFileName(fileName: string) {
 
 async function uploadBlogImage(
   supabase: ReturnType<typeof createClient>,
-  postId: string,
+  path: string,
   file: File
 ) {
   const validationError = validateImageFile(file);
@@ -148,7 +171,6 @@ async function uploadBlogImage(
     return { error: validationError };
   }
 
-  const path = `blog-posts/${postId}/${Date.now()}-${safeFileName(file.name)}`;
   const options = file.type
     ? { contentType: file.type, upsert: false }
     : { upsert: false };
@@ -164,6 +186,33 @@ async function uploadBlogImage(
   }
 
   return { path };
+}
+
+export async function uploadBlogContentImage(
+  formData: FormData
+): Promise<BlogContentImageUploadResult> {
+  const file = getContentImageFile(formData);
+
+  if (!file) {
+    return { error: "Wybierz obraz do wgrania." };
+  }
+
+  const validationError = validateImageFile(file);
+
+  if (validationError) {
+    return { error: validationError };
+  }
+
+  const { supabase } = await requireAdmin();
+  const extension = getFileExtension(file.name);
+  const path = `content/${crypto.randomUUID()}.${extension}`;
+  const uploadResult = await uploadBlogImage(supabase, path, file);
+
+  if ("error" in uploadResult) {
+    return { error: uploadResult.error };
+  }
+
+  return { path: uploadResult.path };
 }
 
 function getPostPayload(formData: FormData): { error: string } | { payload: BlogPostPayload } {
@@ -250,7 +299,11 @@ export async function createBlogPost(
   let featuredImagePath: string | null = null;
 
   if (imageFile) {
-    const uploadResult = await uploadBlogImage(supabase, postId, imageFile);
+    const uploadResult = await uploadBlogImage(
+      supabase,
+      `blog-posts/${postId}/${Date.now()}-${safeFileName(imageFile.name)}`,
+      imageFile
+    );
     if ("error" in uploadResult) {
       return { error: uploadResult.error };
     }
@@ -340,7 +393,11 @@ export async function updateBlogPost(
   let featuredImagePath: string | null = null;
 
   if (imageFile) {
-    const uploadResult = await uploadBlogImage(supabase, id, imageFile);
+    const uploadResult = await uploadBlogImage(
+      supabase,
+      `blog-posts/${id}/${Date.now()}-${safeFileName(imageFile.name)}`,
+      imageFile
+    );
     if ("error" in uploadResult) {
       return { error: uploadResult.error };
     }

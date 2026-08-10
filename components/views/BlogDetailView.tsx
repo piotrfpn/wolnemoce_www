@@ -6,6 +6,7 @@ import BlogCard, { type BlogCardArticle } from "@/components/BlogCard";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import StructuredData from "@/components/StructuredData";
+import { parseBlogContent, type BlogImageSize } from "@/lib/blogContent";
 import { getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getAbsoluteUrl, truncateSeoDescription } from "@/lib/seo";
@@ -145,16 +146,77 @@ function getBlogDetailPath(slug: string, locale: Locale) {
   return getLocalizedPath(`/blog/${slug}`, locale);
 }
 
+function getBlogContentImageUrl(path: string) {
+  const supabase = createClient();
+  return supabase.storage.from("blog-images").getPublicUrl(path).data.publicUrl;
+}
+
+function getBlogContentImageFigureClass(size?: BlogImageSize) {
+  const baseClass = "mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-2";
+
+  if (!size) {
+    return baseClass;
+  }
+
+  const sizeClasses: Record<BlogImageSize, string> = {
+    small: "mx-auto max-w-sm",
+    medium: "mx-auto max-w-xl",
+    large: "mx-auto max-w-3xl",
+    full: "w-full max-w-full",
+  };
+
+  return `${baseClass} ${sizeClasses[size]}`;
+}
+
 function renderContent(content: string) {
-  return content
-    .split(/\n\s*\n/g)
-    .map((block) => block.trim())
-    .filter(Boolean)
-    .map((block, index) => (
-      <p key={`${index}-${block.slice(0, 24)}`} className="mb-5">
-        {block}
-      </p>
-    ));
+  return parseBlogContent(content).map((block, index) => {
+    if (block.type === "paragraph") {
+      return (
+        <p key={`paragraph-${index}`} className="mb-5">
+          {block.text}
+        </p>
+      );
+    }
+
+    if (block.type === "image") {
+      return (
+        <figure key={`image-${index}`} className={getBlogContentImageFigureClass(block.size)}>
+          <img
+            src={getBlogContentImageUrl(block.path)}
+            alt={block.alt || "Obraz w artykule"}
+            className="h-auto w-full max-w-full rounded-xl object-cover"
+          />
+        </figure>
+      );
+    }
+
+    return (
+      <div key={`table-${index}`} className="mb-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+        <table className="min-w-max w-full border-collapse text-left text-sm text-slate-700">
+          <thead className="bg-slate-100 text-xs font-bold uppercase tracking-wide text-slate-600">
+            <tr>
+              {block.headers.map((header, headerIndex) => (
+                <th key={`header-${headerIndex}`} scope="col" className="border-b border-slate-200 px-4 py-3">
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {block.rows.map((row, rowIndex) => (
+              <tr key={`row-${rowIndex}`} className="even:bg-slate-50/70">
+                {row.map((cell, cellIndex) => (
+                  <td key={`cell-${rowIndex}-${cellIndex}`} className="border-b border-slate-100 px-4 py-3 last:border-b-0">
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  });
 }
 
 export async function generateBlogDetailMetadata({
