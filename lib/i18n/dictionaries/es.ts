@@ -46,6 +46,7 @@ const es: Dictionary = {
     emailPlaceholder: "Tu email",
     newsletterSubmit: "Suscribirse",
     rights: "© 2026 WolneMoce. Todos los derechos reservados.",
+    projectAttribution: "Proyecto, concepto y desarrollo del producto:",
     partnerPage: "Sitio del partner",
   },
   hero: {

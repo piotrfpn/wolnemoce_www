@@ -46,6 +46,7 @@ const uk: Dictionary = {
     emailPlaceholder: "Ваш email",
     newsletterSubmit: "Підписатися",
     rights: "© 2026 WolneMoce. Усі права захищено.",
+    projectAttribution: "Проєкт, концепція та розробка продукту:",
     partnerPage: "Сайт партнера",
   },
   hero: {

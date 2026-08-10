@@ -46,6 +46,7 @@ const de: Dictionary = {
     emailPlaceholder: "Ihre E-Mail",
     newsletterSubmit: "Newsletter abonnieren",
     rights: "© 2026 WolneMoce. Alle Rechte vorbehalten.",
+    projectAttribution: "Projekt, Konzept und Produktentwicklung:",
     partnerPage: "Partnerseite",
   },
   hero: {

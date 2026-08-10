@@ -158,7 +158,26 @@ export default function Footer({ locale = defaultLocale }: { locale?: Locale }) 
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/40 md:flex-row md:items-center md:justify-between">
-          <p>{t.rights}</p>
+          <div className="min-w-0 space-y-1">
+            <p>{t.rights}</p>
+            <p className="max-w-2xl break-words text-xs leading-5 text-white/35">
+              {t.projectAttribution}{" "}
+              <span className="text-white/45">Piotr Fiszer</span>{" — "}
+              <a
+                href="tel:+48604904150"
+                className="text-white/45 no-underline transition hover:text-white"
+              >
+                +48 604 904 150
+              </a>{" "}
+              <span aria-hidden="true">·</span>{" "}
+              <a
+                href="mailto:piotr.fiszer@pfconsulting.pl"
+                className="text-white/45 no-underline transition hover:text-white"
+              >
+                piotr.fiszer@pfconsulting.pl
+              </a>
+            </p>
+          </div>
 
           <div className="flex flex-wrap gap-5">
             <Link href={getLocalizedPath("/regulamin", locale)} className="text-white/40 no-underline transition hover:text-white">

@@ -92,6 +92,7 @@ export type Dictionary = {
     emailPlaceholder: string;
     newsletterSubmit: string;
     rights: string;
+    projectAttribution: string;
     partnerPage: string;
   };
   hero: {

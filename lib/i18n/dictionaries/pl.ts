@@ -44,6 +44,7 @@ const pl: Dictionary = {
     emailPlaceholder: "Twój email",
     newsletterSubmit: "Zapisz do newslettera",
     rights: "© 2026 WolneMoce. Wszelkie prawa zastrzeżone.",
+    projectAttribution: "Projekt, koncepcja i rozwój produktu:",
     partnerPage: "Strona partnera",
   },
   hero: {
