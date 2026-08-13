@@ -491,3 +491,10 @@ export function getCapacityRequestBudgetTypeOptions(locale: Locale) {
 export function getCapacityRequestIndustryOptions(locale: Locale) {
   return getLocalizedOptions(industryValues, industryLabels, locale);
 }
+
+export function getCapacityRequestIndustryLabel(
+  value: CapacityRequestIndustryValue,
+  locale: Locale
+): string {
+  return industryLabels[value][locale];
+}

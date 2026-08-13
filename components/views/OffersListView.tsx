@@ -8,6 +8,7 @@ import { cityToSlug, createCityOptions, type CityOption } from "@/lib/location";
 import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { categories, industryServiceTypes, provinces, services } from "@/lib/mockData";
+import { getCapacityRequestIndustryLabel, type CapacityRequestIndustryValue } from "@/lib/i18n/capacityRequestTaxonomy";
 import { createClient } from "@/lib/supabase/server";
 import OffersFiltersClient from "@/app/(legacy)/oferty/OffersFiltersClient";
 
@@ -321,7 +322,9 @@ export default async function OffersListView({
                       key={item}
                       className="flex items-center justify-between rounded-2xl bg-white/10 px-4 py-3"
                     >
-                      <span className="text-sm font-semibold">{item}</span>
+                      <span className="text-sm font-semibold">
+                        {getCapacityRequestIndustryLabel(item as CapacityRequestIndustryValue, locale ?? defaultLocale)}
+                      </span>
                       <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-[#1a5f3c]">
                         {t.filterChip}
                       </span>

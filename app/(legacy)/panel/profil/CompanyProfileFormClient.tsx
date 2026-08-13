@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   type FormEvent,
   useMemo,
@@ -22,6 +22,9 @@ import {
   type CompanyProfileInput,
   type SavedCompanyProfile,
 } from "./actions";
+import { getLocaleFromPathname } from "@/lib/i18n/config";
+import { getCapacityRequestIndustryLabel, type CapacityRequestIndustryValue } from "@/lib/i18n/capacityRequestTaxonomy";
+import { getCapacityRequestServiceLabel, type CapacityRequestServiceValue } from "@/lib/i18n/capacityRequestServiceTaxonomy";
 import type {
   PanelCommonDictionary,
   PanelProfileDictionary,
@@ -244,6 +247,8 @@ export default function CompanyProfileFormClient({
   dictCommon,
 }: CompanyProfileFormClientProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
   const sortedCountryOptions = useMemo(() => {
     const countryLabels: Record<string, string> = {
       PL: dict.countryPL,
@@ -1101,7 +1106,9 @@ export default function CompanyProfileFormClient({
                         onChange={() => handleIndustryToggle(industryName)}
                         className="h-4 w-4 shrink-0 rounded border-slate-300 accent-[#1a5f3c]"
                       />
-                      <span className="min-w-0">{industryName}</span>
+                      <span className="min-w-0">
+                        {getCapacityRequestIndustryLabel(industryName as CapacityRequestIndustryValue, locale)}
+                      </span>
                     </label>
                   );
                 })}
@@ -1149,7 +1156,7 @@ export default function CompanyProfileFormClient({
                   {servicesBySelectedIndustry.map(({ industry, services }) => (
                     <div key={industry} className="min-w-0">
                       <h4 className="mb-3 text-sm font-extrabold text-slate-900">
-                        {industry}
+                        {getCapacityRequestIndustryLabel(industry as CapacityRequestIndustryValue, locale)}
                       </h4>
                       <div className="grid min-w-0 gap-3 md:grid-cols-2">
                         {services.map((serviceType) => {
@@ -1172,7 +1179,7 @@ export default function CompanyProfileFormClient({
                                 className="mt-1 h-4 w-4 shrink-0 rounded border-slate-300 accent-[#1a5f3c]"
                               />
                               <span className="min-w-0 leading-6">
-                                {serviceType}
+                                {getCapacityRequestServiceLabel(serviceType as CapacityRequestServiceValue, locale)}
                               </span>
                             </label>
                           );
@@ -1638,7 +1645,7 @@ export default function CompanyProfileFormClient({
                     <option value="">{dict.serviceRequestBranchPlaceholder}</option>
                     {selectedIndustries.map((industryName) => (
                       <option key={industryName} value={industryName}>
-                        {industryName}
+                        {getCapacityRequestIndustryLabel(industryName as CapacityRequestIndustryValue, locale)}
                       </option>
                     ))}
                   </select>

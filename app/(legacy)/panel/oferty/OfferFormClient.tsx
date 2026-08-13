@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   type ChangeEvent,
   type DragEvent,
@@ -23,6 +23,9 @@ import {
   saveOfferImageMetadataAction,
   deleteOfferImageMetadataAction,
 } from "./actions";
+import { getLocaleFromPathname } from "@/lib/i18n/config";
+import { getCapacityRequestIndustryLabel, type CapacityRequestIndustryValue } from "@/lib/i18n/capacityRequestTaxonomy";
+import { getCapacityRequestServiceLabel, type CapacityRequestServiceValue } from "@/lib/i18n/capacityRequestServiceTaxonomy";
 import type {
   PanelCommonDictionary,
   PanelOfferFormDictionary,
@@ -120,6 +123,8 @@ export default function OfferFormClient({
   dictCommon,
 }: OfferFormClientProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
   const companyIndustries = getCompanyIndustries(company);
   const companyServices = company.service_types ?? [];
   const currentStatus = offer?.status ?? "draft";
@@ -625,7 +630,7 @@ export default function OfferFormClient({
             <option value="">{dict.fields.branch.placeholder}</option>
             {companyIndustries.map((industry) => (
               <option key={industry} value={industry}>
-                {industry}
+                {getCapacityRequestIndustryLabel(industry as CapacityRequestIndustryValue, locale)}
               </option>
             ))}
           </select>
@@ -645,7 +650,7 @@ export default function OfferFormClient({
             <option value="">{dict.fields.serviceType.placeholder}</option>
             {branchServices.map((item) => (
               <option key={item} value={item}>
-                {item}
+                {getCapacityRequestServiceLabel(item as CapacityRequestServiceValue, locale)}
               </option>
             ))}
           </select>

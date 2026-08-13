@@ -5,6 +5,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { cityToSlug, type CityOption } from "@/lib/location";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { getCapacityRequestIndustryLabel, type CapacityRequestIndustryValue } from "@/lib/i18n/capacityRequestTaxonomy";
+import { getCapacityRequestServiceLabel, type CapacityRequestServiceValue } from "@/lib/i18n/capacityRequestServiceTaxonomy";
 
 type OffersFiltersClientProps = {
   categories: string[];
@@ -155,7 +157,7 @@ export default function OffersFiltersClient({
           <option value="">{labels.allIndustries}</option>
           {categories.map((category) => (
             <option key={category} value={category}>
-              {category}
+              {getCapacityRequestIndustryLabel(category as CapacityRequestIndustryValue, locale)}
             </option>
           ))}
         </select>
@@ -175,7 +177,7 @@ export default function OffersFiltersClient({
           <option value="">{labels.allServices}</option>
           {services.map((service) => (
             <option key={service} value={service}>
-              {service}
+              {getCapacityRequestServiceLabel(service as CapacityRequestServiceValue, locale)}
             </option>
           ))}
         </select>

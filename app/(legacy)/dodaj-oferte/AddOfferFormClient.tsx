@@ -1,9 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { type FormEvent, type ReactNode, useState } from "react";
 import StaticFormField from "@/components/StaticFormField";
 import { industryServiceTypes, provinces } from "@/lib/mockData";
+import { getLocaleFromPathname } from "@/lib/i18n/config";
+import { getCapacityRequestIndustryLabel, type CapacityRequestIndustryValue } from "@/lib/i18n/capacityRequestTaxonomy";
+import { getCapacityRequestServiceLabel, type CapacityRequestServiceValue } from "@/lib/i18n/capacityRequestServiceTaxonomy";
 
 type LocationMode = "profile" | "custom";
 
@@ -57,6 +60,8 @@ function SectionHeader({
 
 export default function AddOfferFormClient() {
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
   const [selectedIndustry, setSelectedIndustry] = useState("");
   const [selectedServiceType, setSelectedServiceType] = useState("");
   const [locationMode, setLocationMode] = useState<LocationMode>("profile");
@@ -204,7 +209,7 @@ export default function AddOfferFormClient() {
               <option value="">Wybierz branżę</option>
               {industryOptions.map((industry) => (
                 <option key={industry} value={industry}>
-                  {industry}
+                  {getCapacityRequestIndustryLabel(industry as CapacityRequestIndustryValue, locale)}
                 </option>
               ))}
             </select>
@@ -224,7 +229,7 @@ export default function AddOfferFormClient() {
                 </option>
                 {serviceOptions.map((service) => (
                   <option key={service} value={service}>
-                    {service}
+                    {getCapacityRequestServiceLabel(service as CapacityRequestServiceValue, locale)}
                   </option>
                 ))}
               </select>
