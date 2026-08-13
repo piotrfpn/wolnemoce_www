@@ -180,6 +180,7 @@ export const industryServiceTypes: Record<string, string[]> = {
     "Programowanie układów",
     "Montaż wiązek kablowych",
     "Prototypowanie elektroniki",
+    "Elektronika użytkowa",
   ],
   IT: [
     "Tworzenie aplikacji webowych",

@@ -43,6 +43,7 @@ const electronicsServiceValues = [
   "Programowanie układów",
   "Montaż wiązek kablowych",
   "Prototypowanie elektroniki",
+  "Elektronika użytkowa",
 ] as const;
 
 const automationServiceValues = [
@@ -213,7 +214,7 @@ type BatchFourServiceValue = (typeof itServiceValues)[number];
 
 type BatchFiveServiceValue = (typeof marketingServiceValues)[number];
 
-const expectedBatchOneServiceCount = 29;
+const expectedBatchOneServiceCount = 30;
 const expectedBatchTwoServiceCount = 28;
 const expectedBatchThreeServiceCount = 23;
 const expectedBatchFourServiceCount = 18;
@@ -395,6 +396,14 @@ const serviceLabelsBatchOne = {
     uk: "Прототипування електроніки",
     es: "Prototipado electrónico",
     fr: "Prototypage électronique",
+  },
+  "Elektronika użytkowa": {
+    pl: "Elektronika użytkowa",
+    en: "Consumer electronics",
+    de: "Konsumelektronik",
+    uk: "Споживча електроніка",
+    es: "Electrónica de consumo",
+    fr: "Électronique grand public",
   },
   "Projektowanie stanowisk": {
     pl: "Projektowanie stanowisk",
@@ -1592,7 +1601,7 @@ const allServiceValues = [
 
 export type CapacityRequestServiceValue = (typeof allServiceValues)[number];
 
-const expectedAllServiceCount = 127;
+const expectedAllServiceCount = 128;
 
 const serviceLabelRegistries = [
   serviceLabelsBatchOne,
@@ -1641,7 +1650,7 @@ const totalServiceLabelRegistryKeyCount = serviceLabelRegistries.reduce(
 
 if (totalServiceLabelRegistryKeyCount !== expectedAllServiceCount) {
   throw new Error(
-    "Capacity request service label registries must contain 127 keys before merging."
+    "Capacity request service label registries must contain 128 keys before merging."
   );
 }
 
@@ -1664,7 +1673,7 @@ if (mergedServiceLabelCount !== totalServiceLabelRegistryKeyCount) {
 
 if (mergedServiceLabelCount !== expectedAllServiceCount) {
   throw new Error(
-    "Capacity request service label registry must contain 127 unique keys."
+    "Capacity request service label registry must contain 128 unique keys."
   );
 }
 
@@ -1674,23 +1683,23 @@ assertRegistryCoverage("all service labels", allServiceValues, allServiceLabels)
 
 if (allServiceValues.length !== expectedAllServiceCount) {
   throw new Error(
-    "Capacity request service taxonomy must contain 127 unique values."
+    "Capacity request service taxonomy must contain 128 unique values."
   );
 }
 
 const allIndustryServiceOccurrences = Object.values(industryServiceTypes).flat();
-const expectedIndustryServiceOccurrenceCount = 138;
+const expectedIndustryServiceOccurrenceCount = 139;
 
 if (
   allIndustryServiceOccurrences.length !==
   expectedIndustryServiceOccurrenceCount
 ) {
-  throw new Error("industryServiceTypes must contain 138 service occurrences.");
+  throw new Error("industryServiceTypes must contain 139 service occurrences.");
 }
 
 if (new Set(allIndustryServiceOccurrences).size !== expectedAllServiceCount) {
   throw new Error(
-    "industryServiceTypes must contain 127 unique service values."
+    "industryServiceTypes must contain 128 unique service values."
   );
 }
 
