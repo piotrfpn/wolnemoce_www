@@ -7,11 +7,13 @@ import PublicOfferCard, { type PublicOffer } from "@/components/PublicOfferCard"
 import { cityToSlug, createCityOptions, type CityOption } from "@/lib/location";
 import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
-import { categories, industryServiceTypes, provinces, services } from "@/lib/mockData";
+import { categories, industryServiceTypes, provinces } from "@/lib/mockData";
 import { getCapacityRequestIndustryLabel, type CapacityRequestIndustryValue } from "@/lib/i18n/capacityRequestTaxonomy";
 import { createClient } from "@/lib/supabase/server";
 import OffersFiltersClient from "@/app/(legacy)/oferty/OffersFiltersClient";
 import { SUPPORTED_COUNTRIES } from "@/lib/location";
+
+const allServices = Array.from(new Set(Object.values(industryServiceTypes).flat()));
 
 type OffersPageProps = {
   searchParams?: Record<string, string | string[] | undefined>;
@@ -90,7 +92,7 @@ function getFilterState(
     ),
     serviceType: getOptionFromParam(
       getLegacyParam(searchParams, "usluga", "service_type"),
-      services
+      allServices
     ),
     voivodeship: validCountry === "PL" ? getOptionFromParam(
       getLegacyParam(searchParams, "wojewodztwo", "voivodeship"),
@@ -272,8 +274,8 @@ export default async function OffersListView({
   const filters = getFilterState(searchParams, cityOptions);
   const publicOffers = await getPublicOffers(filters);
   const serviceOptions = filters.industry
-    ? industryServiceTypes[filters.industry] ?? services
-    : services;
+    ? industryServiceTypes[filters.industry] ?? allServices
+    : allServices;
 
   return (
     <>
@@ -339,7 +341,7 @@ export default async function OffersListView({
                       className="flex items-center justify-between rounded-2xl bg-white/10 px-4 py-3"
                     >
                       <span className="text-sm font-semibold">
-                        {getCapacityRequestIndustryLabel(item as CapacityRequestIndustryValue, locale ?? defaultLocale)}
+                        {getCapacityRequestIndustryLabel(item, locale ?? defaultLocale)}
                       </span>
                       <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-[#1a5f3c]">
                         {t.filterChip}

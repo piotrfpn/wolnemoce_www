@@ -193,7 +193,7 @@ export default function OffersFiltersClient({
           <option value="">{labels.allIndustries}</option>
           {categories.map((category) => (
             <option key={category} value={category}>
-              {getCapacityRequestIndustryLabel(category as CapacityRequestIndustryValue, locale)}
+              {getCapacityRequestIndustryLabel(category, locale)}
             </option>
           ))}
         </select>
@@ -213,7 +213,7 @@ export default function OffersFiltersClient({
           <option value="">{labels.allServices}</option>
           {services.map((service) => (
             <option key={service} value={service}>
-              {getCapacityRequestServiceLabel(service as CapacityRequestServiceValue, locale)}
+              {getCapacityRequestServiceLabel(service, locale)}
             </option>
           ))}
         </select>

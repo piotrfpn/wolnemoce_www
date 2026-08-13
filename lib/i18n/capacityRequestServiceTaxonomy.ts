@@ -1720,10 +1720,14 @@ function assertCapacityRequestServiceValue(
 }
 
 export function getCapacityRequestServiceLabel(
-  value: CapacityRequestServiceValue,
+  value: string,
   locale: Locale
 ): string {
-  return allServiceLabels[value][locale];
+  const labelObj = allServiceLabels[value as CapacityRequestServiceValue];
+  if (!labelObj) {
+    return value;
+  }
+  return labelObj[locale] ?? value;
 }
 
 export function getCapacityRequestServiceOptions(

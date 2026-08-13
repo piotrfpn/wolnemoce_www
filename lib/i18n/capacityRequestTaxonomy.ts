@@ -493,8 +493,12 @@ export function getCapacityRequestIndustryOptions(locale: Locale) {
 }
 
 export function getCapacityRequestIndustryLabel(
-  value: CapacityRequestIndustryValue,
+  value: string,
   locale: Locale
 ): string {
-  return industryLabels[value][locale];
+  const labelObj = industryLabels[value as CapacityRequestIndustryValue];
+  if (!labelObj) {
+    return value;
+  }
+  return labelObj[locale] ?? value;
 }
