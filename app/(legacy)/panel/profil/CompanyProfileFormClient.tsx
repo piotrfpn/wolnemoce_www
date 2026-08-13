@@ -10,7 +10,7 @@ import {
   useTransition,
 } from "react";
 import { isGusMockNip } from "@/lib/gus/mockNips";
-import { normalizeCityName, POLISH_CITY_OPTIONS } from "@/lib/location";
+import { normalizeCityName, POLISH_CITY_OPTIONS, SUPPORTED_COUNTRIES } from "@/lib/location";
 import { industryServiceTypes, provinces } from "@/lib/mockData";
 import { createClient } from "@/lib/supabase/client";
 import { isValidNip, normalizeNip } from "@/lib/validators/nip";
@@ -215,27 +215,10 @@ function formatPkdCodes(codes: PkdCode[]) {
     .join("\n");
 }
 
-const SUPPORTED_COUNTRIES = new Set([
-  "PL",
-  "DE",
-  "CZ",
-  "SK",
-  "UA",
-  "FR",
-  "ES",
-  "IT",
-  "NL",
-  "BE",
-  "AT",
-  "GB",
-  "CN",
-  "XX",
-]);
-
 function getSupportedCountryCode(code: string | null | undefined): string {
   if (!code) return "PL";
   const upper = code.toUpperCase();
-  return SUPPORTED_COUNTRIES.has(upper) ? upper : "PL";
+  return SUPPORTED_COUNTRIES.includes(upper) ? upper : "PL";
 }
 
 export default function CompanyProfileFormClient({

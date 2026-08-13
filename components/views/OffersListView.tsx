@@ -11,6 +11,7 @@ import { categories, industryServiceTypes, provinces, services } from "@/lib/moc
 import { getCapacityRequestIndustryLabel, type CapacityRequestIndustryValue } from "@/lib/i18n/capacityRequestTaxonomy";
 import { createClient } from "@/lib/supabase/server";
 import OffersFiltersClient from "@/app/(legacy)/oferty/OffersFiltersClient";
+import { SUPPORTED_COUNTRIES } from "@/lib/location";
 
 type OffersPageProps = {
   searchParams?: Record<string, string | string[] | undefined>;
@@ -78,6 +79,9 @@ function getFilterState(
       ) ?? null
     : null;
 
+  const countryParam = getSingleParam(searchParams, "country").toUpperCase();
+  const validCountry = SUPPORTED_COUNTRIES.includes(countryParam) ? countryParam : "";
+
   return {
     q: getSingleParam(searchParams, "q").trim(),
     industry: getOptionFromParam(
@@ -88,11 +92,12 @@ function getFilterState(
       getLegacyParam(searchParams, "usluga", "service_type"),
       services
     ),
-    voivodeship: getOptionFromParam(
+    voivodeship: validCountry === "PL" ? getOptionFromParam(
       getLegacyParam(searchParams, "wojewodztwo", "voivodeship"),
       provinces
-    ),
+    ) : "",
     city,
+    country: validCountry,
     verified: getSingleParam(searchParams, "verified") === "true",
     sort: ["newest", "featured", "popular", "az"].includes(sort)
       ? sort
@@ -115,13 +120,18 @@ async function getCompanyIdsByName(query: string) {
   return data?.map((company) => company.id as string) ?? [];
 }
 
-async function getFilterCities() {
+async function getFilterCities(country?: string) {
   const supabase = createClient();
-  const { data, error } = await supabase
+  let query = supabase
     .from("offers")
     .select("companies!inner(location_city)")
-    .eq("status", "active")
-    .limit(200);
+    .eq("status", "active");
+
+  if (country && SUPPORTED_COUNTRIES.includes(country)) {
+    query = query.eq("companies.country_code", country);
+  }
+
+  const { data, error } = await query.limit(200);
 
   if (error) {
     console.error("Offer city options query failed", error);
@@ -153,7 +163,7 @@ async function getPublicOffers(
   let query = supabase
     .from("offers")
     .select(
-      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, is_featured, featured_until, featured_priority, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, is_verified, website_url), offer_images(id, path, alt, sort_order)"
+      "id, title, slug, branch, service_type, description, power_available, min_order, lead_time, status, is_featured, featured_until, featured_priority, created_at, companies!inner(name, slug, description, location_voivodeship, location_city, country_code, is_verified, website_url), offer_images(id, path, alt, sort_order)"
     )
     .eq("status", "active");
 
@@ -186,6 +196,10 @@ async function getPublicOffers(
 
   if (filters.city) {
     query = query.in("companies.location_city", filters.city.values);
+  }
+
+  if (filters.country && SUPPORTED_COUNTRIES.includes(filters.country)) {
+    query = query.eq("companies.country_code", filters.country);
   }
 
   if (filters.verified) {
@@ -252,7 +266,9 @@ export default async function OffersListView({
   locale = defaultLocale,
 }: OffersPageProps) {
   const t = getDictionary(locale).offersList;
-  const cityOptions = await getFilterCities();
+  const countryParam = getSingleParam(searchParams, "country").toUpperCase();
+  const validCountry = SUPPORTED_COUNTRIES.includes(countryParam) ? countryParam : "";
+  const cityOptions = await getFilterCities(validCountry);
   const filters = getFilterState(searchParams, cityOptions);
   const publicOffers = await getPublicOffers(filters);
   const serviceOptions = filters.industry

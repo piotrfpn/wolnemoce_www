@@ -1,3 +1,20 @@
+export const SUPPORTED_COUNTRIES = [
+  "PL",
+  "DE",
+  "CZ",
+  "SK",
+  "UA",
+  "FR",
+  "ES",
+  "IT",
+  "NL",
+  "BE",
+  "AT",
+  "GB",
+  "CN",
+  "XX",
+];
+
 export type CityOption = {
   label: string;
   slug: string;
