@@ -50,6 +50,7 @@ export default async function PanelNavbar() {
     projects: dictionary.panel.nav.projects,
     inquiries: dictionary.panel.nav.receivedInquiries,
     sentInquiries: dictionary.panel.nav.sentInquiries,
+    myInterests: dictionary.panel.nav.myInterests,
     myRequests: dictionary.panel.nav.myRequests,
     settings: dictionary.panel.nav.settings,
   };

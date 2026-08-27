@@ -930,9 +930,27 @@ export type Dictionary = {
       inquiries: string;
       receivedInquiries: string;
       sentInquiries: string;
+      myInterests: string;
       myRequests: string;
       settings: string;
     };
+    myInterests: {
+      title: string;
+      description: string;
+      emptyStateTitle: string;
+      emptyStateDescription: string;
+      viewRequest: string;
+      requestNotActive: string;
+      interestedAt: string;
+      statusDraft: string;
+      statusPending: string;
+      statusActive: string;
+      statusRejected: string;
+      statusExpired: string;
+      statusArchived: string;
+      loadError: string;
+    };
+
     dashboard: {
       title: string;
       subtitle: string;
