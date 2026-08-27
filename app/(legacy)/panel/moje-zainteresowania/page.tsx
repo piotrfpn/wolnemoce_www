@@ -8,6 +8,7 @@ import { getPanelLocale } from "@/lib/i18n/panelLocale";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 import { getEffectiveCapacityRequestStatus } from "@/lib/capacityRequestStatus";
 import { getCapacityRequestStatusClass } from "@/lib/capacityRequests";
+import type { Dictionary } from "@/lib/i18n/types";
 
 export const metadata: Metadata = {
   title: "Moje zainteresowania | WolneMoce",
@@ -28,7 +29,7 @@ type MyCapacityRequestInterest = {
   request_expires_at: string;
 };
 
-const getStatusLabel = (status: string, t: any) => {
+const getStatusLabel = (status: string, t: Dictionary["panel"]["myInterests"]) => {
   switch (status) {
     case "draft": return t.statusDraft;
     case "pending": return t.statusPending;
