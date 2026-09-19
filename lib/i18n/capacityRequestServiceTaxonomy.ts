@@ -24,6 +24,7 @@ const metalServiceValues = [
   "Gięcie blach",
   "Obróbka powierzchniowa",
   "Montaż konstrukcji stalowych",
+  "Kulowanie umacniające",
 ] as const;
 
 const plasticsServiceValues = [
@@ -214,7 +215,7 @@ type BatchFourServiceValue = (typeof itServiceValues)[number];
 
 type BatchFiveServiceValue = (typeof marketingServiceValues)[number];
 
-const expectedBatchOneServiceCount = 30;
+const expectedBatchOneServiceCount = 31;
 const expectedBatchTwoServiceCount = 28;
 const expectedBatchThreeServiceCount = 23;
 const expectedBatchFourServiceCount = 18;
@@ -292,6 +293,14 @@ const serviceLabelsBatchOne = {
     uk: "Монтаж сталевих конструкцій",
     es: "Montaje de estructuras de acero",
     fr: "Assemblage de structures métalliques",
+  },
+  "Kulowanie umacniające": {
+    pl: "Kulowanie umacniające",
+    en: "Shot peening",
+    de: "Verfestigungsstrahlen",
+    uk: "Дробоструминне зміцнення",
+    es: "Granallado de pretensado",
+    fr: "Grenaillage de précontrainte",
   },
   "Formowanie wtryskowe": {
     pl: "Formowanie wtryskowe",
@@ -1601,7 +1610,7 @@ const allServiceValues = [
 
 export type CapacityRequestServiceValue = (typeof allServiceValues)[number];
 
-const expectedAllServiceCount = 128;
+const expectedAllServiceCount = 129;
 
 const serviceLabelRegistries = [
   serviceLabelsBatchOne,
@@ -1688,18 +1697,18 @@ if (allServiceValues.length !== expectedAllServiceCount) {
 }
 
 const allIndustryServiceOccurrences = Object.values(industryServiceTypes).flat();
-const expectedIndustryServiceOccurrenceCount = 139;
+const expectedIndustryServiceOccurrenceCount = 140;
 
 if (
   allIndustryServiceOccurrences.length !==
   expectedIndustryServiceOccurrenceCount
 ) {
-  throw new Error("industryServiceTypes must contain 139 service occurrences.");
+  throw new Error("industryServiceTypes must contain 140 service occurrences.");
 }
 
 if (new Set(allIndustryServiceOccurrences).size !== expectedAllServiceCount) {
   throw new Error(
-    "industryServiceTypes must contain 128 unique service values."
+    "industryServiceTypes must contain 129 unique service values."
   );
 }
 

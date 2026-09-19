@@ -163,6 +163,7 @@ export const industryServiceTypes: Record<string, string[]> = {
     "Gięcie blach",
     "Obróbka powierzchniowa",
     "Montaż konstrukcji stalowych",
+    "Kulowanie umacniające",
   ],
   "Tworzywa sztuczne": [
     "Formowanie wtryskowe",
