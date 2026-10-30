@@ -483,7 +483,7 @@ const de: Dictionary = {
       {
         question: "Ist das Hinzufügen eines Angebots kostenlos?",
         answer:
-          "Ja. Im FREE-Plan kann ein Unternehmen ein ausstehendes oder aktives Angebot hinzufügen. Es ist ein guter Weg, um das Marktinteresse zu prüfen, bevor Sie auf einen höheren Plan umsteigen.",
+          "Ja!\nIm FREE-Plan können Sie kostenlos ein Angebot hinzufügen und die Möglichkeiten Ihres Unternehmens potenziellen Geschäftspartnern präsentieren.\nMöchten Sie ein breiteres Publikum erreichen?\nEntdecken Sie die Möglichkeiten des PRO-Plans – mehr Angebote und höhere Sichtbarkeit für Ihr Unternehmen.",
       },
       {
         question: "Wie erhält ein Unternehmen Anfragen von Käufern?",

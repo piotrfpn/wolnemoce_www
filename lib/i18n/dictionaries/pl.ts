@@ -519,7 +519,7 @@ const pl: Dictionary = {
       {
         question: "Czy dodanie oferty jest bezpłatne?",
         answer:
-          "Tak. W planie FREE firma może dodać jedną ofertę oczekującą lub aktywną. To dobry sposób, aby sprawdzić zainteresowanie rynku przed przejściem na wyższy plan.",
+          "Tak!\nW planie FREE możesz bezpłatnie dodać jedną ofertę i zaprezentować możliwości swojej firmy potencjalnym kontrahentom.\nChcesz dotrzeć do szerszego grona odbiorców?\nOdkryj możliwości planu PRO - większa liczba ofert i widoczność Twojej firmy.",
       },
       {
         question: "Jak firma otrzymuje zapytania od kupujących?",

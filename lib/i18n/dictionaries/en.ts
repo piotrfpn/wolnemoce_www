@@ -506,7 +506,7 @@ const en: Dictionary = {
       {
         question: "Is adding an offer free?",
         answer:
-          "Yes. In the FREE plan, a company can add one pending or active offer. It's a good way to check market interest before upgrading.",
+          "Yes!\nIn the FREE plan, you can add one offer for free and present your company's capabilities to potential contractors.\nWant to reach a wider audience?\nDiscover the possibilities of the PRO plan - more offers and greater visibility for your company.",
       },
       {
         question: "How does a company receive inquiries from buyers?",

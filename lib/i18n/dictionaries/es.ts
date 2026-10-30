@@ -477,7 +477,7 @@ const es: Dictionary = {
       {
         question: "¿Es gratis añadir una oferta?",
         answer:
-          "Sí. En el plan FREE, una empresa puede añadir una oferta pendiente o activa. Es una buena manera de comprobar el interés del mercado antes de pasar a un plan superior.",
+          "¡Sí!\nEn el plan FREE puedes añadir una oferta de forma gratuita y presentar las capacidades de tu empresa a posibles socios comerciales.\n¿Quieres llegar a un público más amplio?\nDescubre las posibilidades del plan PRO: mayor número de ofertas y visibilidad para tu empresa.",
       },
       {
         question: "¿Cómo recibe una empresa las consultas de los compradores?",

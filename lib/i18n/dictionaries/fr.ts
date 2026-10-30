@@ -477,7 +477,7 @@ const fr: Dictionary = {
       {
         question: "L'ajout d'une offre est-il gratuit ?",
         answer:
-          "Oui. Dans le forfait FREE, une entreprise peut ajouter une offre en attente ou active. C'est un bon moyen de vérifier l'intérêt du marché avant de passer à un forfait supérieur.",
+          "Oui !\nDans le forfait FREE, vous pouvez ajouter gratuitement une offre et présenter les capacités de votre entreprise à des partenaires potentiels.\nVous souhaitez toucher un public plus large ?\nDécouvrez les possibilités du forfait PRO - plus d'offres et une meilleure visibilité pour votre entreprise.",
       },
       {
         question: "Comment une entreprise reçoit-elle les demandes des acheteurs ?",

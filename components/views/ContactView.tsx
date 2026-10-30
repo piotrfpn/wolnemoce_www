@@ -185,7 +185,7 @@ export default async function ContactView({
             {t.faqs.map((faq) => (
               <div key={faq.question} className="rounded-[20px] border border-slate-200 bg-white p-6">
                 <h3 className="mb-2 font-extrabold text-slate-900">{faq.question}</h3>
-                <p className="text-sm leading-7 text-slate-500">{faq.answer}</p>
+                <p className="whitespace-pre-line text-sm leading-7 text-slate-500">{faq.answer}</p>
               </div>
             ))}
           </div>
