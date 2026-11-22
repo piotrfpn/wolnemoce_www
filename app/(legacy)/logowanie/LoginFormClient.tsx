@@ -52,7 +52,14 @@ export default function LoginFormClient({
     });
 
     if (signInError || !data.user) {
-      setError(signInError?.message ?? labels.errorFallback);
+      const isInvalidCredentials = signInError?.message
+        ?.toLowerCase()
+        .includes("invalid login credentials");
+      setError(
+        isInvalidCredentials
+          ? labels.invalidCredentialsError
+          : signInError?.message ?? labels.errorFallback
+      );
       setIsSubmitting(false);
       return;
     }
@@ -78,12 +85,22 @@ export default function LoginFormClient({
 
       {error ? (
         <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {error}
+          <p>{error}</p>
+          <p className="mt-1.5 text-xs text-red-700/90">
+            {labels.noAccount}{" "}
+            <Link
+              href={registerHref}
+              className="font-bold text-red-800 underline underline-offset-2 hover:text-red-950"
+            >
+              {labels.createAccount}
+            </Link>
+          </p>
         </div>
       ) : null}
 
       <GoogleOAuthButton
         errorLabel={labels.oauthError}
+        hint={labels.googleHint}
         label={labels.googleSubmit}
         nextPath={safeNextPath || "/panel"}
         onError={setError}
@@ -125,24 +142,35 @@ export default function LoginFormClient({
         </label>
       </div>
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="mt-6 btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        {isSubmitting ? labels.submitting : labels.submit}
-      </button>
+      <div className="mt-6 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="inline-flex w-full items-center justify-center rounded-xl border-2 border-transparent bg-gradient-to-br from-[#1a5f3c] to-[#2d8a5e] px-4 py-3 text-sm font-bold text-white shadow-lg shadow-[#1a5f3c]/25 transition hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {isSubmitting ? labels.submitting : labels.submit}
+        </button>
 
-      <div className="mt-6 flex flex-col gap-2 text-center text-sm text-slate-500">
-        <Link href={resetPasswordHref} className="font-semibold text-[#1a5f3c] no-underline">
+        <Link
+          href={registerHref}
+          className="inline-flex w-full items-center justify-center rounded-xl border-2 border-[#1a5f3c] bg-white px-4 py-3 text-center text-sm font-bold text-[#1a5f3c] no-underline transition hover:-translate-y-0.5 hover:bg-[#1a5f3c] hover:text-white hover:shadow-md"
+        >
+          {labels.createAccount}
+        </Link>
+      </div>
+
+      <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-emerald-200/80 bg-emerald-50/60 px-3.5 py-2.5 text-xs leading-5 text-slate-600">
+        <i className="fas fa-circle-info mt-0.5 shrink-0 text-[#1a5f3c]"></i>
+        <span>{labels.newUserHint}</span>
+      </div>
+
+      <div className="mt-5 text-center text-sm text-slate-500">
+        <Link
+          href={resetPasswordHref}
+          className="font-semibold text-[#1a5f3c] no-underline hover:underline"
+        >
           {labels.forgotPassword}
         </Link>
-        <span>
-          {labels.noAccount}{" "}
-          <Link href={registerHref} className="font-semibold text-[#1a5f3c] no-underline">
-            {labels.createAccount}
-          </Link>
-        </span>
       </div>
     </form>
   );

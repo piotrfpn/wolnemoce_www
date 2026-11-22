@@ -763,14 +763,19 @@ const de: Dictionary = {
       email: "E-Mail",
       password: "Passwort",
       googleSubmit: "Mit Google fortfahren",
+      googleHint: "Schnelle Anmeldung mit einem Klick",
       separator: "oder",
       submit: "Anmelden",
       submitting: "Anmeldung...",
       forgotPassword: "Passwort vergessen?",
       noAccount: "Noch kein Konto?",
       createAccount: "Konto erstellen",
+      newUserHint:
+        "Neu hier oder Probleme beim Anmelden? Wählen Sie „Konto erstellen“ oder nutzen Sie die schnelle Google-Anmeldung.",
       oauthError:
         "Die Anmeldung mit Google ist fehlgeschlagen. Versuche es erneut oder nutze die Anmeldung per E-Mail.",
+      invalidCredentialsError:
+        "Ungültige E-Mail-Adresse oder falsches Passwort. Prüfen Sie Ihre Angaben oder erstellen Sie ein neues Konto.",
       errorFallback: "Anmeldung fehlgeschlagen.",
     },
     register: {
@@ -781,6 +786,7 @@ const de: Dictionary = {
       email: "E-Mail",
       password: "Passwort",
       googleSubmit: "Mit Google fortfahren",
+      googleHint: "Schnelle Registrierung mit einem Klick",
       separator: "oder",
       submit: "Konto erstellen",
       submitting: "Konto wird erstellt...",

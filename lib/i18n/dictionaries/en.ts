@@ -788,13 +788,18 @@ const en: Dictionary = {
       email: "Email",
       password: "Password",
       googleSubmit: "Continue with Google",
+      googleHint: "Quick one-click sign-in",
       separator: "or",
       submit: "Log in",
       submitting: "Logging in...",
       forgotPassword: "Forgot your password?",
       noAccount: "No account?",
       createAccount: "Create account",
+      newUserHint:
+        'New here or can\'t log in? Choose "Create account" or use quick sign-in with Google.',
       oauthError: "Google sign-in failed. Try again or use email login.",
+      invalidCredentialsError:
+        "Invalid email or password. Check your details or create a new account if you don't have one yet.",
       errorFallback: "Could not log in.",
     },
     register: {
@@ -805,6 +810,7 @@ const en: Dictionary = {
       email: "Email",
       password: "Password",
       googleSubmit: "Continue with Google",
+      googleHint: "Quick one-click sign-up",
       separator: "or",
       submit: "Create account",
       submitting: "Creating account...",

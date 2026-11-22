@@ -796,15 +796,20 @@ const pl: Dictionary = {
       subtitle: "Wejdź do panelu firmy lub panelu administratora.",
       email: "Email",
       password: "Hasło",
-      googleSubmit: "Kontynuuj z Google",
+      googleSubmit: "Kontynuuj przez Google",
+      googleHint: "Szybkie logowanie jednym kliknięciem",
       separator: "lub",
       submit: "Zaloguj się",
       submitting: "Logowanie...",
       forgotPassword: "Nie pamiętasz hasła?",
       noAccount: "Nie masz konta?",
       createAccount: "Utwórz konto",
+      newUserHint:
+        "Jesteś tu pierwszy raz lub nie możesz się zalogować? Wybierz „Utwórz konto” albo skorzystaj z szybkiego logowania przez Google.",
       oauthError:
         "Nie udało się zalogować przez Google. Spróbuj ponownie albo użyj logowania e-mail.",
+      invalidCredentialsError:
+        "Nieprawidłowy e-mail lub hasło. Sprawdź dane albo utwórz nowe konto, jeśli jeszcze go nie masz.",
       errorFallback: "Nie udało się zalogować.",
     },
     register: {
@@ -814,7 +819,8 @@ const pl: Dictionary = {
       fullName: "Imię i nazwisko",
       email: "Email",
       password: "Hasło",
-      googleSubmit: "Kontynuuj z Google",
+      googleSubmit: "Kontynuuj przez Google",
+      googleHint: "Szybka rejestracja jednym kliknięciem",
       separator: "lub",
       submit: "Utwórz konto",
       submitting: "Tworzenie konta...",

@@ -103,6 +103,7 @@ export default function RegisterFormClient({
 
       <GoogleOAuthButton
         errorLabel={labels.oauthError}
+        hint={labels.googleHint}
         label={labels.googleSubmit}
         nextPath={safeNextPath || "/panel"}
         onError={setError}

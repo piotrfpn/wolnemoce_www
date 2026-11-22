@@ -751,14 +751,19 @@ const uk: Dictionary = {
       email: "Email",
       password: "Пароль",
       googleSubmit: "Продовжити з Google",
+      googleHint: "Швидкий вхід в один клік",
       separator: "або",
       submit: "Увійти",
       submitting: "Вхід...",
       forgotPassword: "Забули пароль?",
       noAccount: "Немає акаунта?",
       createAccount: "Створити акаунт",
+      newUserHint:
+        "Ви тут уперше або не можете увійти? Натисніть «Створити акаунт» або скористайтеся швидким входом через Google.",
       oauthError:
         "Не вдалося увійти через Google. Спробуйте ще раз або скористайтеся входом через e-mail.",
+      invalidCredentialsError:
+        "Невірний email або пароль. Перевірте дані або створіть новий акаунт, якщо у вас його ще немає.",
       errorFallback: "Не вдалося увійти.",
     },
     register: {
@@ -769,6 +774,7 @@ const uk: Dictionary = {
       email: "Email",
       password: "Пароль",
       googleSubmit: "Продовжити з Google",
+      googleHint: "Швидка реєстрація в один клік",
       separator: "або",
       submit: "Створити акаунт",
       submitting: "Створення акаунта...",

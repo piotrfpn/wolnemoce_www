@@ -756,14 +756,19 @@ const fr: Dictionary = {
       email: "Email",
       password: "Mot de passe",
       googleSubmit: "Continuer avec Google",
+      googleHint: "Connexion rapide en un clic",
       separator: "ou",
       submit: "Se connecter",
       submitting: "Connexion...",
       forgotPassword: "Mot de passe oublié ?",
       noAccount: "Pas encore de compte ?",
       createAccount: "Créer un compte",
+      newUserHint:
+        "Nouveau ici ou impossible de vous connecter ? Choisissez « Créer un compte » ou utilisez la connexion rapide avec Google.",
       oauthError:
         "La connexion avec Google a échoué. Réessayez ou utilisez la connexion par e-mail.",
+      invalidCredentialsError:
+        "Adresse e-mail ou mot de passe incorrect. Vérifiez vos identifiants ou créez un compte si vous n'en avez pas encore.",
       errorFallback: "Connexion impossible.",
     },
     register: {
@@ -774,6 +779,7 @@ const fr: Dictionary = {
       email: "Email",
       password: "Mot de passe",
       googleSubmit: "Continuer avec Google",
+      googleHint: "Inscription rapide en un clic",
       separator: "ou",
       submit: "Créer un compte",
       submitting: "Création du compte...",

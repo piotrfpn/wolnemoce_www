@@ -754,14 +754,19 @@ const es: Dictionary = {
       email: "Email",
       password: "Contraseña",
       googleSubmit: "Continuar con Google",
+      googleHint: "Inicio de sesión rápido en un clic",
       separator: "o",
       submit: "Iniciar sesión",
       submitting: "Iniciando sesión...",
       forgotPassword: "¿Has olvidado la contraseña?",
       noAccount: "¿No tienes cuenta?",
       createAccount: "Crear cuenta",
+      newUserHint:
+        "¿Eres nuevo o no puedes iniciar sesión? Elige «Crear cuenta» o usa el inicio rápido con Google.",
       oauthError:
         "No se pudo iniciar sesión con Google. Inténtalo de nuevo o usa el inicio de sesión por correo electrónico.",
+      invalidCredentialsError:
+        "Correo electrónico o contraseña incorrectos. Comprueba tus datos o crea una cuenta nueva si aún no tienes una.",
       errorFallback: "No se pudo iniciar sesión.",
     },
     register: {
@@ -772,6 +777,7 @@ const es: Dictionary = {
       email: "Email",
       password: "Contraseña",
       googleSubmit: "Continuar con Google",
+      googleHint: "Registro rápido en un clic",
       separator: "o",
       submit: "Crear cuenta",
       submitting: "Creando cuenta...",

@@ -695,13 +695,16 @@ export type Dictionary = {
       email: string;
       password: string;
       googleSubmit: string;
+      googleHint: string;
       separator: string;
       submit: string;
       submitting: string;
       forgotPassword: string;
       noAccount: string;
       createAccount: string;
+      newUserHint: string;
       oauthError: string;
+      invalidCredentialsError: string;
       errorFallback: string;
     };
     register: {
@@ -711,6 +714,7 @@ export type Dictionary = {
       email: string;
       password: string;
       googleSubmit: string;
+      googleHint: string;
       separator: string;
       submit: string;
       submitting: string;
