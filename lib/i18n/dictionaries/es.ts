@@ -1445,6 +1445,10 @@ const es: Dictionary = {
       rfqEmailInfo: "Enviaremos notificaciones sobre nuevas consultas a esta dirección. Esta dirección no se mostrará públicamente en el perfil de la empresa.",
       industriesLabel: "Sectores de actividad",
       industriesInfo: "Seleccione todos los sectores en los que opera la empresa.",
+      unsavedChangesNotice: "Tienes cambios sin guardar en el perfil de la empresa.",
+      goToAddOffer: "Ir a añadir oferta",
+      industryNoServicesHint:
+        "Selecciona al menos 1 servicio abajo para añadir ofertas en este sector",
       accountEmailMissing: "Sin dirección de correo electrónico",
       websiteInvalid: "Introduzca una dirección web válida.",
       nipInvalidChecksum: "Introduzca un NIP válido con la suma de comprobación correcta.",

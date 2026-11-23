@@ -125,8 +125,14 @@ export default function OfferFormClient({
   const router = useRouter();
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
-  const companyIndustries = getCompanyIndustries(company);
-  const companyServices = company.service_types ?? [];
+  const companyIndustries = useMemo(
+    () => getCompanyIndustries(company),
+    [company]
+  );
+  const companyServices = useMemo(
+    () => company.service_types ?? [],
+    [company.service_types]
+  );
   const currentStatus = offer?.status ?? "draft";
   const canChooseStatus = mode === "new" || currentStatus === "draft";
   const showActiveModerationWarning = mode === "edit" && currentStatus === "active";
@@ -173,6 +179,25 @@ export default function OfferFormClient({
     Boolean(selectedBranch) &&
     branchServices.length > 0 &&
     !isSubmitting;
+
+  useEffect(() => {
+    if (mode === "new") {
+      router.refresh();
+    }
+  }, [mode, router]);
+
+  useEffect(() => {
+    if (!selectedBranch && companyIndustries.length > 0) {
+      setSelectedBranch(companyIndustries[0]);
+    } else if (
+      selectedBranch &&
+      companyIndustries.length > 0 &&
+      !companyIndustries.includes(selectedBranch)
+    ) {
+      setSelectedBranch(companyIndustries[0]);
+      setServiceType("");
+    }
+  }, [companyIndustries, selectedBranch]);
 
   useEffect(() => {
     const previews = selectedImages.map((file) => ({

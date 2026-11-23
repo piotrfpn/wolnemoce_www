@@ -1461,6 +1461,10 @@ const de: Dictionary = {
       rfqEmailInfo: "An diese Adresse senden wir Benachrichtigungen über neue Anfragen. Die Adresse wird nicht öffentlich im Firmenprofil angezeigt.",
       industriesLabel: "Branchen",
       industriesInfo: "Wählen Sie alle Branchen aus, in denen das Unternehmen tätig ist.",
+      unsavedChangesNotice: "Sie haben ungespeicherte Änderungen im Firmenprofil.",
+      goToAddOffer: "Weiter zum Angebot erstellen",
+      industryNoServicesHint:
+        "Wählen Sie unten mind. 1 Leistung, um Angebote in dieser Branche zu erstellen",
       accountEmailMissing: "Keine E-Mail-Adresse",
       websiteInvalid: "Geben Sie eine gültige Website-Adresse ein.",
       nipInvalidChecksum: "Geben Sie eine gültige NIP mit korrekter Prüfsumme ein.",

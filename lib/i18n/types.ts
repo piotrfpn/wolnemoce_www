@@ -1295,6 +1295,9 @@ export type Dictionary = {
       rfqEmailInfo: string;
       industriesLabel: string;
       industriesInfo: string;
+      unsavedChangesNotice: string;
+      goToAddOffer: string;
+      industryNoServicesHint: string;
       accountEmailMissing: string;
       websiteInvalid: string;
       nipInvalidChecksum: string;

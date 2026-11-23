@@ -637,6 +637,8 @@ export async function saveCompanyProfileAction(
 
   if (outcome.shouldRevalidate) {
     revalidatePath("/panel/profil");
+    revalidatePath("/panel/oferty");
+    revalidatePath("/panel/oferty/nowa");
     revalidatePath("/panel", "layout");
   }
 

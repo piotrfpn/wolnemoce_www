@@ -7,7 +7,6 @@ import {
   useMemo,
   useRef,
   useState,
-  useTransition,
 } from "react";
 import { isGusMockNip } from "@/lib/gus/mockNips";
 import { normalizeCityName, POLISH_CITY_OPTIONS, SUPPORTED_COUNTRIES } from "@/lib/location";
@@ -221,6 +220,38 @@ function getSupportedCountryCode(code: string | null | undefined): string {
   return SUPPORTED_COUNTRIES.includes(upper) ? upper : "PL";
 }
 
+function buildProfileSnapshot(params: {
+  countryCode: string;
+  nip: string;
+  name: string;
+  description: string;
+  mainIndustry: string;
+  selectedIndustries: string[];
+  selectedServiceTypes: string[];
+  voivodeship: string;
+  city: string;
+  postalCode: string;
+  streetAddress: string;
+  fullAddress: string;
+  regon: string;
+  krs: string;
+  legalForm: string;
+  businessStatus: string;
+  primaryPkd: string;
+  pkdCodes: PkdCode[];
+  websiteUrl: string;
+  contactEmail: string;
+  taxId: string;
+  registrationNumber: string;
+  registeredAddress: string;
+}) {
+  return JSON.stringify({
+    ...params,
+    selectedIndustries: [...params.selectedIndustries].sort(),
+    selectedServiceTypes: [...params.selectedServiceTypes].sort(),
+  });
+}
+
 export default function CompanyProfileFormClient({
   userId,
   userEmail,
@@ -326,7 +357,37 @@ export default function CompanyProfileFormClient({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [isSavePending, startSaveTransition] = useTransition();
+  const [isSaving, setIsSaving] = useState(false);
+  const [savedSnapshot, setSavedSnapshot] = useState(() =>
+    buildProfileSnapshot({
+      countryCode: getSupportedCountryCode(company?.country_code),
+      nip: company?.nip ?? "",
+      name: company?.name ?? "",
+      description: company?.description ?? "",
+      mainIndustry:
+        company?.industry && initialIndustries.includes(company.industry)
+          ? company.industry
+          : initialIndustries[0] ?? "",
+      selectedIndustries: initialIndustries,
+      selectedServiceTypes: company?.service_types ?? [],
+      voivodeship: company?.location_voivodeship ?? "",
+      city: company?.location_city ? normalizeCityName(company.location_city) : "",
+      postalCode: company?.location_postal_code ?? "",
+      streetAddress: company?.location_street ?? "",
+      fullAddress: company?.location_full_address ?? "",
+      regon: company?.regon ?? "",
+      krs: company?.krs ?? "",
+      legalForm: company?.legal_form ?? "",
+      businessStatus: company?.business_status ?? "",
+      primaryPkd: company?.primary_pkd ?? "",
+      pkdCodes: company?.pkd_codes ?? [],
+      websiteUrl: company?.website_url ?? "",
+      contactEmail: company?.contact_email ?? "",
+      taxId: company?.tax_id ?? "",
+      registrationNumber: company?.registration_number ?? "",
+      registeredAddress: company?.registered_address ?? "",
+    })
+  );
   const [gusError, setGusError] = useState("");
   const [gusMessage, setGusMessage] = useState("");
   const [isGusLoading, setIsGusLoading] = useState(false);
@@ -339,6 +400,62 @@ export default function CompanyProfileFormClient({
   const [requestMessage, setRequestMessage] = useState("");
   const [isRequestSubmitting, setIsRequestSubmitting] = useState(false);
   const gusLookupInFlight = useRef(false);
+
+  const currentSnapshot = useMemo(
+    () =>
+      buildProfileSnapshot({
+        countryCode,
+        nip,
+        name,
+        description,
+        mainIndustry,
+        selectedIndustries,
+        selectedServiceTypes,
+        voivodeship,
+        city,
+        postalCode,
+        streetAddress,
+        fullAddress,
+        regon,
+        krs,
+        legalForm,
+        businessStatus,
+        primaryPkd,
+        pkdCodes,
+        websiteUrl,
+        contactEmail,
+        taxId,
+        registrationNumber,
+        registeredAddress,
+      }),
+    [
+      countryCode,
+      nip,
+      name,
+      description,
+      mainIndustry,
+      selectedIndustries,
+      selectedServiceTypes,
+      voivodeship,
+      city,
+      postalCode,
+      streetAddress,
+      fullAddress,
+      regon,
+      krs,
+      legalForm,
+      businessStatus,
+      primaryPkd,
+      pkdCodes,
+      websiteUrl,
+      contactEmail,
+      taxId,
+      registrationNumber,
+      registeredAddress,
+    ]
+  );
+
+  const hasUnsavedChanges = currentSnapshot !== savedSnapshot;
 
   const servicesBySelectedIndustry = useMemo(
     () =>
@@ -356,39 +473,39 @@ export default function CompanyProfileFormClient({
   }
 
   function handleIndustryToggle(industry: string) {
-    setSelectedIndustries((current) => {
-      const next = current.includes(industry)
-        ? current.filter((item) => item !== industry)
-        : [...current, industry].sort((first, second) =>
-            first.localeCompare(second, "pl")
-          );
+    setError("");
+    setMessage("");
 
-      const allowedServices = getAllowedServices(next);
-      setSelectedServiceTypes((services) =>
-        services.filter((service) => allowedServices.has(service))
-      );
+    const next = selectedIndustries.includes(industry)
+      ? selectedIndustries.filter((item) => item !== industry)
+      : [...selectedIndustries, industry].sort((first, second) =>
+          first.localeCompare(second, "pl")
+        );
 
-      setMainIndustry((currentMain) => {
-        if (next.length === 1) {
-          return next[0];
-        }
+    const allowedServices = getAllowedServices(next);
+    setSelectedIndustries(next);
+    setSelectedServiceTypes((services) =>
+      services.filter((service) => allowedServices.has(service))
+    );
+    setMainIndustry((currentMain) => {
+      if (next.length === 1) {
+        return next[0];
+      }
 
-        return currentMain && next.includes(currentMain)
-          ? currentMain
-          : next[0] ?? "";
-      });
-
-      setRequestIndustry((currentRequestIndustry) =>
-        currentRequestIndustry && next.includes(currentRequestIndustry)
-          ? currentRequestIndustry
-          : next[0] ?? ""
-      );
-
-      return next;
+      return currentMain && next.includes(currentMain)
+        ? currentMain
+        : next[0] ?? "";
     });
+    setRequestIndustry((currentRequestIndustry) =>
+      currentRequestIndustry && next.includes(currentRequestIndustry)
+        ? currentRequestIndustry
+        : next[0] ?? ""
+    );
   }
 
   function toggleServiceType(serviceType: string) {
+    setError("");
+    setMessage("");
     setSelectedServiceTypes((current) =>
       current.includes(serviceType)
         ? current.filter((item) => item !== serviceType)
@@ -459,17 +576,22 @@ export default function CompanyProfileFormClient({
         : data.industry
           ? [data.industry]
           : [];
+    const nextMainIndustry = data.industry ?? savedIndustries[0] ?? "";
+    const nextCity = data.location_city ? normalizeCityName(data.location_city) : "";
+    const nextCountryCode = getSupportedCountryCode(data.country_code);
+    const nextContactEmail =
+      data.contact_email !== undefined ? (data.contact_email ?? "") : contactEmail;
 
     setCompanyId(data.id);
     setCompanySlug(data.slug ?? "");
     setNip(data.nip ?? "");
     setName(data.name ?? "");
     setDescription(data.description ?? "");
-    setMainIndustry(data.industry ?? savedIndustries[0] ?? "");
+    setMainIndustry(nextMainIndustry);
     setSelectedIndustries(savedIndustries);
     setSelectedServiceTypes(data.service_types ?? []);
     setVoivodeship(data.location_voivodeship ?? "");
-    setCity(data.location_city ? normalizeCityName(data.location_city) : "");
+    setCity(nextCity);
     setPostalCode(data.location_postal_code ?? "");
     setStreetAddress(data.location_street ?? "");
     setFullAddress(data.location_full_address ?? "");
@@ -480,7 +602,7 @@ export default function CompanyProfileFormClient({
     setPrimaryPkd(data.primary_pkd ?? "");
     setPkdCodes(data.pkd_codes ?? []);
     setWebsiteUrl(data.website_url ?? "");
-    setCountryCode(getSupportedCountryCode(data.country_code));
+    setCountryCode(nextCountryCode);
     setTaxId(data.tax_id ?? "");
     setRegistrationNumber(data.registration_number ?? "");
     setRegisteredAddress(data.registered_address ?? "");
@@ -488,10 +610,41 @@ export default function CompanyProfileFormClient({
       setContactEmail(data.contact_email ?? "");
     }
     setRequestIndustry(savedIndustries[0] ?? "");
+    setSavedSnapshot(
+      buildProfileSnapshot({
+        countryCode: nextCountryCode,
+        nip: data.nip ?? "",
+        name: data.name ?? "",
+        description: data.description ?? "",
+        mainIndustry: nextMainIndustry,
+        selectedIndustries: savedIndustries,
+        selectedServiceTypes: data.service_types ?? [],
+        voivodeship: data.location_voivodeship ?? "",
+        city: nextCity,
+        postalCode: data.location_postal_code ?? "",
+        streetAddress: data.location_street ?? "",
+        fullAddress: data.location_full_address ?? "",
+        regon: data.regon ?? "",
+        krs: data.krs ?? "",
+        legalForm: data.legal_form ?? "",
+        businessStatus: data.business_status ?? "",
+        primaryPkd: data.primary_pkd ?? "",
+        pkdCodes: data.pkd_codes ?? [],
+        websiteUrl: data.website_url ?? "",
+        contactEmail: nextContactEmail,
+        taxId: data.tax_id ?? "",
+        registrationNumber: data.registration_number ?? "",
+        registeredAddress: data.registered_address ?? "",
+      })
+    );
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (isSaving) {
+      return;
+    }
+
     setError("");
     setMessage("");
 
@@ -527,34 +680,35 @@ export default function CompanyProfileFormClient({
       registeredAddress,
     };
 
-    startSaveTransition(async () => {
-      try {
-        const result = await saveCompanyProfileAction(input);
+    setIsSaving(true);
+    try {
+      const result = await saveCompanyProfileAction(input);
 
-        if (!result.success) {
-          if (result.data) {
-            applySavedCompany(result.data);
-          }
-          if (result.reverificationRequired) {
-            setIsVerified(false);
-          }
-          setError(dict[result.errorKey]);
-          if (result.data) {
-            router.refresh();
-          }
-          return;
+      if (!result.success) {
+        if (result.data) {
+          applySavedCompany(result.data);
         }
-
-        applySavedCompany(result.data);
         if (result.reverificationRequired) {
           setIsVerified(false);
         }
-        setMessage(dict[result.messageKey]);
-        router.refresh();
-      } catch {
-        setError(dict.profileSaveError);
+        setError(dict[result.errorKey]);
+        if (result.data) {
+          router.refresh();
+        }
+        return;
       }
-    });
+
+      applySavedCompany(result.data);
+      if (result.reverificationRequired) {
+        setIsVerified(false);
+      }
+      setMessage(dict[result.messageKey]);
+      router.refresh();
+    } catch {
+      setError(dict.profileSaveError);
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   async function handleGusLookup() {
@@ -1114,7 +1268,10 @@ export default function CompanyProfileFormClient({
                   <option value="">{dict.mainIndustryPlaceholder}</option>
                   {selectedIndustries.map((industryName) => (
                     <option key={industryName} value={industryName}>
-                      {industryName}
+                      {getCapacityRequestIndustryLabel(
+                        industryName as CapacityRequestIndustryValue,
+                        locale
+                      )}
                     </option>
                   ))}
                 </select>
@@ -1136,40 +1293,60 @@ export default function CompanyProfileFormClient({
                 </div>
               ) : (
                 <div className="space-y-5">
-                  {servicesBySelectedIndustry.map(({ industry, services }) => (
-                    <div key={industry} className="min-w-0">
-                      <h4 className="mb-3 text-sm font-extrabold text-slate-900">
-                        {getCapacityRequestIndustryLabel(industry as CapacityRequestIndustryValue, locale)}
-                      </h4>
-                      <div className="grid min-w-0 gap-3 md:grid-cols-2">
-                        {services.map((serviceType) => {
-                          const isChecked =
-                            selectedServiceTypes.includes(serviceType);
+                  {servicesBySelectedIndustry.map(({ industry, services }) => {
+                    const hasSelectedServiceInIndustry = services.some((service) =>
+                      selectedServiceTypes.includes(service)
+                    );
 
-                          return (
-                            <label
-                              key={`${industry}-${serviceType}`}
-                              className={`flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 text-sm transition ${
-                                isChecked
-                                  ? "border-[#1a5f3c] bg-[#f4fbf7] text-slate-900"
-                                  : "border-slate-200 bg-white text-slate-600 hover:border-[#1a5f3c]/40"
-                              }`}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={isChecked}
-                                onChange={() => toggleServiceType(serviceType)}
-                                className="mt-1 h-4 w-4 shrink-0 rounded border-slate-300 accent-[#1a5f3c]"
-                              />
-                              <span className="min-w-0 leading-6">
-                                {getCapacityRequestServiceLabel(serviceType as CapacityRequestServiceValue, locale)}
-                              </span>
-                            </label>
-                          );
-                        })}
+                    return (
+                      <div key={industry} className="min-w-0">
+                        <div className="mb-3 flex flex-wrap items-center gap-2">
+                          <h4 className="text-sm font-extrabold text-slate-900">
+                            {getCapacityRequestIndustryLabel(
+                              industry as CapacityRequestIndustryValue,
+                              locale
+                            )}
+                          </h4>
+                          {!hasSelectedServiceInIndustry ? (
+                            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-800">
+                              <i className="fas fa-circle-exclamation text-[11px]"></i>
+                              {dict.industryNoServicesHint}
+                            </span>
+                          ) : null}
+                        </div>
+                        <div className="grid min-w-0 gap-3 md:grid-cols-2">
+                          {services.map((serviceType) => {
+                            const isChecked =
+                              selectedServiceTypes.includes(serviceType);
+
+                            return (
+                              <label
+                                key={`${industry}-${serviceType}`}
+                                className={`flex min-w-0 cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 text-sm transition ${
+                                  isChecked
+                                    ? "border-[#1a5f3c] bg-[#f4fbf7] text-slate-900"
+                                    : "border-slate-200 bg-white text-slate-600 hover:border-[#1a5f3c]/40"
+                                }`}
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={isChecked}
+                                  onChange={() => toggleServiceType(serviceType)}
+                                  className="mt-1 h-4 w-4 shrink-0 rounded border-slate-300 accent-[#1a5f3c]"
+                                />
+                                <span className="min-w-0 leading-6">
+                                  {getCapacityRequestServiceLabel(
+                                    serviceType as CapacityRequestServiceValue,
+                                    locale
+                                  )}
+                                </span>
+                              </label>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -1476,13 +1653,92 @@ export default function CompanyProfileFormClient({
             </label>
           </div>
 
-          <button
-            type="submit"
-            disabled={isSavePending}
-            className="mt-8 btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
+          <div
+            className={`mt-8 ${
+              error
+                ? "sticky bottom-4 z-30 rounded-2xl border border-red-200 bg-red-50/95 p-4 shadow-lg backdrop-blur"
+                : message && !hasUnsavedChanges
+                  ? "sticky bottom-4 z-30 rounded-2xl border border-emerald-200 bg-emerald-50/95 p-4 shadow-lg backdrop-blur"
+                  : hasUnsavedChanges || isSaving
+                    ? "sticky bottom-4 z-30 rounded-2xl border border-amber-200 bg-white/95 p-4 shadow-lg backdrop-blur"
+                    : ""
+            }`}
           >
-            {isSavePending ? dictCommon.saving : dict.saveChanges}
-          </button>
+            {error ? (
+              <div
+                role="alert"
+                className="mb-3 flex items-start justify-between gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
+              >
+                <span className="flex items-start gap-2">
+                  <i className="fas fa-circle-exclamation mt-0.5 shrink-0"></i>
+                  <span>{error}</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setError("")}
+                  aria-label="Zamknij komunikat"
+                  className="shrink-0 text-red-500 transition hover:text-red-800"
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+            ) : null}
+
+            {message ? (
+              <div
+                role="status"
+                className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800"
+              >
+                <span className="flex items-start gap-2">
+                  <i className="fas fa-circle-check mt-0.5 shrink-0 text-[#1a5f3c]"></i>
+                  <span>{message}</span>
+                </span>
+                <div className="flex items-center gap-3">
+                  <Link
+                    href="/panel/oferty/nowa"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-[#1a5f3c] px-3 py-1.5 text-xs font-bold text-white no-underline transition hover:bg-[#144a2f]"
+                  >
+                    {dict.goToAddOffer}
+                    <i className="fas fa-arrow-right text-[11px]"></i>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => setMessage("")}
+                    aria-label="Zamknij komunikat"
+                    className="shrink-0 text-emerald-700 transition hover:text-emerald-950"
+                  >
+                    <i className="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              {hasUnsavedChanges ? (
+                <p className="flex items-center gap-2 text-xs font-semibold text-amber-800">
+                  <span className="h-2 w-2 rounded-full bg-amber-500"></span>
+                  {dict.unsavedChangesNotice}
+                </p>
+              ) : (
+                <span />
+              )}
+
+              <button
+                type="submit"
+                disabled={isSaving}
+                className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isSaving ? (
+                  <>
+                    <i className="fas fa-spinner fa-spin"></i>
+                    {dictCommon.saving}
+                  </>
+                ) : (
+                  dict.saveChanges
+                )}
+              </button>
+            </div>
+          </div>
         </form>
 
         <section className="min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8">

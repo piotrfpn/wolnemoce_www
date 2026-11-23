@@ -1519,6 +1519,10 @@ const en: Dictionary = {
       rfqEmailInfo: "We will send notifications about new inquiries to this address. This address will not be publicly displayed in the company profile.",
       industriesLabel: "Business industries",
       industriesInfo: "Select all industries in which the company operates.",
+      unsavedChangesNotice: "You have unsaved changes in your company profile.",
+      goToAddOffer: "Go to add offer",
+      industryNoServicesHint:
+        "Select at least 1 service below to add offers in this industry",
       accountEmailMissing: "No email address",
       websiteInvalid: "Enter a valid website address.",
       nipInvalidChecksum: "Enter a valid NIP with the correct checksum.",

@@ -1527,6 +1527,10 @@ const pl: Dictionary = {
       rfqEmailInfo: "Na ten adres wyślemy powiadomienia o nowych zapytaniach ofertowych. Adres nie będzie publicznie wyświetlany w profilu firmy.",
       industriesLabel: "Branże działalności",
       industriesInfo: "Wybierz wszystkie branże, w których działa firma.",
+      unsavedChangesNotice: "Masz niezapisane zmiany w profilu firmy.",
+      goToAddOffer: "Przejdź do dodawania oferty",
+      industryNoServicesHint:
+        "Wybierz min. 1 usługę poniżej, aby móc dodawać oferty w tej branży",
       accountEmailMissing: "Brak adresu e-mail",
       websiteInvalid: "Podaj poprawny adres strony internetowej.",
       nipInvalidChecksum: "Podaj poprawny NIP z prawidłową sumą kontrolną.",
