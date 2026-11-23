@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import PolishProofreadTextarea from "@/components/PolishProofreadTextarea";
 import { isGusMockNip } from "@/lib/gus/mockNips";
 import { normalizeCityName, POLISH_CITY_OPTIONS, SUPPORTED_COUNTRIES } from "@/lib/location";
 import { industryServiceTypes, provinces } from "@/lib/mockData";
@@ -1638,19 +1639,23 @@ export default function CompanyProfileFormClient({
             )}
 
             {/* Company Description */}
-            <label className="block min-w-0 md:col-span-2">
-              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+            <div className="block min-w-0 md:col-span-2">
+              <label
+                htmlFor="company-description"
+                className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500"
+              >
                 <i className="fas fa-align-left text-[#1a5f3c]"></i>
                 {dict.descriptionLabel}
-              </span>
-              <textarea
+              </label>
+              <PolishProofreadTextarea
+                id="company-description"
                 value={description}
-                onChange={(event) => setDescription(event.target.value)}
+                onChange={setDescription}
                 rows={6}
                 placeholder={dict.descriptionPlaceholder}
-                className={inputClass}
+                locale={locale}
               />
-            </label>
+            </div>
           </div>
 
           <div
