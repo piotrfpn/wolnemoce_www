@@ -3,7 +3,6 @@ import { notFound, redirect } from "next/navigation";
 import {
   getLocalizedPath,
   isSupportedLocale,
-  prefixedLocales,
   supportedLocales,
   type Locale,
 } from "@/lib/i18n/config";
@@ -16,14 +15,12 @@ type LocaleAddOfferPageProps = {
   };
 };
 
-export function generateStaticParams() {
-  return prefixedLocales.map((locale) => ({ locale }));
-}
+export const dynamic = "force-dynamic";
 
 export function generateMetadata({
   params,
 }: LocaleAddOfferPageProps): Metadata {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 
@@ -46,7 +43,7 @@ export function generateMetadata({
 export default async function LocalizedAddOfferPage({
   params,
 }: LocaleAddOfferPageProps) {
-  if (!isSupportedLocale(params.locale) || params.locale === "pl") {
+  if (!isSupportedLocale(params.locale)) {
     notFound();
   }
 
