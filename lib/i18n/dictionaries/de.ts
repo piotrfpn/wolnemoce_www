@@ -1157,7 +1157,7 @@ const de: Dictionary = {
       fields: {
         title: {
           label: "Angebotstitel",
-          placeholder: "Z. B. CNC-Bearbeitung - Kapazität 500 Stk./Monat",
+          placeholder: "Z. B. CNC-Bearbeitung (frei)",
         },
         branch: {
           label: "Branche des Angebots",

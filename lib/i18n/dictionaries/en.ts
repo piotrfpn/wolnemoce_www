@@ -1219,7 +1219,7 @@ const en: Dictionary = {
       fields: {
         title: {
           label: "Offer title",
-          placeholder: "E.g. CNC machining - 500 pcs/month capacity",
+          placeholder: "E.g. CNC machining capacity",
         },
         branch: {
           label: "Offer industry",

@@ -1137,7 +1137,7 @@ const uk: Dictionary = {
       fields: {
         title: {
           label: "Назва пропозиції",
-          placeholder: "Напр. CNC-обробка - потужність 500 шт./місяць",
+          placeholder: "Напр. Вільні потужності CNC",
         },
         branch: {
           label: "Галузь пропозиції",

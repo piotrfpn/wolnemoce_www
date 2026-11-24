@@ -1142,7 +1142,7 @@ const fr: Dictionary = {
       fields: {
         title: {
           label: "Titre de l'offre",
-          placeholder: "Ex. usinage CNC - capacité 500 pcs/mois",
+          placeholder: "Ex. Usinage CNC disponible",
         },
         branch: {
           label: "Secteur de l'offre",

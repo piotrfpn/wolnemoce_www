@@ -1226,7 +1226,7 @@ const pl: Dictionary = {
       fields: {
         title: {
           label: "Tytuł oferty",
-          placeholder: "Np. Obróbka CNC - wolne moce 500 szt/miesiąc",
+          placeholder: "Np. Obróbka CNC – wolne moce",
         },
         branch: {
           label: "Branża oferty",

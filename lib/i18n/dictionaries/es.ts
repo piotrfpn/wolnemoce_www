@@ -1141,7 +1141,7 @@ const es: Dictionary = {
       fields: {
         title: {
           label: "Título de la oferta",
-          placeholder: "Ej. mecanizado CNC - capacidad de 500 uds./mes",
+          placeholder: "Ej. Mecanizado CNC disponible",
         },
         branch: {
           label: "Sector de la oferta",
