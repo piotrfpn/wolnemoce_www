@@ -784,7 +784,7 @@ const en: Dictionary = {
   auth: {
     login: {
       title: "Log in",
-      subtitle: "Access your company panel or administrator panel.",
+      subtitle: "Log in or create an account to add an offer.",
       email: "Email",
       password: "Password",
       googleSubmit: "Continue with Google",

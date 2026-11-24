@@ -747,7 +747,7 @@ const uk: Dictionary = {
   auth: {
     login: {
       title: "Увійти",
-      subtitle: "Перейдіть до панелі компанії або адміністратора.",
+      subtitle: "Увійдіть або створіть акаунт, щоб додати пропозицію.",
       email: "Email",
       password: "Пароль",
       googleSubmit: "Продовжити з Google",

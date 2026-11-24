@@ -759,7 +759,7 @@ const de: Dictionary = {
   auth: {
     login: {
       title: "Anmelden",
-      subtitle: "Zugang zum Firmenbereich oder Administratorbereich.",
+      subtitle: "Melden Sie sich an oder erstellen Sie ein Konto, um ein Angebot hinzuzufügen.",
       email: "E-Mail",
       password: "Passwort",
       googleSubmit: "Mit Google fortfahren",

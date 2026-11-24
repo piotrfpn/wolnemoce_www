@@ -750,7 +750,7 @@ const es: Dictionary = {
   auth: {
     login: {
       title: "Iniciar sesión",
-      subtitle: "Accede al panel de empresa o al panel de administrador.",
+      subtitle: "Inicia sesión o crea una cuenta para añadir una oferta.",
       email: "Email",
       password: "Contraseña",
       googleSubmit: "Continuar con Google",

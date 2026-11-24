@@ -793,7 +793,7 @@ const pl: Dictionary = {
   auth: {
     login: {
       title: "Zaloguj się",
-      subtitle: "Wejdź do panelu firmy lub panelu administratora.",
+      subtitle: "Zaloguj się lub utwórz konto, aby dodać ofertę.",
       email: "Email",
       password: "Hasło",
       googleSubmit: "Kontynuuj przez Google",
