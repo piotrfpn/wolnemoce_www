@@ -2,9 +2,14 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import GoogleOAuthButton from "@/components/auth/GoogleOAuthButton";
 import { getSafeNextPath } from "@/lib/safeNextPath";
+import {
+  appendUtmToUrl,
+  readUtmFromBrowser,
+  type UtmParams,
+} from "@/lib/utm";
 import { registerUser } from "./actions";
 import type { Dictionary } from "@/lib/i18n/types";
 
@@ -32,6 +37,13 @@ export default function RegisterFormClient({
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [utm, setUtm] = useState<UtmParams | null>(null);
+
+  useEffect(() => {
+    setUtm(readUtmFromBrowser());
+  }, []);
+
+  const loginHrefWithUtm = appendUtmToUrl(loginHref, utm);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -70,6 +82,10 @@ export default function RegisterFormClient({
       className="w-full min-w-0 rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm md:p-8"
     >
       <input type="hidden" name="nextPath" value={safeNextPath} />
+      <input type="hidden" name="utm_source" value={utm?.utm_source ?? ""} />
+      <input type="hidden" name="utm_medium" value={utm?.utm_medium ?? ""} />
+      <input type="hidden" name="utm_campaign" value={utm?.utm_campaign ?? ""} />
+      <input type="hidden" name="utm_content" value={utm?.utm_content ?? ""} />
 
       <div className="mb-8 text-center">
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1a5f3c]/10 text-[#1a5f3c]">
@@ -205,7 +221,7 @@ export default function RegisterFormClient({
 
       <p className="mt-6 text-center text-sm text-slate-500">
         {labels.alreadyHaveAccount}{" "}
-        <Link href={loginHref} className="font-semibold text-[#1a5f3c] no-underline">
+        <Link href={loginHrefWithUtm} className="font-semibold text-[#1a5f3c] no-underline">
           {labels.loginLink}
         </Link>
       </p>

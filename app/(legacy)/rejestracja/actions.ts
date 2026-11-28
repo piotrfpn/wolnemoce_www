@@ -1,7 +1,15 @@
 "use server";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import {
+  appendUtmToUrl,
+  hasAnyUtm,
+  parseUtmCookie,
+  sanitizeUtmValue,
+  UTM_COOKIE_NAME,
+  type UtmParams,
+} from "@/lib/utm";
 
 export type RegisterActionResult = {
   error?: string;
@@ -58,17 +66,42 @@ export async function registerUser(
   }
 
   const origin = getOrigin();
+  const cookieUtm = parseUtmCookie(cookies().get(UTM_COOKIE_NAME)?.value);
+  const utm: UtmParams = {
+    utm_source:
+      sanitizeUtmValue(getValue(formData, "utm_source")) ?? cookieUtm?.utm_source,
+    utm_medium:
+      sanitizeUtmValue(getValue(formData, "utm_medium")) ?? cookieUtm?.utm_medium,
+    utm_campaign:
+      sanitizeUtmValue(getValue(formData, "utm_campaign")) ??
+      cookieUtm?.utm_campaign,
+    utm_content:
+      sanitizeUtmValue(getValue(formData, "utm_content")) ??
+      cookieUtm?.utm_content,
+  };
+
+  const userMetadata: Record<string, string> = {
+    full_name: fullName,
+  };
+  if (utm.utm_source) userMetadata.utm_source = utm.utm_source;
+  if (utm.utm_medium) userMetadata.utm_medium = utm.utm_medium;
+  if (utm.utm_campaign) userMetadata.utm_campaign = utm.utm_campaign;
+  if (utm.utm_content) userMetadata.utm_content = utm.utm_content;
+
+  const baseCallbackUrl = origin
+    ? `${origin}/auth/callback?next=${encodeURIComponent(redirectAfterAuth)}`
+    : undefined;
+  const emailRedirectTo = baseCallbackUrl
+    ? appendUtmToUrl(baseCallbackUrl, utm)
+    : undefined;
+
   const supabase = createClient();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: {
-        full_name: fullName,
-      },
-      emailRedirectTo: origin
-        ? `${origin}/auth/callback?next=${encodeURIComponent(redirectAfterAuth)}`
-        : undefined,
+      data: userMetadata,
+      emailRedirectTo,
     },
   });
 
@@ -77,6 +110,18 @@ export async function registerUser(
   }
 
   if (data.session) {
+    if (hasAnyUtm(utm)) {
+      try {
+        await supabase.rpc("save_own_profile_utm", {
+          p_utm_source: utm.utm_source ?? null,
+          p_utm_medium: utm.utm_medium ?? null,
+          p_utm_campaign: utm.utm_campaign ?? null,
+          p_utm_content: utm.utm_content ?? null,
+        });
+      } catch {
+        // handle_new_user trigger already saves UTM from raw_user_meta_data
+      }
+    }
     return { redirectTo: redirectAfterAuth };
   }
 

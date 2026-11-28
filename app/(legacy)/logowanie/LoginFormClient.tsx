@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import GoogleOAuthButton from "@/components/auth/GoogleOAuthButton";
 import {
   defaultLocale,
@@ -11,6 +11,12 @@ import {
 } from "@/lib/i18n/config";
 import { getSafeNextPath } from "@/lib/safeNextPath";
 import { createClient } from "@/lib/supabase/client";
+import {
+  appendUtmToUrl,
+  hasAnyUtm,
+  readUtmFromBrowser,
+  type UtmParams,
+} from "@/lib/utm";
 import type { Dictionary } from "@/lib/i18n/types";
 
 type LoginFormClientProps = {
@@ -39,6 +45,13 @@ export default function LoginFormClient({
   const [password, setPassword] = useState("");
   const [error, setError] = useState(oauthError ? labels.oauthError : "");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [utm, setUtm] = useState<UtmParams | null>(null);
+
+  useEffect(() => {
+    setUtm(readUtmFromBrowser());
+  }, []);
+
+  const registerHrefWithUtm = appendUtmToUrl(registerHref, utm);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -62,6 +75,20 @@ export default function LoginFormClient({
       );
       setIsSubmitting(false);
       return;
+    }
+
+    const activeUtm = readUtmFromBrowser() ?? utm;
+    if (hasAnyUtm(activeUtm)) {
+      try {
+        await supabase.rpc("save_own_profile_utm", {
+          p_utm_source: activeUtm.utm_source ?? null,
+          p_utm_medium: activeUtm.utm_medium ?? null,
+          p_utm_campaign: activeUtm.utm_campaign ?? null,
+          p_utm_content: activeUtm.utm_content ?? null,
+        });
+      } catch {
+        // non-blocking attribution fallback
+      }
     }
 
     router.push(safeNextPath || "/panel");
@@ -89,7 +116,7 @@ export default function LoginFormClient({
           <p className="mt-1.5 text-xs text-red-700/90">
             {labels.noAccount}{" "}
             <Link
-              href={registerHref}
+              href={registerHrefWithUtm}
               className="font-bold text-red-800 underline underline-offset-2 hover:text-red-950"
             >
               {labels.createAccount}
@@ -152,7 +179,7 @@ export default function LoginFormClient({
         </button>
 
         <Link
-          href={registerHref}
+          href={registerHrefWithUtm}
           className="inline-flex w-full items-center justify-center rounded-xl border-2 border-[#1a5f3c] bg-white px-4 py-3 text-center text-sm font-bold text-[#1a5f3c] no-underline transition hover:-translate-y-0.5 hover:bg-[#1a5f3c] hover:text-white hover:shadow-md"
         >
           {labels.createAccount}

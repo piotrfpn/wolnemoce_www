@@ -328,6 +328,7 @@ export default async function AdminPage() {
                 { title: "Przejdź do certyfikatów", icon: "fa-certificate", href: "/admin/certyfikaty" },
                 { title: "Przejdź do wiadomości", icon: "fa-envelope", href: "/admin/contact-messages" },
                 { title: "Przejdź do bloga", icon: "fa-newspaper", href: "/admin/blog" },
+                { title: "Źródła rejestracji (UTM / CSV)", icon: "fa-chart-line", href: "/admin/pozyskanie" },
               ].map((action, i) => (
                 <Link
                   key={i}

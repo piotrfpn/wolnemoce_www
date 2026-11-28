@@ -4,6 +4,11 @@ import { useState } from "react";
 import { getSiteUrl } from "@/lib/seo";
 import { getSafeNextPath } from "@/lib/safeNextPath";
 import { createClient } from "@/lib/supabase/client";
+import {
+  appendUtmToUrl,
+  persistUtmInBrowser,
+  readUtmFromBrowser,
+} from "@/lib/utm";
 
 type GoogleOAuthButtonProps = {
   errorLabel: string;
@@ -69,9 +74,13 @@ export default function GoogleOAuthButton({
     setIsSubmitting(true);
     onError("");
 
-    const redirectTo = `${getOAuthOrigin()}/auth/callback?next=${encodeURIComponent(
+    const utm = readUtmFromBrowser();
+    persistUtmInBrowser(utm);
+
+    const baseCallbackUrl = `${getOAuthOrigin()}/auth/callback?next=${encodeURIComponent(
       getSafeNextPath(nextPath, "/panel")
     )}`;
+    const redirectTo = appendUtmToUrl(baseCallbackUrl, utm);
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",

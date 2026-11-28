@@ -1,5 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
+import {
+  extractUtmFromSearchParams,
+  serializeUtmCookie,
+  UTM_COOKIE_MAX_AGE_SECONDS,
+  UTM_COOKIE_NAME,
+} from "@/lib/utm";
 
 const protectedPrefixes = ["/panel", "/admin"];
 
@@ -42,6 +48,18 @@ export async function middleware(request: NextRequest) {
   }
 
   const { response, user } = await updateSession(request);
+
+  const incomingUtm = extractUtmFromSearchParams(request.nextUrl.searchParams);
+  if (incomingUtm) {
+    response.cookies.set(UTM_COOKIE_NAME, serializeUtmCookie(incomingUtm), {
+      path: "/",
+      maxAge: UTM_COOKIE_MAX_AGE_SECONDS,
+      sameSite: "lax",
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
+    });
+  }
+
   const isProtectedRoute = protectedPrefixes.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
   );

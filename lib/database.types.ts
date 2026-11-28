@@ -2657,6 +2657,11 @@ export type Database = {
           profile_completed: boolean
           role: Database["public"]["Enums"]["user_role"]
           updated_at: string
+          utm_campaign: string | null
+          utm_captured_at: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
         }
         Insert: {
           contact_email?: string | null
@@ -2670,6 +2675,11 @@ export type Database = {
           profile_completed?: boolean
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
+          utm_campaign?: string | null
+          utm_captured_at?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
         }
         Update: {
           contact_email?: string | null
@@ -2683,6 +2693,11 @@ export type Database = {
           profile_completed?: boolean
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
+          utm_campaign?: string | null
+          utm_captured_at?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
         }
         Relationships: []
       }
@@ -2956,6 +2971,15 @@ export type Database = {
       admin_change_company_plan: {
         Args: { p_company_id: string; p_new_plan: string; p_reason: string }
         Returns: undefined
+      }
+      save_own_profile_utm: {
+        Args: {
+          p_utm_campaign?: string | null
+          p_utm_content?: string | null
+          p_utm_medium?: string | null
+          p_utm_source?: string | null
+        }
+        Returns: boolean
       }
       count_my_recent_capacity_requests: {
         Args: { p_company_id: string; p_since: string }
