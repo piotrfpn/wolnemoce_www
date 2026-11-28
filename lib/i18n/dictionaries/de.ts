@@ -875,15 +875,16 @@ const de: Dictionary = {
     pageLabel: "Preise",
     pageTitle: "Einfache Pläne für Produktionsfirmen",
     pageDescription:
-      "Die Preisseite ist eine statische Darstellung des Modells. Schaltflächen führen zum Angebotsformular oder Kontakt, ohne Zahlungen und ohne Stripe.",
+      "Starten Sie kostenlos mit dem Plan FREE und veröffentlichen Sie Ihr erstes Angebot freier Kapazitäten. Wenn Ihr Unternehmen mehr Angebote oder höhere Sichtbarkeit benötigt, können Sie jederzeit auf PRO wechseln oder ein individuelles Angebot anfragen.",
     label: "Preise",
     title: "Wählen Sie einen Plan für Ihre Firma",
     description:
       "Passen Sie den Plan an Ihren Bedarf an. Erhöhen Sie Sichtbarkeit und verwalten Sie Anfragen.",
-    mostPopular: "Am beliebtesten",
+    mostPopular: "Für aktive Unternehmen",
     plans: [
       {
         name: "Plan FREE",
+        badge: "Zum Start",
         subtitle: "Für Unternehmen, die prüfen möchten, ob WolneMoce ein geeigneter Kanal zur Präsentation von Dienstleistungen, freien Kapazitäten oder Kooperationsanfragen sein kann.",
         description: "Ein guter Einstieg: Vervollständigen Sie Ihr Profil, ergänzen Sie grundlegende Informationen und prüfen Sie, wie das Portal die Sichtbarkeit Ihres Unternehmens im B2B-Kooperationskontext unterstützt.",
         price: "0 PLN",
@@ -892,6 +893,7 @@ const de: Dictionary = {
           "1 wartendes oder aktives Angebot",
           "Standard-Sichtbarkeit im Angebotskatalog",
           "Basis-Firmenprofil",
+          "Unternehmensverifizierung durch Administrator: kostenlos",
           "Anfragebearbeitung im Panel",
           "Möglichkeit, Partnerleistungen zu bestellen",
         ],
@@ -900,6 +902,7 @@ const de: Dictionary = {
       },
       {
         name: "Plan PRO",
+        badge: "Für aktive Unternehmen",
         subtitle: "Für Unternehmen, die ihre Möglichkeiten aktiv präsentieren und die Sichtbarkeit von Angeboten oder Anfragen erhöhen möchten.",
         description: "Für Unternehmen, die WolneMoce als zusätzlichen Kanal für B2B-Kontakte, die Präsentation von Dienstleistungen und den Aufbau von Sichtbarkeit bei potenziellen Geschäftspartnern nutzen möchten.",
         price: "199 PLN",
@@ -909,7 +912,7 @@ const de: Dictionary = {
         features: [
           "5 aktive oder wartende Angebote",
           "Höhere Sichtbarkeit in Ergebnissen",
-          "Möglichkeit zur Verifizierungsanfrage",
+          "Unternehmensverifizierung durch Administrator: kostenlos",
           "Priorisierte Moderation",
           "Zugang zur Hervorhebung von Angeboten",
           "Zugang zu optionalen Partnerleistungen",
@@ -927,6 +930,7 @@ const de: Dictionary = {
         features: [
           "Individuelle Angebotslimits",
           "Individuelle Betreuung",
+          "Unternehmensverifizierung durch Administrator: kostenlos",
           "Key Account Manager",
           "Branchenkampagnen",
           "Einführungsunterstützung",

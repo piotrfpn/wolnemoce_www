@@ -927,15 +927,16 @@ const pl: Dictionary = {
     pageLabel: "Cennik",
     pageTitle: "Proste plany dla firm produkcyjnych",
     pageDescription:
-      "Cennik jest statyczną prezentacją modelu. Przyciski prowadzą do formularza dodania oferty lub kontaktu, bez płatności i bez integracji Stripe.",
+      "Zacznij bezpłatnie od planu FREE i dodaj pierwszą ofertę wolnych mocy. Gdy Twoja firma będzie potrzebować więcej ofert lub większej widoczności, możesz w każdej chwili przejść na plan PRO lub zapytać o ofertę indywidualną.",
     label: "Cennik",
     title: "Wybierz plan dla swojej firmy",
     description:
       "Dopasuj plan do swoich potrzeb. Zwiększ widoczność, pozyskuj więcej zapytań i rozwijaj swój biznes.",
-    mostPopular: "Najpopularniejszy",
+    mostPopular: "Dla aktywnych firm",
     plans: [
       {
         name: "Plan FREE",
+        badge: "Na start",
         subtitle: "Dla firm, które chcą sprawdzić, czy WolneMoce może być dobrym kanałem prezentacji usług, wolnych mocy lub zapytań kooperacyjnych.",
         description: "Dobry wybór na start: uzupełnij profil, dodaj podstawowe informacje i sprawdź, jak portal wspiera widoczność Twojej firmy w kontekście kooperacji B2B.",
         price: "0 zł",
@@ -944,6 +945,7 @@ const pl: Dictionary = {
           "1 oferta oczekująca lub aktywna",
           "Standardowa widoczność w katalogu ofert",
           "Podstawowy profil firmy",
+          "Weryfikacja firmy przez administratora: bezpłatnie",
           "Obsługa zapytań z panelu",
           "Możliwość zamówienia usług partnerskich",
         ],
@@ -952,6 +954,7 @@ const pl: Dictionary = {
       },
       {
         name: "Plan PRO",
+        badge: "Dla aktywnych firm",
         subtitle: "Dla firm, które chcą aktywnie prezentować swoje możliwości i zwiększyć widoczność ofert lub zapytań.",
         description: "Plan dla firm traktujących WolneMoce jako dodatkowy kanał pozyskiwania kontaktów B2B, prezentacji usług i budowania widoczności wśród potencjalnych kontrahentów.",
         price: "199 zł",
@@ -961,7 +964,7 @@ const pl: Dictionary = {
         features: [
           "5 ofert aktywnych lub oczekujących",
           "Wyższa widoczność w wynikach",
-          "Możliwość zgłoszenia firmy do weryfikacji",
+          "Weryfikacja firmy przez administratora: bezpłatnie",
           "Priorytetowa moderacja",
           "Dostęp do wyróżniania ofert",
           "Dostęp do opcjonalnych usług partnerskich",
@@ -979,6 +982,7 @@ const pl: Dictionary = {
         features: [
           "Indywidualne limity ofert",
           "Indywidualna obsługa",
+          "Weryfikacja firmy przez administratora: bezpłatnie",
           "Key Account Manager",
           "Kampanie branżowe",
           "Wsparcie wdrożeniowe",

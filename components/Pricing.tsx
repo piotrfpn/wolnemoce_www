@@ -23,8 +23,16 @@ export default function Pricing({ locale = defaultLocale }: { locale?: Locale })
               plan.isFeatured ? "featured" : ""
             }`}
           >
-            {plan.isFeatured && (
-              <div className="pricing-badge">{t.mostPopular}</div>
+            {(plan.badge || plan.isFeatured) && (
+              <div
+                className={
+                  plan.isFeatured
+                    ? "pricing-badge"
+                    : "pricing-badge !bg-emerald-50 !text-[#1a5f3c] border border-[#1a5f3c]/30 !shadow-sm"
+                }
+              >
+                {plan.badge ?? t.mostPopular}
+              </div>
             )}
 
             <h3>{plan.name}</h3>

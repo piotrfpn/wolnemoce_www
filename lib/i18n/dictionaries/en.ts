@@ -916,15 +916,16 @@ const en: Dictionary = {
     pageLabel: "Pricing",
     pageTitle: "Simple plans for production companies",
     pageDescription:
-      "Pricing is a static presentation of the model. Buttons lead to the add-offer form or contact page, with no payments and no Stripe integration.",
+      "Start for free with the FREE plan and publish your first production capacity offer. When your company needs more offers or higher visibility, you can upgrade to PRO or request a custom quote at any time.",
     label: "Pricing",
     title: "Choose a plan for your company",
     description:
       "Match the plan to your needs. Increase visibility and manage inquiries as your business grows.",
-    mostPopular: "Most popular",
+    mostPopular: "For active companies",
     plans: [
       {
         name: "FREE plan",
+        badge: "To get started",
         subtitle: "For companies that want to check whether WolneMoce can be a useful channel for presenting services, available capacity or cooperation requests.",
         description: "A good choice to start: complete your profile, add basic information and see how the portal supports your company’s visibility in B2B cooperation.",
         price: "PLN 0",
@@ -933,6 +934,7 @@ const en: Dictionary = {
           "1 pending or active offer",
           "Standard visibility in the offer catalog",
           "Basic company profile",
+          "Company verification by administrator: free",
           "Inquiry handling in the panel",
           "Option to order partner services",
         ],
@@ -941,6 +943,7 @@ const en: Dictionary = {
       },
       {
         name: "PRO plan",
+        badge: "For active companies",
         subtitle: "For companies that want to actively present their capabilities and increase the visibility of offers or requests.",
         description: "For companies treating WolneMoce as an additional channel for B2B contacts, service presentation and visibility among potential contractors.",
         price: "199 PLN",
@@ -950,7 +953,7 @@ const en: Dictionary = {
         features: [
           "5 active or pending offers",
           "Higher visibility in results",
-          "Option to submit the company for verification",
+          "Company verification by administrator: free",
           "Priority moderation",
           "Access to offer highlighting",
           "Access to optional partner services",
@@ -967,6 +970,7 @@ const en: Dictionary = {
         features: [
           "Custom offer limits",
           "Individual support",
+          "Company verification by administrator: free",
           "Key Account Manager",
           "Industry campaigns",
           "Implementation support",

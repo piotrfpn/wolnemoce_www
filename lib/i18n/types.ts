@@ -806,6 +806,7 @@ export type Dictionary = {
     mostPopular: string;
     plans: Array<{
       name: string;
+      badge?: string;
       subtitle: string;
       description?: string;
       price: string;

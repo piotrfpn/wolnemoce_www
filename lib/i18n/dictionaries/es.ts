@@ -865,15 +865,16 @@ const es: Dictionary = {
     pageLabel: "Precios",
     pageTitle: "Planes simples para empresas productivas",
     pageDescription:
-      "Los precios son una presentación estática del modelo. Los botones llevan al formulario de oferta o contacto, sin pagos ni Stripe.",
+      "Empieza gratis con el plan FREE y publica tu primera oferta de capacidad productiva. Cuando tu empresa necesite más ofertas o mayor visibilidad, puedes pasar al plan PRO o solicitar una oferta personalizada en cualquier momento.",
     label: "Precios",
     title: "Elige un plan para tu empresa",
     description:
       "Ajusta el plan a tus necesidades. Aumenta la visibilidad y gestiona consultas.",
-    mostPopular: "Más popular",
+    mostPopular: "Para empresas activas",
     plans: [
       {
         name: "Plan FREE",
+        badge: "Para empezar",
         subtitle: "Para empresas que desean comprobar si WolneMoce puede ser un canal útil para presentar servicios, capacidades disponibles o solicitudes de cooperación.",
         description: "Una buena opción para empezar: complete su perfil, añada información básica y compruebe cómo el portal apoya la visibilidad de su empresa en el contexto de la cooperación B2B.",
         price: "0 PLN",
@@ -882,6 +883,7 @@ const es: Dictionary = {
           "1 oferta pendiente o activa",
           "Visibilidad estándar en el catálogo",
           "Perfil básico de empresa",
+          "Verificación de empresa por administrador: gratuita",
           "Gestión de consultas en el panel",
           "Posibilidad de contratar servicios partners",
         ],
@@ -890,6 +892,7 @@ const es: Dictionary = {
       },
       {
         name: "Plan PRO",
+        badge: "Para empresas activas",
         subtitle: "Para empresas que desean presentar activamente sus capacidades y aumentar la visibilidad de sus ofertas o solicitudes.",
         description: "Para empresas que tratan a WolneMoce como un canal adicional para contactos B2B, presentación de servicios y fomento de la visibilidad entre posibles socios.",
         price: "199 PLN",
@@ -899,7 +902,7 @@ const es: Dictionary = {
         features: [
           "5 ofertas activas o pendientes",
           "Mayor visibilidad en resultados",
-          "Posibilidad de solicitar verificación",
+          "Verificación de empresa por administrador: gratuita",
           "Moderación prioritaria",
           "Acceso a destacar ofertas",
           "Acceso a servicios partners opcionales",
@@ -917,6 +920,7 @@ const es: Dictionary = {
         features: [
           "Límites de ofertas individuales",
           "Soporte individual",
+          "Verificación de empresa por administrador: gratuita",
           "Key Account Manager",
           "Campañas sectoriales",
           "Soporte de implementación",

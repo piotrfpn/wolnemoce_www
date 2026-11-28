@@ -867,15 +867,16 @@ const fr: Dictionary = {
     pageLabel: "Tarifs",
     pageTitle: "Des plans simples pour les entreprises industrielles",
     pageDescription:
-      "La tarification est une présentation statique du modèle. Les boutons mènent au formulaire d’offre ou au contact, sans paiement ni Stripe.",
+      "Commencez gratuitement avec le plan FREE et publiez votre première offre de capacité disponible. Lorsque votre entreprise aura besoin de plus d’offres ou d’une meilleure visibilité, vous pourrez passer au plan PRO ou demander un devis personnalisé à tout moment.",
     label: "Tarifs",
     title: "Choisissez un plan pour votre entreprise",
     description:
       "Adaptez le plan à vos besoins. Améliorez la visibilité et gérez les demandes.",
-    mostPopular: "Le plus populaire",
+    mostPopular: "Pour les entreprises actives",
     plans: [
       {
         name: "Plan FREE",
+        badge: "Pour démarrer",
         subtitle: "Pour les entreprises qui souhaitent vérifier si WolneMoce peut être un canal utile pour présenter des services, des capacités disponibles ou des demandes de coopération.",
         description: "Un bon choix pour commencer : complétez votre profil, ajoutez les informations de base et vérifiez comment le portail soutient la visibilité de votre entreprise dans le contexte de la coopération B2B.",
         price: "0 PLN",
@@ -884,6 +885,7 @@ const fr: Dictionary = {
           "1 offre en attente ou active",
           "Visibilité standard dans le catalogue",
           "Profil d’entreprise de base",
+          "Vérification d’entreprise par l’administrateur : gratuite",
           "Gestion des demandes dans le panel",
           "Possibilité de commander des services partenaires",
         ],
@@ -892,6 +894,7 @@ const fr: Dictionary = {
       },
       {
         name: "Plan PRO",
+        badge: "Pour les entreprises actives",
         subtitle: "Pour les entreprises qui souhaitent présenter activement leurs capacités et augmenter la visibilité de leurs offres ou demandes.",
         description: "Pour les entreprises qui considèrent WolneMoce comme un canal supplémentaire de contacts B2B, de présentation de services et de renforcement de la visibilité auprès de partenaires potentiels.",
         price: "199 PLN",
@@ -901,7 +904,7 @@ const fr: Dictionary = {
         features: [
           "5 offres actives ou en attente",
           "Meilleure visibilité dans les résultats",
-          "Possibilité de demander la vérification",
+          "Vérification d’entreprise par l’administrateur : gratuite",
           "Modération prioritaire",
           "Accès à la mise en avant des offres",
           "Accès aux services partenaires optionnels",
@@ -919,6 +922,7 @@ const fr: Dictionary = {
         features: [
           "Limites d’offres personnalisées",
           "Accompagnement individuel",
+          "Vérification d’entreprise par l’administrateur : gratuite",
           "Key Account Manager",
           "Campagnes sectorielles",
           "Support de déploiement",
