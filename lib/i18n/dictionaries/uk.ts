@@ -788,8 +788,20 @@ const uk: Dictionary = {
       privacyLink: "Політикою конфіденційності",
       termsSuffix: ".",
       termsRequired: "Потрібно прийняти умови, щоб створити акаунт.",
-      success: "Акаунт створено. Ви можете увійти.",
+      success:
+        "Акаунт створено! Ми надіслали посилання для активації на ваш email — перейдіть за ним, щоб активувати акаунт і продовжити (перевірте також Спам).",
       continue: "Продовжити",
+      referralSourceLabel: "Звідки ви про нас дізналися? (необов’язково)",
+      referralSourcePlaceholder: "Оберіть джерело (необов’язково)",
+      referralOptions: [
+        { value: "facebook", label: "Facebook" },
+        { value: "instagram", label: "Instagram" },
+        { value: "linkedin", label: "LinkedIn" },
+        { value: "google", label: "Пошук Google" },
+        { value: "recommendation", label: "Рекомендація / знайомий" },
+        { value: "industry_event", label: "Виставка / галузева подія" },
+        { value: "other", label: "Інше" },
+      ],
     },
     passwordRecovery: {
       reset: {

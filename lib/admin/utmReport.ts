@@ -17,6 +17,7 @@ export type UtmRegistrationRow = {
   utmCampaign: string | null;
   utmContent: string | null;
   utmCapturedAt: string | null;
+  referralSource: string | null;
 };
 
 export type UtmReportFilters = {
@@ -45,7 +46,7 @@ export async function fetchAdminUtmReport(
   const profilesRes = await adminClient
     .from("profiles")
     .select(
-      "id, full_name, email, role, utm_source, utm_medium, utm_campaign, utm_content, utm_captured_at, created_at"
+      "id, full_name, email, role, utm_source, utm_medium, utm_campaign, utm_content, utm_captured_at, referral_source, created_at"
     )
     .order("created_at", { ascending: false })
     .limit(2000);
@@ -119,6 +120,7 @@ export async function fetchAdminUtmReport(
       utmCampaign: p.utm_campaign ?? null,
       utmContent: p.utm_content ?? null,
       utmCapturedAt: p.utm_captured_at ?? null,
+      referralSource: p.referral_source ?? null,
     };
   });
 
@@ -208,6 +210,7 @@ export function buildUtmCsv(rows: UtmRegistrationRow[]): string {
     "utm_campaign",
     "utm_content",
     "utm_captured_at",
+    "referral_source",
   ].join(",");
 
   const body = rows.map((row) =>
@@ -222,6 +225,7 @@ export function buildUtmCsv(rows: UtmRegistrationRow[]): string {
       escapeCsvCell(row.utmCampaign),
       escapeCsvCell(row.utmContent),
       escapeCsvCell(row.utmCapturedAt),
+      escapeCsvCell(row.referralSource),
     ].join(",")
   );
 

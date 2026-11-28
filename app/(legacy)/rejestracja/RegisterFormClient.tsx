@@ -41,6 +41,7 @@ export default function RegisterFormClient({
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [referralSource, setReferralSource] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -196,6 +197,26 @@ export default function RegisterFormClient({
             minLength={6}
             className="w-full min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
           />
+        </label>
+
+        <label className="block min-w-0">
+          <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500">
+            <i className="fas fa-bullhorn text-[#1a5f3c]"></i>
+            {labels.referralSourceLabel}
+          </span>
+          <select
+            name="referralSource"
+            value={referralSource}
+            onChange={(event) => setReferralSource(event.target.value)}
+            className="w-full min-w-0 max-w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#1a5f3c] focus:bg-white focus:ring-4 focus:ring-[#1a5f3c]/10"
+          >
+            <option value="">{labels.referralSourcePlaceholder}</option>
+            {labels.referralOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </label>
 
         <label className="flex min-w-0 items-start gap-3 rounded-xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">

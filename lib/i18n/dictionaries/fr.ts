@@ -793,8 +793,20 @@ const fr: Dictionary = {
       privacyLink: "politique de confidentialité",
       termsSuffix: ".",
       termsRequired: "Vous devez accepter les conditions pour créer un compte.",
-      success: "Le compte a été créé. Vous pouvez vous connecter.",
+      success:
+        "Compte créé ! Nous avons envoyé un lien d’activation à votre adresse e-mail — cliquez dessus pour activer votre compte et continuer (vérifiez aussi vos spams).",
       continue: "Continuer",
+      referralSourceLabel: "Comment avez-vous connu WolneMoce ? (facultatif)",
+      referralSourcePlaceholder: "Choisir une source (facultatif)",
+      referralOptions: [
+        { value: "facebook", label: "Facebook" },
+        { value: "instagram", label: "Instagram" },
+        { value: "linkedin", label: "LinkedIn" },
+        { value: "google", label: "Recherche Google" },
+        { value: "recommendation", label: "Recommandation" },
+        { value: "industry_event", label: "Salon / événement professionnel" },
+        { value: "other", label: "Autre" },
+      ],
     },
     passwordRecovery: {
       reset: {

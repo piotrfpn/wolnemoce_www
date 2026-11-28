@@ -791,8 +791,20 @@ const es: Dictionary = {
       privacyLink: "política de privacidad",
       termsSuffix: ".",
       termsRequired: "Debes aceptar los términos para crear una cuenta.",
-      success: "La cuenta ha sido creada. Puedes iniciar sesión.",
+      success:
+        "¡Cuenta creada! Hemos enviado un enlace de activación a tu correo — haz clic en él para activar tu cuenta y continuar (revisa también Spam).",
       continue: "Continuar",
+      referralSourceLabel: "¿Cómo nos conociste? (opcional)",
+      referralSourcePlaceholder: "Selecciona una opción (opcional)",
+      referralOptions: [
+        { value: "facebook", label: "Facebook" },
+        { value: "instagram", label: "Instagram" },
+        { value: "linkedin", label: "LinkedIn" },
+        { value: "google", label: "Búsqueda en Google" },
+        { value: "recommendation", label: "Recomendación / conocido" },
+        { value: "industry_event", label: "Feria / evento del sector" },
+        { value: "other", label: "Otro" },
+      ],
     },
     passwordRecovery: {
       reset: {

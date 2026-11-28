@@ -1,13 +1,14 @@
 -- supabase/migrations/00042_profile_utm_attribution.sql
 -- Store UTM acquisition parameters (utm_source, utm_medium, utm_campaign, utm_content) on account creation
 
--- 1. Add UTM columns to public.profiles
+-- 1. Add UTM and self-reported referral columns to public.profiles
 alter table public.profiles
   add column if not exists utm_source text,
   add column if not exists utm_medium text,
   add column if not exists utm_campaign text,
   add column if not exists utm_content text,
-  add column if not exists utm_captured_at timestamptz;
+  add column if not exists utm_captured_at timestamptz,
+  add column if not exists referral_source text;
 
 create index if not exists idx_profiles_utm_source_created
   on public.profiles (utm_source, created_at desc)
@@ -33,12 +34,14 @@ declare
   v_utm_campaign text;
   v_utm_content text;
   v_utm_captured_at timestamptz;
+  v_referral_source text;
 begin
   begin
     v_utm_source := nullif(left(trim(coalesce(new.raw_user_meta_data ->> 'utm_source', '')), 120), '');
     v_utm_medium := nullif(left(trim(coalesce(new.raw_user_meta_data ->> 'utm_medium', '')), 120), '');
     v_utm_campaign := nullif(left(trim(coalesce(new.raw_user_meta_data ->> 'utm_campaign', '')), 120), '');
     v_utm_content := nullif(left(trim(coalesce(new.raw_user_meta_data ->> 'utm_content', '')), 120), '');
+    v_referral_source := nullif(left(trim(coalesce(new.raw_user_meta_data ->> 'referral_source', '')), 120), '');
 
     if v_utm_source is not null
       or v_utm_medium is not null
@@ -58,7 +61,8 @@ begin
       utm_medium,
       utm_campaign,
       utm_content,
-      utm_captured_at
+      utm_captured_at,
+      referral_source
     )
     values (
       new.id,
@@ -73,7 +77,8 @@ begin
       v_utm_medium,
       v_utm_campaign,
       v_utm_content,
-      v_utm_captured_at
+      v_utm_captured_at,
+      v_referral_source
     )
     on conflict (id) do nothing;
 

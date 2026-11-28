@@ -823,8 +823,20 @@ const en: Dictionary = {
       privacyLink: "Privacy Policy",
       termsSuffix: ".",
       termsRequired: "You must accept the terms to create an account.",
-      success: "The account has been created. You can log in.",
+      success:
+        "Account created! We sent an activation link to your email — click it to activate your account and continue (please also check Spam or Promotions).",
       continue: "Continue",
+      referralSourceLabel: "How did you hear about us? (optional)",
+      referralSourcePlaceholder: "Select source (optional)",
+      referralOptions: [
+        { value: "facebook", label: "Facebook" },
+        { value: "instagram", label: "Instagram" },
+        { value: "linkedin", label: "LinkedIn" },
+        { value: "google", label: "Google Search" },
+        { value: "recommendation", label: "Recommendation / colleague" },
+        { value: "industry_event", label: "Trade fair / industry event" },
+        { value: "other", label: "Other" },
+      ],
     },
     passwordRecovery: {
       reset: {

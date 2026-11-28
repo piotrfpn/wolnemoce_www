@@ -80,6 +80,7 @@ export async function registerUser(
       cookieUtm?.utm_content,
   };
 
+  const referralSource = sanitizeUtmValue(getValue(formData, "referralSource"));
   const userMetadata: Record<string, string> = {
     full_name: fullName,
   };
@@ -87,6 +88,7 @@ export async function registerUser(
   if (utm.utm_medium) userMetadata.utm_medium = utm.utm_medium;
   if (utm.utm_campaign) userMetadata.utm_campaign = utm.utm_campaign;
   if (utm.utm_content) userMetadata.utm_content = utm.utm_content;
+  if (referralSource) userMetadata.referral_source = referralSource;
 
   const baseCallbackUrl = origin
     ? `${origin}/auth/callback?next=${encodeURIComponent(redirectAfterAuth)}`
@@ -125,5 +127,8 @@ export async function registerUser(
     return { redirectTo: redirectAfterAuth };
   }
 
-  return { message: "Konto zostało utworzone. Możesz się zalogować." };
+  return {
+    message:
+      "Konto zostało utworzone! Wysłaliśmy link aktywacyjny na Twój adres e-mail — kliknij go, aby aktywować konto i przejść dalej (sprawdź też folder Spam lub Oferty).",
+  };
 }

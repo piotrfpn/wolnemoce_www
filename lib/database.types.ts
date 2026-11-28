@@ -2655,6 +2655,7 @@ export type Database = {
           last_login_at: string | null
           phone: string | null
           profile_completed: boolean
+          referral_source: string | null
           role: Database["public"]["Enums"]["user_role"]
           updated_at: string
           utm_campaign: string | null
@@ -2673,6 +2674,7 @@ export type Database = {
           last_login_at?: string | null
           phone?: string | null
           profile_completed?: boolean
+          referral_source?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
           utm_campaign?: string | null
@@ -2691,6 +2693,7 @@ export type Database = {
           last_login_at?: string | null
           phone?: string | null
           profile_completed?: boolean
+          referral_source?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
           utm_campaign?: string | null

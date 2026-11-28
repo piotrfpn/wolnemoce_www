@@ -801,8 +801,20 @@ const de: Dictionary = {
       termsSuffix: "gelesen habe.",
       termsRequired:
         "Sie müssen die Nutzungsbedingungen akzeptieren, um ein Konto zu erstellen.",
-      success: "Das Konto wurde erstellt. Sie können sich anmelden.",
+      success:
+        "Konto erstellt! Wir haben einen Aktivierungslink an Ihre E-Mail gesendet — klicken Sie darauf, um fortzufahren (prüfen Sie ggf. auch Spam).",
       continue: "Weiter",
+      referralSourceLabel: "Wie haben Sie von uns erfahren? (optional)",
+      referralSourcePlaceholder: "Quelle wählen (optional)",
+      referralOptions: [
+        { value: "facebook", label: "Facebook" },
+        { value: "instagram", label: "Instagram" },
+        { value: "linkedin", label: "LinkedIn" },
+        { value: "google", label: "Google-Suche" },
+        { value: "recommendation", label: "Empfehlung / Bekannte" },
+        { value: "industry_event", label: "Messe / Branchenevent" },
+        { value: "other", label: "Sonstiges" },
+      ],
     },
     passwordRecovery: {
       reset: {

@@ -729,6 +729,9 @@ export type Dictionary = {
       termsRequired: string;
       success: string;
       continue: string;
+      referralSourceLabel: string;
+      referralSourcePlaceholder: string;
+      referralOptions: Array<{ value: string; label: string }>;
     };
     passwordRecovery: {
       reset: {

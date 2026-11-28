@@ -834,8 +834,20 @@ const pl: Dictionary = {
       privacyLink: "Polityką Prywatności",
       termsSuffix: ".",
       termsRequired: "Musisz zaakceptować regulamin, aby założyć konto.",
-      success: "Konto zostało utworzone. Możesz się zalogować.",
+      success:
+        "Konto zostało utworzone! Wysłaliśmy link aktywacyjny na Twój adres e-mail — kliknij go, aby aktywować konto i przejść dalej (sprawdź też folder Spam lub Oferty).",
       continue: "Przejdź dalej",
+      referralSourceLabel: "Skąd o nas wiesz? (opcjonalnie)",
+      referralSourcePlaceholder: "Wybierz źródło (opcjonalnie)",
+      referralOptions: [
+        { value: "facebook", label: "Facebook" },
+        { value: "instagram", label: "Instagram" },
+        { value: "linkedin", label: "LinkedIn" },
+        { value: "google", label: "Wyszukiwarka Google" },
+        { value: "recommendation", label: "Polecenie / znajomy" },
+        { value: "industry_event", label: "Targi / wydarzenie branżowe" },
+        { value: "other", label: "Inne" },
+      ],
     },
     passwordRecovery: {
       reset: {

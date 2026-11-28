@@ -272,13 +272,14 @@ export default async function AdminUtmPage({
                     <th className="px-4 py-3.5">utm_medium</th>
                     <th className="px-4 py-3.5">utm_campaign</th>
                     <th className="px-4 py-3.5">utm_content</th>
+                    <th className="px-4 py-3.5">Skąd o nas wie?</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {report.rows.length === 0 ? (
                     <tr>
                       <td
-                        colSpan={7}
+                        colSpan={8}
                         className="px-4 py-10 text-center text-sm text-slate-500"
                       >
                         Brak kont spełniających wybrane filtry.
@@ -336,6 +337,9 @@ export default async function AdminUtmPage({
                         </td>
                         <td className="px-4 py-3 text-xs text-slate-700">
                           {row.utmContent || <span className="text-slate-300">—</span>}
+                        </td>
+                        <td className="px-4 py-3 text-xs text-slate-700">
+                          {row.referralSource || <span className="text-slate-300">—</span>}
                         </td>
                       </tr>
                     ))
