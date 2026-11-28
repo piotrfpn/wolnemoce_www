@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../../globals.css";
+import AnalyticsAndConsent from "@/components/analytics/AnalyticsAndConsent";
 import { defaultLocale, isSupportedLocale } from "@/lib/i18n/config";
 import { getAbsoluteUrl, getSiteUrl } from "@/lib/seo";
 
@@ -65,7 +66,10 @@ export default function LocaleRootLayout({
 
   return (
     <html lang={locale}>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <AnalyticsAndConsent locale={locale} />
+      </body>
     </html>
   );
 }

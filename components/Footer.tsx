@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AddOfferLinkClient from "./AddOfferLinkClient";
+import CookieSettingsButton from "./analytics/CookieSettingsButton";
 import { defaultLocale, getLocalizedPath, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/getDictionary";
 
@@ -198,6 +199,7 @@ export default function Footer({ locale = defaultLocale }: { locale?: Locale }) 
             <Link href={getLocalizedPath("/polityka-cookies", locale)} className="text-white/40 no-underline transition hover:text-white">
               Cookies
             </Link>
+            <CookieSettingsButton locale={locale} />
           </div>
         </div>
       </div>

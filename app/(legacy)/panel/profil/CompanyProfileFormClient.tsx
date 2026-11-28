@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import PolishProofreadTextarea from "@/components/PolishProofreadTextarea";
+import { trackAnalyticsEvent } from "@/lib/analytics";
 import { isGusMockNip } from "@/lib/gus/mockNips";
 import { normalizeCityName, POLISH_CITY_OPTIONS, SUPPORTED_COUNTRIES } from "@/lib/location";
 import { industryServiceTypes, provinces } from "@/lib/mockData";
@@ -702,6 +703,7 @@ export default function CompanyProfileFormClient({
       }
 
       applySavedCompany(result.data);
+      trackAnalyticsEvent("company_profile_saved");
       if (result.reverificationRequired) {
         setIsVerified(false);
       }

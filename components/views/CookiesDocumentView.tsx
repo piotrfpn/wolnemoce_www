@@ -83,31 +83,41 @@ export default function CookiesDocumentView({ locale = defaultLocale }: LegalPag
                 </p>
               </Section>
 
-              <Section number={3} title="Stan soft-launch">
+              <Section number={3} title="Analityka, marketing i Google Consent Mode v2">
                 <p>
-                  Na obecnym etapie WolneMoce.pl nie wykorzystuje cookies
-                  analitycznych ani marketingowych. Serwis nie używa Google
-                  Analytics, GA4, Meta Pixel, Hotjar, heatmap, remarketingu ani
-                  podobnych narzędzi śledzących zachowanie użytkowników w celach
-                  reklamowych lub marketingowych.
+                  WolneMoce.com wykorzystuje baner zgody na pliki cookies oraz
+                  mechanizm <strong>Google Consent Mode v2</strong>. Domyślnie
+                  przechowywanie danych analitycznych (<code>analytics_storage</code>)
+                  oraz reklamowych (<code>ad_storage</code>, <code>ad_user_data</code>,{" "}
+                  <code>ad_personalization</code>) jest ustawione jako wyłączone
+                  (<code>denied</code>) do momentu wyrażenia wyraźnej zgody przez
+                  użytkownika.
                 </p>
                 <p>
-                  Serwis nie wyświetla obecnie banera zgody na cookies, ponieważ
-                  korzysta wyłącznie z cookies i podobnych technologii
-                  niezbędnych do działania aplikacji. Baner cookies i panel
-                  preferencji zostaną wdrożone, jeżeli w przyszłości pojawią się
-                  technologie wymagające zgody użytkownika, takie jak analityka,
-                  piksele reklamowe, remarketing, heatmapy lub podobne narzędzia.
+                  Po wyrażeniu zgody w banerze cookies Serwis może uruchamiać:
                 </p>
+                <ul className="list-disc space-y-2 pl-5">
+                  <li>
+                    <strong>Google Analytics 4 (GA4)</strong> — pomiar ruchu i
+                    zdarzeń konwersyjnych w celu ulepszania działania portalu
+                    (wyłącznie po zgodzie na cookies analityczne).
+                  </li>
+                  <li>
+                    <strong>Meta Pixel (Facebook / Instagram)</strong> — pomiar
+                    skuteczności kampanii w mediach społecznościowych (wyłącznie
+                    po zgodzie na cookies marketingowe).
+                  </li>
+                </ul>
               </Section>
 
               <Section number={4} title="Jakich kategorii technologii używa portal">
                 <ul className="list-disc space-y-2 pl-5">
-                  <li><strong>Niezbędne i techniczne</strong> - wymagane do działania Serwisu.</li>
+                  <li><strong>Niezbędne i techniczne</strong> - wymagane do działania Serwisu oraz zapamiętania wyboru zgody (<code>wm_cookie_consent</code>).</li>
                   <li><strong>Bezpieczeństwa</strong> - pomagają chronić konto i panel.</li>
                   <li><strong>Sesyjne i logowania</strong> - utrzymują sesję użytkownika.</li>
                   <li><strong>Preferencje języka</strong> - obejmują m.in. cookie <code>wm_locale</code>, które zapamiętuje wybrany język lub język panelu.</li>
-                  <li><strong>Formularze i panel</strong> - obejmują technologie potrzebne do obsługi formularzy, panelu użytkownika, RFQ i przejść między ekranami.</li>
+                  <li><strong>Formularze, panel i atrybucja kampanii</strong> - obejmują technologie potrzebne do obsługi formularzy, przejść między ekranami oraz zachowania parametrów źródła kampanii UTM (<code>wm_utm</code>).</li>
+                  <li><strong>Analityczne i marketingowe (opcjonalne)</strong> - uruchamiane wyłącznie po wyrażeniu zgody w banerze cookies (GA4, Meta Pixel).</li>
                 </ul>
               </Section>
 
@@ -152,20 +162,15 @@ export default function CookiesDocumentView({ locale = defaultLocale }: LegalPag
                 <p>
                   Cookies niezbędne są wymagane do działania portalu i mogą być
                   stosowane bez odrębnej zgody w zakresie dopuszczalnym przez
-                  prawo. Na obecnym etapie Serwis nie uruchamia cookies
-                  opcjonalnych wymagających zgody.
+                  prawo. Cookies analityczne (GA4) i marketingowe (Meta Pixel) są
+                  uruchamiane wyłącznie po wyraźnej zgodzie użytkownika w banerze
+                  cookies.
                 </p>
                 <p>
-                  Jeżeli w przyszłości zostaną wdrożone narzędzia analityczne,
-                  marketingowe, remarketingowe, heatmapy, piksele reklamowe lub
-                  podobne technologie niekonieczne, zostanie wdrożony baner zgody
-                  i panel preferencji. Zgoda nie będzie oparta na samym
-                  scrollowaniu, dalszym korzystaniu ze strony ani domyślnie
-                  zaznaczonych zgodach.
-                </p>
-                <p>
-                  Użytkownik może zarządzać cookies w ustawieniach swojej
-                  przeglądarki.
+                  Użytkownik może w każdej chwili zmienić lub wycofać swoją zgodę,
+                  klikając przycisk <strong>„Ustawienia cookies”</strong> w stopce
+                  strony, a także zarządzać plikami cookies bezpośrednio w
+                  ustawieniach swojej przeglądarki.
                 </p>
               </Section>
 

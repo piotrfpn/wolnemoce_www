@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../globals.css";
+import AnalyticsAndConsent from "@/components/analytics/AnalyticsAndConsent";
 import { getAbsoluteUrl, getSiteUrl } from "@/lib/seo";
 
 const inter = Inter({
@@ -54,7 +55,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pl">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <AnalyticsAndConsent locale="pl" />
+      </body>
     </html>
   );
 }

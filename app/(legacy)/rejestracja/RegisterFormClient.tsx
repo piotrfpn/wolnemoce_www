@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useState } from "react";
 import GoogleOAuthButton from "@/components/auth/GoogleOAuthButton";
 import InAppBrowserNotice from "@/components/auth/InAppBrowserNotice";
+import { trackAnalyticsEvent } from "@/lib/analytics";
 import {
   detectInAppBrowser,
   type InAppBrowserInfo,
@@ -79,6 +80,8 @@ export default function RegisterFormClient({
       setIsSubmitting(false);
       return;
     }
+
+    trackAnalyticsEvent("sign_up", { method: "email" });
 
     if (result.redirectTo) {
       router.push(result.redirectTo);
