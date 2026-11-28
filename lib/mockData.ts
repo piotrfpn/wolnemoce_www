@@ -696,6 +696,10 @@ export const faqs = [
 export const contactInfo = {
   email: "kontakt@wolnemoce.com",
   phone: "+48 604 904 150",
+  contacts: [
+    { name: "Piotr Fiszer", phone: "+48 604 904 150" },
+    { name: "Łukasz Antczak", phone: "+48 788 750 273" },
+  ],
   city: "Poznań",
   hours: "Pon.-pt. 9:00-17:00",
 };

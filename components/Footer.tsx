@@ -27,14 +27,27 @@ export default function Footer({ locale = defaultLocale }: { locale?: Locale }) 
 
             <div className="flex gap-3">
               {[
-                ["LinkedIn", "fab fa-linkedin-in"],
-                ["Facebook", "fab fa-facebook-f"],
-                ["X", "fab fa-twitter"],
-                ["YouTube", "fab fa-youtube"],
-              ].map(([label, icon]) => (
+                [
+                  "LinkedIn",
+                  "fab fa-linkedin-in",
+                  "https://www.linkedin.com/company/wolnemoce/",
+                ],
+                [
+                  "Facebook",
+                  "fab fa-facebook-f",
+                  "https://www.facebook.com/wolnemoce",
+                ],
+                [
+                  "Instagram",
+                  "fab fa-instagram",
+                  "https://www.instagram.com/wolnemoce/",
+                ],
+              ].map(([label, icon, href]) => (
                 <a
                   key={label}
-                  href="#"
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-sm text-white no-underline transition hover:-translate-y-0.5 hover:bg-[#1a5f3c]"
                   aria-label={label}
                 >
@@ -135,46 +148,55 @@ export default function Footer({ locale = defaultLocale }: { locale?: Locale }) 
           </div>
 
           <div>
-            <h4 className="mb-4 text-base font-bold text-white">{t.newsletter}</h4>
-            <p className="mb-5 text-sm leading-6 text-white/60">
-              {t.newsletterCopy}
-            </p>
-
-            <form className="flex gap-2">
-              <input
-                type="email"
-                placeholder={t.emailPlaceholder}
-                className="min-w-0 flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-white/40 focus:border-[#2d8a5e]"
-              />
-              <button
-                type="button"
-                className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#1a5f3c] text-white transition hover:bg-[#2d8a5e]"
-                aria-label={t.newsletterSubmit}
-              >
-                <i className="fas fa-paper-plane"></i>
-              </button>
-            </form>
+            <h4 className="mb-4 text-base font-bold text-white">{dictionary.nav.contact}</h4>
+            <ul className="space-y-3 list-none text-sm text-white/70">
+              <li>
+                <a
+                  href="mailto:kontakt@wolnemoce.com"
+                  className="inline-flex items-center gap-2 text-white/80 no-underline transition hover:text-white"
+                >
+                  <i className="fas fa-envelope text-[#2d8a5e]"></i>
+                  <span>kontakt@wolnemoce.com</span>
+                </a>
+              </li>
+              <li>
+                <span className="block text-xs text-white/45">Piotr Fiszer</span>
+                <a
+                  href="tel:+48604904150"
+                  className="inline-flex items-center gap-2 text-white/80 no-underline transition hover:text-white"
+                >
+                  <i className="fas fa-phone text-[#2d8a5e]"></i>
+                  <span>+48 604 904 150</span>
+                </a>
+              </li>
+              <li>
+                <span className="block text-xs text-white/45">Łukasz Antczak</span>
+                <a
+                  href="tel:+48788750273"
+                  className="inline-flex items-center gap-2 text-white/80 no-underline transition hover:text-white"
+                >
+                  <i className="fas fa-phone text-[#2d8a5e]"></i>
+                  <span>+48 788 750 273</span>
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/40 md:flex-row md:items-center md:justify-between">
           <div className="min-w-0 space-y-1">
             <p>{t.rights}</p>
-            <p className="max-w-2xl break-words text-xs leading-5 text-white/35">
-              {t.projectAttribution}{" "}
-              <span className="text-white/45">Piotr Fiszer</span>{" — "}
-              <a
-                href="tel:+48604904150"
-                className="text-white/45 no-underline transition hover:text-white"
-              >
-                +48 604 904 150
-              </a>{" "}
+            <p className="max-w-3xl break-words text-xs leading-5 text-white/40">
+              Operator:{" "}
+              <span className="text-white/55">PFConsulting Piotr Fiszer</span>{" "}
+              <span aria-hidden="true">·</span> NIP: 7792017326{" "}
+              <span aria-hidden="true">·</span> ul. Promienista 114, 60-142 Poznań{" "}
               <span aria-hidden="true">·</span>{" "}
               <a
-                href="mailto:piotr.fiszer@pfconsulting.pl"
-                className="text-white/45 no-underline transition hover:text-white"
+                href="mailto:kontakt@wolnemoce.com"
+                className="text-white/55 no-underline transition hover:text-white"
               >
-                piotr.fiszer@pfconsulting.pl
+                kontakt@wolnemoce.com
               </a>
             </p>
           </div>

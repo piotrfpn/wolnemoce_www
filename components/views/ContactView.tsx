@@ -88,29 +88,50 @@ export default async function ContactView({
 
         <section className="section grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <div className="space-y-5">
-            {[
-              ["fas fa-envelope", t.labels.email, contactInfo.email],
-              ["fas fa-phone", t.labels.phone, contactInfo.phone],
-              ["fas fa-clock", t.labels.hours, contactInfo.hours],
-            ].map(([icon, label, value]) => (
-              <div key={label} className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
-                <i className={`${icon} mb-4 text-2xl text-[#1a5f3c]`}></i>
-                <h2 className="text-sm font-bold uppercase tracking-wide text-slate-500">
-                  {label}
-                </h2>
-                {icon === "fas fa-phone" ? (
-                  <a href={`tel:${value.replace(/\s+/g, "")}`} className="mt-1 block text-lg font-extrabold text-slate-900 hover:text-emerald-700 transition-colors">
-                    {value}
-                  </a>
-                ) : icon === "fas fa-envelope" ? (
-                  <a href={`mailto:${value}`} className="mt-1 block text-lg font-extrabold text-slate-900 hover:text-emerald-700 transition-colors">
-                    {value}
-                  </a>
-                ) : (
-                  <p className="mt-1 text-lg font-extrabold text-slate-900">{value}</p>
-                )}
+            <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+              <i className="fas fa-envelope mb-4 text-2xl text-[#1a5f3c]"></i>
+              <h2 className="text-sm font-bold uppercase tracking-wide text-slate-500">
+                {t.labels.email}
+              </h2>
+              <a
+                href={`mailto:${contactInfo.email}`}
+                className="mt-1 block text-lg font-extrabold text-slate-900 transition-colors hover:text-emerald-700"
+              >
+                {contactInfo.email}
+              </a>
+            </div>
+
+            <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+              <i className="fas fa-phone mb-4 text-2xl text-[#1a5f3c]"></i>
+              <h2 className="text-sm font-bold uppercase tracking-wide text-slate-500">
+                {t.labels.phone}
+              </h2>
+              <div className="mt-2 space-y-3">
+                {contactInfo.contacts.map((person) => (
+                  <div key={person.phone}>
+                    <p className="text-xs font-semibold text-slate-500">
+                      {person.name}
+                    </p>
+                    <a
+                      href={`tel:${person.phone.replace(/\s+/g, "")}`}
+                      className="block text-lg font-extrabold text-slate-900 transition-colors hover:text-emerald-700"
+                    >
+                      {person.phone}
+                    </a>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            <div className="rounded-[24px] border border-slate-200 bg-white p-6 shadow-sm">
+              <i className="fas fa-clock mb-4 text-2xl text-[#1a5f3c]"></i>
+              <h2 className="text-sm font-bold uppercase tracking-wide text-slate-500">
+                {t.labels.hours}
+              </h2>
+              <p className="mt-1 text-lg font-extrabold text-slate-900">
+                {contactInfo.hours}
+              </p>
+            </div>
           </div>
 
           <div>
