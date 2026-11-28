@@ -4,6 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useState } from "react";
 import GoogleOAuthButton from "@/components/auth/GoogleOAuthButton";
+import InAppBrowserNotice from "@/components/auth/InAppBrowserNotice";
+import {
+  detectInAppBrowser,
+  type InAppBrowserInfo,
+} from "@/lib/inAppBrowser";
 import { getSafeNextPath } from "@/lib/safeNextPath";
 import {
   appendUtmToUrl,
@@ -14,6 +19,7 @@ import { registerUser } from "./actions";
 import type { Dictionary } from "@/lib/i18n/types";
 
 type RegisterFormClientProps = {
+  inAppLabels: Dictionary["auth"]["inAppBrowser"];
   labels: Dictionary["auth"]["register"];
   loginHref: string;
   nextPath?: string;
@@ -22,6 +28,7 @@ type RegisterFormClientProps = {
 };
 
 export default function RegisterFormClient({
+  inAppLabels,
   labels,
   loginHref,
   nextPath,
@@ -38,9 +45,16 @@ export default function RegisterFormClient({
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [utm, setUtm] = useState<UtmParams | null>(null);
+  const [inAppBrowser, setInAppBrowser] = useState<InAppBrowserInfo>({
+    isInApp: false,
+    appName: null,
+    isAndroid: false,
+    isIos: false,
+  });
 
   useEffect(() => {
     setUtm(readUtmFromBrowser());
+    setInAppBrowser(detectInAppBrowser());
   }, []);
 
   const loginHrefWithUtm = appendUtmToUrl(loginHref, utm);
@@ -117,19 +131,23 @@ export default function RegisterFormClient({
         </div>
       ) : null}
 
-      <GoogleOAuthButton
-        errorLabel={labels.oauthError}
-        hint={labels.googleHint}
-        label={labels.googleSubmit}
-        nextPath={safeNextPath || "/panel"}
-        onError={setError}
-      />
+      {!inAppBrowser.isInApp ? (
+        <>
+          <GoogleOAuthButton
+            errorLabel={labels.oauthError}
+            hint={labels.googleHint}
+            label={labels.googleSubmit}
+            nextPath={safeNextPath || "/panel"}
+            onError={setError}
+          />
 
-      <div className="my-6 flex items-center gap-3 text-xs font-bold uppercase tracking-wide text-slate-400">
-        <span className="h-px flex-1 bg-slate-200"></span>
-        <span>{labels.separator}</span>
-        <span className="h-px flex-1 bg-slate-200"></span>
-      </div>
+          <div className="my-6 flex items-center gap-3 text-xs font-bold uppercase tracking-wide text-slate-400">
+            <span className="h-px flex-1 bg-slate-200"></span>
+            <span>{labels.separator}</span>
+            <span className="h-px flex-1 bg-slate-200"></span>
+          </div>
+        </>
+      ) : null}
 
       <div className="space-y-5">
         <label className="block min-w-0">
@@ -218,6 +236,14 @@ export default function RegisterFormClient({
       >
         {isSubmitting ? labels.submitting : labels.submit}
       </button>
+
+      {inAppBrowser.isInApp ? (
+        <InAppBrowserNotice
+          info={inAppBrowser}
+          labels={inAppLabels}
+          utm={utm}
+        />
+      ) : null}
 
       <p className="mt-6 text-center text-sm text-slate-500">
         {labels.alreadyHaveAccount}{" "}

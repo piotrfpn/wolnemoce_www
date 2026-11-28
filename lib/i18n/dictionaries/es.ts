@@ -817,6 +817,16 @@ const es: Dictionary = {
           "No hay una sesión activa de recuperación de contraseña. Usa el enlace del correo electrónico.",
       },
     },
+    inAppBrowser: {
+      title: "¿Quieres iniciar sesión con Google?",
+      description:
+        "El navegador integrado de la aplicación bloquea el acceso con Google. Puedes continuar con correo electrónico arriba o abrir esta página en Chrome o Safari.",
+      openInChrome: "Abrir en Chrome",
+      copyLink: "Copiar enlace para navegador",
+      copied: "Enlace copiado",
+      iosHint:
+        "Consejo: pulsa el menú ⋯ en la esquina y elige «Abrir en el navegador» o «Abrir en Safari».",
+    },
   },
   legal: {
     label: "Documento legal",

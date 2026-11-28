@@ -752,6 +752,14 @@ export type Dictionary = {
         missingSessionError: string;
       };
     };
+    inAppBrowser: {
+      title: string;
+      description: string;
+      openInChrome: string;
+      copyLink: string;
+      copied: string;
+      iosHint: string;
+    };
   };
   legal: {
     label: string;

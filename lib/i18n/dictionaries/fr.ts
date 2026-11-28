@@ -819,6 +819,16 @@ const fr: Dictionary = {
           "Aucune session de récupération de mot de passe n’est active. Utilisez le lien reçu par e-mail.",
       },
     },
+    inAppBrowser: {
+      title: "Vous souhaitez vous connecter avec Google ?",
+      description:
+        "Le navigateur intégré de l’application bloque la connexion Google. Vous pouvez continuer par e-mail ci-dessus ou ouvrir cette page dans Chrome ou Safari.",
+      openInChrome: "Ouvrir dans Chrome",
+      copyLink: "Copier le lien",
+      copied: "Lien copié",
+      iosHint:
+        "Astuce : appuyez sur le menu ⋯ dans le coin et choisissez « Ouvrir dans le navigateur » ou « Ouvrir dans Safari ».",
+    },
   },
   legal: {
     label: "Document juridique",

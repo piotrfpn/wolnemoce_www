@@ -4,11 +4,16 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useState } from "react";
 import GoogleOAuthButton from "@/components/auth/GoogleOAuthButton";
+import InAppBrowserNotice from "@/components/auth/InAppBrowserNotice";
 import {
   defaultLocale,
   getLocalizedPath,
   isSupportedLocale,
 } from "@/lib/i18n/config";
+import {
+  detectInAppBrowser,
+  type InAppBrowserInfo,
+} from "@/lib/inAppBrowser";
 import { getSafeNextPath } from "@/lib/safeNextPath";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -20,6 +25,7 @@ import {
 import type { Dictionary } from "@/lib/i18n/types";
 
 type LoginFormClientProps = {
+  inAppLabels: Dictionary["auth"]["inAppBrowser"];
   labels: Dictionary["auth"]["login"];
   nextPath?: string;
   oauthError?: boolean;
@@ -27,6 +33,7 @@ type LoginFormClientProps = {
 };
 
 export default function LoginFormClient({
+  inAppLabels,
   labels,
   nextPath,
   oauthError = false,
@@ -46,9 +53,16 @@ export default function LoginFormClient({
   const [error, setError] = useState(oauthError ? labels.oauthError : "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [utm, setUtm] = useState<UtmParams | null>(null);
+  const [inAppBrowser, setInAppBrowser] = useState<InAppBrowserInfo>({
+    isInApp: false,
+    appName: null,
+    isAndroid: false,
+    isIos: false,
+  });
 
   useEffect(() => {
     setUtm(readUtmFromBrowser());
+    setInAppBrowser(detectInAppBrowser());
   }, []);
 
   const registerHrefWithUtm = appendUtmToUrl(registerHref, utm);
@@ -125,19 +139,23 @@ export default function LoginFormClient({
         </div>
       ) : null}
 
-      <GoogleOAuthButton
-        errorLabel={labels.oauthError}
-        hint={labels.googleHint}
-        label={labels.googleSubmit}
-        nextPath={safeNextPath || "/panel"}
-        onError={setError}
-      />
+      {!inAppBrowser.isInApp ? (
+        <>
+          <GoogleOAuthButton
+            errorLabel={labels.oauthError}
+            hint={labels.googleHint}
+            label={labels.googleSubmit}
+            nextPath={safeNextPath || "/panel"}
+            onError={setError}
+          />
 
-      <div className="my-6 flex items-center gap-3 text-xs font-bold uppercase tracking-wide text-slate-400">
-        <span className="h-px flex-1 bg-slate-200"></span>
-        <span>{labels.separator}</span>
-        <span className="h-px flex-1 bg-slate-200"></span>
-      </div>
+          <div className="my-6 flex items-center gap-3 text-xs font-bold uppercase tracking-wide text-slate-400">
+            <span className="h-px flex-1 bg-slate-200"></span>
+            <span>{labels.separator}</span>
+            <span className="h-px flex-1 bg-slate-200"></span>
+          </div>
+        </>
+      ) : null}
 
       <div className="space-y-5">
         <label className="block min-w-0">
@@ -186,10 +204,18 @@ export default function LoginFormClient({
         </Link>
       </div>
 
-      <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-emerald-200/80 bg-emerald-50/60 px-3.5 py-2.5 text-xs leading-5 text-slate-600">
-        <i className="fas fa-circle-info mt-0.5 shrink-0 text-[#1a5f3c]"></i>
-        <span>{labels.newUserHint}</span>
-      </div>
+      {inAppBrowser.isInApp ? (
+        <InAppBrowserNotice
+          info={inAppBrowser}
+          labels={inAppLabels}
+          utm={utm}
+        />
+      ) : (
+        <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-emerald-200/80 bg-emerald-50/60 px-3.5 py-2.5 text-xs leading-5 text-slate-600">
+          <i className="fas fa-circle-info mt-0.5 shrink-0 text-[#1a5f3c]"></i>
+          <span>{labels.newUserHint}</span>
+        </div>
+      )}
 
       <div className="mt-5 text-center text-sm text-slate-500">
         <Link

@@ -860,6 +860,16 @@ const pl: Dictionary = {
           "Brak aktywnej sesji resetu hasła. Użyj linku z wiadomości email.",
       },
     },
+    inAppBrowser: {
+      title: "Chcesz zalogować się przez Google?",
+      description:
+        "Przeglądarka wbudowana w aplikację blokuje logowanie przez Google. Możesz zalogować się lub założyć konto e-mailem powyżej albo otworzyć tę stronę w Chrome lub Safari.",
+      openInChrome: "Otwórz w Chrome",
+      copyLink: "Skopiuj link do przeglądarki",
+      copied: "Link skopiowany",
+      iosHint:
+        "Wskazówka: kliknij menu ⋯ w rogu ekranu i wybierz „Otwórz w przeglądarce” lub „Otwórz w Safari”.",
+    },
   },
   legal: {
     label: "Dokument prawny",

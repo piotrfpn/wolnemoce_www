@@ -827,6 +827,16 @@ const de: Dictionary = {
           "Es gibt keine aktive Sitzung zum Zurücksetzen des Passworts. Verwenden Sie den Link aus der E-Mail.",
       },
     },
+    inAppBrowser: {
+      title: "Möchten Sie sich mit Google anmelden?",
+      description:
+        "Der integrierte App-Browser blockiert die Anmeldung über Google. Sie können sich oben per E-Mail anmelden oder diese Seite in Chrome oder Safari öffnen.",
+      openInChrome: "In Chrome öffnen",
+      copyLink: "Link für Browser kopieren",
+      copied: "Link kopiert",
+      iosHint:
+        "Tipp: Tippen Sie oben auf ⋯ und wählen Sie „Im Browser öffnen“ oder „In Safari öffnen“.",
+    },
   },
   legal: {
     label: "Rechtsdokument",

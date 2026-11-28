@@ -40,6 +40,7 @@ export default function RegisterView({
       <main className="bg-slate-50 pt-[72px]">
         <section className="mx-auto flex min-h-[calc(100vh-72px)] max-w-[560px] items-center px-6 py-16">
           <RegisterFormClient
+            inAppLabels={dictionary.auth.inAppBrowser}
             labels={dictionary.auth.register}
             loginHref={loginHref}
             nextPath={safeNextPath}

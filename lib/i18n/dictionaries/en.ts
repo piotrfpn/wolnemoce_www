@@ -849,6 +849,16 @@ const en: Dictionary = {
           "There is no active password recovery session. Use the link from the email.",
       },
     },
+    inAppBrowser: {
+      title: "Want to sign in with Google?",
+      description:
+        "In-app browsers block Google sign-in. You can continue with email above or open this page in Chrome or Safari.",
+      openInChrome: "Open in Chrome",
+      copyLink: "Copy link for browser",
+      copied: "Link copied",
+      iosHint:
+        "Tip: tap the ⋯ menu in the corner and choose “Open in browser” or “Open in Safari”.",
+    },
   },
   legal: {
     label: "Legal document",
