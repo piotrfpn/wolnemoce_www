@@ -1055,9 +1055,9 @@ const pl: Dictionary = {
     description:
       "WolneMoce pomaga uporządkować pierwsze kroki w kooperacji produkcyjnej B2B.",
     items: [
-      { text: "Opisz, czego potrzebujesz: obróbki, montażu, produkcji seryjnej, usług technicznych, logistyki lub innego wsparcia. Twoje zapytanie może trafić do firm, które mają odpowiednie kompetencje i wolne moce.", author: "Dla firm szukających podwykonawców", role: "", initials: "B2B" },
-      { text: "Pokaż dostępne technologie, usługi, branże i możliwości produkcyjne. Dodaj ofertę, uzupełnij profil firmy i zwiększ widoczność swojej firmy w kontekście kooperacji B2B.", author: "Dla firm posiadających wolne moce", role: "", initials: "RFQ", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
-      { text: "Szukaj alternatywnych źródeł dostaw, kooperantów, firm usługowych i partnerów produkcyjnych bez przeglądania przypadkowych katalogów.", author: "Dla działów zakupów i operacji", role: "", initials: "SEO", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
+      { text: "Opisz, czego potrzebujesz: obróbki, montażu, produkcji seryjnej, usług technicznych, logistyki lub innego wsparcia. Twoje zapytanie może trafić do firm, które mają odpowiednie kompetencje i wolne moce.", author: "Dla firm szukających podwykonawców", role: "", initials: "RFQ" },
+      { text: "Pokaż dostępne technologie, usługi, branże i możliwości produkcyjne. Dodaj ofertę, uzupełnij profil firmy i zwiększ widoczność swojej firmy w kontekście kooperacji B2B.", author: "Dla firm posiadających wolne moce", role: "", initials: "B2B", gradient: "linear-gradient(135deg, #3b82f6, #60a5fa)" },
+      { text: "Szukaj alternatywnych źródeł dostaw, kooperantów, firm usługowych i partnerów produkcyjnych bez przeglądania przypadkowych katalogów.", author: "Dla działów zakupów i operacji", role: "", initials: "RFI", gradient: "linear-gradient(135deg, #8b5cf6, #a78bfa)" },
     ],
   },
   blogPreview: {

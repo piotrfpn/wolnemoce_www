@@ -966,19 +966,19 @@ const es: Dictionary = {
         text: "Describa lo que necesita: mecanizado, ensamblaje, producción en serie, servicios técnicos, logística u otro apoyo. Su solicitud puede llegar a empresas con las competencias adecuadas y capacidades de producción libres.",
         author: "Para empresas que buscan subcontratistas",
         role: "",
-        initials: "B2B"
+        initials: "RFQ"
       },
       {
         text: "Muestre las tecnologías, servicios, industrias y capacidades de producción disponibles. Añada una oferta, complete el perfil de su empresa y aumente la visibilidad de su empresa en el contexto de la cooperación B2B.",
         author: "Para empresas con capacidades libres",
         role: "",
-        initials: "RFQ"
+        initials: "B2B"
       },
       {
         text: "Busque fuentes de suministro alternativas, socios de cooperación, proveedores de servicios y socios de producción sin tener que navegar por directorios aleatorios.",
         author: "Para departamentos de compras y operaciones",
         role: "",
-        initials: "SEO"
+        initials: "RFI"
       }
     ]
   },

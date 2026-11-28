@@ -997,19 +997,19 @@ const de: Dictionary = {
         text: "Beschreiben Sie, was Sie benötigen: mechanische Bearbeitung, Montage, Serienfertigung, technische Dienstleistungen, Logistik oder andere Unterstützung. Ihre Anfrage kann Unternehmen erreichen, die über passende Kompetenzen und freie Produktionskapazitäten verfügen.",
         author: "Für Unternehmen, die Subunternehmer suchen",
         role: "",
-        initials: "B2B"
+        initials: "RFQ"
       },
       {
         text: "Zeigen Sie verfügbare Technologien, Dienstleistungen, Branchen und Produktionsmöglichkeiten. Fügen Sie ein Angebot hinzu, vervollständigen Sie Ihr Firmenprofil und erhöhen Sie die Sichtbarkeit Ihres Unternehmens im Kontext der B2B-Kooperation.",
         author: "Für Unternehmen mit freien Kapazitäten",
         role: "",
-        initials: "RFQ"
+        initials: "B2B"
       },
       {
         text: "Suchen Sie nach alternativen Bezugsquellen, Kooperationspartnern, Dienstleistern und Produktionspartnern, ohne zufällige Verzeichnisse durchsuchen zu müssen.",
         author: "Für Einkaufs- und Betriebsabteilungen",
         role: "",
-        initials: "SEO"
+        initials: "RFI"
       }
     ]
   },

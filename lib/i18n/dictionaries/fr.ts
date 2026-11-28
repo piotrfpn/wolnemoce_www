@@ -983,19 +983,19 @@ const fr: Dictionary = {
         text: "Décrivez ce dont vous avez besoin : usinage, assemblage, production en série, services techniques, logistique ou autre soutien. Votre demande peut atteindre des entreprises disposant des compétences appropriées et de capacités de production libres.",
         author: "Pour les entreprises cherchant des sous-traitants",
         role: "",
-        initials: "B2B"
+        initials: "RFQ"
       },
       {
         text: "Montrez les technologies, services, industries et capacités de production disponibles. Ajoutez une offre, complétez le profil de votre entreprise et augmentez la visibilité de votre entreprise dans le contexte de la coopération B2B.",
         author: "Pour les entreprises avec des capacités libres",
         role: "",
-        initials: "RFQ"
+        initials: "B2B"
       },
       {
         text: "Recherchez des sources d'approvisionnement alternatives, des partenaires de coopération, des prestataires de services et des partenaires de production sans avoir à parcourir des annuaires aléatoires.",
         author: "Pour les services achats et opérations",
         role: "",
-        initials: "SEO"
+        initials: "RFI"
       }
     ]
   },

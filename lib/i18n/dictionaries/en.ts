@@ -1036,19 +1036,19 @@ const en: Dictionary = {
         text: "Describe what you need: machining, assembly, serial production, technical services, logistics or other support. Your request can reach companies with the right competencies and available production capacity.",
         author: "For companies looking for subcontractors",
         role: "",
-        initials: "B2B"
+        initials: "RFQ"
       },
       {
         text: "Show available technologies, services, industries and production capabilities. Add an offer, complete your company profile and increase your visibility in the context of B2B cooperation.",
         author: "For companies with available capacity",
         role: "",
-        initials: "RFQ"
+        initials: "B2B"
       },
       {
         text: "Search for alternative sources of supply, cooperation partners, service providers and production partners without browsing random directories.",
         author: "For purchasing and operations teams",
         role: "",
-        initials: "SEO"
+        initials: "RFI"
       }
     ],
   },
