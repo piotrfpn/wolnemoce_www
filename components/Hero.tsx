@@ -90,7 +90,7 @@ export default function Hero({ locale = defaultLocale }: { locale?: Locale }) {
           <div className="relative rounded-[24px] border border-white/20 bg-white/10 p-7 text-white shadow-2xl backdrop-blur-xl">
             <div className="mb-5 flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#f59e0b] to-[#fbbf24] text-lg font-bold">
-                MP
+                <i className="fas fa-industry"></i>
               </div>
               <div>
                 <h4 className="text-base font-bold">{t.previewCompany}</h4>
@@ -120,9 +120,12 @@ export default function Hero({ locale = defaultLocale }: { locale?: Locale }) {
                 <i className="fas fa-circle-check text-[#fbbf24]"></i>
                 <span>{t.previewStatus}</span>
               </div>
-              <button className="rounded-lg bg-white px-4 py-2 text-xs font-bold text-[#1a5f3c]">
+              <Link
+                href={offersHref}
+                className="rounded-lg bg-white px-4 py-2 text-xs font-bold text-[#1a5f3c] no-underline transition hover:bg-emerald-50"
+              >
                 {t.previewAsk}
-              </button>
+              </Link>
             </div>
           </div>
 
