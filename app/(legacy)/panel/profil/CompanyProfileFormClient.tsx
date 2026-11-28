@@ -76,6 +76,7 @@ type CompanyProfileFormClientProps = {
   company: CompanyData | null;
   dict: PanelProfileDictionary;
   dictCommon: PanelCommonDictionary;
+  nextPath?: string;
 };
 
 type PkdCode = {
@@ -260,6 +261,7 @@ export default function CompanyProfileFormClient({
   company,
   dict,
   dictCommon,
+  nextPath,
 }: CompanyProfileFormClientProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -702,6 +704,12 @@ export default function CompanyProfileFormClient({
       applySavedCompany(result.data);
       if (result.reverificationRequired) {
         setIsVerified(false);
+      }
+      if (nextPath) {
+        setMessage(dict.redirectingToOffer);
+        router.push(nextPath);
+        router.refresh();
+        return;
       }
       setMessage(dict[result.messageKey]);
       router.refresh();
@@ -1738,6 +1746,8 @@ export default function CompanyProfileFormClient({
                     <i className="fas fa-spinner fa-spin"></i>
                     {dictCommon.saving}
                   </>
+                ) : nextPath === "/panel/oferty/nowa" ? (
+                  dict.saveAndContinueToOffer
                 ) : (
                   dict.saveChanges
                 )}

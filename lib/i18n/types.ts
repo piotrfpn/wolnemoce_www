@@ -1370,6 +1370,13 @@ export type Dictionary = {
       certificatesSubtitle: string;
       certificatesDescription: string;
       certificatesSaveFirst: string;
+      onboardingStep1Badge: string;
+      onboardingStep1Title: string;
+      onboardingStep2Badge: string;
+      onboardingStep2Title: string;
+      onboardingRedirectHint: string;
+      saveAndContinueToOffer: string;
+      redirectingToOffer: string;
       certificateNameLabel: string;
       certificateIssuerLabel: string;
       certificateNumberLabel: string;
