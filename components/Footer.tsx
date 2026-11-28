@@ -184,21 +184,8 @@ export default function Footer({ locale = defaultLocale }: { locale?: Locale }) 
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/40 md:flex-row md:items-center md:justify-between">
-          <div className="min-w-0 space-y-1">
+          <div className="min-w-0">
             <p>{t.rights}</p>
-            <p className="max-w-3xl break-words text-xs leading-5 text-white/40">
-              Operator:{" "}
-              <span className="text-white/55">PFConsulting Piotr Fiszer</span>{" "}
-              <span aria-hidden="true">·</span> NIP: 7792017326{" "}
-              <span aria-hidden="true">·</span> ul. Promienista 114, 60-142 Poznań{" "}
-              <span aria-hidden="true">·</span>{" "}
-              <a
-                href="mailto:kontakt@wolnemoce.com"
-                className="text-white/55 no-underline transition hover:text-white"
-              >
-                kontakt@wolnemoce.com
-              </a>
-            </p>
           </div>
 
           <div className="flex flex-wrap gap-5">
