@@ -324,6 +324,7 @@ export const industryServiceTypes: Record<string, string[]> = {
     "Części zamienne",
     "Relokacja maszyn",
     "Modernizacja urządzeń",
+    "Montaż i demontaż maszyn przemysłowych",
   ],
 };
 
